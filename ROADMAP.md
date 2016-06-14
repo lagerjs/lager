@@ -11,6 +11,7 @@ General
 *   Document IAM permission needed *for each plugin* **M**
 *   Add a logging system (use bunyan) **M**
 *   Update the dev application to create the "Planet Express" apis **L**
+*   Create the notion of `context` (environment + stage/version)
 *   Write unit tests
 *   ~~Setup continuous integration~~ (Alexis)
 *   Setup quality tools (Alexis)
