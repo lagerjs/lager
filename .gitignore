@@ -1,4 +1,3 @@
-docker-compose.env
+dev-app/docker-compose.env
 reports
 node_modules
-test.json
