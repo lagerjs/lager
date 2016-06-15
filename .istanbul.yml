@@ -1,5 +1,0 @@
-verbose: false
-instrumentation:
-    excludes: ['lambda.js', 'config.js']
-reporting:
-    dir: ./reports
