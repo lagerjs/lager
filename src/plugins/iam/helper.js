@@ -70,7 +70,7 @@ function getAwsRole(awsIAM, name) {
     if (e.code === 'NoSuchEntity') {
       return Promise.resolve();
     }
-    throw(e);
+    throw e;
   });
 }
 

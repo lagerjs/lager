@@ -353,7 +353,10 @@ function mergeSpecsFiles(beginPath, subPath) {
       // But because require() caches the content it loads, we clone the result to avoid bugs
       // if the function is called twice
       subSpec = _.cloneDeep(require(searchSpecDir + path.sep + 'spec'));
-    } catch (e) {}
+    } catch (e) {
+      // Silently ignore the error when calling require() on an unexisting spec.json file
+      if (e.code !== 'MODULE_NOT_FOUND') { throw e; }
+    }
 
     // Merge the spec eventually found
     _.merge(spec, subSpec);
