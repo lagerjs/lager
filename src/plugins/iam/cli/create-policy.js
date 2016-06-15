@@ -13,9 +13,9 @@ module.exports = (program, inquirer) => {
   .command('create-policy')
   .description('create a new policy')
   .arguments('[policy-identifier]')
-  .action(function (policyIdentifier, options) {
+  .action(function action(policyIdentifier, options) {
     // Transform cli arguments and options into a parameter map
-    let parameters = cliTools.processCliArgs(arguments);
+    const parameters = cliTools.processCliArgs(arguments);
 
     // If the cli arguments are correct, we can launch the interactive prompt
     return inquirer.prompt(prepareQuestions(parameters))
@@ -28,6 +28,12 @@ module.exports = (program, inquirer) => {
   return Promise.resolve();
 };
 
+/**
+ * Prepare the list of questions for the prompt
+ * @param  {Object} parameters - the parameters that have already been passed to the cli
+ * @param  {Object} choicesLists - lists of values for closed choice parameters
+ * @return {Array}
+ */
 function prepareQuestions(parameters, choicesLists) {
   return [{
     type: 'input',
@@ -40,8 +46,8 @@ function prepareQuestions(parameters, choicesLists) {
 
 /**
  * Create the new policy
- * @param  {Object} parameters [description]
- * @return void
+ * @param  {Object} parameters - the parameters provided in the command and in the prompt
+ * @return {Promise<null>}
  */
 function performTask(parameters) {
   const configFilePath = path.join(process.cwd(), 'iam', 'policies');
