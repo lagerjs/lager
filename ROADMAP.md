@@ -11,7 +11,7 @@ General
 *   Document IAM permission needed *for each plugin* **M**
 *   Add a logging system (use bunyan) **M**
 *   Update the dev application to create the "Planet Express" apis **L**
-*   Create the notion of `context` (environment + stage/version)
+*   Create the notion of `context` (environment + stage/version) **M**
 *   Write unit tests
 *   ~~Setup continuous integration~~ (Alexis)
 *   Setup quality tools (Alexis)
@@ -45,7 +45,7 @@ General
 `iam` core plugin
 ---
 
-*   Create a plugin to create/update/manage IAM roles/policies **L**
+*   ~~Create a plugin to create/update/manage IAM roles/policies~~ **L**
 *   Implement `iam` command line **M**
 
 Other plugins

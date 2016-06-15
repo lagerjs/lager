@@ -1,3 +1,4 @@
 dev-app/docker-compose.env
 reports
 node_modules
+npm-debug.log
