@@ -86,9 +86,9 @@ Lambda.prototype.buildPackage = function buildPackage() {
   const dependenciesPaths = this.config.includeLibs || [];
 
   return new Promise((resolve, reject) => {
-    var archivePath = '/tmp/' + (new Buffer(lambdaPath).toString('base64')) + '.zip';
-    var outputStream = fs.createWriteStream(archivePath);
-    var archive = archiver.create('zip', {});
+    const archivePath = '/tmp/' + new Buffer(lambdaPath).toString('base64') + '.zip';
+    const outputStream = fs.createWriteStream(archivePath);
+    const archive = archiver.create('zip', {});
     outputStream.on('close', () => {
       fs.readFile(archivePath, (e, result) => {
         if (e) { return reject(e); }

@@ -25,40 +25,6 @@ function listParser(val) {
 }
 
 /**
- * Given a list of labels, retreive the corresponding values in a list of items
- * @param  {Array} list - a list of strings or objects { value, label }
- * @param  {string|Array} label - the label or list of labels we are searching
- * @return void
- */
-function retrieveValuesFromList(list, labels) {
-  const results = [];
-  _.forEach(labels, label => {
-    results.push(retrieveValueFromList(list, label));
-  });
-  return results;
-}
-
-/**
- * Given a label, retreive the corresponding value in a list of items
- * @param  {Array} list - a list of strings or objects { value, label }
- * @param  {string|Array} label - the label we are searching
- * @return void
- */
-function retrieveValueFromList(list, label) {
-  const item = _.find(list, item => {
-    if (item.label) {
-      return item.label === label;
-    }
-    return item === label;
-  });
-  if (item.label) {
-    return item.value;
-  }
-  return item;
-}
-
-
-/**
  * Generate a function that check if an item belongs to a list
  * @param  {Array} list - the list of available values
  * @param  {string} label - a label to identify the type of the list items
@@ -133,15 +99,13 @@ function processAnswerTypeOther(answers, key) {
  */
 function processAnswerTypeNone(answers, key) {
   if (answers[key] === 'none') {
-    delete(answers[key]);
+    delete answers[key];
   }
 }
 
 module.exports = {
   format,
   listParser,
-  retrieveValuesFromList,
-  retrieveValueFromList,
   generateListValidator,
   processCliArgs,
   processAnswerTypeOther,
