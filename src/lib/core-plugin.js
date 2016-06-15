@@ -14,6 +14,8 @@ function registerCommands(program, inquirer) {
 
 
 module.exports = {
+  name: 'core',
+
   hooks: {
     registerCommands
   }

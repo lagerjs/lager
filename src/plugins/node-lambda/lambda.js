@@ -15,7 +15,7 @@ const IntegrationDataInjector = require('./integration-data-injector');
  * @param {Object} config - lambda configuration
  * @constructor
  */
-let Lambda = function Lambda(config) {
+const Lambda = function Lambda(config) {
   this.config = config;
 
   this.config.params = this.config.params || {};
@@ -41,7 +41,7 @@ let Lambda = function Lambda(config) {
  * Returns a string representation of a Lambda instance
  * @return {string}
  */
-Lambda.prototype.toString =  function toString() {
+Lambda.prototype.toString = function toString() {
   return 'Lambda ' + this.config.identifier;
 };
 
@@ -59,11 +59,10 @@ Lambda.prototype.deploy = function deploy(region, stage, environment) {
       // If the function already exists
       console.log('   * The lambda ' + this.config.identifier + ' already exists');
       return this.update(awsLambda, environment);
-    } else {
-      // If error occured because the function does not exists, we create it
-      console.log('   * The lambda ' + this.config.identifier + ' does not exists');
-      return this.create(awsLambda, environment);
     }
+    // If error occured because the function does not exists, we create it
+    console.log('   * The lambda ' + this.config.identifier + ' does not exists');
+    return this.create(awsLambda, environment);
   })
   .then((data) => {
     // Publish a new version
@@ -84,20 +83,20 @@ Lambda.prototype.deploy = function deploy(region, stage, environment) {
  */
 Lambda.prototype.buildPackage = function buildPackage() {
   const lambdaPath = this.config.handlerPath;
-  const dependenciesPaths = (this.config.includeLibs || []);
+  const dependenciesPaths = this.config.includeLibs || [];
 
-  return new Promise(function(resolve, reject) {
+  return new Promise((resolve, reject) => {
     var archivePath = '/tmp/' + (new Buffer(lambdaPath).toString('base64')) + '.zip';
     var outputStream = fs.createWriteStream(archivePath);
     var archive = archiver.create('zip', {});
-    outputStream.on('close', function() {
+    outputStream.on('close', () => {
       fs.readFile(archivePath, (e, result) => {
         if (e) { return reject(e); }
         resolve(result);
       });
     });
 
-    archive.on('error', function(e) {
+    archive.on('error', e => {
       reject(e);
     });
 
@@ -107,12 +106,12 @@ Lambda.prototype.buildPackage = function buildPackage() {
     archive.directory(lambdaPath, '');
 
     // Add the library code (aka code in common for all lambdas) to the archive
-    dependenciesPaths.forEach(function(dependencyPath) {
+    dependenciesPaths.forEach(dependencyPath => {
       archive.directory(dependencyPath, path.basename(dependencyPath));
     });
 
     // Add the application configuration of the environment to the archive
-    var envConfig = process.env;
+    const envConfig = process.env;
     envConfig.LAMBDA = true;
     archive.append(JSON.stringify(envConfig), { name: 'env_config.json' });
 
@@ -127,15 +126,13 @@ Lambda.prototype.buildPackage = function buildPackage() {
  * @return {Promise<Boolean>}
  */
 Lambda.prototype.isDeployed = function isDeployed(awsLambda) {
-  let params = { FunctionName: this.config.params.FunctionName };
+  const params = { FunctionName: this.config.params.FunctionName };
   return Promise.promisify(awsLambda.getFunction.bind(awsLambda))(params)
   .then(() => {
     return Promise.resolve(true);
   })
-  .catch((e) => {
-    if (e.code !== 'ResourceNotFoundException') {
-      throw(e);
-    }
+  .catch(e => {
+    if (e.code !== 'ResourceNotFoundException') { throw e; }
     return Promise.resolve(false);
   });
 };
@@ -147,7 +144,7 @@ Lambda.prototype.isDeployed = function isDeployed(awsLambda) {
  * @return {Promise<Object>} - AWS description of the lambda
  */
 Lambda.prototype.create = function create(awsLambda, environment) {
-  let params = _.cloneDeep(this.config.params);
+  const params = _.cloneDeep(this.config.params);
   return Promise.all([this.buildPackage(), lager.retrieveRoleArn(params.Role, environment)])
   .spread((buffer, roleArn) => {
     params.Code = { ZipFile: buffer };
@@ -166,7 +163,7 @@ Lambda.prototype.update = function update(awsLambda, environment) {
   return this.buildPackage()
   .then((buffer) => {
     // First, update the code
-    let codeParams = {
+    const codeParams = {
       FunctionName: this.config.params.FunctionName,
       Publish: this.config.params.Publish,
       ZipFile: buffer
@@ -178,7 +175,7 @@ Lambda.prototype.update = function update(awsLambda, environment) {
   })
   .spread((codeUpdateResponse, roleArn) => {
     // Then, update the configuration
-    var configParams = _.cloneDeep(this.config.params);
+    const configParams = _.cloneDeep(this.config.params);
     delete configParams.Publish;
     configParams.Role = roleArn;
     return Promise.promisify(awsLambda.updateFunctionConfiguration.bind(awsLambda))(configParams);
@@ -193,7 +190,7 @@ Lambda.prototype.update = function update(awsLambda, environment) {
  */
 Lambda.prototype.publishVersion = function publishVersion(awsLambda, alias) {
   // @TODO set alias and delete previous version
-  let params = {
+  const params = {
     FunctionName: this.config.params.FunctionName
   };
   return Promise.promisify(awsLambda.publishVersion.bind(awsLambda))(params);

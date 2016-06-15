@@ -12,14 +12,14 @@ const PrettyError = require('pretty-error');
 const pe = new PrettyError();
 
 // To render exceptions thrown in non-promies code:
-process.on('uncaughtException', function(error) {
-   console.log(pe.render(error));
+process.on('uncaughtException', e => {
+   console.log(pe.render(e));
 });
 
 // To render unhandled rejections created in BlueBird:
-process.on('unhandledRejection', function(reason) {
-   console.log("Unhandled rejection");
-   console.log(pe.render(reason));
+process.on('unhandledRejection', r => {
+   console.log('Unhandled rejection');
+   console.log(pe.render(r));
 });
 
 // @TODO Set this configuration for environments
@@ -50,29 +50,33 @@ function Lager() {
 
 /**
  * Lager expose it's bluebird dependency, so plugins don't need to add it as a dependency
+ * @return {Promise} - the bluebird library
  */
-Lager.prototype.getPromise = function() {
+Lager.prototype.getPromise = function getPromise() {
   return Promise;
 };
 
 /**
  * Lager expose it's lodash dependency, so plugins don't need to add it as a dependency
+ * @return {Object} - the lodash library
  */
-Lager.prototype.getLodash = function() {
+Lager.prototype.getLodash = function getLodash() {
   return _;
 };
 
 /**
  * Lager expose it's commander dependency, so plugins can add their own commands
+ * @return {Object} - a commander program instance
  */
-Lager.prototype.getProgram = function() {
+Lager.prototype.getProgram = function getProgram() {
   return program;
 };
 
 /**
  * Lager expose it's inquirer dependency, so plugins can add their own command prompt
+ * @return {Object} - a inquirer instance
  */
-Lager.prototype.getInquirer = function() {
+Lager.prototype.getInquirer = function getInquirer() {
   return inquirer;
 };
 
@@ -81,7 +85,7 @@ Lager.prototype.getInquirer = function() {
  * @param  {Object} plugin
  * @return {Lager}
  */
-Lager.prototype.registerPlugin = function(plugin) {
+Lager.prototype.registerPlugin = function registerPlugin(plugin) {
   this.plugins.push(plugin);
   return this;
 };
@@ -91,7 +95,7 @@ Lager.prototype.registerPlugin = function(plugin) {
  * @param  {string} name
  * @return {Object}
  */
-Lager.prototype.getPlugin = function(name) {
+Lager.prototype.getPlugin = function getPlugin(name) {
   return _.find(this.plugins, plugin => {
     return plugin.name === name;
   });
@@ -104,10 +108,10 @@ Lager.prototype.getPlugin = function(name) {
  * @return {Promise<[]>} return the promise of an array containing the hook's arguments
  *         eventually transformed by plugins
  */
-Lager.prototype.fire = function() {
+Lager.prototype.fire = function fire() {
   // Extract arguments and eventName
-  let args = Array.prototype.slice.call(arguments);
-  let eventName = args.shift();
+  const args = Array.prototype.slice.call(arguments);
+  const eventName = args.shift();
 
   // let argsDescription = '(' + _.map(args, arg => {
   //   return !arg ? arg : (arg.toString ? arg.toString() : Object.prototype.toString.call(arg));
@@ -116,7 +120,7 @@ Lager.prototype.fire = function() {
 
   // Define a recusive function that will check if a plugin implements the hook,
   // execute it and pass the eventually transformed arguments to the next one
-  let callPluginsSequencialy = function callPluginsSequencialy(i, args) {
+  const callPluginsSequencialy = function callPluginsSequencialy(i, args) {
     if (!this.plugins[i]) {
       // If there is no more plugin to execute, we return a promise of the event arguments/result
       // So we are getting out of the sequencial calls
@@ -125,9 +129,11 @@ Lager.prototype.fire = function() {
 
     if (this.plugins[i].hooks && this.plugins[i].hooks[eventName]) {
       // If the plugin implements the hook, then we execute it
+      // console.log('call ' + eventName + ' hook from ' + this.plugins[i].name);
       return this.plugins[i].hooks[eventName].apply(this.plugins[i], args)
-      .spread(function() {
-        // When the plugin hook has been executed, we move to the next plugin (recursivity
+      .spread(function propagateArguments() {
+        // We cannot use the () => {} notation here because we use `arguments`
+        // When the plugin hook has been executed, we move to the next plugin (recursivity)
         return callPluginsSequencialy.bind(this)(i + 1, arguments);
       }.bind(this));
     }
@@ -141,9 +147,9 @@ Lager.prototype.fire = function() {
 
 
 
-/******************************************************
+/* *****************************************************
  * Add helper functions to the Lager constructor
- ******************************************************/
+ * *****************************************************/
 // @TODO this should be a Lager plugin
 /**
  * Take a string as parameter and return a role ARN

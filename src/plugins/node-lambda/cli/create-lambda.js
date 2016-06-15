@@ -9,26 +9,26 @@ const cliTools = require('@lager/lager/lib/cli-tools');
 const ncpAsync = Promise.promisify(require('ncp'));
 const mkdirpAsync = Promise.promisify(require('mkdirp'));
 
-module.exports = (program, inquirer) => {
+module.exports = function createLambdaCmd(program, inquirer) {
 
   // Build the list of available APIs for input verification and interactive selection
   const memoryValues = [];
-  for (let i = 128; i <= 1536; i = i + 64) {
+  for (let i = 128; i <= 1536; i += 64) {
     memoryValues.push({ value: i, label: i + 'MB' });
   }
-  const valueLists = {
+  const choicesLists = {
     memory: memoryValues,
     execType: [{
       value: 'api-endpoints',
-      label: 'With this type of execution, the Lambda will execute endpoints defined by the api-gateway plugin'
+      name: cliTools.format.info('api-endpoints') + ' - With this type of execution, the Lambda will execute endpoints defined by the api-gateway plugin'
     }, {
       value: 'none',
-      label: 'Do not add an execution type to the Lambda, you will write a custom one'
+      name: cliTools.format.info('none') + ' - Do not add an execution type to the Lambda, you will write a custom one'
     }]
   };
   const validators = {
-    memory: cliTools.generateListValidator(valueLists.memory, 'memory value'),
-    execType: cliTools.generateListValidator(valueLists.execType, 'Lambda execution type')
+    memory: cliTools.generateListValidator(choicesLists.memory, 'memory value'),
+    execType: cliTools.generateListValidator(choicesLists.execType, 'Lambda execution type')
   };
 
   program
@@ -39,12 +39,12 @@ module.exports = (program, inquirer) => {
   .option('-m, --memory <memory>', 'Select the memory (MB)', parseInt)
   .option('-r, --role <role>', 'Select the execution role')
   .option('-e, --exec-type <execution-type>', 'Select the type of execution to associate to the lambda')
-  .action(function (lambdaIdentifier, options) {
+  .action(function action(lambdaIdentifier, options) {
     // Transform cli arguments and options into a parameter map
-    let parameters = cliTools.processCliArgs(arguments, validators);
+    const parameters = cliTools.processCliArgs(arguments, validators);
 
     // If the cli arguments are correct, we can launch the interactive prompt
-    return inquirer.prompt(prepareQuestions(parameters, valueLists))
+    return inquirer.prompt(prepareQuestions(parameters, choicesLists))
     .then(answers => {
       // Merge the parameters from the command and from the prompt and create the new API
       return performTask(_.merge(parameters, answers));
@@ -54,8 +54,13 @@ module.exports = (program, inquirer) => {
   return Promise.resolve();
 };
 
-
-function prepareQuestions(parameters, valueLists) {
+/**
+ * Prepare the list of questions for the prompt
+ * @param  {Object} parameters - parameters that have already been passed to the cli
+ * @param  {Object} choicesLists - lists of values for closed choice parameters
+ * @return {Array} - a list of questions
+ */
+function prepareQuestions(parameters, choicesLists) {
   return [{
     type: 'input',
     name: 'lambdaIdentifier',
@@ -72,7 +77,7 @@ function prepareQuestions(parameters, valueLists) {
     type: 'list',
     name: 'memory',
     message: 'Choose the memory allocated to the Lambda',
-    choices: valueLists.memory,
+    choices: choicesLists.memory,
     when: answers => { return !parameters.memory; },
     default: '128MB'
   }, {
@@ -84,16 +89,16 @@ function prepareQuestions(parameters, valueLists) {
     type: 'list',
     name: 'execType',
     message: 'Select an execution type for the Lambda',
-    choices: valueLists.execType,
+    choices: choicesLists.execType,
     when: answers => { return !parameters.execType; },
     default: 'api-endpoints'
   }];
 }
 
 /**
- * Create the new endpoint
- * @param  {Object} parameters [description]
- * @return void
+ * Create the new lambda
+ * @param  {Object} parameters - the parameters provided in the command and in the prompt
+ * @return {Promise<null>}
  */
 function performTask(parameters) {
   const configFilePath = path.join(process.cwd(), 'lambdas', parameters.lambdaIdentifier);
@@ -101,13 +106,13 @@ function performTask(parameters) {
   .then(() => {
     // We create the configuration file of the Lambda
     let config = {
-      "params": {
-        "Timeout": parameters.timeout,
-        "MemorySize": parameters.memory,
-        "Role": parameters.role
+      params: {
+        Timeout: parameters.timeout,
+        MemorySize: parameters.memory,
+        Role: parameters.role
       },
-      "includeEndpoints": parameters.execType === 'api-endpoints',
-      "includeLibs": []
+      includeEndpoints: parameters.execType === 'api-endpoints',
+      includeLibs: []
     };
 
     // We save the specification in a json file

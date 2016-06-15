@@ -2,7 +2,7 @@
 
 const lager = require('@lager/lager/lib/lager');
 
-module.exports = function(program, inquirer) {
+module.exports = function deployApiCmd(program, inquirer) {
   return program
   .command('deploy-apis')
   .description('deploy apis')

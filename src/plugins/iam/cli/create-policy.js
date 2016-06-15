@@ -28,7 +28,7 @@ module.exports = (program, inquirer) => {
   return Promise.resolve();
 };
 
-function prepareQuestions(parameters, valueLists) {
+function prepareQuestions(parameters, choicesLists) {
   return [{
     type: 'input',
     name: 'policyIdentifier',

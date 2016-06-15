@@ -177,11 +177,9 @@ module.exports = {
     beforeApisLoad: function beforeApisLoad() {
       return loadPolicies()
       .then((loadedPolicies) => {
-        policies = loadedPolicies;
         return loadRoles();
       })
       .then((loadedRoles) => {
-        roles = loadedRoles;
         return Promise.resolve([]);
       });
     }
