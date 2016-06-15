@@ -32,7 +32,7 @@ module.exports = (program, inquirer) => {
     .arguments('[policy-identifier]')
     .action(function (policyIdentifier, options) {
       // Transform cli arguments and options into a parameter map
-      let parameters = cliTools.processCliArgs(arguments);
+      let parameters = cliTools.processCliArgs(arguments, validators);
 
       // If the cli arguments are correct, we can launch the interactive prompt
       return inquirer.prompt(prepareQuestions(parameters, valueLists))

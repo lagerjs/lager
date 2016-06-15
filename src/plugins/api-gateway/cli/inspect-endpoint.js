@@ -47,6 +47,8 @@ module.exports = function(program, inquirer) {
         console.log(spec);
       });
     });
+
+    return Promise.resolve(); 
   });
 };
 

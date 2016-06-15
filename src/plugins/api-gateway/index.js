@@ -2,7 +2,6 @@
 
 const file = require('file');
 const path = require('path');
-const util = require('util');
 const lager = require('@lager/lager/lib/lager');
 const cardinal = require('cardinal');
 const Promise = lager.getPromise();
@@ -227,24 +226,6 @@ function publishAllApis(apis, region, stage, environment) {
   })
   .spread((apis) => {
     return Promise.resolve(apis);
-  });
-}
-
-/**
- * Build all API specifications with their endpoints
- * @return {[Object]}
- */
-function buildSpecs() {
-  return Promise.all([loadApis(), loadEndpoints()])
-  .spread((apis, endpoints) => {
-    return Promise.map(apis, (api) => {
-      return Promise.map(endpoints, (endpoint) => {
-        return api.addEndpoint(endpoint);
-      })
-      .then(() => {
-        return Promise.resolve(api);
-      });
-    });
   });
 }
 

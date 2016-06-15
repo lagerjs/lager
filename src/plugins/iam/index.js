@@ -136,15 +136,17 @@ function loadRole(configPath, name) {
   });
 }
 
+/**
+ * [findRole description]
+ * @param  {[type]} identifier [description]
+ * @return {[type]}            [description]
+ */
 function findRole(identifier) {
   return loadRoles()
   .then((roles) => {
     return _.find(roles, (role) => { return role.name === identifier; });
   });
 }
-
-let policies = [];
-let roles = [];
 
 module.exports = {
   name: 'iam',

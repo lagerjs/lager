@@ -2,7 +2,6 @@
 
 const lager = require('@lager/lager/lib/lager');
 const Promise = lager.getPromise();
-const _ = lager.getLodash();
 const AWS = require('aws-sdk');
 const iamHelper = require('./helper');
 
