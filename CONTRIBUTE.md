@@ -11,7 +11,7 @@ Rules
 *   Respect conventions for case: ConstructorFunctionName, instanceName, functionName, node-module-file-name.js
 *   Code coverage objective: 80%
 
-Setup dev environment
+Setup development environment
 ---
 
 The repository comes with a docker-compose configuration that allows to quickly test modification on the lager command line.
@@ -28,7 +28,9 @@ Indeed, it installs the `lager` command line like `npm install @lager/lager -g` 
 
 ### Building and launching the environment for the development application
 
-The lager repository comes with a dockerized environment that allows to quickly test modifications.
+The lager repository comes with a dockerized environment that allows to quickly test modifications on a sample project.
+
+#### Checking that the container user matches your `uid/gid`
 
 To have appropriate permissions on the files in the container, the user in the container must have the same `uid/gid` that the user that owns the repository on the host machine.
 Check the `uid/gid` of your user on the host machine:
@@ -50,12 +52,14 @@ If your user has a `uid/gid` different than 1000, you can edit `dev-app/docker-c
 # USER lager
 ```
 
-Rebuild the docker images if necessary:
+Rebuild the docker image if necessary:
 
 ```bash
 $ # In the directory `dev-app`
 $ docker-compose build
 ```
+
+#### Launching the development environment
 
 If/when the `uid/gid` matches, run a shell in a container of the node image:
 
