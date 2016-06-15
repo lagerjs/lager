@@ -13,10 +13,10 @@ const Endpoint = require('./endpoint');
 
 /**
  * Load all API specifications
- * @return {Promise<[Api]>}
+ * @return {Promise<[Api]>} - the promise of an array containing all Apis
  */
 function loadApis() {
-  let apiSpecsPath = path.join(process.cwd(), 'apis');
+  const apiSpecsPath = path.join(process.cwd(), 'apis');
 
   // This event allows to inject code before loading all APIs
   return lager.fire('beforeApisLoad')
@@ -26,9 +26,9 @@ function loadApis() {
   })
   .then(subdirs => {
     // Load all the API specifications
-    let apiPromises = [];
+    const apiPromises = [];
     _.forEach(subdirs, (subdir) => {
-      let apiSpecPath = path.join(apiSpecsPath, subdir, 'spec');
+      const apiSpecPath = path.join(apiSpecsPath, subdir, 'spec');
       // subdir is the identifier of the API, so we pass it as the second argument
       apiPromises.push(loadApi(apiSpecPath, subdir));
     });
@@ -63,10 +63,10 @@ function loadApi(apiSpecPath, identifier) {
     // or the content exported by a node module
     // But because require() caches the content it loads, we clone the result to avoid bugs
     // if the function is called twice
-    let apiSpec = _.cloneDeep(require(apiSpecPath));
+    const apiSpec = _.cloneDeep(require(apiSpecPath));
     apiSpec['x-lager'] = apiSpec['x-lager'] || {};
     apiSpec['x-lager'].identifier = apiSpec['x-lager'].identifier || identifier;
-    let api = new Api(apiSpec);
+    const api = new Api(apiSpec);
 
     // This event allows to inject code to alter the API specification
     return lager.fire('afterApiLoad', api);
@@ -81,21 +81,21 @@ function loadApi(apiSpecPath, identifier) {
  * @return {Promise<[Endpoints]>}
  */
 function loadEndpoints() {
-  let endpointsDirectory = 'endpoints';
-  let endpointSpecsPath = path.join(process.cwd(), endpointsDirectory);
+  const endpointsDirectory = 'endpoints';
+  const endpointSpecsPath = path.join(process.cwd(), endpointsDirectory);
 
   return lager.fire('beforeEndpointsLoad')
   .spread(() => {
-    let endpointPromises = [];
+    const endpointPromises = [];
     file.walkSync(endpointSpecsPath, (dirPath, dirs, files) => {
       // We are looking for directories that have the name of an HTTP method
-      let subPath = dirPath.substr(endpointSpecsPath.length);
-      let resourcePathParts = subPath.split(path.sep);
-      let method = resourcePathParts.pop();
-      if (['GET', 'POST', 'PUT', 'PATCH', 'DELETE'].indexOf(method) === -1) return;
+      const subPath = dirPath.substr(endpointSpecsPath.length);
+      const resourcePathParts = subPath.split(path.sep);
+      const method = resourcePathParts.pop();
+      if (['GET', 'POST', 'PUT', 'PATCH', 'DELETE'].indexOf(method) === -1) { return; }
 
       // We construct the path to the resource (url style, not filesystem)
-      let resourcePath = resourcePathParts.join('/');
+      const resourcePath = resourcePathParts.join('/');
 
       endpointPromises.push(loadEndpoint(endpointSpecsPath, resourcePath, method));
     });
@@ -130,10 +130,10 @@ function loadEndpoint(endpointSpecRootPath, resourcePath, method) {
   method = method.toUpperCase();
   return lager.fire('beforeEndpointLoad')
   .spread(() => {
-    let parts = resourcePath.split('/');
-    let subPath = parts.join(path.sep) + path.sep + method;
-    let spec = mergeSpecsFiles(endpointSpecRootPath, subPath);
-    let endpoint = new Endpoint(spec, resourcePath, method);
+    const parts = resourcePath.split('/');
+    const subPath = parts.join(path.sep) + path.sep + method;
+    const spec = mergeSpecsFiles(endpointSpecRootPath, subPath);
+    const endpoint = new Endpoint(spec, resourcePath, method);
 
     // This event allows to inject code to alter the endpoint specification
     return lager.fire('afterEndpointLoad', endpoint);
@@ -265,7 +265,7 @@ function deploy(region, stage, environment) {
 function getApiSpec(identifier, type, colors) {
   type = type || 'doc';
   // @TODO identifier is not necessarily the name of the folder: it can be overriden in the spec file
-  let apiSpecPath = path.join(process.cwd(), 'apis', identifier, 'spec');
+  const apiSpecPath = path.join(process.cwd(), 'apis', identifier, 'spec');
   return Promise.all([loadApi(apiSpecPath, identifier), loadEndpoints()])
   .spread((api, endpoints) => {
     return Promise.all([addEndpointsToApis([api], endpoints), endpoints]);
@@ -280,7 +280,7 @@ function getApiSpec(identifier, type, colors) {
 }
 
 function getEndpointSpec(method, resourcePath, type, colors) {
-  let endpointSpecRootPath = path.join(process.cwd(), 'endpoints');
+  const endpointSpecRootPath = path.join(process.cwd(), 'endpoints');
   return loadEndpoint(endpointSpecRootPath, resourcePath, method)
   .then(endpoint => {
     // @TODO create Endpoint.genSpec(type) similarly ti Api
@@ -289,10 +289,15 @@ function getEndpointSpec(method, resourcePath, type, colors) {
       json = cardinal.highlight(json, { json: true });
     }
     return json;
-});
+  });
 }
 
-
+/**
+ * [registerCommands description]
+ * @param  {Object} program  - commander program instance
+ * @param  {Object} inquirer - inquirer instance
+ * @return {Promise<[program, inquirer]>} - promise of an array containing the parameters
+ */
 function registerCommands(program, inquirer) {
   return Promise.all([
     require('./cli/create-api')(program, inquirer),
@@ -328,17 +333,17 @@ module.exports = {
  */
 function mergeSpecsFiles(beginPath, subPath) {
   // Initialise specification
-  let spec = {};
+  const spec = {};
 
   // List all directories where we have to look for specifications
-  let subDirs = subPath.split(path.sep);
+  const subDirs = subPath.split(path.sep);
 
   // Initialize the directory path for the do/while statement
   let searchSpecDir = beginPath;
 
   do {
     let subSpec = {};
-    let subDir = subDirs.shift();
+    const subDir = subDirs.shift();
     searchSpecDir = path.join(searchSpecDir, subDir);
 
     try {

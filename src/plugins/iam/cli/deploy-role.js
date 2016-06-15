@@ -14,16 +14,16 @@ module.exports = (program, inquirer) => {
   return plugin.loadRoles()
   .then(roles => {
     // Build the list of available roles for input verification and interactive selection
-    const valueLists = {
+    const choicesLists = {
       roleIdentifier: _.map(roles, role => {
         return {
           value: role.name,
-          label: role.name + (role.description ? ' - ' + role.description : '')
+          name: role.name + (role.description ? ' - ' + role.description : '')
         };
       })
     };
     const validators = {
-      roleIdentifier: cliTools.generateListValidator(valueLists.roleIdentifier, 'role identifier')
+      roleIdentifier: cliTools.generateListValidator(choicesLists.roleIdentifier, 'role identifier')
     };
 
     program
@@ -35,7 +35,7 @@ module.exports = (program, inquirer) => {
       let parameters = cliTools.processCliArgs(arguments, validators);
 
       // If the cli arguments are correct, we can launch the interactive prompt
-      return inquirer.prompt(prepareQuestions(parameters, valueLists))
+      return inquirer.prompt(prepareQuestions(parameters, choicesLists))
       .then(answers => {
         // Merge the parameters from the command and from the prompt and create the new API
         return performTask(_.merge(parameters, answers));
@@ -52,12 +52,12 @@ module.exports = (program, inquirer) => {
  * @param  {Object} valueLists - lists of values for closed choice parameters
  * @return {Array}
  */
-function prepareQuestions(parameters, valueLists) {
+function prepareQuestions(parameters, choicesLists) {
   return [{
     type: 'list',
     name: 'roleIdentifier',
     message: 'Which role do you want to deploy?',
-    choices: _.map(valueLists.roleIdentifier, 'label'),
+    choices: choicesLists.roleIdentifier,
     when: function(currentAnswers) {
       return !parameters.roleIdentifier;
     }

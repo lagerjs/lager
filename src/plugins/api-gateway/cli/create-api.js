@@ -8,7 +8,7 @@ const mkdirpAsync = Promise.promisify(require('mkdirp'));
 const _ = lager.getLodash();
 const cliTools = require('@lager/lager/lib/cli-tools');
 
-module.exports = function(program, inquirer) {
+module.exports = function createApiCmd(program, inquirer) {
   // We have to require the plugin inside the function
   // Otherwise we could have a circular require occuring when Lager is registering it
   const plugin = lager.getPlugin('api-gateway');
@@ -16,13 +16,14 @@ module.exports = function(program, inquirer) {
   // First, retrieve possible values for the endpoint-identifiers parameter
   return plugin.loadEndpoints()
   .then(endpoints => {
+    // @TODO propose to select endpoints
     // Build the list of available endpoints for interactive selection
-    const valueLists = {
+    const choicesLists = {
       endpointsIdentifiers: _.map(endpoints, endpoint => {
-        let spec = endpoint.getSpec();
+        const spec = endpoint.getSpec();
         return {
           value: endpoint.getMethod() + ' ' + endpoint.getResourcePath(),
-          label: endpoint.getMethod() + ' ' + endpoint.getResourcePath() + (spec.summary ? ' - ' + spec.summary : '')
+          name: endpoint.getMethod() + ' ' + endpoint.getResourcePath() + (spec.summary ? ' - ' + spec.summary : '')
         };
       }),
       mimeType: ['application/json', 'text/plain', { value: 'other', label: 'other (you will be prompted to enter a value)'}]
@@ -35,15 +36,15 @@ module.exports = function(program, inquirer) {
     .description('create a new API')
     .arguments('[api-identifier]')
     .option('-t, --title <title>', 'The title of the API')
-    .option('-d, --description <description>', 'A short description of the API')
+    .option('-d, --desc <description>', 'A short description of the API')
     .option('-c, --consume <mime-types>', 'A list of MIME types the operation can consume separated by ","', cliTools.listParser)
     .option('-p, --produce <mime-types>', 'A list of MIME types the operation can produce separated by ","', cliTools.listParser)
-    .action(function(apiIdentifier, options) {
+    .action(function action(apiIdentifier, options) {
       // Transform cli arguments and options into a parameter map
-      let parameters = cliTools.processCliArgs(arguments, []);
+      const parameters = cliTools.processCliArgs(arguments, []);
 
       // If the cli arguments are correct, we can launch the interactive prompt
-      return inquirer.prompt(prepareQuestions(parameters, valueLists))
+      return inquirer.prompt(prepareQuestions(parameters, choicesLists))
       .then(answers => {
         // Transform answers into correct parameters
         cliTools.processAnswerTypeOther(answers, 'consume');
@@ -57,14 +58,13 @@ module.exports = function(program, inquirer) {
 };
 
 
-
 /**
  * Prepare the list of questions for the prompt
- * @param  {Object} parameters - the parameters that have already been passed to the cli
- * @param  {Object} valueLists - lists of values for closed choice parameters
- * @return {Array}
+ * @param  {Object} parameters - parameters that have already been passed to the cli
+ * @param  {Object} choicesLists - lists of values for closed choice parameters
+ * @return {Array} - a list of questions
  */
-function prepareQuestions(parameters, valueLists) {
+function prepareQuestions(parameters, choicesLists) {
   return [{
     type: 'input',
     name: 'apiIdentifier',
@@ -78,14 +78,14 @@ function prepareQuestions(parameters, valueLists) {
     when: answers => { return !parameters.title; }
   }, {
     type: 'input',
-    name: 'description',
+    name: 'desc',
     message: 'You can write a more complete description of the API here',
-    when: answers => { return !parameters.description; }
+    when: answers => { return !parameters.desc; }
   }, {
     type: 'checkbox',
     name: 'consume',
     message: 'What are the MIME types that the operation can consume?',
-    choices: valueLists.mimeType,
+    choices: choicesLists.mimeType,
     when: answers => { return !parameters.consume; },
     default: ['application/json']
   }, {
@@ -97,7 +97,7 @@ function prepareQuestions(parameters, valueLists) {
     type: 'checkbox',
     name: 'produce',
     message: 'What are the MIME types that the operation can produce?',
-    choices: valueLists.mimeType,
+    choices: choicesLists.mimeType,
     when: answers => { return !parameters.produce; },
     default: ['application/json']
   }, {
@@ -110,9 +110,9 @@ function prepareQuestions(parameters, valueLists) {
 
 
 /**
- * Create the new endpoint
- * @param  {Object} parameters [description]
- * @return void
+ * Create the new api
+ * @param  {Object} parameters - the parameters provided in the command and in the prompt
+ * @return {Promise<null>}
  */
 function performTask(parameters) {
   // If a name has been provided, we create the project directory
@@ -123,7 +123,7 @@ function performTask(parameters) {
       swagger: '2.0',
       info: {
         title: parameters.title,
-        description: parameters.description
+        description: parameters.desc
       },
       schemes: ['https'],
       host: 'API_ID.execute-api.REGION.amazonaws.com',

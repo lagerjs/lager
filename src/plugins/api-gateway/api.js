@@ -6,11 +6,11 @@ const AWS = require('aws-sdk');
 const lager = require('@lager/lager/lib/lager');
 
 /**
- * Constructor function
- *
- * @param {Object} spec - base API specification
+ * Represents an API
+ * @constructor
+ * @param {Object} spec - base API specification (OpenAPI specification)
  */
-let Api = function Api(spec) {
+const Api = function Api(spec) {
   this.spec = spec;
 };
 
@@ -18,7 +18,7 @@ let Api = function Api(spec) {
  * Returns a string representation of an Api instance
  * @return {string}
  */
-Api.prototype.toString =  function toString() {
+Api.prototype.toString = function toString() {
   return 'Api ' + this.spec['x-lager'].identifier;
 };
 
@@ -44,16 +44,13 @@ Api.prototype.addEndpoint = function addEndpoint(endpoint) {
   return lager.fire('beforeAddEndpointToApi', this, endpoint)
   .spread((api, endpoint) => {
     // We construct the path specification
-    var path = {};
+    const path = {};
     path[endpoint.getResourcePath()] = {};
     path[endpoint.getResourcePath()][endpoint.getMethod().toLowerCase()] = endpoint.getSpec();
     _.merge(this.spec.paths, path);
 
     // @TODO Add models referenced in the endpoint
-
     // @TODO Add CORS configuration
-    // Create or update OPTION method if necessary
-    //addCorsConfig(endpointSpecification);
 
     return lager.fire('afterAddEndpointToApi', this, endpoint);
   })
@@ -70,7 +67,7 @@ Api.prototype.addEndpoint = function addEndpoint(endpoint) {
  * @return {Object}
  */
 Api.prototype.genSpec = function genSpec(type) {
-  let spec = _.cloneDeep(this.spec);
+  const spec = _.cloneDeep(this.spec);
   if (type === 'publish') {
     return cleanSpecForPublish(spec);
   } else if (type === 'doc') {
@@ -96,9 +93,8 @@ Api.prototype.publish = function publish(region, stage, environment) {
   .spread((awsApi, spec) => {
     if (awsApi) {
       return updateRestApi(awsApiGateway, spec, awsApi);
-    } else {
-      return createRestApi(awsApiGateway, spec, environment + '_' + spec['x-lager'].identifier);
     }
+    return createRestApi(awsApiGateway, spec, environment + '_' + spec['x-lager'].identifier);
   })
   .then((awsApi) => {
     this.spec['x-lager'].id = awsApi.id;
@@ -120,7 +116,7 @@ Api.prototype.publish = function publish(region, stage, environment) {
  * @return {Promise<Object>} - the AWS response
  */
 Api.prototype.setName = function setName(awsApiGateway, newName) {
-  var params = {
+  const params = {
     restApiId: this.spec['x-lager'].id,
     patchOperations: [{
       op: 'replace',
@@ -146,22 +142,21 @@ module.exports = Api;
  * @return {Promise<Object|null>}
  */
 function getApiByName(awsApiGateway, name, listParams, position) {
-  var params = _.assign({
+  const params = _.assign({
     position: position,
     limit: 100
   }, listParams);
   return Promise.promisify(awsApiGateway.getRestApis.bind(awsApiGateway))(params)
   .then(function(apiList) {
-    var apiFound = _.find(apiList.items, function(api) {
+    const apiFound = _.find(apiList.items, function(api) {
       return api.name === name;
     });
     if (apiFound) {
       return Promise.resolve(apiFound);
     } else if (apiList.items.length === params.limit) {
       return getApiByName(awsApiGateway, name, listParams, params.position + params.limit - 1);
-    } else {
-      return Promise.resolve(null);
     }
+    return Promise.resolve(null);
   });
 }
 
@@ -188,7 +183,7 @@ function createRestApi(awsApiGateway, apiSpec, name) {
  */
 function updateRestApi(awsApiGateway, apiSpec, awsApi) {
   console.log('Update Rest API ' + apiSpec['x-lager'].identifier);
-  let params = {
+  const params = {
     body: JSON.stringify(apiSpec),
     failOnWarnings: false,
     restApiId: awsApi.id,
@@ -200,16 +195,16 @@ function updateRestApi(awsApiGateway, apiSpec, awsApi) {
 /**
  * Clean an OpenAPI specification to remove parts incompatible with the ApiGateway import
  * @param  {Object} spec - an OpenAPI specification
- * @return {Object} - the OpenAPI specification cleaned
+ * @return {Object} - the cleaned OpenAPI specification
  */
 function cleanSpecForPublish(spec) {
   // @TODO: see if it is still useful when importing with the SDK
   // JSON schema doesn't allow to have example as property, but swagger model does
   // https://github.com/awslabs/aws-apigateway-importer/issues/177
-  _.forEach(spec.definitions, function(definition) {
-    delete(definition.example);
-    _.forEach(definition.properties, function(property) {
-      delete(property.example);
+  _.forEach(spec.definitions, definition => {
+    delete definition.example;
+    _.forEach(definition.properties, property => {
+      delete property.example;
     });
   });
   return spec;
@@ -218,17 +213,17 @@ function cleanSpecForPublish(spec) {
 /**
  * Clean an OpenAPI specification to remove parts specific to lager and ApiGateway
  * @param  {Object} spec - an OpenAPI specification
- * @return {Object} - the OpenAPI specification cleaned
+ * @return {Object} - the cleaned OpenAPI specification
  */
 function cleanSpecForDoc(spec) {
-  // @TODO: also delete lager extentions
   // For documentation, we can remove the OPTION methods, the lager extentions
   // and the extentions from API Gateway Importer
-  _.forEach(spec.paths, function(path) {
-    delete(path.options);
-    _.forEach(path, function(methodDefinition) {
-      delete(methodDefinition['x-amazon-apigateway-auth']);
-      delete(methodDefinition['x-amazon-apigateway-integration']);
+  delete spec['x-lager'];
+  _.forEach(spec.paths, path => {
+    delete path.options;
+    _.forEach(path, method => {
+      delete method['x-amazon-apigateway-auth'];
+      delete method['x-amazon-apigateway-integration'];
     });
   });
   return spec;

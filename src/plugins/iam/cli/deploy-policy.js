@@ -14,16 +14,16 @@ module.exports = (program, inquirer) => {
   return plugin.loadPolicies()
   .then(policies => {
     // Build the list of available policies for input verification and interactive selection
-    const valueLists = {
+    const choicesLists = {
       policyIdentifier: _.map(policies, policy => {
         return {
           value: policy.name,
-          label: policy.name + (policy.description ? ' - ' + policy.description : '')
+          name: policy.name + (policy.description ? ' - ' + policy.description : '')
         };
       })
     };
     const validators = {
-      policyIdentifier: cliTools.generateListValidator(valueLists.policyIdentifier, 'policy identifier')
+      policyIdentifier: cliTools.generateListValidator(choicesLists.policyIdentifier, 'policy identifier')
     };
 
     program
@@ -35,7 +35,7 @@ module.exports = (program, inquirer) => {
       let parameters = cliTools.processCliArgs(arguments, validators);
 
       // If the cli arguments are correct, we can launch the interactive prompt
-      return inquirer.prompt(prepareQuestions(parameters, valueLists))
+      return inquirer.prompt(prepareQuestions(parameters, choicesLists))
       .then(answers => {
         // Merge the parameters from the command and from the prompt and create the new API
         return performTask(_.merge(parameters, answers));
@@ -49,15 +49,15 @@ module.exports = (program, inquirer) => {
 /**
  * Prepare the list of questions for the prompt
  * @param  {Object} parameters - the parameters that have already been passed to the cli
- * @param  {Object} valueLists - lists of values for closed choice parameters
+ * @param  {Object} choicesLists - lists of values for closed choice parameters
  * @return {Array}
  */
-function prepareQuestions(parameters, valueLists) {
+function prepareQuestions(parameters, choicesLists) {
   return [{
     type: 'list',
     name: 'policyIdentifier',
     message: 'Which policy do you want to deploy?',
-    choices: _.map(valueLists.policyIdentifier, 'label'),
+    choices: choicesLists.policyIdentifier,
     when: function(currentAnswers) {
       return !parameters.policyIdentifier;
     }

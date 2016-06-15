@@ -14,22 +14,22 @@ module.exports = function(program, inquirer) {
   return plugin.loadApis()
   .then(apis => {
     // Build the list of available APIs for input verification and interactive selection
-    const valueLists = {
+    const choicesLists = {
       apiIdentifier: _.map(apis, api => {
         return {
           value: api.spec['x-lager'].identifier,
-          label: api.spec['x-lager'].identifier + (api.spec.info && api.spec.info.title ? ' - ' + api.spec.info.title : '')
+          name: cliTools.format.info(api.spec['x-lager'].identifier) + (api.spec.info && api.spec.info.title ? ' - ' + api.spec.info.title : '')
         };
       }),
       specVersion: [
-        { value: 'doc', label: 'version of the specification for documentation purpose' },
-        { value: 'publish', label: 'version of the specification used for publication in API Gateway' },
-        { value: 'complete', label: 'version of the specification unaltered' },
+        { value: 'doc', name: cliTools.format.info('doc') + ' - version of the specification for documentation purpose (Swagger UI, Postman ...)' },
+        { value: 'aws', name: cliTools.format.info('aws') + ' - version of the specification used for publication in API Gateway' },
+        { value: 'complete', name: cliTools.format.info('complete') + ' - version of the specification containing everything (doc + aws)' }
       ]
     };
     const validators = {
-      apiIdentifier: cliTools.generateListValidator(valueLists.apiIdentifier, 'API identifier'),
-      specVersion: cliTools.generateListValidator(valueLists.specVersion, 'specification version')
+      apiIdentifier: cliTools.generateListValidator(choicesLists.apiIdentifier, 'API identifier'),
+      specVersion: cliTools.generateListValidator(choicesLists.specVersion, 'specification version')
     };
 
     program
@@ -37,25 +37,25 @@ module.exports = function(program, inquirer) {
     .description('inspect an api specification')
     .arguments('[api-identifier]')
     .option('-c, --colors', 'highlight output')
-    .option('-t, --type', 'select the type of specification to retrieve: doc, deploy, complete')
+    .option('-s, --spec-version <version>', 'select the type of specification to retrieve: doc|aws|complete')
     .action(function (apiIdentifier, options) {
       // Transform cli arguments and options into a parameter map
       let parameters = cliTools.processCliArgs(arguments, validators);
 
       // If the cli arguments are correct, we can prepare the questions for the interactive prompt
       // Launch the interactive prompt
-      return inquirer.prompt(prepareQuestions(parameters, valueLists))
+      return inquirer.prompt(prepareQuestions(parameters, choicesLists))
       .then(answers => {
         // Merge the parameters provided in the command and in the prompt
         parameters =  _.merge(parameters, answers);
-        return plugin.getApiSpec(parameters.apiIdentifier, 'doc', parameters.colors);
+        return plugin.getApiSpec(parameters.apiIdentifier, parameters.specVersion, parameters.colors);
       })
       .then(spec => {
         console.log(spec);
       });
     });
 
-    return Promise.resolve(); 
+    return Promise.resolve();
   });
 };
 
@@ -63,15 +63,15 @@ module.exports = function(program, inquirer) {
 /**
  * Prepare the list of questions for the prompt
  * @param  {Object} parameters - the parameters that have already been passed to the cli
- * @param  {Object} valueLists - lists of values for closed choice parameters
+ * @param  {Object} choicesLists - lists of values for closed choice parameters
  * @return {Array}
  */
-function prepareQuestions(parameters, valueLists) {
+function prepareQuestions(parameters, choicesLists) {
   return [{
     type: 'list',
     name: 'apiIdentifier',
     message: 'Which API do you want to inspect?',
-    choices: _.map(valueLists.apiIdentifier, 'label'),
+    choices: choicesLists.apiIdentifier,
     when: function(currentAnswers) {
       return !parameters.apiIdentifier;
     }
@@ -79,7 +79,7 @@ function prepareQuestions(parameters, valueLists) {
     type: 'list',
     name: 'specVersion',
     message: 'Which version of the specification do ou want to see?',
-    choices: _.map(valueLists.specVersion, 'label'),
+    choices: choicesLists.specVersion,
     when: function(currentAnswers) {
       return !parameters.specVersion;
     }
