@@ -6,9 +6,6 @@ const Promise = lager.getPromise();
 const fs = Promise.promisifyAll(require('fs'));
 const _ = require('lodash');
 
-// Add plugin commands to lager cli
-const createLambda = require('./cli/create-lambda');
-
 const Lambda = require('./lambda');
 
 function loadLambdas() {
@@ -81,7 +78,7 @@ module.exports = {
      */
     registerCommands: function registerCommands(program, inquirer) {
       return Promise.all([
-        createLambda(program, inquirer)
+        require('./cli/create-lambda')(program, inquirer)
       ])
       .then(() => {
         return Promise.resolve([program, inquirer]);

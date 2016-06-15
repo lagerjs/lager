@@ -10,7 +10,7 @@
     "archiver": "1.0.0",
     "aws-sdk": "2.3.17",
     "bluebird": "3.4.0",
-    "cardinal": "^0.7.1",
+    "cardinal": "0.7.1",
     "commander": "2.9.0",
     "file": "0.2.2",
     "inquirer": "1.0.3",

@@ -2,6 +2,7 @@
   "name": "dev-app",
   "plugins": [
     "api-gateway",
-    "node-lambda"
+    "node-lambda",
+    "iam"
   ]
 }

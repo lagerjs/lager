@@ -2,21 +2,20 @@
 
 const fs = require('fs');
 const path = require('path');
-const Promise = require('bluebird');
+const lager = require('@lager/lager/lib/lager');
+const Promise = lager.getPromise();
 const _ = require('lodash');
 const AWS = require('aws-sdk');
 const archiver = require('archiver');
 const IntegrationDataInjector = require('./integration-data-injector');
-const lager = require('@lager/lager/lib/lager');
 
 
 /**
  * Constructor function
- * @param {Object} spec - base API specification
+ * @param {Object} config - lambda configuration
  * @constructor
  */
 let Lambda = function Lambda(config) {
-//console.log(config);
   this.config = config;
 
   this.config.params = this.config.params || {};
@@ -86,8 +85,8 @@ Lambda.prototype.deploy = function deploy(region, stage, environment) {
 Lambda.prototype.buildPackage = function buildPackage() {
   const lambdaPath = this.config.handlerPath;
   const dependenciesPaths = (this.config.includeLibs || []);
-  return new Promise(function(resolve, reject) {
 
+  return new Promise(function(resolve, reject) {
     var archivePath = '/tmp/' + (new Buffer(lambdaPath).toString('base64')) + '.zip';
     var outputStream = fs.createWriteStream(archivePath);
     var archive = archiver.create('zip', {});

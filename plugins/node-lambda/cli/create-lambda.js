@@ -4,11 +4,10 @@ const path = require('path');
 const lager = require('@lager/lager/lib/lager');
 const Promise = lager.getPromise();
 const fs = Promise.promisifyAll(require('fs'));
-const ncpAsync = Promise.promisify(require('ncp'));
-const cliTools = require('@lager/lager/lib/cli-tools');
-const mkdirpAsync = Promise.promisify(require('mkdirp'));
 const _ = lager.getLodash();
-const routers = ['api-endpoints', 'none'];
+const cliTools = require('@lager/lager/lib/cli-tools');
+const ncpAsync = Promise.promisify(require('ncp'));
+const mkdirpAsync = Promise.promisify(require('mkdirp'));
 
 module.exports = (program, inquirer) => {
 
@@ -41,9 +40,6 @@ module.exports = (program, inquirer) => {
   .option('-r, --role <role>', 'Select the execution role')
   .option('-e, --exec-type <execution-type>', 'Select the type of execution to associate to the lambda')
   .action(function (lambdaIdentifier, options) {
-    //console.log(options);
-    options['exec-type'] = options.execType;
-
     // Transform cli arguments and options into a parameter map
     let parameters = cliTools.processCliArgs(arguments, validators);
 
@@ -63,7 +59,7 @@ function prepareQuestions(parameters, valueLists) {
   return [{
     type: 'input',
     name: 'lambdaIdentifier',
-    message: 'Choose a unique identifier for the new Lambda (alphanumeric caracters, "_" and "-" accepted)',
+    message: 'Choose a unique identifier for the Lambda (alphanumeric caracters, "_" and "-" accepted)',
     when: answers => { return !parameters.lambdaIdentifier; },
     validate: input => { return /^[a-z0-9_-]+$/i.test(input); }
   }, {
@@ -121,7 +117,6 @@ function performTask(parameters) {
     // We create the lambda handler
     const src = path.join(__dirname, 'templates','lambda.js');
     const dest = path.join(configFilePath, 'lambdas.js');
-    console.log(src, dest);
     return ncpAsync(src, dest);
   })
   .then(() => {

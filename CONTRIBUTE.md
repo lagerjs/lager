@@ -14,23 +14,37 @@ Rules
 Setup dev environment
 ---
 
-Install docker and docker-compose
+The repository comes with a docker-compose configuration that allows to quickly test modification on the lager command line.
 
-### Working environment container
+Indeed, it installs the `lager` command line like `npm install @lager/lager -g` would do and comes with a test application.
+
+### Prerequisites
+
+*   Install docker and docker-compose
+*   `git clone git@github.com:lagerjs/lager.git`
+*   `cd lager`
+*   `npm install`
+*   `cp docker-compose.env.example docker-compose.env`
+*   configure the file `docker-compose.env` with AWS credentials that you want to use to perform deployment tests
+
+### Launching the development environment
 
 ```bash
 docker-compose run node zsh
 ```
 
-You will enter in container as the user `dev` in the root directory of a sample project.
-Lager will be installed globally.
+You will open a shell in a container as the user `lager`, in the root directory of a sample project. Lager will be installed globally. Test it with the following command.
+
+```bash
+lager -h
+```
 
 ### Unit tests container
 
-!! NO TESTS YET !!
+!! TODO !! improve test runner and document it
 
-There is a specific container to run tests, so we can define a different execution environment
-and be sure to isolate the execution of tests.
+~~There is a specific container to run tests, so we can define a different execution environment
+and be sure to isolate the execution of tests.~~
 
 ```bash
 docker-compose run test
