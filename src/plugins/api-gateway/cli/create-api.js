@@ -29,10 +29,9 @@ module.exports = function createApiCmd(program, inquirer) {
       mimeType: ['application/json', 'text/plain', { value: 'other', label: 'other (you will be prompted to enter a value)'}]
     };
 
-
     return program
-    .command('create-api')
-    .alias('new-api')
+    .command('ag:create-api')
+    .alias('ag:new-api')
     .description('create a new API')
     .arguments('[api-identifier]')
     .option('-t, --title <title>', 'The title of the API')
