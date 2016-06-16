@@ -34,12 +34,22 @@ const icli = {
   },
 
   /**
+   * Commander instance getter
+   * @return {Object} - the commander instance
+   */
+  getProgram() {
+    return program;
+  },
+
+  /**
    * Commander instance setter
    * @param {Object} p - commander instance
    * @return {Object} - the icli instance
    */
   setProgram(p) {
     program = p;
+    // Remove the "help" command because we do no use separate executable commands
+    program.executables = false;
     return this;
   },
 
@@ -61,7 +71,7 @@ const icli = {
    */
   createSubCommand(config, executeCommand) {
     // create the command
-    const cmd = program.command(config.cmd);
+    const cmd = program.command(config.cmd, null, config.options);
     cmd.description(config.description);
 
     // Extract commander arguments and options from the list of parameters
@@ -110,7 +120,7 @@ const icli = {
           if (availableValues.length > 1) {
             help = 'available values: ' + _.map(availableValues, icli.format.info).join(', ');
           }
-          errorMessages.push(icli.format.ko(providedValue) + ' is not a valid ' + label + ' - ' + help);
+          errorMessages.push(icli.format.ko(providedValue) + ' is not a valid ' + (label ? label : 'value') + ' - ' + help);
         }
       });
       if (errorMessages.length > 0) {
@@ -232,12 +242,7 @@ function getAction(parameters, executeCommand, commanderActionHook, inquirerProm
         return inquirerPromptHook(answers, commandParameterValues);
       }
       // Once we have all parameter values from the command and from the questions, we can execute the command
-      _.forEach(answers, (value, key) => {
-        if (!commandParameterValues[key] && answers[key]) {
-          commandParameterValues[key] = answers[key];
-        }
-      });
-      executeCommand(commandParameterValues);
+      executeCommand(_.merge(commandParameterValues, answers));
     });
   };
 }
@@ -247,7 +252,7 @@ function getAction(parameters, executeCommand, commanderActionHook, inquirerProm
  * and apply validations
  * @param  {Object} cliArgs - "arguments" object passed to the method action()
  * @param  {Object} validators - map of parameterKey / validation function
- * @return {Array} - a list o parameter values
+ * @return {Array} - a list of parameter values
  */
 function processCliArgs(cliArgs, validations) {
   // Initialize an object that will contain the final parameters (cli + prompt)
@@ -259,7 +264,7 @@ function processCliArgs(cliArgs, validations) {
   // If an argument is a comma separated list, we could also transform it into an Array here
   const validationResult = validateParameters(parameters, validations);
   if (validationResult !== true) {
-    console.log('\n  ' + icli.format.ko('error') + ':\n    ' + validationResult.join('\n    ') + '\n');
+    console.log('\n  ' + icli.format.ko('Error') + ':\n\n    ' + validationResult.join('\n    ') + '\n');
     process.exit(1);
   }
   return parameters;
@@ -300,7 +305,11 @@ function validateParameters(parameters, validations) {
     if (value && validations[key] ) {
       const validation = validations[key](value);
       if (validation !== true) {
-        messages = _.concat(messages, validation);
+        if (validation === false) {
+          messages.push(icli.format.error(value) + ' is not a valid parameter for ' + icli.format.info(key));
+        } else {
+          messages = _.concat(messages, validation);
+        }
       }
     }
   });
@@ -320,6 +329,7 @@ function parametersToQuestions(parameters, cmdParameterValues) {
     const question = parameter.question;
 
     // But we can extend it with data that comes from the parameter configuration
+    question.default = question.default || parameter.default;
     question.type = question.type || parameter.type;
     question.name = question.name || parameter.name;
     if (!question.choices && parameter.choices) {
