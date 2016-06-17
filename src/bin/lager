@@ -1,29 +1,18 @@
 #!/usr/bin/env node
 'use strict';
 
+// Nice ES6 syntax
+// const { Promise, _, icli } = require('@lager/lager').import;
 const lager = require('@lager/lager');
-const program = lager.getProgram();
-const cliTools = require('@lager/lager/lib/cli-tools');
+const icli = lager.import.icli;
+
 const packageJson = require('@lager/lager/package');
 
-program.version(packageJson.version);
+icli.getProgram().version(packageJson.version);
 
 // We fire the "registerCommands" event so plugins can add their own commands
-lager.fire('registerCommands', program, lager.getInquirer())
-.spread((program, inquirer) => {
-  // If a command is unknown, we show an error (by default it is silently ignored)
-  program.command('*', 'nothing here',  { noHelp: true })
-  .action(function(cmd) {
-    let msg = '\n  The command ' + cliTools.format.ko(cmd) + ' does not exist\n\n';
-    msg += '  Enter ' + cliTools.format.cmd('lager --help') + ' to see available commands\n';
-    msg += '  You have to be in the root folder of your Lager project to see commands implemented by Lager plugins\n';
-    console.log(msg);
-    process.exit(1);
-  });
-
-  // Remove the "help" command because we do no use separate executable commands
-  program.executables = false;
-
+lager.fire('registerCommands')
+.spread(() => {
   // Finally, we execute the cli
-  program.parse(process.argv);
+  icli.getProgram().parse(process.argv);
 });

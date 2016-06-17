@@ -1,98 +1,98 @@
 'use strict';
 
 const path = require('path');
+
+// Nice ES6 syntax
+// const { Promise, _, icli } = require('@lager/lager/lib/lager').import;
 const lager = require('@lager/lager/lib/lager');
-const Promise = lager.getPromise();
+const Promise = lager.import.Promise;
+const _ = lager.import._;
+const icli = lager.import.icli;
+
 const fs = Promise.promisifyAll(require('fs'));
-const _ = lager.getLodash();
-const cliTools = require('@lager/lager/lib/cli-tools');
-const ncpAsync = Promise.promisify(require('ncp'));
 const mkdirpAsync = Promise.promisify(require('mkdirp'));
+const ncpAsync = Promise.promisify(require('ncp'));
 
-module.exports = function createLambdaCmd(program, inquirer) {
+/**
+ * This module exports a function that enrich the interactive command line and return a promise
+ * @return {Promise} - a promise that resolve when the operation is done
+ */
+module.exports = () => {
+  // Build the lists of choices
+  const choicesLists = getChoices();
 
-  // Build the list of available APIs for input verification and interactive selection
+  const config = {
+    cmd: 'create-lambda',
+    description: 'create a new lambda',
+    parameters: [{
+      cmdSpec: '[lambda-identifier]',
+      type: 'input',
+      validate: input => { return /^[a-z0-9_-]+$/i.test(input); },
+      question: {
+        message: 'Choose a unique identifier for the Lambda (alphanumeric caracters, "_" and "-" accepted)'
+      }
+    }, {
+      cmdSpec: '-t, --timeout <timeout>',
+      description: 'select the timeout (in seconds)',
+      type: 'integer',
+      question: {
+        message: 'Choose the timeout (in seconds)'
+      }
+    }, {
+      cmdSpec: '-m, --memory <memory>>',
+      description: 'select the memory (in MB)',
+      type: 'list',
+      choices: choicesLists.memory,
+      question: {
+        message: 'Choose the memory'
+      }
+    }, {
+      // @TODO: should be a list
+      cmdSpec: '-r, --role <role>',
+      description: 'select the execution role',
+      type: 'input',
+      question: {
+        message: 'Choose the execution role'
+      }
+    }, {
+      cmdSpec: '-e, --exec-type <execution-type>',
+      description: 'select the type of execution to associate to the lambda',
+      type: 'list',
+      choices: choicesLists.execType,
+      default: choicesLists.execType[0],
+      question: {
+        message: 'Select an execution type'
+      }
+    }]
+  };
+
+  /**
+   * Create the command and the promp
+   */
+  return icli.createSubCommand(config, executeCommand);
+};
+
+/**
+ * Build the choices for "list" and "checkbox" parameters
+ * @param  {Array} endpoints - the list o available endpoint specifications
+ * @return {Object} - collection of lists of choices for "list" and "checkbox" parameters
+ */
+function getChoices() {
   const memoryValues = [];
   for (let i = 128; i <= 1536; i += 64) {
-    memoryValues.push({ value: i, label: i + 'MB' });
+    memoryValues.push({ value: i, name: _.padStart(i, 4) + ' MB' });
   }
   const choicesLists = {
     memory: memoryValues,
     execType: [{
       value: 'api-endpoints',
-      name: cliTools.format.info('api-endpoints') + ' - With this type of execution, the Lambda will execute endpoints defined by the api-gateway plugin'
+      name: icli.format.info('api-endpoints') + ' - With this type of execution, the Lambda will execute endpoints defined by the api-gateway plugin'
     }, {
       value: 'none',
-      name: cliTools.format.info('none') + ' - Do not add an execution type to the Lambda, you will write a custom one'
+      name: icli.format.info('none') + ' - Do not add an execution type to the Lambda, you will write a custom one'
     }]
   };
-  const validators = {
-    memory: cliTools.generateListValidator(choicesLists.memory, 'memory value'),
-    execType: cliTools.generateListValidator(choicesLists.execType, 'Lambda execution type')
-  };
-
-  program
-  .command('create-lambda')
-  .description('create a new lambda')
-  .arguments('[lambda-identifier]')
-  .option('-t, --timeout <timeout>', 'Select the timeout (seconds)', parseInt)
-  .option('-m, --memory <memory>', 'Select the memory (MB)', parseInt)
-  .option('-r, --role <role>', 'Select the execution role')
-  .option('-e, --exec-type <execution-type>', 'Select the type of execution to associate to the lambda')
-  .action(function action(lambdaIdentifier, options) {
-    // Transform cli arguments and options into a parameter map
-    const parameters = cliTools.processCliArgs(arguments, validators);
-
-    // If the cli arguments are correct, we can launch the interactive prompt
-    return inquirer.prompt(prepareQuestions(parameters, choicesLists))
-    .then(answers => {
-      // Merge the parameters from the command and from the prompt and create the new API
-      return performTask(_.merge(parameters, answers));
-    });
-  });
-
-  return Promise.resolve();
-};
-
-/**
- * Prepare the list of questions for the prompt
- * @param  {Object} parameters - parameters that have already been passed to the cli
- * @param  {Object} choicesLists - lists of values for closed choice parameters
- * @return {Array} - a list of questions
- */
-function prepareQuestions(parameters, choicesLists) {
-  return [{
-    type: 'input',
-    name: 'lambdaIdentifier',
-    message: 'Choose a unique identifier for the Lambda (alphanumeric caracters, "_" and "-" accepted)',
-    when: answers => { return !parameters.lambdaIdentifier; },
-    validate: input => { return /^[a-z0-9_-]+$/i.test(input); }
-  }, {
-    type: 'input',
-    name: 'timeout',
-    message: 'Choose the timeout',
-    when: answers => { return !parameters.timeout; },
-    validate: input => { return !isNaN(parseInt(input, 10)); }
-  }, {
-    type: 'list',
-    name: 'memory',
-    message: 'Choose the memory allocated to the Lambda',
-    choices: choicesLists.memory,
-    when: answers => { return !parameters.memory; },
-    default: '128MB'
-  }, {
-    type: 'input',
-    name: 'role',
-    message: 'Choose the execution role',
-    when: answers => { return !parameters.role; }
-  }, {
-    type: 'list',
-    name: 'execType',
-    message: 'Select an execution type for the Lambda',
-    choices: choicesLists.execType,
-    when: answers => { return !parameters.execType; },
-    default: 'api-endpoints'
-  }];
+  return choicesLists;
 }
 
 /**
@@ -100,7 +100,7 @@ function prepareQuestions(parameters, choicesLists) {
  * @param  {Object} parameters - the parameters provided in the command and in the prompt
  * @return {Promise<null>}
  */
-function performTask(parameters) {
+function executeCommand(parameters) {
   const configFilePath = path.join(process.cwd(), 'lambdas', parameters.lambdaIdentifier);
   return mkdirpAsync(configFilePath)
   .then(() => {

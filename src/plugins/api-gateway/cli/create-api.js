@@ -59,6 +59,7 @@ module.exports = () => {
         description: 'A list of MIME types the API can consume separated by ","',
         type: 'checkbox',
         choices: choicesLists.mimeType,
+        default: choicesLists.mimeType[0],
         question: {
           message: 'What are the MIME types that the API can consume?'
         }
@@ -67,6 +68,7 @@ module.exports = () => {
         description: 'A list of MIME types the API can produce separated by ","',
         type: 'checkbox',
         choices: choicesLists.mimeType,
+        default: choicesLists.mimeType[0],
         question: {
           message: 'What are the MIME types that the API can produce?'
         }

@@ -51,7 +51,7 @@ module.exports = () => {
         }
       }, {
         cmdSpec: '-c, --colors',
-        description: 'output with colors',
+        description: 'highlight output',
         type: 'confirm',
         default: true,
         question: {
@@ -72,18 +72,13 @@ module.exports = () => {
     /**
      * Create the command and the promp
      */
-    return icli.createSubCommand(config, parameters => {
-      plugin.getEndpointSpec(parameters.httpMethod, parameters.resourcePath, parameters.specVersion, parameters.colors)
-      .then(spec => {
-        console.log(spec);
-      });
-    });
+    return Promise.resolve(icli.createSubCommand(config, executeCommand));
   });
 };
 
 /**
  * Build the choices for "list" and "checkbox" parameters
- * @param  {Array} endpoints - the list o available endpoint specifications
+ * @param  {Array} endpoints - the list of available endpoint specifications
  * @return {Object} - collection of lists of choices for "list" and "checkbox" parameters
  */
 function getChoices(endpoints) {
@@ -109,4 +104,16 @@ function getChoices(endpoints) {
   ];
 
   return lists;
+}
+
+/**
+ * Output endpoint specification
+ * @param  {Object} parameters - the parameters provided in the command and in the prompt
+ * @return {Promise<null>}
+ */
+function executeCommand(parameters) {
+  return lager.getPlugin('api-gateway').getEndpointSpec(parameters.httpMethod, parameters.resourcePath, parameters.specVersion, parameters.colors)
+  .then(spec => {
+    console.log(spec);
+  });
 }

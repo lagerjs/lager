@@ -1,55 +1,47 @@
 'use strict';
 
 const path = require('path');
+
+// Nice ES6 syntax
+// const { Promise, _, icli } = require('@lager/lager/lib/lager').import;
 const lager = require('@lager/lager/lib/lager');
-const Promise = lager.getPromise();
+const Promise = lager.import.Promise;
+const _ = lager.import._;
+const icli = lager.import.icli;
+
 const fs = Promise.promisifyAll(require('fs'));
-const _ = lager.getLodash();
-const cliTools = require('@lager/lager/lib/cli-tools');
 const mkdirpAsync = Promise.promisify(require('mkdirp'));
 
-module.exports = (program, inquirer) => {
-  program
-  .command('create-policy')
-  .description('create a new policy')
-  .arguments('[policy-identifier]')
-  .action(function action(policyIdentifier, options) {
-    // Transform cli arguments and options into a parameter map
-    const parameters = cliTools.processCliArgs(arguments);
-
-    // If the cli arguments are correct, we can launch the interactive prompt
-    return inquirer.prompt(prepareQuestions(parameters))
-    .then(answers => {
-      // Merge the parameters from the command and from the prompt and create the new API
-      return performTask(_.merge(parameters, answers));
-    });
-  });
-
-  return Promise.resolve();
-};
-
 /**
- * Prepare the list of questions for the prompt
- * @param  {Object} parameters - the parameters that have already been passed to the cli
- * @param  {Object} choicesLists - lists of values for closed choice parameters
- * @return {Array}
+ * This module exports a function that enrich the interactive command line and return a promise
+ * @return {Promise} - a promise that resolve when the operation is done
  */
-function prepareQuestions(parameters, choicesLists) {
-  return [{
-    type: 'input',
-    name: 'policyIdentifier',
-    message: 'Choose a unique identifier for the policy (alphanumeric caracters, "_" and "-" accepted)',
-    when: answers => { return !parameters.policyIdentifier; },
-    validate: input => { return /^[a-z0-9_-]+$/i.test(input); }
-  }];
-}
+module.exports = () => {
+  const config = {
+    cmd: 'create-policy',
+    description: 'create a new policy',
+    parameters: [{
+      cmdSpec: '[policy-identifier]',
+      type: 'input',
+      validate:  input => { return /^[a-z0-9_-]+$/i.test(input); },
+      question: {
+        message: 'Choose a unique identifier for the policy (alphanumeric caracters, "_" and "-" accepted)'
+      }
+    }]
+  };
+
+  /**
+   * Create the command and the promp
+   */
+  return icli.createSubCommand(config, executeCommand);
+};
 
 /**
  * Create the new policy
  * @param  {Object} parameters - the parameters provided in the command and in the prompt
  * @return {Promise<null>}
  */
-function performTask(parameters) {
+function executeCommand(parameters) {
   const configFilePath = path.join(process.cwd(), 'iam', 'policies');
   return mkdirpAsync(configFilePath)
   .then(() => {
