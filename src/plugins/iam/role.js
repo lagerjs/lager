@@ -101,7 +101,7 @@ Role.prototype.attachManagedPolicy = function attachManagedPolicy(awsIAM, policy
     Scope: 'All'
   };
   return iamHelper.retrievePolicyArn(awsIAM, policyIdentifier, environment, searchParams)
-  .then(function(policyArn) {
+  .then(policyArn => {
     var params = {
       PolicyArn: policyArn,
       RoleName: roleName

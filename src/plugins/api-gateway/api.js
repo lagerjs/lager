@@ -147,7 +147,7 @@ function getApiByName(awsApiGateway, name, listParams, position) {
     limit: 100
   }, listParams);
   return Promise.promisify(awsApiGateway.getRestApis.bind(awsApiGateway))(params)
-  .then(function(apiList) {
+  .then(apiList => {
     const apiFound = _.find(apiList.items, function(api) {
       return api.name === name;
     });

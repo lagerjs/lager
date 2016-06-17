@@ -16,7 +16,7 @@ function getPolicyByName(awsIAM, name, listParams, marker) {
     Scope: 'All'
   }, listParams);
   return Promise.promisify(awsIAM.listPolicies.bind(awsIAM))(params)
-  .then(function(policyList) {
+  .then(policyList => {
     //console.log(policyList);
     const policyFound = _.find(policyList.Policies, function(policy) { return policy.PolicyName === name; });
     if (policyFound) {
@@ -44,7 +44,7 @@ function retrievePolicyArn(awsIAM, identifier, environment, searchParams) {
     return Promise.resolve(identifier);
   }
   return getPolicyByName(awsIAM, identifier, searchParams)
-  .then(function(policy) {
+  .then(policy => {
     if (!policy) {
       // If we didn't find a policy and "environment" is available,
       // we are adding it as a prefix and do another search
