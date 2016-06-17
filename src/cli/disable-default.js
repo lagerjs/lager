@@ -27,7 +27,7 @@ module.exports = () => {
 /**
  * Show an error if a unknown command was called
  * @param  {Object} parameters - the parameters provided in the command and in the prompt
- * @return {Promise<null>}
+ * @return {void} - the execution stops here
  */
 function executeCommand(parameters) {
   let msg = '\n  ' + icli.format.ko('Unknown command \n\n');

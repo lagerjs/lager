@@ -60,7 +60,7 @@ function getChoices() {
 /**
  * Deploy roles
  * @param  {Object} parameters - the parameters provided in the command and in the prompt
- * @return {Promise<null>}
+ * @return {Promise<null>} - The execution stops here
  */
 function executeCommand(parameters) {
   return plugin.findPRoles(parameters.roleIdentifiers)

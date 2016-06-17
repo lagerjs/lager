@@ -110,7 +110,7 @@ function getChoices(apis) {
 /**
  * Create the new endpoint
  * @param  {Object} parameters - the parameters provided in the command and in the prompt
- * @return {Promise<null>}
+ * @return {Promise<null>} - The execution stops here
  */
 function executeCommand(parameters) {
   if (parameters.resourcePath.charAt(0) !== '/') { parameters.resourcePath = '/' + parameters.resourcePath; }

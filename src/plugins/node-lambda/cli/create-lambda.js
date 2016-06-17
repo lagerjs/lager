@@ -98,7 +98,7 @@ function getChoices() {
 /**
  * Create the new lambda
  * @param  {Object} parameters - the parameters provided in the command and in the prompt
- * @return {Promise<null>}
+ * @return {Promise<null>} - The execution stops here
  */
 function executeCommand(parameters) {
   const configFilePath = path.join(process.cwd(), 'lambdas', parameters.lambdaIdentifier);

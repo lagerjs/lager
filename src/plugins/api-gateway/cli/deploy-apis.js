@@ -15,7 +15,7 @@ const plugin = lager.getPlugin('api-gateway');
  */
 module.exports = () => {
   // Build the list of available APIs andAWS regions for input verification and interactive selection
-  const choicesLists = getChoices()
+  return getChoices()
   .then(choicesLists => {
     const config = {
       cmd: 'deploy-apis',
@@ -110,7 +110,7 @@ function getChoices(apis) {
 /**
  * Create the new endpoint
  * @param  {Object} parameters - the parameters provided in the command and in the prompt
- * @return {Promise<null>}
+ * @return {Promise<null>} - The execution stops here
  */
 function executeCommand(parameters) {
   return lager.getPlugin('api-gateway').deploy(

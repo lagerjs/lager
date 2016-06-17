@@ -85,7 +85,7 @@ function getChoices(apis) {
 /**
  * Output API specification
  * @param  {Object} parameters - the parameters provided in the command and in the prompt
- * @return {Promise<null>}
+ * @return {Promise<null>} - The execution stops here
  */
 function executeCommand(parameters) {
   return lager.getPlugin('api-gateway').getApiSpec(parameters.apiIdentifier, parameters.specVersion, parameters.colors)

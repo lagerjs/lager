@@ -104,7 +104,7 @@ function getChoices(endpoints) {
 /**
  * Create the new api
  * @param  {Object} parameters - the parameters provided in the command and in the prompt
- * @return {Promise<null>}
+ * @return {Promise<null>} - The execution stops here
  */
 function executeCommand(parameters) {
   // If a name has been provided, we create the project directory

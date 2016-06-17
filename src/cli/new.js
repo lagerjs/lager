@@ -7,7 +7,6 @@ const path = require('path');
 // const { Promise, _, icli } = require('@lager/lager/lib/lager').import;
 const lager = require('@lager/lager/lib/lager');
 const Promise = lager.import.Promise;
-const _ = lager.import._;
 const icli = lager.import.icli;
 
 const fs = Promise.promisifyAll(require('fs'));
@@ -76,7 +75,7 @@ function getChoices() {
 /**
  * Create the new project
  * @param  {Object} parameters - the parameters provided in the command and in the prompt
- * @return {Promise<null>}
+ * @return {Promise<null>} - The execution stops here
  */
 function executeCommand(parameters) {
   // If a name has been provided, we create the project directory

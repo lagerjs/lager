@@ -60,7 +60,7 @@ function getChoices() {
 /**
  * Deploy policies
  * @param  {Object} parameters - the parameters provided in the command and in the prompt
- * @return {Promise<null>}
+ * @return {Promise<null>} - The execution stops here
  */
 function executeCommand(parameters) {
   return plugin.findPolicies(parameters.policyIdentifiers)
