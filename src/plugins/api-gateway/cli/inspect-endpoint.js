@@ -8,7 +8,7 @@ const icli = lager.import.icli;
 
 /**
  * This module exports a function that enrich the interactive command line and return a promise
- * @return {Promise} - a promise that resolve when the operation is done
+ * @returns{Promise} - a promise that resolve when the operation is done
  */
 module.exports = () => {
   // We have to require the plugin inside the function
@@ -78,8 +78,8 @@ module.exports = () => {
 
 /**
  * Build the choices for "list" and "checkbox" parameters
- * @param  {Array} endpoints - the list of available endpoint specifications
- * @return {Object} - collection of lists of choices for "list" and "checkbox" parameters
+ * @param {Array} endpoints - the list of available endpoint specifications
+ * @returns{Object} - collection of lists of choices for "list" and "checkbox" parameters
  */
 function getChoices(endpoints) {
   // Build lists of resource paths and http methods
@@ -108,8 +108,8 @@ function getChoices(endpoints) {
 
 /**
  * Output endpoint specification
- * @param  {Object} parameters - the parameters provided in the command and in the prompt
- * @return {Promise<null>} - The execution stops here
+ * @param {Object} parameters - the parameters provided in the command and in the prompt
+ * @returns{Promise<null>} - The execution stops here
  */
 function executeCommand(parameters) {
   return lager.getPlugin('api-gateway').getEndpointSpec(parameters.httpMethod, parameters.resourcePath, parameters.specVersion, parameters.colors)

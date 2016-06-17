@@ -20,8 +20,8 @@ let Policy = function Policy(document, name, pathPrefix) {
 
 /**
  * Deploy a policy
- * @param  String pathToPolicy
- * @return Promise
+ * @param String pathToPolicy
+ * @returnsPromise
  */
 Policy.prototype.deploy = function deploy(stage, environment) {
   const awsIAM = new AWS.IAM();
@@ -59,10 +59,10 @@ Policy.prototype.deploy = function deploy(stage, environment) {
 
 /**
  * [create description]
- * @param  {[type]} awsIAM      [description]
- * @param  {[type]} stage       [description]
- * @param  {[type]} environment [description]
- * @return {[type]}             [description]
+ * @param {[type]} awsIAM      [description]
+ * @param {[type]} stage       [description]
+ * @param {[type]} environment [description]
+ * @returns{[type]}             [description]
  */
 Policy.prototype.create = function create(awsIAM, stage, environment) {
   const params = {
@@ -76,10 +76,10 @@ Policy.prototype.create = function create(awsIAM, stage, environment) {
 
 /**
  * [update description]
- * @param  {[type]} awsIAM      [description]
- * @param  {[type]} stage       [description]
- * @param  {[type]} environment [description]
- * @return {[type]}             [description]
+ * @param {[type]} awsIAM      [description]
+ * @param {[type]} stage       [description]
+ * @param {[type]} environment [description]
+ * @returns{[type]}             [description]
  */
 Policy.prototype.updateIfNeeded = function updateIfNeeded(awsIAM, currentPolicy) {
   const params = {
@@ -100,9 +100,9 @@ Policy.prototype.updateIfNeeded = function updateIfNeeded(awsIAM, currentPolicy)
 
 /**
  * [update description]
- * @param  {[type]} awsIAM    [description]
- * @param  {[type]} policyArn [description]
- * @return {[type]}           [description]
+ * @param {[type]} awsIAM    [description]
+ * @param {[type]} policyArn [description]
+ * @returns{[type]}           [description]
  */
 Policy.prototype.update = function update(awsIAM, policyArn) {
   return Promise.promisify(awsIAM.listPolicyVersions.bind(awsIAM))({ PolicyArn: policyArn })
@@ -135,9 +135,9 @@ Policy.prototype.update = function update(awsIAM, policyArn) {
 
 /**
  * Create a policy version
- * @param  String policyArn
- * @param  String policyDocument
- * @return Promise
+ * @param String policyArn
+ * @param String policyDocument
+ * @returnsPromise
  */
 Policy.prototype.createPolicyVersion = function(awsIAM, policyArn) {
   // @TODO We should SetAsDefault only once the deployment is performed

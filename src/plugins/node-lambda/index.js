@@ -75,7 +75,7 @@ module.exports = {
   hooks: {
     /**
      * [registerCommands description]
-     * @return {[type]} [description]
+     * @returns{[type]} [description]
      */
     registerCommands: function registerCommands() {
       return Promise.all([
@@ -89,7 +89,7 @@ module.exports = {
 
     /**
      * This hook load all lambda configurations
-     * @return {Boolean}
+     * @returns{Boolean}
      */
     beforeApisLoad: function beforeApisLoad() {
       return loadLambdas()
@@ -102,11 +102,11 @@ module.exports = {
     /**
      * This hook perform the deployment of lambdas in AWS and return integration data
      * that will be used to configure the related endpoints
-     * @param  {Object} config - the deployment config: a object containing the region, satge, and environment
-     * @param  {Array} integrationResults - the collection of integration results
+     * @param {Object} config - the deployment config: a object containing the region, satge, and environment
+     * @param {Array} integrationResults - the collection of integration results
      *                                      we will add our own integrations results
      *                                      to this array
-     * @return {Promise<Array>}
+     * @returns{Promise<Array>}
      */
     loadIntegrations: function loadIntegrations(config, integrationResults) {
       return Promise.map(lambdas, (lambda) => {
@@ -120,7 +120,7 @@ module.exports = {
     /**
      * When the APIs have been deployed, we should cleanup the Lambda environment
      * and delete the lambdas that are not used anymore
-     * @return {[type]} [description]
+     * @returns{[type]} [description]
      */
     afterDeployAll: function afterDeployAll() {
       return Promise.resolve();

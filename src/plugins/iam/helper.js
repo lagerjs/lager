@@ -33,11 +33,11 @@ function getPolicyByName(awsIAM, name, listParams, marker) {
 /* istanbul ignore next */
 /**
  * Retrieve a policy Arn from a identifier that can be either the ARN or the name
- * @param  {[type]} awsIAM       [description]
- * @param  {String} identifier - The name or the ARN of the role
- * @param  {[type]} environment  [description]
- * @param  {[type]} searchParams [description]
- * @return {[type]}              [description]
+ * @param {[type]} awsIAM       [description]
+ * @param {String} identifier - The name or the ARN of the role
+ * @param {[type]} environment  [description]
+ * @param {[type]} searchParams [description]
+ * @returns{[type]}              [description]
  */
 function retrievePolicyArn(awsIAM, identifier, environment, searchParams) {
   if (/arn:aws:iam::\d{12}:policy\/?[a-zA-Z_0-9+=,.@\-_/]+]/.test(identifier)) {
@@ -60,9 +60,9 @@ function retrievePolicyArn(awsIAM, identifier, environment, searchParams) {
 
 /**
  * Search for an AWS role by name and return null if not found
- * @param  {[type]} awsIAM [description]
- * @param  {[type]} name   [description]
- * @return {[type]}        [description]
+ * @param {[type]} awsIAM [description]
+ * @param {[type]} name   [description]
+ * @returns{[type]}        [description]
  */
 function getAwsRole(awsIAM, name) {
   return Promise.promisify(awsIAM.getRole.bind(awsIAM))({ RoleName: name })

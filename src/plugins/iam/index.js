@@ -45,9 +45,9 @@ function loadPolicies() {
 
 /**
  * [loadPolicy description]
- * @param  {[type]} documentPath [description]
- * @param  {[type]} name         [description]
- * @return {[type]}              [description]
+ * @param {[type]} documentPath [description]
+ * @param {[type]} name         [description]
+ * @returns{[type]}              [description]
  */
 function loadPolicy(documentPath, name) {
   return lager.fire('beforePolicyLoad', documentPath, name)
@@ -69,8 +69,8 @@ function loadPolicy(documentPath, name) {
 
 /**
  * [findPolicies description]
- * @param  {[type]} identifiers [description]
- * @return {[type]}             [description]
+ * @param {[type]} identifiers [description]
+ * @returns{[type]}             [description]
  */
 function findPolicies(identifiers) {
   return loadPolicies()
@@ -81,7 +81,7 @@ function findPolicies(identifiers) {
 
 /**
  * [loadRoles description]
- * @return {[type]} [description]
+ * @returns{[type]} [description]
  */
 function loadRoles() {
   const roleConfigsPath = path.join(process.cwd(), 'iam', 'roles');
@@ -119,9 +119,9 @@ function loadRoles() {
 
 /**
  * [loadRole description]
- * @param  {[type]} configPath [description]
- * @param  {[type]} name       [description]
- * @return {[type]}            [description]
+ * @param {[type]} configPath [description]
+ * @param {[type]} name       [description]
+ * @returns{[type]}            [description]
  */
 function loadRole(configPath, name) {
   return lager.fire('beforeRoleLoad', configPath, name)
@@ -143,8 +143,8 @@ function loadRole(configPath, name) {
 
 /**
  * [findRole description]
- * @param  {[type]} identifiers [description]
- * @return {[type]}            [description]
+ * @param {[type]} identifiers [description]
+ * @returns{[type]}            [description]
  */
 function findRoles(identifiers) {
   return loadRoles()
@@ -159,7 +159,7 @@ module.exports = {
   hooks: {
     /**
      * [registerCommands description]
-     * @return {[type]}          [description]
+     * @returns{[type]}          [description]
      */
     registerCommands: function registerCommands() {
       return Promise.all([
@@ -175,7 +175,7 @@ module.exports = {
 
     /**
      * This hook load all role and policy configurations
-     * @return {Boolean}
+     * @returns{Boolean}
      */
     beforeApisLoad: function beforeApisLoad() {
       return loadPolicies()

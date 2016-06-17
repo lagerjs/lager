@@ -16,7 +16,7 @@ const Api = function Api(spec) {
 
 /**
  * Returns a string representation of an Api instance
- * @return {string}
+ * @returns{string}
  */
 Api.prototype.toString = function toString() {
   return 'Api ' + this.spec['x-lager'].identifier;
@@ -25,7 +25,7 @@ Api.prototype.toString = function toString() {
 /**
  * Check if an endpoint applies to an API
  * @param {Endpoint} endpoint
- * @return {boolean}
+ * @returns{boolean}
  */
 Api.prototype.doesExposeEndpoint = function doesExposeEndpoint(endpoint) {
   const spec = endpoint.getSpec();
@@ -38,7 +38,7 @@ Api.prototype.doesExposeEndpoint = function doesExposeEndpoint(endpoint) {
 /**
  * Add an endpoint to the API
  * @param {Endpoint} endpoint
- * @return {Promise<Api>}
+ * @returns{Promise<Api>}
  */
 Api.prototype.addEndpoint = function addEndpoint(endpoint) {
   return lager.fire('beforeAddEndpointToApi', this, endpoint)
@@ -63,8 +63,8 @@ Api.prototype.addEndpoint = function addEndpoint(endpoint) {
  * Generate the OpenAPI specification
  * It can be the "publish" version (for API Gateway)
  * or the "doc" version (for Swagger UI, Postman, etc...)
- * @param  {string} type - the kind of specification to generate (publish|doc)
- * @return {Object}
+ * @param {string} type - the kind of specification to generate (publish|doc)
+ * @returns{Object}
  */
 Api.prototype.genSpec = function genSpec(type) {
   const spec = _.cloneDeep(this.spec);
@@ -79,7 +79,7 @@ Api.prototype.genSpec = function genSpec(type) {
 /**
  * Publish the API specification in API Gateway
  *
- * @return {Promise<Api>}
+ * @returns{Promise<Api>}
  */
 Api.prototype.publish = function publish(region, stage, environment) {
   const awsApiGateway = new AWS.APIGateway({ region });
@@ -113,7 +113,7 @@ Api.prototype.publish = function publish(region, stage, environment) {
 /**
  * Set the name of the API in ApiGateway
  * @param {string} newName - the name to apply to the API in ApiGateway
- * @return {Promise<Object>} - the AWS response
+ * @returns{Promise<Object>} - the AWS response
  */
 Api.prototype.setName = function setName(awsApiGateway, newName) {
   const params = {
@@ -135,11 +135,11 @@ module.exports = Api;
  * Since we do not know the API ID but only the name, we have to list
  * all APIs and search for the name
  * Note that an API name is not necessarily unique, but we consider it should be
- * @param  {APIGateway} awsApiGateway - an API Gateway client from the AWS SDK
- * @param  {string} name - the name of the API we are looking for
- * @param  {[]} listParams - params of the awsApiGateway.getRestApis() method from the AWS SDK
- * @param  {Integer} position - used for recusive call when the list of APIs is too long
- * @return {Promise<Object|null>}
+ * @param {APIGateway} awsApiGateway - an API Gateway client from the AWS SDK
+ * @param {string} name - the name of the API we are looking for
+ * @param {[]} listParams - params of the awsApiGateway.getRestApis() method from the AWS SDK
+ * @param {Integer} position - used for recusive call when the list of APIs is too long
+ * @returns{Promise<Object|null>}
  */
 function getApiByName(awsApiGateway, name, listParams, position) {
   const params = _.assign({
@@ -162,9 +162,9 @@ function getApiByName(awsApiGateway, name, listParams, position) {
 
 /**
  * Creates a new API in ApiGateway
- * @param  {AWS.ApiGateway} - an ApiGateway client from the AWS SDK
- * @param  {Object} apiSpec - an OpenAPI specification
- * @return {Promise<Object>} - an AWS Object representing the API
+ * @param {AWS.ApiGateway} - an ApiGateway client from the AWS SDK
+ * @param {Object} apiSpec - an OpenAPI specification
+ * @returns{Promise<Object>} - an AWS Object representing the API
  */
 function createRestApi(awsApiGateway, apiSpec, name) {
   console.log('Create Rest API ' + apiSpec['x-lager'].identifier);
@@ -176,10 +176,10 @@ function createRestApi(awsApiGateway, apiSpec, name) {
 
 /**
  * Creates a new API in ApiGateway
- * @param  {AWS.ApiGateway} - an ApiGateway client from the AWS SDK
- * @param  {Object} apiSpec - an OpenAPI specification
- * @param  {Object} - an AWS Object representing the API
- * @return {Promise<Object>} - an AWS Object representing the API
+ * @param {AWS.ApiGateway} - an ApiGateway client from the AWS SDK
+ * @param {Object} apiSpec - an OpenAPI specification
+ * @param {Object} - an AWS Object representing the API
+ * @returns{Promise<Object>} - an AWS Object representing the API
  */
 function updateRestApi(awsApiGateway, apiSpec, awsApi) {
   console.log('Update Rest API ' + apiSpec['x-lager'].identifier);
@@ -194,8 +194,8 @@ function updateRestApi(awsApiGateway, apiSpec, awsApi) {
 
 /**
  * Clean an OpenAPI specification to remove parts incompatible with the ApiGateway import
- * @param  {Object} spec - an OpenAPI specification
- * @return {Object} - the cleaned OpenAPI specification
+ * @param {Object} spec - an OpenAPI specification
+ * @returns{Object} - the cleaned OpenAPI specification
  */
 function cleanSpecForPublish(spec) {
   // @TODO: see if it is still useful when importing with the SDK
@@ -212,8 +212,8 @@ function cleanSpecForPublish(spec) {
 
 /**
  * Clean an OpenAPI specification to remove parts specific to lager and ApiGateway
- * @param  {Object} spec - an OpenAPI specification
- * @return {Object} - the cleaned OpenAPI specification
+ * @param {Object} spec - an OpenAPI specification
+ * @returns{Object} - the cleaned OpenAPI specification
  */
 function cleanSpecForDoc(spec) {
   // For documentation, we can remove the OPTION methods, the lager extentions

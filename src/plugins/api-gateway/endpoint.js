@@ -15,7 +15,7 @@ var Endpoint = function Endpoint(spec, resourcePath, method) {
 
 /**
  * Returns a string representation of an Endpoint instance
- * @return {string}
+ * @returns{string}
  */
 Endpoint.prototype.toString =  function toString() {
   return 'Endpoint ' + this.method + ' ' + this.resourcePath;
@@ -23,7 +23,7 @@ Endpoint.prototype.toString =  function toString() {
 
 /**
  * Returns the endpoint's HTTP method
- * @return {string}
+ * @returns{string}
  */
 Endpoint.prototype.getMethod = function getMethod() {
   return this.method;
@@ -31,7 +31,7 @@ Endpoint.prototype.getMethod = function getMethod() {
 
 /**
  * Returns the endpoint's path
- * @return {string}
+ * @returns{string}
  */
 Endpoint.prototype.getResourcePath = function getResourcePath() {
   return this.resourcePath;
@@ -39,7 +39,7 @@ Endpoint.prototype.getResourcePath = function getResourcePath() {
 
 /**
  * Returns the endpoint's OpenAPI specification
- * @return {Object}
+ * @returns{Object}
  */
 Endpoint.prototype.getSpec = function getSpec() {
   return this.spec;

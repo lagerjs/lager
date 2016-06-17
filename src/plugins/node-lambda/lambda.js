@@ -39,7 +39,7 @@ const Lambda = function Lambda(config) {
 
 /**
  * Returns a string representation of a Lambda instance
- * @return {string}
+ * @returns{string}
  */
 Lambda.prototype.toString = function toString() {
   return 'Lambda ' + this.config.identifier;
@@ -47,7 +47,7 @@ Lambda.prototype.toString = function toString() {
 
 /**
  * Deploys the lambda in AWS
- * @return {Promise<LambdaIntegrationDataInjector>} - the IntegrationDataInjector of the lambda
+ * @returns{Promise<LambdaIntegrationDataInjector>} - the IntegrationDataInjector of the lambda
  */
 Lambda.prototype.deploy = function deploy(region, stage, environment) {
   console.log('   * Deploy ' + this.config.identifier);
@@ -79,7 +79,7 @@ Lambda.prototype.deploy = function deploy(region, stage, environment) {
 
 /**
  * Create a zip package for a lambda and provide it's content in a buffer
- * @return {Promise<Buffer>}
+ * @returns{Promise<Buffer>}
  */
 Lambda.prototype.buildPackage = function buildPackage() {
   const lambdaPath = this.config.handlerPath;
@@ -123,7 +123,7 @@ Lambda.prototype.buildPackage = function buildPackage() {
 /* istanbul ignore next */
 /**
  * Check if the Lambda already exists in AWS
- * @return {Promise<Boolean>}
+ * @returns{Promise<Boolean>}
  */
 Lambda.prototype.isDeployed = function isDeployed(awsLambda) {
   const params = { FunctionName: this.config.params.FunctionName };
@@ -141,7 +141,7 @@ Lambda.prototype.isDeployed = function isDeployed(awsLambda) {
 /* istanbul ignore next */
 /**
  * Create the lambda in AWS
- * @return {Promise<Object>} - AWS description of the lambda
+ * @returns{Promise<Object>} - AWS description of the lambda
  */
 Lambda.prototype.create = function create(awsLambda, environment) {
   const params = _.cloneDeep(this.config.params);
@@ -157,7 +157,7 @@ Lambda.prototype.create = function create(awsLambda, environment) {
 /* istanbul ignore next */
 /**
  * Update the lambda in AWS
- * @return {Promise<Object>} - AWS description of the lambda
+ * @returns{Promise<Object>} - AWS description of the lambda
  */
 Lambda.prototype.update = function update(awsLambda, environment) {
   return this.buildPackage()
@@ -186,7 +186,7 @@ Lambda.prototype.update = function update(awsLambda, environment) {
 /* istanbul ignore next */
 /**
  * Create a new version of the lambda
- * @return {Promise<Object>} - AWS description of the lambda
+ * @returns{Promise<Object>} - AWS description of the lambda
  */
 Lambda.prototype.publishVersion = function publishVersion(awsLambda, alias) {
   // @TODO set alias and delete previous version

@@ -11,7 +11,7 @@ const plugin = lager.getPlugin('iam');
 
 /**
  * This module exports a function that enrich the interactive command line and return a promise
- * @return {Promise} - a promise that resolve when the operation is done
+ * @returns{Promise} - a promise that resolve when the operation is done
  */
 module.exports = () => {
   // First, retrieve possible values for the endpoint-identifiers parameter
@@ -39,8 +39,8 @@ module.exports = () => {
 
 /**
  * Build the choices for "list" and "checkbox" parameters
- * @param  {Array} endpoints - the list o available endpoint specifications
- * @return {Object} - collection of lists of choices for "list" and "checkbox" parameters
+ * @param {Array} endpoints - the list o available endpoint specifications
+ * @returns{Object} - collection of lists of choices for "list" and "checkbox" parameters
  */
 function getChoices() {
   return plugin.loadPolicies()
@@ -59,8 +59,8 @@ function getChoices() {
 
 /**
  * Deploy policies
- * @param  {Object} parameters - the parameters provided in the command and in the prompt
- * @return {Promise<null>} - The execution stops here
+ * @param {Object} parameters - the parameters provided in the command and in the prompt
+ * @returns{Promise<null>} - The execution stops here
  */
 function executeCommand(parameters) {
   return plugin.findPolicies(parameters.policyIdentifiers)

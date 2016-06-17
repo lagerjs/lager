@@ -19,9 +19,9 @@ let Role = function Role(config, name, pathPrefix) {
 
 /**
  * [deploy description]
- * @param  {[type]} stage       [description]
- * @param  {[type]} environment [description]
- * @return {[type]}             [description]
+ * @param {[type]} stage       [description]
+ * @param {[type]} environment [description]
+ * @returns{[type]}             [description]
  */
 Role.prototype.deploy = function deploy(stage, environment) {
   const awsIAM = new AWS.IAM();
@@ -46,9 +46,9 @@ Role.prototype.deploy = function deploy(stage, environment) {
 
 /**
  * [create description]
- * @param  {[type]} awsIAM [description]
- * @param  {[type]} name   [description]
- * @return {[type]}        [description]
+ * @param {[type]} awsIAM [description]
+ * @param {[type]} name   [description]
+ * @returns{[type]}        [description]
  */
 Role.prototype.create = function create(awsIAM, name) {
   console.log(' * Create role ' + name);
@@ -62,9 +62,9 @@ Role.prototype.create = function create(awsIAM, name) {
 
 /**
  * [update description]
- * @param  {[type]} awsIAM      [description]
- * @param  {[type]} currentRole [description]
- * @return {[type]}             [description]
+ * @param {[type]} awsIAM      [description]
+ * @param {[type]} currentRole [description]
+ * @returns{[type]}             [description]
  */
 Role.prototype.update = function update(awsIAM, currentRole) {
   console.log(' * Update role ' + currentRole.RoleName);
@@ -77,10 +77,10 @@ Role.prototype.update = function update(awsIAM, currentRole) {
 
 /**
  * [attachPolicies description]
- * @param  {[type]} name        [description]
- * @param  {[type]} config      [description]
- * @param  {[type]} environment [description]
- * @return {[type]}             [description]
+ * @param {[type]} name        [description]
+ * @param {[type]} config      [description]
+ * @param {[type]} environment [description]
+ * @returns{[type]}             [description]
  */
 Role.prototype.attachPolicies = function attachPolicies(awsIAM, roleName, environment) {
   // Run the functions in serie
@@ -91,9 +91,9 @@ Role.prototype.attachPolicies = function attachPolicies(awsIAM, roleName, enviro
 
 /**
  * [attachManagedPolicy description]
- * @param  {String} roleName         Role name
- * @param  {String} policyIdentifier Name or arn
- * @return Promise
+ * @param {String} roleName         Role name
+ * @param {String} policyIdentifier Name or arn
+ * @returnsPromise
  */
 Role.prototype.attachManagedPolicy = function attachManagedPolicy(awsIAM, policyIdentifier, roleName, environment) {
   const searchParams = {

@@ -35,7 +35,7 @@ const icli = {
 
   /**
    * Commander instance getter
-   * @return {Object} - the commander instance
+   * @returns{Object} - the commander instance
    */
   getProgram() {
     return program;
@@ -44,7 +44,7 @@ const icli = {
   /**
    * Commander instance setter
    * @param {Object} p - commander instance
-   * @return {Object} - the icli instance
+   * @returns{Object} - the icli instance
    */
   setProgram(p) {
     program = p;
@@ -56,7 +56,7 @@ const icli = {
   /**
    * Inquirer instance setter
    * @param {Object} p - inquirer instance
-   * @return {Object} - the icli instance
+   * @returns{Object} - the icli instance
    */
   setPrompt(p) {
     prompt = p;
@@ -65,9 +65,9 @@ const icli = {
 
   /**
    * Create a new interactive command
-   * @param  {Object} config - a configuration object
-   * @param  {function} executeCommand - callback processing the property values once defined by the command line and the prompt
-   * @return {void}
+   * @param {Object} config - a configuration object
+   * @param {function} executeCommand - callback processing the property values once defined by the command line and the prompt
+   * @returns{void}
    */
   createSubCommand(config, executeCommand) {
     // create the command
@@ -101,9 +101,9 @@ const icli = {
 
   /**
    * Generate a function that check if an item belongs to a list
-   * @param  {Array} list - the list of available values
-   * @param  {string} label - a label to identify the type of the list items (used in error messages)
-   * @return {function} - a validation function
+   * @param {Array} list - the list of available values
+   * @param {string} label - a label to identify the type of the list items (used in error messages)
+   * @returns{function} - a validation function
    */
   generateListValidation(list, label) {
     return function listValidation(providedValues) {
@@ -137,8 +137,8 @@ module.exports = icli;
 /**
  * Calculate parameter names and add a "validate" property if needed
  * Return the list of commander arguments and the list of commander options
- * @param  {Array} parameters - a list of parameter configurations
- * @return {Object} - an object containing the list of arguments and the list of options
+ * @param {Array} parameters - a list of parameter configurations
+ * @returns{Object} - an object containing the list of arguments and the list of options
  */
 function parseParameters(parameters) {
   const args = [];
@@ -172,8 +172,8 @@ function parseParameters(parameters) {
 
 /**
  * Parse a parameter of type "option" to calculate the name and generate the commander option
- * @param  {Object} parameter - a parameter definition that will be enriched with a correct name
- * @return {Object} - the properties of the commander option
+ * @param {Object} parameter - a parameter definition that will be enriched with a correct name
+ * @returns{Object} - the properties of the commander option
  */
 function parseOptionSpec(parameter) {
   // @see https://github.com/tj/commander.js/blob/33751b444a578259a7e37a0971d757452de3f228/index.js#L44-L46
@@ -189,8 +189,8 @@ function parseOptionSpec(parameter) {
 
 /**
  * Parse a parameter of type "argument" to calculate the name and generate the commander option
- * @param  {Object} parameter - a parameter definition that will be enriched with a correct name
- * @return {Object} - a commander argument
+ * @param {Object} parameter - a parameter definition that will be enriched with a correct name
+ * @returns{Object} - a commander argument
  */
 function parseArgumentSpec(parameter) {
   parameter.name = _.camelCase(parameter.cmdSpec);
@@ -199,8 +199,8 @@ function parseArgumentSpec(parameter) {
 
 /**
  * Get default coercion for a parameter type
- * @param  {string} type - a parameter type
- * @return {function|null} - the coercion function to applu to the command line argument/option
+ * @param {string} type - a parameter type
+ * @returns{function|null} - the coercion function to applu to the command line argument/option
  */
 function getCoercionForType(type) {
   switch (type) {
@@ -215,11 +215,11 @@ function getCoercionForType(type) {
 
 /**
  * Construct the action() function passed to commander
- * @param  {Array} parameters - the list of parameters
- * @param  {function} executeCommand - the function that perform the interactive command task with property values
- * @param  {function} commanderActionHook - a hook fuction that allows to alter the result of the command arguments/options
- * @param  {function} inquirerPromptHook - a hook fuction that allows to alter the result of the questions
- * @return {function} - The function that must be passed to cmd.action()
+ * @param {Array} parameters - the list of parameters
+ * @param {function} executeCommand - the function that perform the interactive command task with property values
+ * @param {function} commanderActionHook - a hook fuction that allows to alter the result of the command arguments/options
+ * @param {function} inquirerPromptHook - a hook fuction that allows to alter the result of the questions
+ * @returns{function} - The function that must be passed to cmd.action()
  */
 function getAction(parameters, executeCommand, commanderActionHook, inquirerPromptHook) {
   return function action() {
@@ -250,9 +250,9 @@ function getAction(parameters, executeCommand, commanderActionHook, inquirerProm
 /**
  * Transform the parameters of commander action() callback into a list of parameter values
  * and apply validations
- * @param  {Object} cliArgs - "arguments" object passed to the method action()
- * @param  {Object} validators - map of parameterKey / validation function
- * @return {Array} - a list of parameter values
+ * @param {Object} cliArgs - "arguments" object passed to the method action()
+ * @param {Object} validators - map of parameterKey / validation function
+ * @returns{Array} - a list of parameter values
  */
 function processCliArgs(cliArgs, validations) {
   // Initialize an object that will contain the final parameters (cli + prompt)
@@ -272,8 +272,8 @@ function processCliArgs(cliArgs, validations) {
 
 /**
  * Verify and transform cli args into parameters
- * @param  {Object} cliArgs - arguments and options that have been passed to the cli
- * @return {Object} - parameter values
+ * @param {Object} cliArgs - arguments and options that have been passed to the cli
+ * @returns{Object} - parameter values
  */
 function cliArgsToParameters(cliArgs) {
   // Initialize an object that will contain the final parameters (cli + prompt)
@@ -295,9 +295,9 @@ function cliArgsToParameters(cliArgs) {
 /**
  * Validate a list of parameter values
  * Used to validate parameters passed to the command before preparing prompt questions
- * @param  {Object} parameters - parameters that have been passed to the cli
- * @param  {Object} validations - validation functions
- * @return {Array|bool} - true if all validations passed, or else an array of error messages
+ * @param {Object} parameters - parameters that have been passed to the cli
+ * @param {Object} validations - validation functions
+ * @returns{Array|bool} - true if all validations passed, or else an array of error messages
  */
 function validateParameters(parameters, validations) {
   let messages = [];
@@ -318,9 +318,9 @@ function validateParameters(parameters, validations) {
 
 /**
  * Transform a list of parameter configurations into a list of inquirer questions
- * @param  {Array} parameters - a list of parameter configurations
- * @param  {Object} cmdParameterValues - the parameter values that have been set by the command
- * @return {Array} - a list of inquirer questions
+ * @param {Array} parameters - a list of parameter configurations
+ * @param {Object} cmdParameterValues - the parameter values that have been set by the command
+ * @returns{Array} - a list of inquirer questions
  */
 function parametersToQuestions(parameters, cmdParameterValues) {
   const questions = [];

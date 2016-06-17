@@ -8,8 +8,8 @@ let iam = new AWS.IAM();
 /* istanbul ignore next */
 /**
  * Retrieve a role Arn from a identifier that can be either the ARN or the name
- * @param  {string} identifier - The name or the ARN of the role
- * @return {Promise<string>}
+ * @param {string} identifier - The name or the ARN of the role
+ * @returns{Promise<string>}
  */
 module.exports = function retrieveRoleArn(identifier, environment) {
   // First check if the parameter already is an ARN

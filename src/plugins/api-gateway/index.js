@@ -13,7 +13,7 @@ const Endpoint = require('./endpoint');
 
 /**
  * Load all API specifications
- * @return {Promise<[Api]>} - the promise of an array containing all Apis
+ * @returns{Promise<[Api]>} - the promise of an array containing all Apis
  */
 function loadApis() {
   const apiSpecsPath = path.join(process.cwd(), 'apis');
@@ -51,10 +51,10 @@ function loadApis() {
 
 /**
  * Load an API specification
- * @param  {string} apiSpecPath - the full path to the specification file
- * @param  {string} OPTIONAL identifier - a human readable identifier, eventually
+ * @param {string} apiSpecPath - the full path to the specification file
+ * @param {string} OPTIONAL identifier - a human readable identifier, eventually
  *                                        configured in the specification file itself
- * @return {Promise<Api>}
+ * @returns{Promise<Api>}
  */
 function loadApi(apiSpecPath, identifier) {
   return lager.fire('beforeApiLoad', apiSpecPath, identifier)
@@ -78,7 +78,7 @@ function loadApi(apiSpecPath, identifier) {
 
 /**
  * Load all Endpoint specifications
- * @return {Promise<[Endpoints]>}
+ * @returns{Promise<[Endpoints]>}
  */
 function loadEndpoints() {
   const endpointsDirectory = 'endpoints';
@@ -120,10 +120,10 @@ function loadEndpoints() {
  *
  * From the `endpointSpecRootPath` directory, lager will look for a specification in
  * each subdirectory following the structure `path/to/the/resource/HTTP_METHOD/`
- * @param  {string} endpointSpecRootPath - the root directory of the endpoint configuration
- * @param  {string} resourcePath - the URL path to the endpoint resource
- * @param  {string} method - the HTTP method of the endpoint
- * @return {Promise<Endpoint>}
+ * @param {string} endpointSpecRootPath - the root directory of the endpoint configuration
+ * @param {string} resourcePath - the URL path to the endpoint resource
+ * @param {string} method - the HTTP method of the endpoint
+ * @returns{Promise<Endpoint>}
  */
 function loadEndpoint(endpointSpecRootPath, resourcePath, method) {
   // @TODO throw error if the endpoint does not exists
@@ -145,7 +145,7 @@ function loadEndpoint(endpointSpecRootPath, resourcePath, method) {
 
 /**
  * Integration load and deployment is performed other plugins
- * @return {[IntegrationObject]} [description]
+ * @returns{[IntegrationObject]} [description]
  */
 function loadIntegrations(region, stage, environment) {
   // The `deployIntegrations` hook takes two arguments
@@ -161,11 +161,11 @@ function loadIntegrations(region, stage, environment) {
  * Update the configuration of endpoints with data returned by integration
  * This data can come from the deployment of a lambda function, the configuration
  * of an HTTP proxy, the generation of a mock etc ...
- * @param  {[Endpoint]} - a list of Endpoints
- * @param  {[IntegrationDataInjector]} - a list of integration data injectors
+ * @param {[Endpoint]} - a list of Endpoints
+ * @param {[IntegrationDataInjector]} - a list of integration data injectors
  *                                       an integration data injector is able to recognize
  *                                       if it applies to an endpoint and update its specification
- * @return {[Endpoint]}
+ * @returns{[Endpoint]}
  */
 function addIntegrationDataToEndpoints(endpoints, integrationDataInjectors) {
   return lager.fire('beforeAddIntegrationDataToEndpoints', endpoints, integrationDataInjectors)
@@ -186,9 +186,9 @@ function addIntegrationDataToEndpoints(endpoints, integrationDataInjectors) {
 
 /**
  * [function description]
- * @param  {[Api]} apis
- * @param  {[Endpoint]} endpoints
- * @return {Promise<[Api]>}
+ * @param {[Api]} apis
+ * @param {[Endpoint]} endpoints
+ * @returns{Promise<[Api]>}
  */
 function addEndpointsToApis(apis, endpoints) {
   return lager.fire('beforeAddEndpointsToApis', apis, endpoints)
@@ -211,8 +211,8 @@ function addEndpointsToApis(apis, endpoints) {
 
 /**
  * [function description]
- * @param  {[type]} apis [description]
- * @return {[type]}      [description]
+ * @param {[type]} apis [description]
+ * @returns{[type]}      [description]
  */
 function publishAllApis(apis, region, stage, environment) {
   return lager.fire('beforePublishAllApis', apis)
@@ -231,10 +231,10 @@ function publishAllApis(apis, region, stage, environment) {
 
 /**
  *
- * @param  {string} region - AWS where we want to deploy APIs
- * @param  {string} stage - the stage to apply to the deployment (typically, the version)
- * @param  {string} environment - the environment prefixes the API name in API Gateway
- * @return {[type]}
+ * @param {string} region - AWS where we want to deploy APIs
+ * @param {string} stage - the stage to apply to the deployment (typically, the version)
+ * @param {string} environment - the environment prefixes the API name in API Gateway
+ * @returns{[type]}
  */
 function deploy(region, stage, environment) {
   // First load API and endpoint specifications
@@ -294,7 +294,7 @@ function getEndpointSpec(method, resourcePath, type, colors) {
 
 /**
  * [registerCommands description]
- * @return {Promise<[program, inquirer]>} - promise of an array containing the parameters
+ * @returns{Promise<[program, inquirer]>} - promise of an array containing the parameters
  */
 function registerCommands() {
   return Promise.all([
@@ -325,9 +325,9 @@ module.exports = {
 
 /**
  * Function that aggregates the specifications found in all spec.json|js files in a path
- * @param  {string} beginPath - path from which the function will look for swagger.json|js files
- * @param  {string} subPath - path until which the function will look for swagger.json|js files
- * @return {Object} - aggregation of specifications that have been found
+ * @param {string} beginPath - path from which the function will look for swagger.json|js files
+ * @param {string} subPath - path until which the function will look for swagger.json|js files
+ * @returns{Object} - aggregation of specifications that have been found
  */
 function mergeSpecsFiles(beginPath, subPath) {
   // Initialise specification
