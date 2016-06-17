@@ -93,7 +93,7 @@ const icli = {
    * Generate a function that check if an item belongs to a list
    * @param  {Array} list - the list of available values
    * @param  {string} label - a label to identify the type of the list items (used in error messages)
-   * @return {function}
+   * @return {function} - a validation function
    */
   generateListValidation(list, label) {
     return function listValidation(providedValues) {
