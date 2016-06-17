@@ -75,7 +75,7 @@ module.exports = () => {
           message: 'What are the MIME types that the operation can produce?'
         }
       }],
-      commanderActionHook: function() {
+      commanderActionHook() {
         if (arguments[1]) { arguments[1] = arguments[1].toUpperCase(); }
         return arguments;
       }

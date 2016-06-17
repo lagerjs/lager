@@ -15,14 +15,14 @@ if (process.env.NODE_ENV === 'development') {
 
   // To render exceptions thrown in non-promies code:
   process.on('uncaughtException', e => {
-     console.log('Uncaught exception');
-     console.log(pe.render(e));
+    console.log('Uncaught exception');
+    console.log(pe.render(e));
   });
 
   // To render unhandled rejections created in BlueBird:
   process.on('unhandledRejection', r => {
-     console.log('Unhandled rejection');
-     console.log(pe.render(r));
+    console.log('Unhandled rejection');
+    console.log(pe.render(r));
   });
 
   Promise.config({
@@ -34,8 +34,8 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 
-icli.setProgram(require('commander'));
-icli.setPrompt(require('inquirer'));
+icli.setProgram(require('commander'))
+    .setPrompt(require('inquirer'));
 
 /**
  * Construct the lager instance

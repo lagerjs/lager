@@ -1,6 +1,5 @@
 'use strict';
 
-const Promise = require('bluebird');
 const _ = require('lodash');
 
 /**
@@ -37,17 +36,21 @@ const icli = {
   /**
    * Commander instance setter
    * @param {Object} p - commander instance
+   * @return {Object} - the icli instance
    */
   setProgram(p) {
     program = p;
+    return this;
   },
 
   /**
    * Inquirer instance setter
    * @param {Object} p - inquirer instance
+   * @return {Object} - the icli instance
    */
   setPrompt(p) {
     prompt = p;
+    return this;
   },
 
   /**
@@ -93,7 +96,7 @@ const icli = {
    * @return {function}
    */
   generateListValidation(list, label) {
-    return function(providedValues) {
+    return function listValidation(providedValues) {
       // If the parameter is not a list of value, we create it
       if (!_.isArray(providedValues)) { providedValues = [providedValues]; }
 
@@ -105,7 +108,7 @@ const icli = {
         if (_.indexOf(availableValues, providedValue) === -1) {
           let help = 'available value: ' + icli.format.info(availableValues[0]);
           if (availableValues.length > 1) {
-            help = 'available values: ' +  _.map(availableValues, icli.format.info).join(', ');
+            help = 'available values: ' + _.map(availableValues, icli.format.info).join(', ');
           }
           errorMessages.push(icli.format.ko(providedValue) + ' is not a valid ' + label + ' - ' + help);
         }
@@ -190,13 +193,13 @@ function parseArgumentSpec(parameter) {
  * @return {function|null} - the coercion function to applu to the command line argument/option
  */
 function getCoercionForType(type) {
-  switch(type) {
-    case 'int':
-      return parseInt;
-    case 'checkbox':
-      return val => { return _.map(val.split(','), _.trim); };
-    default:
-      return null;
+  switch (type) {
+  case 'int':
+    return parseInt;
+  case 'checkbox':
+    return val => { return _.map(val.split(','), _.trim); };
+  default:
+    return null;
   }
 }
 
@@ -209,7 +212,7 @@ function getCoercionForType(type) {
  * @return {function} - The function that must be passed to cmd.action()
  */
 function getAction(parameters, executeCommand, commanderActionHook, inquirerPromptHook) {
-  return function () {
+  return function action() {
     // Hook that allows to tranform the result of the commander parsing, before converting it into parameter values
     const args = commanderActionHook ? commanderActionHook.apply(this, arguments) : arguments;
     const validations = _.reduce(parameters, (result, parameter) => {
@@ -248,7 +251,7 @@ function getAction(parameters, executeCommand, commanderActionHook, inquirerProm
  */
 function processCliArgs(cliArgs, validations) {
   // Initialize an object that will contain the final parameters (cli + prompt)
-  let parameters = cliArgsToParameters(cliArgs);
+  const parameters = cliArgsToParameters(cliArgs);
   validations = validations || [];
 
   // We verify that arguments provided in the command are correct
@@ -271,14 +274,14 @@ function cliArgsToParameters(cliArgs) {
   // Initialize an object that will contain the final parameters (cli + prompt)
   const parameters = {};
 
-  let options = Array.prototype.pop.call(cliArgs);
+  const options = Array.prototype.pop.call(cliArgs);
   // Convert cli arguments to parameters
   _.forEach(options._args, (argsDefinition, i) => {
     parameters[_.camelCase(argsDefinition.name)] = cliArgs[i];
   });
   // Convert cli options to parameters
   _.forEach(options.options, option => {
-    let key = _.camelCase(option.long);
+    const key = _.camelCase(option.long);
     parameters[key] = options[key];
   });
   return parameters;
@@ -317,7 +320,7 @@ function parametersToQuestions(parameters, cmdParameterValues) {
     const question = parameter.question;
 
     // But we can extend it with data that comes from the parameter configuration
-    question.type = question.type || parameter.type;
+    question.type = question.type || parameter.type;
     question.name = question.name || parameter.name;
     if (!question.choices && parameter.choices) {
       if (_.isFunction(parameter.choices)) {
