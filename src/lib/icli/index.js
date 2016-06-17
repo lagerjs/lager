@@ -247,7 +247,7 @@ function getAction(parameters, executeCommand, commanderActionHook, inquirerProm
  * and apply validations
  * @param  {Object} cliArgs - "arguments" object passed to the method action()
  * @param  {Object} validators - map of parameterKey / validation function
- * @return void
+ * @return {Array} - a list o parameter values
  */
 function processCliArgs(cliArgs, validations) {
   // Initialize an object that will contain the final parameters (cli + prompt)
