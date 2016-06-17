@@ -41,7 +41,6 @@ function generateListValidator(list, label) {
     const errorMessages = [];
     _.forEach(providedValues, providedValue => {
       if (_.indexOf(availableValues, providedValue) === -1) {
-        console.log(providedValue);
         let help = 'available value: ' + format.info(availableValues[0]);
         if (availableValues.length > 1) {
           help = 'available values: ' +  _.map(availableValues, format.info).join(', ');

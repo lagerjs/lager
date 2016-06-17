@@ -1,14 +1,25 @@
 'use strict';
 
 const path = require('path');
+
+// Nice ES6 syntax
+// const { Promise, _, icli } = require('@lager/lager/lib/lager').import;
 const lager = require('@lager/lager/lib/lager');
-const Promise = lager.getPromise();
+const Promise = lager.import.Promise;
+const _ = lager.import._;
+const icli = lager.import.icli;
+
 const fs = Promise.promisifyAll(require('fs'));
 const mkdirpAsync = Promise.promisify(require('mkdirp'));
-const _ = lager.getLodash();
-const cliTools = require('@lager/lager/lib/cli-tools');
 
-module.exports = function createApiCmd(program, inquirer) {
+// @TODO propose to select endpoints
+// @TODO reactivate the possibility to select values not proposed in a list
+
+/**
+ * This module exports a function that enrich the interactive command line and return a promise
+ * @return {Promise} - a promise that resolve when the operation is done
+ */
+module.exports = () => {
   // We have to require the plugin inside the function
   // Otherwise we could have a circular require occuring when Lager is registering it
   const plugin = lager.getPlugin('api-gateway');
@@ -16,105 +27,84 @@ module.exports = function createApiCmd(program, inquirer) {
   // First, retrieve possible values for the endpoint-identifiers parameter
   return plugin.loadEndpoints()
   .then(endpoints => {
-    // @TODO propose to select endpoints
     // Build the list of available endpoints for interactive selection
-    const choicesLists = {
-      endpointsIdentifiers: _.map(endpoints, endpoint => {
-        const spec = endpoint.getSpec();
-        return {
-          value: endpoint.getMethod() + ' ' + endpoint.getResourcePath(),
-          name: endpoint.getMethod() + ' ' + endpoint.getResourcePath() + (spec.summary ? ' - ' + spec.summary : '')
-        };
-      }),
-      mimeType: ['application/json', 'text/plain', { value: 'other', label: 'other (you will be prompted to enter a value)'}]
+    const choicesLists = getChoices(endpoints);
+
+    const config = {
+      cmd: 'create-api',
+      description: 'create a new API',
+      parameters: [{
+        cmdSpec: '[api-identifier]',
+        type: 'input',
+        validate: input => { return /^[a-z0-9_-]+$/i.test(input); },
+        question: {
+          message: 'Choose a unique identifier for the new API (alphanumeric caracters, "_" and "-" accepted)'
+        }
+      }, {
+        cmdSpec: '-t, --title <title>',
+        description: 'The title of the API',
+        type: 'input',
+        question: {
+          message: 'Choose a short title for the API'
+        }
+      }, {
+        cmdSpec: '-d, --desc <description>',
+        description: 'A description of the API',
+        type: 'input',
+        question: {
+          message: 'You can write a more complete description of the API here'
+        }
+      }, {
+        cmdSpec: '-c, --consume <mime-types>',
+        description: 'A list of MIME types the API can consume separated by ","',
+        type: 'checkbox',
+        choices: choicesLists.mimeType,
+        question: {
+          message: 'What are the MIME types that the API can consume?'
+        }
+      }, {
+        cmdSpec: '-p, --produce <mime-types>',
+        description: 'A list of MIME types the API can produce separated by ","',
+        type: 'checkbox',
+        choices: choicesLists.mimeType,
+        question: {
+          message: 'What are the MIME types that the API can produce?'
+        }
+      }]
     };
 
-
-    return program
-    .command('create-api')
-    .alias('new-api')
-    .description('create a new API')
-    .arguments('[api-identifier]')
-    .option('-t, --title <title>', 'The title of the API')
-    .option('-d, --desc <description>', 'A short description of the API')
-    .option('-c, --consume <mime-types>', 'A list of MIME types the operation can consume separated by ","', cliTools.listParser)
-    .option('-p, --produce <mime-types>', 'A list of MIME types the operation can produce separated by ","', cliTools.listParser)
-    .action(function action(apiIdentifier, options) {
-      // Transform cli arguments and options into a parameter map
-      const parameters = cliTools.processCliArgs(arguments, []);
-
-      // If the cli arguments are correct, we can launch the interactive prompt
-      return inquirer.prompt(prepareQuestions(parameters, choicesLists))
-      .then(answers => {
-        // Transform answers into correct parameters
-        cliTools.processAnswerTypeOther(answers, 'consume');
-        cliTools.processAnswerTypeOther(answers, 'produce');
-
-        // Merge the parameters from the command and from the prompt and create the new API
-        return performTask(_.merge(parameters, answers));
-      });
-    });
+    /**
+     * Create the command and the promp
+     */
+    return icli.createSubCommand(config, executeCommand);
   });
 };
 
-
 /**
- * Prepare the list of questions for the prompt
- * @param  {Object} parameters - parameters that have already been passed to the cli
- * @param  {Object} choicesLists - lists of values for closed choice parameters
- * @return {Array} - a list of questions
+ * Build the choices for "list" and "checkbox" parameters
+ * @param  {Array} endpoints - the list o available endpoint specifications
+ * @return {Object} - collection of lists of choices for "list" and "checkbox" parameters
  */
-function prepareQuestions(parameters, choicesLists) {
-  return [{
-    type: 'input',
-    name: 'apiIdentifier',
-    message: 'Choose a unique identifier for the new API (alphanumeric caracters, "_" and "-" accepted)',
-    when: answers => { return !parameters.apiIdentifier; },
-    validate: input => { return /^[a-z0-9_-]+$/i.test(input); }
-  }, {
-    type: 'input',
-    name: 'title',
-    message: 'Choose a short title for the API',
-    when: answers => { return !parameters.title; }
-  }, {
-    type: 'input',
-    name: 'desc',
-    message: 'You can write a more complete description of the API here',
-    when: answers => { return !parameters.desc; }
-  }, {
-    type: 'checkbox',
-    name: 'consume',
-    message: 'What are the MIME types that the operation can consume?',
-    choices: choicesLists.mimeType,
-    when: answers => { return !parameters.consume; },
-    default: ['application/json']
-  }, {
-    type: 'input',
-    name: 'consumeOther',
-    message: 'Enter the MIME types that the operation can consume, separated by commas',
-    when: answers => { return !parameters.consume && answers.consume.indexOf('other') !== -1; }
-  }, {
-    type: 'checkbox',
-    name: 'produce',
-    message: 'What are the MIME types that the operation can produce?',
-    choices: choicesLists.mimeType,
-    when: answers => { return !parameters.produce; },
-    default: ['application/json']
-  }, {
-    type: 'input',
-    name: 'produceOther',
-    message: 'Enter the MIME types that the operation can produce, separated by commas',
-    when: answers => { return !parameters.produce && answers.produce.indexOf('other') !== -1; }
-  }];
+function getChoices(endpoints) {
+  const choicesLists = {
+    endpointsIdentifiers: _.map(endpoints, endpoint => {
+      const spec = endpoint.getSpec();
+      return {
+        value: endpoint.getMethod() + ' ' + endpoint.getResourcePath(),
+        name: endpoint.getMethod() + ' ' + endpoint.getResourcePath() + (spec.summary ? ' - ' + spec.summary : '')
+      };
+    }),
+    mimeType: ['application/json', 'text/plain', { value: 'other', label: 'other (you will be prompted to enter a value)'}]
+  };
+  return choicesLists;
 }
-
 
 /**
  * Create the new api
  * @param  {Object} parameters - the parameters provided in the command and in the prompt
  * @return {Promise<null>}
  */
-function performTask(parameters) {
+function executeCommand(parameters) {
   // If a name has been provided, we create the project directory
   const specFilePath = path.join(process.cwd(), 'apis', parameters.apiIdentifier);
   return mkdirpAsync(specFilePath)
@@ -140,3 +130,16 @@ function performTask(parameters) {
     console.log(msg);
   });
 }
+
+
+// {
+//   type: 'input',
+//   name: 'consumeOther',
+//   message: 'Enter the MIME types that the operation can consume, separated by commas',
+//   when: answers => { return !parameters.consume && answers.consume.indexOf('other') !== -1; }
+// }, {
+//   type: 'input',
+//   name: 'produceOther',
+//   message: 'Enter the MIME types that the operation can produce, separated by commas',
+//   when: answers => { return !parameters.produce && answers.produce.indexOf('other') !== -1; }
+// }
