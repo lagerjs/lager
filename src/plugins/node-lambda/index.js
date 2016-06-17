@@ -74,14 +74,15 @@ module.exports = {
 
   hooks: {
     /**
-     *
+     * [registerCommands description]
+     * @return {[type]} [description]
      */
-    registerCommands: function registerCommands(program, inquirer) {
+    registerCommands: function registerCommands() {
       return Promise.all([
-        require('./cli/create-lambda')(program, inquirer)
+        require('./cli/create-lambda')()
       ])
       .then(() => {
-        return Promise.resolve([program, inquirer]);
+        return Promise.resolve([]);
       });
     },
 

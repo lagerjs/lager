@@ -12,15 +12,13 @@ const icli = lager.import.icli;
 const fs = Promise.promisifyAll(require('fs'));
 const mkdirpAsync = Promise.promisify(require('mkdirp'));
 
+const plugin = lager.getPlugin('api-gateway');
+
 /**
  * This module exports a function that enrich the interactive command line and return a promise
  * @return {Promise} - a promise that resolve when the operation is done
  */
 module.exports = () => {
-  // We have to require the plugin inside the function
-  // Otherwise we could have a circular require occuring when Lager is registering it
-  const plugin = lager.getPlugin('api-gateway');
-
   // First, retrieve possible values for the api-identifiers parameter
   return plugin.loadApis()
   .then(apis => {
@@ -63,6 +61,7 @@ module.exports = () => {
         description: 'A list of MIME types the operation can consume separated by ","',
         type: 'checkbox',
         choices: choicesLists.mimeType,
+        default: choicesLists.mimeType[0],
         question: {
           message: 'What are the MIME types that the operation can consume?'
         }
@@ -71,6 +70,7 @@ module.exports = () => {
         description: 'A list of MIME types the operation can produce separated by ","',
         type: 'checkbox',
         choices: choicesLists.mimeType,
+        default: choicesLists.mimeType[0],
         question: {
           message: 'What are the MIME types that the operation can produce?'
         }
@@ -90,7 +90,7 @@ module.exports = () => {
 
 /**
  * Build the choices for "list" and "checkbox" parameters
- * @param  {Array} apis - the list o available api specifications
+ * @param  {Array} apis - the list of available API specifications
  * @return {Object} - collection of lists of choices for "list" and "checkbox" parameters
  */
 function getChoices(apis) {
@@ -102,7 +102,7 @@ function getChoices(apis) {
       };
     }),
     httpMethod: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
-    mimeType: ['application/json', 'text/plain', { value: 'other', label: 'other (you will be prompted to enter a value)'}]
+    mimeType: ['application/json', 'text/plain', { value: 'other', name: 'other (you will be prompted to enter a value)'}]
   };
   return choicesLists;
 }
@@ -110,7 +110,7 @@ function getChoices(apis) {
 /**
  * Create the new endpoint
  * @param  {Object} parameters - the parameters provided in the command and in the prompt
- * @return {Promise<null>}
+ * @return {Promise<null>} - The execution stops here
  */
 function executeCommand(parameters) {
   if (parameters.resourcePath.charAt(0) !== '/') { parameters.resourcePath = '/' + parameters.resourcePath; }

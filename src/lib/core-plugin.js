@@ -3,12 +3,13 @@
 const lager = require('@lager/lager/lib/lager');
 const Promise = lager.getPromise();
 
-function registerCommands(program, inquirer) {
+function registerCommands() {
   return Promise.all([
-    require('@lager/lager/cli/new')(program, inquirer)
+    require('@lager/lager/cli/disable-default')(),
+    require('@lager/lager/cli/new')()
   ])
   .then(() => {
-    return Promise.resolve([program, inquirer]);
+    return Promise.resolve([]);
   });
 }
 

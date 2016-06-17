@@ -294,20 +294,18 @@ function getEndpointSpec(method, resourcePath, type, colors) {
 
 /**
  * [registerCommands description]
- * @param  {Object} program  - commander program instance
- * @param  {Object} inquirer - inquirer instance
  * @return {Promise<[program, inquirer]>} - promise of an array containing the parameters
  */
-function registerCommands(program, inquirer) {
+function registerCommands() {
   return Promise.all([
-    require('./cli/create-api')(program, inquirer),
-    require('./cli/create-endpoint')(program, inquirer),
-    require('./cli/inspect-api')(program, inquirer),
-    require('./cli/inspect-endpoint')(program, inquirer),
-    require('./cli/deploy-apis')(program, inquirer)
+    require('./cli/create-api')(),
+    require('./cli/create-endpoint')(),
+    require('./cli/inspect-api')(),
+    require('./cli/inspect-endpoint')(),
+    require('./cli/deploy-apis')()
   ])
   .then(() => {
-    return Promise.resolve([program, inquirer]);
+    return Promise.resolve([]);
   });
 }
 

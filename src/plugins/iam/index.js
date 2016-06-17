@@ -67,10 +67,15 @@ function loadPolicy(documentPath, name) {
   });
 }
 
-function findPolicy(identifier) {
+/**
+ * [findPolicies description]
+ * @param  {[type]} identifiers [description]
+ * @return {[type]}             [description]
+ */
+function findPolicies(identifiers) {
   return loadPolicies()
   .then((policies) => {
-    return _.find(policies, (policy) => { return policy.name === identifier; });
+    return _.filter(policies, (policy) => { return identifiers.indexOf(policy.name) !== -1; });
   });
 }
 
@@ -138,13 +143,13 @@ function loadRole(configPath, name) {
 
 /**
  * [findRole description]
- * @param  {[type]} identifier [description]
+ * @param  {[type]} identifiers [description]
  * @return {[type]}            [description]
  */
-function findRole(identifier) {
+function findRoles(identifiers) {
   return loadRoles()
   .then((roles) => {
-    return _.find(roles, (role) => { return role.name === identifier; });
+    return _.filter(roles, (role) => { return identifiers.indexOf(role.name) !== -1; });
   });
 }
 
@@ -154,19 +159,17 @@ module.exports = {
   hooks: {
     /**
      * [registerCommands description]
-     * @param  {[type]} program  [description]
-     * @param  {[type]} inquirer [description]
      * @return {[type]}          [description]
      */
-    registerCommands: function registerCommands(program, inquirer) {
+    registerCommands: function registerCommands() {
       return Promise.all([
-        require('./cli/create-policy')(program, inquirer),
-        require('./cli/create-role')(program, inquirer),
-        require('./cli/deploy-policy')(program, inquirer),
-        require('./cli/deploy-role')(program, inquirer)
+        require('./cli/create-policy')(),
+        require('./cli/create-role')(),
+        require('./cli/deploy-policies')(),
+        require('./cli/deploy-roles')()
       ])
       .then(() => {
-        return Promise.resolve([program, inquirer]);
+        return Promise.resolve([]);
       });
     },
 
@@ -186,7 +189,7 @@ module.exports = {
   },
 
   loadPolicies,
-  findPolicy,
+  findPolicies,
   loadRoles,
-  findRole
+  findRoles
 };
