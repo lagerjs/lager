@@ -8,7 +8,7 @@ const icli = lager.import.icli;
 
 /**
  * This module exports a function that enrich the interactive command line and return a promise
- * @returns{Promise} - a promise that resolve when the operation is done
+ * @returns {Promise} - a promise that resolve when the operation is done
  */
 module.exports = () => {
   const config = {
@@ -27,7 +27,7 @@ module.exports = () => {
 /**
  * Show an error if a unknown command was called
  * @param {Object} parameters - the parameters provided in the command and in the prompt
- * @returns{void} - the execution stops here
+ * @returns {void} - the execution stops here
  */
 function executeCommand(parameters) {
   let msg = '\n  ' + icli.format.ko('Unknown command \n\n');

@@ -62,7 +62,7 @@ Policy.prototype.deploy = function deploy(stage, environment) {
  * @param {[type]} awsIAM      [description]
  * @param {[type]} stage       [description]
  * @param {[type]} environment [description]
- * @returns{[type]}             [description]
+ * @returns {[type]}             [description]
  */
 Policy.prototype.create = function create(awsIAM, stage, environment) {
   const params = {
@@ -79,7 +79,7 @@ Policy.prototype.create = function create(awsIAM, stage, environment) {
  * @param {[type]} awsIAM      [description]
  * @param {[type]} stage       [description]
  * @param {[type]} environment [description]
- * @returns{[type]}             [description]
+ * @returns {[type]}             [description]
  */
 Policy.prototype.updateIfNeeded = function updateIfNeeded(awsIAM, currentPolicy) {
   const params = {
@@ -102,7 +102,7 @@ Policy.prototype.updateIfNeeded = function updateIfNeeded(awsIAM, currentPolicy)
  * [update description]
  * @param {[type]} awsIAM    [description]
  * @param {[type]} policyArn [description]
- * @returns{[type]}           [description]
+ * @returns {[type]}           [description]
  */
 Policy.prototype.update = function update(awsIAM, policyArn) {
   return Promise.promisify(awsIAM.listPolicyVersions.bind(awsIAM))({ PolicyArn: policyArn })

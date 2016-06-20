@@ -13,7 +13,7 @@ const mkdirpAsync = Promise.promisify(require('mkdirp'));
 
 /**
  * This module exports a function that enrich the interactive command line and return a promise
- * @returns{Promise} - a promise that resolve when the operation is done
+ * @returns {Promise} - a promise that resolve when the operation is done
  */
 module.exports = () => {
   const config = {
@@ -38,7 +38,7 @@ module.exports = () => {
 /**
  * Create the new role
  * @param {Object} parameters - the parameters provided in the command and in the prompt
- * @returns{Promise<null>} - The execution stops here
+ * @returns {Promise<null>} - The execution stops here
  */
 function executeCommand(parameters) {
   const configFilePath = path.join(process.cwd(), 'iam', 'roles');

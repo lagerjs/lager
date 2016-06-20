@@ -14,7 +14,7 @@ let LambdaIntegrationDataInjector = function LambdaIntegrationDataInjector(lambd
  * Implementation of an integrationDataInjector
  * Take an endpoint as parameter and update it's configuration with the lambda's data
  * @param {Endpoint} endpoint
- * @returns{Endpoint}
+ * @returns {Endpoint}
  */
 LambdaIntegrationDataInjector.prototype.applyToEndpoint = function applyToEndpoint(endpoint) {
   let spec = endpoint.getSpec();

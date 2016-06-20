@@ -3,7 +3,6 @@
 const file = require('file');
 const path = require('path');
 const lager = require('@lager/lager/lib/lager');
-const cardinal = require('cardinal');
 const Promise = lager.getPromise();
 const fs = Promise.promisifyAll(require('fs'));
 const _ = lager.getLodash();
@@ -13,7 +12,7 @@ const Endpoint = require('./endpoint');
 
 /**
  * Load all API specifications
- * @returns{Promise<[Api]>} - the promise of an array containing all Apis
+ * @returns {Promise<[Api]>} - the promise of an array containing all Apis
  */
 function loadApis() {
   const apiSpecsPath = path.join(process.cwd(), 'apis');
@@ -54,7 +53,7 @@ function loadApis() {
  * @param {string} apiSpecPath - the full path to the specification file
  * @param {string} OPTIONAL identifier - a human readable identifier, eventually
  *                                        configured in the specification file itself
- * @returns{Promise<Api>}
+ * @returns {Promise<Api>}
  */
 function loadApi(apiSpecPath, identifier) {
   return lager.fire('beforeApiLoad', apiSpecPath, identifier)
@@ -77,7 +76,7 @@ function loadApi(apiSpecPath, identifier) {
 
 /**
  * Load all Endpoint specifications
- * @returns{Promise<[Endpoints]>}
+ * @returns {Promise<[Endpoints]>}
  */
 function loadEndpoints() {
   const endpointsDirectory = 'endpoints';
@@ -116,13 +115,12 @@ function loadEndpoints() {
 
 /**
  * Load an Endpoint specification
- *
  * From the `endpointSpecRootPath` directory, lager will look for a specification in
  * each subdirectory following the structure `path/to/the/resource/HTTP_METHOD/`
  * @param {string} endpointSpecRootPath - the root directory of the endpoint configuration
  * @param {string} resourcePath - the URL path to the endpoint resource
  * @param {string} method - the HTTP method of the endpoint
- * @returns{Promise<Endpoint>}
+ * @returns {Promise<Endpoint>}
  */
 function loadEndpoint(endpointSpecRootPath, resourcePath, method) {
   // @TODO throw error if the endpoint does not exists
@@ -143,51 +141,10 @@ function loadEndpoint(endpointSpecRootPath, resourcePath, method) {
 }
 
 /**
- * Integration load and deployment is performed other plugins
- * @returns{[IntegrationObject]} [description]
- */
-function loadIntegrations(region, stage, environment) {
-  // The `deployIntegrations` hook takes two arguments
-  // A object containing the region, stage and environment of the deployment
-  // and nn array that will receive integration results
-  return lager.fire('loadIntegrations', {region, stage, environment}, [])
-  .spread((config, integrationDataInjectors) => {
-    return Promise.resolve(integrationDataInjectors);
-  });
-}
-
-/**
- * Update the configuration of endpoints with data returned by integration
- * This data can come from the deployment of a lambda function, the configuration
- * of an HTTP proxy, the generation of a mock etc ...
- * @param {[Endpoint]} - a list of Endpoints
- * @param {[IntegrationDataInjector]} - a list of integration data injectors
- *                                       an integration data injector is able to recognize
- *                                       if it applies to an endpoint and update its specification
- * @returns{[Endpoint]}
- */
-function addIntegrationDataToEndpoints(endpoints, integrationDataInjectors) {
-  return lager.fire('beforeAddIntegrationDataToEndpoints', endpoints, integrationDataInjectors)
-  .spread((endpoints, integrationDataInjectors) => {
-    return Promise.map(integrationDataInjectors, (integrationDataInjector) => {
-      return Promise.map(endpoints, (endpoint) => {
-        return integrationDataInjector.applyToEndpoint(endpoint);
-      });
-    });
-  })
-  .then(() => {
-    return lager.fire('afterAddIntegrationDataToEndpoints', endpoints, integrationDataInjectors);
-  })
-  .spread((endpoints, integrationDataInjectors) => {
-    return Promise.resolve(endpoints);
-  });
-}
-
-/**
  * [function description]
  * @param {[Api]} apis
  * @param {[Endpoint]} endpoints
- * @returns{Promise<[Api]>}
+ * @returns {Promise<[Api]>}
  */
 function addEndpointsToApis(apis, endpoints) {
   return lager.fire('beforeAddEndpointsToApis', apis, endpoints)
@@ -209,10 +166,54 @@ function addEndpointsToApis(apis, endpoints) {
 }
 
 /**
- * [publishApis description]
- * @param  {[type]}  apis    [description]
- * @param  {[type]}  region  [description]
- * @param  {[type]}  context [description]
+ * Integration load and deployment is performed other plugins
+ * @param  {string} region - AWS region
+ * @param  {string} stage - API stage
+ * @param  {string} environment - environment identifier
+ * @returns {[IntegrationObject]} - an array of integrqtion objects
+ */
+function loadIntegrations(region, stage, environment) {
+  // The `deployIntegrations` hook takes two arguments
+  // A object containing the region, stage and environment of the deployment
+  // and nn array that will receive integration results
+  return lager.fire('loadIntegrations', {region, stage, environment}, [])
+  .spread((config, integrationDataInjectors) => {
+    return Promise.resolve(integrationDataInjectors);
+  });
+}
+
+/**
+ * Update the configuration of endpoints with data returned by integration
+ * This data can come from the deployment of a lambda function, the configuration
+ * of an HTTP proxy, the generation of a mock etc ...
+ * @param {[Endpoint]} - a list of Endpoints
+ * @param {[IntegrationDataInjector]} - a list of integration data injectors
+ *                                       an integration data injector is able to recognize
+ *                                       if it applies to an endpoint and update its specification
+ * @returns {[Endpoint]} - the list of endpoints of the application
+ */
+function addIntegrationDataToEndpoints(endpoints, integrationDataInjectors) {
+  return lager.fire('beforeAddIntegrationDataToEndpoints', endpoints, integrationDataInjectors)
+  .spread((endpoints, integrationDataInjectors) => {
+    return Promise.map(integrationDataInjectors, (integrationDataInjector) => {
+      return Promise.map(endpoints, (endpoint) => {
+        return integrationDataInjector.applyToEndpoint(endpoint);
+      });
+    });
+  })
+  .then(() => {
+    return lager.fire('afterAddIntegrationDataToEndpoints', endpoints, integrationDataInjectors);
+  })
+  .spread((endpoints, integrationDataInjectors) => {
+    return Promise.resolve(endpoints);
+  });
+}
+
+/**
+ * Plublish OpenAPI specfications in API Gateway
+ * @param {Array} apis - List of APIs enriched with endpoints
+ * @param {string} region - AWS region where we want to deploy APIs
+ * @param {Object} context - an object containing the environment and the stage to apply to the deployment
  * @return {Boolean}         [description]
  */
 function publishApis(apis, region, context) {
@@ -231,10 +232,11 @@ function publishApis(apis, region, context) {
 }
 
 /**
- *
- * @param {string} region - AWS where we want to deploy APIs
+ * Deploy a list of APIs
+ * @param {Array} apiIdentifiers - List of APIs identifiers
+ * @param {string} region - AWS region where we want to deploy APIs
  * @param {Object} context - an object containing the environment and the stage to apply to the deployment
- * @returns{[type]}
+ * @returns {[type]}
  */
 function deploy(apiIdentifiers, region, context) {
   // First load API and endpoint specifications
@@ -242,7 +244,10 @@ function deploy(apiIdentifiers, region, context) {
   return Promise.all([loadApis(), loadEndpoints()])
   .spread((apis, endpoints) => {
     apis = _.filter(apis, api => { return apiIdentifiers.indexOf(api.getIdentifier()) !== -1; });
-
+    console.log('Add endpoints to APIs');
+    return Promise.all([addEndpointsToApis(apis, endpoints), endpoints]);
+  })
+  .spread((apis, endpoints) => {
     console.log('Load integrations');
     // The load of API and endpoint specifications succeeded, we can deploy the integrations
     // Typically, il is lambda functions, but it could be anything published by a plugin
@@ -254,48 +259,43 @@ function deploy(apiIdentifiers, region, context) {
     return Promise.all([apis, addIntegrationDataToEndpoints(endpoints, integrationsDataInjectors)]);
   })
   .spread((apis, endpoints) => {
-    console.log('Add endpoints to APIs');
-    // Once the endpoints are up-to-date with the integrations, we can add them to the APIs
-    return Promise.all([addEndpointsToApis(apis, endpoints), endpoints]);
-  })
-  .spread((apis, endpoints) => {
     // Now that we have complete API specifications, we can publish them in API Gateway
     return publishApis(apis, region, context);
   });
 }
 
-function getApiSpec(identifier, type, colors) {
-  type = type || 'doc';
-  // @TODO identifier is not necessarily the name of the folder: it can be overriden in the spec file
-  const apiSpecPath = path.join(process.cwd(), 'apis', identifier, 'spec');
-  return Promise.all([loadApi(apiSpecPath, identifier), loadEndpoints()])
-  .spread((api, endpoints) => {
-    return Promise.all([addEndpointsToApis([api], endpoints), endpoints]);
-  })
+/**
+ * Find an APIs by its identifier and return it with its endpoints
+ * @param {string} identifier - the API identifier
+ * @returns {Array} - the API corresponding to the  identifier
+ */
+function findApi(identifier) {
+  return Promise.all([loadApis(), loadEndpoints()])
   .spread((apis, endpoints) => {
-    let json = JSON.stringify(apis[0].generateSpec(type), null, 2);
-    if (colors) {
-      json = cardinal.highlight(json, { json: true });
-    }
-    return json;
-  });
-}
-
-function getEndpointSpec(method, resourcePath, type, colors) {
-  const endpointSpecRootPath = path.join(process.cwd(), 'endpoints');
-  return loadEndpoint(endpointSpecRootPath, resourcePath, method)
-  .then(endpoint => {
-    let json = JSON.stringify(endpoint.generateSpec(type), null, 2);
-    if (colors) {
-      json = cardinal.highlight(json, { json: true });
-    }
-    return json;
+    const api = _.find(apis, (api) => { return api.getIdentifier() === identifier; });
+    return addEndpointsToApis([api], endpoints);
+  })
+  .then(apis => {
+    return apis[0];
   });
 }
 
 /**
- * [registerCommands description]
- * @returns{Promise<[program, inquirer]>} - promise of an array containing the parameters
+ * Find an endpoint by its resource path and HTTP method
+ * @param {string} resourcePath - the resource path of the endpoint
+ * @param {string} method - the HTTP method of the endpoint
+ * @returns {Array} - the endpoint corresponding to the resource path and the HTTP method
+ */
+function findEndpoint(resourcePath, method) {
+  return loadEndpoints()
+  .then((endpoints) => {
+    return _.find(endpoints, (endpoint) => { return endpoint.getResourcePath() === resourcePath && endpoint.getMethod() === method; });
+  });
+}
+
+/**
+ *
+ * @returns {Promise<[program, inquirer]>} - promise of an array containing the parameters
  */
 function registerCommands() {
   return Promise.all([
@@ -316,11 +316,11 @@ module.exports = {
     registerCommands
   },
   helpers: {},
-  getApiSpec,
-  getEndpointSpec,
-  deploy,
   loadApis,
-  loadEndpoints
+  loadEndpoints,
+  deploy,
+  findApi,
+  findEndpoint
 };
 
 
@@ -328,7 +328,7 @@ module.exports = {
  * Function that aggregates the specifications found in all spec.json|js files in a path
  * @param {string} beginPath - path from which the function will look for swagger.json|js files
  * @param {string} subPath - path until which the function will look for swagger.json|js files
- * @returns{Object} - aggregation of specifications that have been found
+ * @returns {Object} - aggregation of specifications that have been found
  */
 function mergeSpecsFiles(beginPath, subPath) {
   // Initialise specification

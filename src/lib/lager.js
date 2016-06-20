@@ -56,7 +56,7 @@ function Lager() {
 
 /**
  * Lager expose it's bluebird dependency, so plugins don't need to add it as a dependency
- * @returns{Promise} - the bluebird library
+ * @returns {Promise} - the bluebird library
  */
 Lager.prototype.getPromise = function getPromise() {
   return Promise;
@@ -64,7 +64,7 @@ Lager.prototype.getPromise = function getPromise() {
 
 /**
  * Lager expose it's lodash dependency, so plugins don't need to add it as a dependency
- * @returns{Object} - the lodash library
+ * @returns {Object} - the lodash library
  */
 Lager.prototype.getLodash = function getLodash() {
   return _;
@@ -72,7 +72,7 @@ Lager.prototype.getLodash = function getLodash() {
 
 /**
  * Lager expose it's commander dependency, so plugins can add their own commands
- * @returns{Object} - a commander program instance
+ * @returns {Object} - a commander program instance
  */
 Lager.prototype.getProgram = function getProgram() {
   return program;
@@ -80,7 +80,7 @@ Lager.prototype.getProgram = function getProgram() {
 
 /**
  * Lager expose it's inquirer dependency, so plugins can add their own command prompt
- * @returns{Object} - a inquirer instance
+ * @returns {Object} - a inquirer instance
  */
 Lager.prototype.getInquirer = function getInquirer() {
   return inquirer;
@@ -89,7 +89,7 @@ Lager.prototype.getInquirer = function getInquirer() {
 /**
  * Add a plugin to the lager instance
  * @param {Object} plugin
- * @returns{Lager}
+ * @returns {Lager}
  */
 Lager.prototype.registerPlugin = function registerPlugin(plugin) {
   this.plugins.push(plugin);
@@ -99,7 +99,7 @@ Lager.prototype.registerPlugin = function registerPlugin(plugin) {
 /**
  * Retrieve a plugin by name
  * @param {string} name
- * @returns{Object}
+ * @returns {Object}
  */
 Lager.prototype.getPlugin = function getPlugin(name) {
   return _.find(this.plugins, plugin => {
@@ -111,7 +111,7 @@ Lager.prototype.getPlugin = function getPlugin(name) {
  * Fire a hook/event
  * @param {string} eventName - the name of the hook
  * @param {...*} arg - the list of arguments provided to the hook
- * @returns{Promise<[]>} return the promise of an array containing the hook's arguments
+ * @returns {Promise<[]>} return the promise of an array containing the hook's arguments
  *         eventually transformed by plugins
  */
 Lager.prototype.fire = function fire() {

@@ -13,7 +13,7 @@ const fs = Promise.promisifyAll(require('fs'));
 
 /**
  * This module exports a function that enrich the interactive command line and return a promise
- * @returns{Promise} - a promise that resolve when the operation is done
+ * @returns {Promise} - a promise that resolve when the operation is done
  */
 module.exports = () => {
   // Build the lists of choices
@@ -49,7 +49,7 @@ module.exports = () => {
 /**
  * Build the choices for "list" and "checkbox" parameters
  * @param {Array} endpoints - the list o available endpoint specifications
- * @returns{Object} - collection of lists of choices for "list" and "checkbox" parameters
+ * @returns {Object} - collection of lists of choices for "list" and "checkbox" parameters
  */
 function getChoices() {
   return {
@@ -75,7 +75,7 @@ function getChoices() {
 /**
  * Create the new project
  * @param {Object} parameters - the parameters provided in the command and in the prompt
- * @returns{Promise<null>} - The execution stops here
+ * @returns {Promise<null>} - The execution stops here
  */
 function executeCommand(parameters) {
   // If a name has been provided, we create the project directory

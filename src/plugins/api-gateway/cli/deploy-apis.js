@@ -11,7 +11,7 @@ const plugin = lager.getPlugin('api-gateway');
 
 /**
  * This module exports a function that enrich the interactive command line and return a promise
- * @returns{Promise} - a promise that resolve when the operation is done
+ * @returns {Promise} - a promise that resolve when the operation is done
  */
 module.exports = () => {
   // Build the list of available APIs andAWS regions for input verification and interactive selection
@@ -65,7 +65,7 @@ module.exports = () => {
 /**
  * Build the choices for "list" and "checkbox" parameters
  * @param {Array} apis - the list o available api specifications
- * @returns{Object} - collection of lists of choices for "list" and "checkbox" parameters
+ * @returns {Object} - collection of lists of choices for "list" and "checkbox" parameters
  */
 function getChoices(apis) {
   // First, retrieve possible values for the api-identifiers parameter
@@ -110,7 +110,7 @@ function getChoices(apis) {
 /**
  * Execute the deployment
  * @param {Object} parameters - the parameters provided in the command and in the prompt
- * @returns{Promise<null>} - The execution stops here
+ * @returns {Promise<null>} - The execution stops here
  */
 function executeCommand(parameters) {
   return lager.getPlugin('api-gateway').deploy(

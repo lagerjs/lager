@@ -2,7 +2,7 @@
   "x-lager": {
     "lambda": "",
     "lambdaInvocationRole": "",
-    "apis": [null, "another-sample-api"]
+    "apis": [null, "sender"]
   },
   "summary": "Returns the content of http://www.example.com/",
   "description": "This endpoint proxyfies the page http://www.example.com/",

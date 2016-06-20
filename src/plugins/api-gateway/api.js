@@ -21,7 +21,7 @@ const Api = function Api(identifier, spec) {
 
 /**
  * Returns the API identifier in the Lager project
- * @returns{string}
+ * @returns {string}
  */
 Api.prototype.getIdentifier = function getIdentifier() {
   return this.identifier;
@@ -29,7 +29,7 @@ Api.prototype.getIdentifier = function getIdentifier() {
 
 /**
  * Returns a string representation of an Api instance
- * @returns{string}
+ * @returns {string}
  */
 Api.prototype.toString = function toString() {
   return 'Api ' + this.identifier;
@@ -38,7 +38,7 @@ Api.prototype.toString = function toString() {
 /**
  * Check if an endpoint applies to an API
  * @param {Endpoint} endpoint
- * @returns{boolean}
+ * @returns {boolean}
  */
 Api.prototype.doesExposeEndpoint = function doesExposeEndpoint(endpoint) {
   const spec = endpoint.getSpec();
@@ -51,7 +51,7 @@ Api.prototype.doesExposeEndpoint = function doesExposeEndpoint(endpoint) {
 /**
  * Add an endpoint to the API
  * @param {Endpoint} endpoint
- * @returns{Promise<Api>}
+ * @returns {Promise<Api>}
  */
 Api.prototype.addEndpoint = function addEndpoint(endpoint) {
   return lager.fire('beforeAddEndpointToApi', this, endpoint)
@@ -72,7 +72,8 @@ Api.prototype.addEndpoint = function addEndpoint(endpoint) {
  * or the "doc" version (for Swagger UI, Postman, etc...)
  * or a complete, unaltered version for debugging
  * @param {string} type - the kind of specification to generate (api-gateway|doc)
- * @returns{Object}
+ * @param {Object} context - a object containing the stage and the environment
+ * @returns {Object}
  */
 Api.prototype.generateSpec = function generateSpec(type, context) {
   const spec = _.cloneDeep(this.spec);
@@ -82,14 +83,16 @@ Api.prototype.generateSpec = function generateSpec(type, context) {
     // We create the new "path" entry and merge it to specification
     const path = {};
     path[endpoint.getResourcePath()] = {};
-    path[endpoint.getResourcePath()][endpoint.getMethod().toLowerCase()] = endpoint.generateSpec();
-    _.merge(this.spec.paths, path);
+    path[endpoint.getResourcePath()][endpoint.getMethod().toLowerCase()] = endpoint.generateSpec(type);
+    _.merge(spec.paths, path);
   });
 
   // Depending on the type of specification we want, we may do some cleanup
   if (type === 'api-gateway') {
     // Inject lager identification data in the API name
-    spec.info.title = context.environment + ' ' + this.identifier + ' - ' + spec.info.title;
+    if (context) {
+      spec.info.title = context.environment + ' ' + this.identifier + ' - ' + spec.info.title;
+    }
     return cleanSpecForApiGateway(spec);
   } else if (type === 'doc') {
     return cleanSpecForDoc(spec);
@@ -100,7 +103,7 @@ Api.prototype.generateSpec = function generateSpec(type, context) {
 /**
  * Publish the API specification in API Gateway
  *
- * @returns{Promise<Api>}
+ * @returns {Promise<Api>}
  */
 Api.prototype.publish = function publish(region, context) {
   const awsApiGateway = new AWS.APIGateway({ region });
@@ -132,7 +135,7 @@ Api.prototype.publish = function publish(region, context) {
  * @param {Object} context - an object containing information about the environment of the API we are searching
  * @param {[]} listParams - params of the awsApiGateway.getRestApis() method from the AWS SDK
  * @param {Integer} position - used for recusive call when the list of APIs is too long
- * @returns{Promise<Object|null>}
+ * @returns {Promise<Object|null>}
  */
 Api.prototype.findInApiGateway = function findInApiGateway(awsApiGateway, context, position) {
   const params = {
@@ -162,7 +165,7 @@ Api.prototype._findIdentificationInName = function _findIdentificationInName(nam
  * Creates a new API in ApiGateway
  * @param {AWS.ApiGateway} - an ApiGateway client from the AWS SDK
  * @param {Object} apiSpec - an OpenAPI specification
- * @returns{Promise<Object>} - an AWS Object representing the API
+ * @returns {Promise<Object>} - an AWS Object representing the API
  */
 Api.prototype._createInApiGateway = function _createInApiGateway(awsApiGateway, context) {
   const spec = this.generateSpec('api-gateway', context);
@@ -179,7 +182,7 @@ Api.prototype._createInApiGateway = function _createInApiGateway(awsApiGateway, 
  * @param {AWS.ApiGateway} - an ApiGateway client from the AWS SDK
  * @param {Object} apiSpec - an OpenAPI specification
  * @param {Object} - an AWS Object representing the API
- * @returns{Promise<Object>} - an AWS Object representing the API
+ * @returns {Promise<Object>} - an AWS Object representing the API
  */
 Api.prototype._updateInApiGateway = function _updateInApiGateway(awsApiGateway, context, awsApi) {
   const spec = this.generateSpec('api-gateway', context);
@@ -198,7 +201,7 @@ module.exports = Api;
 /**
  * Clean an OpenAPI specification to remove parts incompatible with the ApiGateway import
  * @param {Object} spec - an OpenAPI specification
- * @returns{Object} - the cleaned OpenAPI specification
+ * @returns {Object} - the cleaned OpenAPI specification
  */
 function cleanSpecForApiGateway(spec) {
   // @TODO: see if it is still useful when importing with the SDK
@@ -217,7 +220,7 @@ function cleanSpecForApiGateway(spec) {
 /**
  * Clean an OpenAPI specification to remove parts specific to lager and ApiGateway
  * @param {Object} spec - an OpenAPI specification
- * @returns{Object} - the cleaned OpenAPI specification
+ * @returns {Object} - the cleaned OpenAPI specification
  */
 function cleanSpecForDoc(spec) {
   // For documentation, we can remove the OPTION methods, the lager extentions

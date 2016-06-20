@@ -20,7 +20,7 @@ var Endpoint = function Endpoint(spec, resourcePath, method) {
 
 /**
  * Returns a string representation of an Endpoint instance
- * @returns{string}
+ * @returns {string}
  */
 Endpoint.prototype.toString =  function toString() {
   return 'Endpoint ' + this.method + ' ' + this.resourcePath;
@@ -28,7 +28,7 @@ Endpoint.prototype.toString =  function toString() {
 
 /**
  * Returns the endpoint's HTTP method
- * @returns{string}
+ * @returns {string}
  */
 Endpoint.prototype.getMethod = function getMethod() {
   return this.method;
@@ -36,7 +36,7 @@ Endpoint.prototype.getMethod = function getMethod() {
 
 /**
  * Returns the endpoint's path
- * @returns{string}
+ * @returns {string}
  */
 Endpoint.prototype.getResourcePath = function getResourcePath() {
   return this.resourcePath;
@@ -44,7 +44,7 @@ Endpoint.prototype.getResourcePath = function getResourcePath() {
 
 /**
  * Returns the endpoint's OpenAPI specification
- * @returns{Object}
+ * @returns {Object}
  */
 Endpoint.prototype.getSpec = function getSpec() {
   return this.spec;
@@ -56,7 +56,7 @@ Endpoint.prototype.getSpec = function getSpec() {
  * or the "doc" version (for Swagger UI, Postman, etc...)
  * or a complete, unaltered version for debugging
  * @param {string} type - the kind of specification to generate (api-gateway|doc)
- * @returns{Object}
+ * @returns {Object}
  */
 Endpoint.prototype.generateSpec = function generateSpec(type) {
   const spec = _.cloneDeep(this.spec);
@@ -75,7 +75,7 @@ module.exports = Endpoint;
 /**
  * Clean a specification to remove parts incompatible with the ApiGateway import
  * @param {Object} spec - an OpenAPI specification
- * @returns{Object} - the cleaned OpenAPI specification
+ * @returns {Object} - the cleaned OpenAPI specification
  */
 function cleanSpecForApiGateway(spec) {
   delete spec['x-lager'];
@@ -85,7 +85,7 @@ function cleanSpecForApiGateway(spec) {
 /**
  * Clean a specification to remove parts specific to lager and ApiGateway
  * @param {Object} spec - an OpenAPI specification
- * @returns{Object} - the cleaned OpenAPI specification
+ * @returns {Object} - the cleaned OpenAPI specification
  */
 function cleanSpecForDoc(spec) {
   // For documentation, we can remove the OPTION methods, the lager extentions
