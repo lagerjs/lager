@@ -12,7 +12,7 @@ const Endpoint = require('./endpoint');
 
 /**
  * Load all API specifications
- * @returns {Promise<[Api]>} - the promise of an array containing all Apis
+ * @returns {Promise<[Api]>} - the promise of an array containing all APIs
  */
 function loadApis() {
   const apiSpecsPath = path.join(process.cwd(), 'apis');
@@ -53,7 +53,7 @@ function loadApis() {
  * @param {string} apiSpecPath - the full path to the specification file
  * @param {string} OPTIONAL identifier - a human readable identifier, eventually
  *                                        configured in the specification file itself
- * @returns {Promise<Api>}
+ * @returns {Promise<Api>} - the promise of an API instance
  */
 function loadApi(apiSpecPath, identifier) {
   return lager.fire('beforeApiLoad', apiSpecPath, identifier)
@@ -76,7 +76,7 @@ function loadApi(apiSpecPath, identifier) {
 
 /**
  * Load all Endpoint specifications
- * @returns {Promise<[Endpoints]>}
+ * @returns {Promise<[Endpoints]>} - the promise of an array containing all endpoints
  */
 function loadEndpoints() {
   const endpointsDirectory = 'endpoints';
@@ -120,7 +120,7 @@ function loadEndpoints() {
  * @param {string} endpointSpecRootPath - the root directory of the endpoint configuration
  * @param {string} resourcePath - the URL path to the endpoint resource
  * @param {string} method - the HTTP method of the endpoint
- * @returns {Promise<Endpoint>}
+ * @returns {Promise<Endpoint>} - the promise of an endpoint instance
  */
 function loadEndpoint(endpointSpecRootPath, resourcePath, method) {
   // @TODO throw error if the endpoint does not exists
@@ -142,9 +142,9 @@ function loadEndpoint(endpointSpecRootPath, resourcePath, method) {
 
 /**
  * [function description]
- * @param {[Api]} apis
- * @param {[Endpoint]} endpoints
- * @returns {Promise<[Api]>}
+ * @param {[Api]} apis - a list of APIs
+ * @param {[Endpoint]} endpoints - a list of Edpoints
+ * @returns {Promise<[Api]>} - the list of APIs enriched with endpoints
  */
 function addEndpointsToApis(apis, endpoints) {
   return lager.fire('beforeAddEndpointsToApis', apis, endpoints)
@@ -214,7 +214,7 @@ function addIntegrationDataToEndpoints(endpoints, integrationDataInjectors) {
  * @param {Array} apis - List of APIs enriched with endpoints
  * @param {string} region - AWS region where we want to deploy APIs
  * @param {Object} context - an object containing the environment and the stage to apply to the deployment
- * @return {Boolean}         [description]
+ * @return {Promise<[Api]>} - a promise of a list of published APIs
  */
 function publishApis(apis, region, context) {
   return lager.fire('beforePublishApis', apis)
@@ -236,7 +236,7 @@ function publishApis(apis, region, context) {
  * @param {Array} apiIdentifiers - List of APIs identifiers
  * @param {string} region - AWS region where we want to deploy APIs
  * @param {Object} context - an object containing the environment and the stage to apply to the deployment
- * @returns {[type]}
+ * @return {Promise<[Api]>} - a promise of a list of published APIs
  */
 function deploy(apiIdentifiers, region, context) {
   // First load API and endpoint specifications
@@ -294,7 +294,7 @@ function findEndpoint(resourcePath, method) {
 }
 
 /**
- *
+ * Enrich the lager command line
  * @returns {Promise<[program, inquirer]>} - promise of an array containing the parameters
  */
 function registerCommands() {

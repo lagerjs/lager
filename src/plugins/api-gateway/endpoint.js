@@ -12,7 +12,7 @@ const _ = lager.import._;
  * @param {string} method - HTTP method of the endpoint
  * @constructor
  */
-var Endpoint = function Endpoint(spec, resourcePath, method) {
+const Endpoint = function Endpoint(spec, resourcePath, method) {
   this.method = method;
   this.resourcePath = resourcePath;
   this.spec = spec;
@@ -20,15 +20,15 @@ var Endpoint = function Endpoint(spec, resourcePath, method) {
 
 /**
  * Returns a string representation of an Endpoint instance
- * @returns {string}
+ * @returns {string} -  a string representation of an endpoint instance
  */
-Endpoint.prototype.toString =  function toString() {
+Endpoint.prototype.toString = function toString() {
   return 'Endpoint ' + this.method + ' ' + this.resourcePath;
 };
 
 /**
  * Returns the endpoint's HTTP method
- * @returns {string}
+ * @returns {string} - an HTTP method
  */
 Endpoint.prototype.getMethod = function getMethod() {
   return this.method;
@@ -36,7 +36,7 @@ Endpoint.prototype.getMethod = function getMethod() {
 
 /**
  * Returns the endpoint's path
- * @returns {string}
+ * @returns {string} -  the resource path of the endpoint
  */
 Endpoint.prototype.getResourcePath = function getResourcePath() {
   return this.resourcePath;
@@ -44,7 +44,7 @@ Endpoint.prototype.getResourcePath = function getResourcePath() {
 
 /**
  * Returns the endpoint's OpenAPI specification
- * @returns {Object}
+ * @returns {Object} - a portion of OpenAPI specification describing the endpoint
  */
 Endpoint.prototype.getSpec = function getSpec() {
   return this.spec;
@@ -56,7 +56,7 @@ Endpoint.prototype.getSpec = function getSpec() {
  * or the "doc" version (for Swagger UI, Postman, etc...)
  * or a complete, unaltered version for debugging
  * @param {string} type - the kind of specification to generate (api-gateway|doc)
- * @returns {Object}
+ * @returns {Object} - a portion of OpenAPI specification describing the endpoint
  */
 Endpoint.prototype.generateSpec = function generateSpec(type) {
   const spec = _.cloneDeep(this.spec);

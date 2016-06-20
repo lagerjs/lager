@@ -139,7 +139,7 @@ Api.prototype.publish = function publish(region, context) {
  */
 Api.prototype.findInApiGateway = function findInApiGateway(awsApiGateway, context, position) {
   const params = {
-    position: position,
+    position,
     limit: 100
   };
   return Promise.promisify(awsApiGateway.getRestApis.bind(awsApiGateway))(params)
