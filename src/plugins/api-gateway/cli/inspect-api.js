@@ -70,13 +70,13 @@ function getChoices(apis) {
   return {
     apiIdentifier: _.map(apis, api => {
       return {
-        value: api.spec['x-lager'].identifier,
-        name: icli.format.info(api.spec['x-lager'].identifier) + (api.spec.info && api.spec.info.title ? ' - ' + api.spec.info.title : '')
+        value: api.getIdentifier(),
+        name: icli.format.info(api.getIdentifier()) + (api.spec.info && api.spec.info.title ? ' - ' + api.spec.info.title : '')
       };
     }),
     specVersion: [
       { value: 'doc', name: icli.format.info('doc') + ' - version of the specification for documentation purpose (Swagger UI, Postman ...)' },
-      { value: 'aws', name: icli.format.info('aws') + ' - version of the specification used for publication in API Gateway' },
+      { value: 'api-gateway', name: icli.format.info('aws') + ' - version of the specification used for publication in API Gateway' },
       { value: 'complete', name: icli.format.info('complete') + ' - version of the specification containing everything (doc + aws)' }
     ]
   };

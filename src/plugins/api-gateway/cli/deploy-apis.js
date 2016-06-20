@@ -74,8 +74,8 @@ function getChoices(apis) {
     return {
       apiIdentifiers: _.map(apis, api => {
         return {
-          value: api.spec['x-lager'].identifier,
-          name: icli.format.info(api.spec['x-lager'].identifier) + (api.spec.info && api.spec.info.title ? ' - ' + api.spec.info.title : '')
+          value: api.getIdentifier(),
+          name: icli.format.info(api.getIdentifier()) + (api.spec.info && api.spec.info.title ? ' - ' + api.spec.info.title : '')
         };
       }),
       region: [{
@@ -108,14 +108,17 @@ function getChoices(apis) {
 }
 
 /**
- * Create the new endpoint
+ * Execute the deployment
  * @param {Object} parameters - the parameters provided in the command and in the prompt
  * @returns{Promise<null>} - The execution stops here
  */
 function executeCommand(parameters) {
   return lager.getPlugin('api-gateway').deploy(
+    parameters.apiIdentifiers,
     parameters.region,
-    parameters.stage,
-    parameters.environment
+    {
+      stage: parameters.stage,
+      environment: parameters.environment
+    }
   );
 }

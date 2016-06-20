@@ -99,7 +99,7 @@ function getChoices(endpoints) {
   // Build the list of available specification versions for input verification and interactive selection
   lists.specVersion = [
     { value: 'doc', name: icli.format.info('doc') + ' - version of the specification for documentation purpose (Swagger UI, Postman ...)' },
-    { value: 'aws', name: icli.format.info('aws') + ' - version of the specification used for publication in API Gateway' },
+    { value: 'api-gateway', name: icli.format.info('aws') + ' - version of the specification used for publication in API Gateway' },
     { value: 'complete', name: icli.format.info('complete') + ' - version of the specification containing everything (doc + aws)' }
   ];
 

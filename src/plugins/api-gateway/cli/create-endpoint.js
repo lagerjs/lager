@@ -97,8 +97,8 @@ function getChoices(apis) {
   const choicesLists = {
     apis: _.map(apis, api => {
       return {
-        value: api.spec['x-lager'].identifier,
-        name: icli.format.info(api.spec['x-lager'].identifier) + (api.spec.info && api.spec.info.title ? ' - ' + api.spec.info.title : '')
+        value: api.getIdentifier(),
+        name: icli.format.info(api.getIdentifier()) + (api.spec.info && api.spec.info.title ? ' - ' + api.spec.info.title : '')
       };
     }),
     httpMethod: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],

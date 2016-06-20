@@ -1,15 +1,14 @@
 {
-  "x-lager": {
-    "identifier": "my-sample-api"
-  },
   "swagger": "2.0",
-  "info": {},
+  "info": {
+    "title": "Back Office"
+  },
   "schemes": ["https"],
   "host": "API_ID.execute-api.REGION.amazonaws.com",
   "basePath": "",
   "tags": [{
     "name": "Lager",
-    "description": "Lager sample API"
+    "description": "Another lager sample API"
   }],
   "paths": {},
   "definitions": {

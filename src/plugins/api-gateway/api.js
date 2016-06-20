@@ -1,17 +1,30 @@
 'use strict';
 
-const Promise = require('bluebird');
-const _ = require('lodash');
-const AWS = require('aws-sdk');
+// Nice ES6 syntax
+// const { Promise, _, icli } = require('@lager/lager/lib/lager').import;
 const lager = require('@lager/lager/lib/lager');
+const _ = lager.import._;
+const Promise = lager.import.Promise;
+
+const AWS = require('aws-sdk');
 
 /**
  * Represents an API
  * @constructor
  * @param {Object} spec - base API specification (OpenAPI specification)
  */
-const Api = function Api(spec) {
+const Api = function Api(identifier, spec) {
+  this.identifier = identifier;
   this.spec = spec;
+  this.endpoints = [];
+};
+
+/**
+ * Returns the API identifier in the Lager project
+ * @returns{string}
+ */
+Api.prototype.getIdentifier = function getIdentifier() {
+  return this.identifier;
 };
 
 /**
@@ -19,7 +32,7 @@ const Api = function Api(spec) {
  * @returns{string}
  */
 Api.prototype.toString = function toString() {
-  return 'Api ' + this.spec['x-lager'].identifier;
+  return 'Api ' + this.identifier;
 };
 
 /**
@@ -30,7 +43,7 @@ Api.prototype.toString = function toString() {
 Api.prototype.doesExposeEndpoint = function doesExposeEndpoint(endpoint) {
   const spec = endpoint.getSpec();
   if (spec['x-lager'] && spec['x-lager'].apis && spec['x-lager'].apis.length) {
-    return endpoint.getSpec()['x-lager'].apis.indexOf(this.spec['x-lager'].identifier) !== -1;
+    return endpoint.getSpec()['x-lager'].apis.indexOf(this.identifier) !== -1;
   }
   return false;
 };
@@ -43,15 +56,9 @@ Api.prototype.doesExposeEndpoint = function doesExposeEndpoint(endpoint) {
 Api.prototype.addEndpoint = function addEndpoint(endpoint) {
   return lager.fire('beforeAddEndpointToApi', this, endpoint)
   .spread((api, endpoint) => {
-    // We construct the path specification
-    const path = {};
-    path[endpoint.getResourcePath()] = {};
-    path[endpoint.getResourcePath()][endpoint.getMethod().toLowerCase()] = endpoint.getSpec();
-    _.merge(this.spec.paths, path);
-
+    this.endpoints.push(endpoint);
     // @TODO Add models referenced in the endpoint
-    // @TODO Add CORS configuration
-
+    // @TODO Add CORS configuration (with a separate plugin)
     return lager.fire('afterAddEndpointToApi', this, endpoint);
   })
   .spread(() => {
@@ -60,16 +67,30 @@ Api.prototype.addEndpoint = function addEndpoint(endpoint) {
 };
 
 /**
- * Generate the OpenAPI specification
- * It can be the "publish" version (for API Gateway)
+ * Generate an OpenAPI specification
+ * It can be the "api-gateway" version (for publication in API Gateway)
  * or the "doc" version (for Swagger UI, Postman, etc...)
- * @param {string} type - the kind of specification to generate (publish|doc)
+ * or a complete, unaltered version for debugging
+ * @param {string} type - the kind of specification to generate (api-gateway|doc)
  * @returns{Object}
  */
-Api.prototype.genSpec = function genSpec(type) {
+Api.prototype.generateSpec = function generateSpec(type, context) {
   const spec = _.cloneDeep(this.spec);
-  if (type === 'publish') {
-    return cleanSpecForPublish(spec);
+
+  // Add endpoint specifications
+  _.forEach(this.endpoints, endpoint => {
+    // We create the new "path" entry and merge it to specification
+    const path = {};
+    path[endpoint.getResourcePath()] = {};
+    path[endpoint.getResourcePath()][endpoint.getMethod().toLowerCase()] = endpoint.generateSpec();
+    _.merge(this.spec.paths, path);
+  });
+
+  // Depending on the type of specification we want, we may do some cleanup
+  if (type === 'api-gateway') {
+    // Inject lager identification data in the API name
+    spec.info.title = context.environment + ' ' + this.identifier + ' - ' + spec.info.title;
+    return cleanSpecForApiGateway(spec);
   } else if (type === 'doc') {
     return cleanSpecForDoc(spec);
   }
@@ -81,26 +102,18 @@ Api.prototype.genSpec = function genSpec(type) {
  *
  * @returns{Promise<Api>}
  */
-Api.prototype.publish = function publish(region, stage, environment) {
+Api.prototype.publish = function publish(region, context) {
   const awsApiGateway = new AWS.APIGateway({ region });
   return lager.fire('beforePublishApi', this)
   .spread(() => {
-    return this.genSpec('publish');
+    // Retrieve the API in AWS API Gateway
+    return this.findInApiGateway(awsApiGateway, context);
   })
-  .then((spec) => {
-    return [getApiByName(awsApiGateway, environment + '_' + spec['x-lager'].identifier), spec];
-  })
-  .spread((awsApi, spec) => {
+  .then(awsApi => {
     if (awsApi) {
-      return updateRestApi(awsApiGateway, spec, awsApi);
+      return this._updateInApiGateway(awsApiGateway, context, awsApi);
     }
-    return createRestApi(awsApiGateway, spec, environment + '_' + spec['x-lager'].identifier);
-  })
-  .then((awsApi) => {
-    this.spec['x-lager'].id = awsApi.id;
-    // WARN: awsApiGateway.putRestApi() rewrites the name of the API with the date of the import
-    // We have to rewrite it correctly
-    return this.setName(awsApiGateway, environment + '_' + this.spec['x-lager'].identifier);
+    return this._createInApiGateway(awsApiGateway, context);
   })
   .then(() => {
     return lager.fire('afterPublishApi', this);
@@ -110,55 +123,40 @@ Api.prototype.publish = function publish(region, stage, environment) {
   });
 };
 
-/**
- * Set the name of the API in ApiGateway
- * @param {string} newName - the name to apply to the API in ApiGateway
- * @returns{Promise<Object>} - the AWS response
- */
-Api.prototype.setName = function setName(awsApiGateway, newName) {
-  const params = {
-    restApiId: this.spec['x-lager'].id,
-    patchOperations: [{
-      op: 'replace',
-      path: '/name',
-      value: newName
-    }]
-  };
-  return Promise.promisify(awsApiGateway.updateRestApi.bind(awsApiGateway))(params);
-};
-
-module.exports = Api;
-
 
 /**
  * We cannot find an API by name with the AWS SDK (only by ID)
- * Since we do not know the API ID but only the name, we have to list
- * all APIs and search for the name
- * Note that an API name is not necessarily unique, but we consider it should be
+ * We do not know the API ID but Lager inject identification content in the name
+ * We have to list all APIs and return the first one having a name that matches
  * @param {APIGateway} awsApiGateway - an API Gateway client from the AWS SDK
- * @param {string} name - the name of the API we are looking for
+ * @param {Object} context - an object containing information about the environment of the API we are searching
  * @param {[]} listParams - params of the awsApiGateway.getRestApis() method from the AWS SDK
  * @param {Integer} position - used for recusive call when the list of APIs is too long
  * @returns{Promise<Object|null>}
  */
-function getApiByName(awsApiGateway, name, listParams, position) {
-  const params = _.assign({
+Api.prototype.findInApiGateway = function findInApiGateway(awsApiGateway, context, position) {
+  const params = {
     position: position,
     limit: 100
-  }, listParams);
+  };
   return Promise.promisify(awsApiGateway.getRestApis.bind(awsApiGateway))(params)
   .then(apiList => {
-    const apiFound = _.find(apiList.items, function(api) {
-      return api.name === name;
+    const apiFound = _.find(apiList.items, api => {
+      return this._findIdentificationInName(api.name, context);
     });
     if (apiFound) {
       return Promise.resolve(apiFound);
     } else if (apiList.items.length === params.limit) {
-      return getApiByName(awsApiGateway, name, listParams, params.position + params.limit - 1);
+      return this.findInApiGateway(awsApiGateway, context, params.position + params.limit - 1);
     }
     return Promise.resolve(null);
   });
-}
+};
+
+Api.prototype._findIdentificationInName = function _findIdentificationInName(name, context) {
+  const identification = context.environment + ' ' + this.identifier + ' - ';
+  return _.startsWith(name, identification);
+};
 
 /**
  * Creates a new API in ApiGateway
@@ -166,13 +164,15 @@ function getApiByName(awsApiGateway, name, listParams, position) {
  * @param {Object} apiSpec - an OpenAPI specification
  * @returns{Promise<Object>} - an AWS Object representing the API
  */
-function createRestApi(awsApiGateway, apiSpec, name) {
-  console.log('Create Rest API ' + apiSpec['x-lager'].identifier);
-  return Promise.promisify(awsApiGateway.createRestApi.bind(awsApiGateway))({ name })
-  .then((awsApi) => {
-    return updateRestApi(awsApiGateway, apiSpec, awsApi);
-  });
-}
+Api.prototype._createInApiGateway = function _createInApiGateway(awsApiGateway, context) {
+  const spec = this.generateSpec('api-gateway', context);
+  console.log('Create API ' + spec.info.title);
+  const params = {
+    body: JSON.stringify(spec),
+    failOnWarnings: false
+  };
+  return Promise.promisify(awsApiGateway.importRestApi.bind(awsApiGateway))(params);
+};
 
 /**
  * Creates a new API in ApiGateway
@@ -181,26 +181,30 @@ function createRestApi(awsApiGateway, apiSpec, name) {
  * @param {Object} - an AWS Object representing the API
  * @returns{Promise<Object>} - an AWS Object representing the API
  */
-function updateRestApi(awsApiGateway, apiSpec, awsApi) {
-  console.log('Update Rest API ' + apiSpec['x-lager'].identifier);
+Api.prototype._updateInApiGateway = function _updateInApiGateway(awsApiGateway, context, awsApi) {
+  const spec = this.generateSpec('api-gateway', context);
+  console.log('Update API ' + spec.info.title);
   const params = {
-    body: JSON.stringify(apiSpec),
+    body: JSON.stringify(spec),
     failOnWarnings: false,
     restApiId: awsApi.id,
     mode: 'overwrite'
   };
   return Promise.promisify(awsApiGateway.putRestApi.bind(awsApiGateway))(params);
-}
+};
+
+module.exports = Api;
 
 /**
  * Clean an OpenAPI specification to remove parts incompatible with the ApiGateway import
  * @param {Object} spec - an OpenAPI specification
  * @returns{Object} - the cleaned OpenAPI specification
  */
-function cleanSpecForPublish(spec) {
+function cleanSpecForApiGateway(spec) {
   // @TODO: see if it is still useful when importing with the SDK
   // JSON schema doesn't allow to have example as property, but swagger model does
   // https://github.com/awslabs/aws-apigateway-importer/issues/177
+  delete spec['x-lager'];
   _.forEach(spec.definitions, definition => {
     delete definition.example;
     _.forEach(definition.properties, property => {

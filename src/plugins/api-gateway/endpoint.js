@@ -1,5 +1,10 @@
 'use strict';
 
+// Nice ES6 syntax
+// const { Promise, _, icli } = require('@lager/lager/lib/lager').import;
+const lager = require('@lager/lager/lib/lager');
+const _ = lager.import._;
+
 /**
  * The specification of an API endpoint
  * @param {Object} spec - OpenAPI specification of the endpoint
@@ -45,4 +50,48 @@ Endpoint.prototype.getSpec = function getSpec() {
   return this.spec;
 };
 
+/**
+ * Generate a portion of OpenAPI specification
+ * It can be the "api-gateway" version (for publication in API Gateway)
+ * or the "doc" version (for Swagger UI, Postman, etc...)
+ * or a complete, unaltered version for debugging
+ * @param {string} type - the kind of specification to generate (api-gateway|doc)
+ * @returns{Object}
+ */
+Endpoint.prototype.generateSpec = function generateSpec(type) {
+  const spec = _.cloneDeep(this.spec);
+
+  // Depending on the type of specification we want, we may do some cleanup
+  if (type === 'api-gateway') {
+    return cleanSpecForApiGateway(spec);
+  } else if (type === 'doc') {
+    return cleanSpecForDoc(spec);
+  }
+  return spec;
+};
+
 module.exports = Endpoint;
+
+/**
+ * Clean a specification to remove parts incompatible with the ApiGateway import
+ * @param {Object} spec - an OpenAPI specification
+ * @returns{Object} - the cleaned OpenAPI specification
+ */
+function cleanSpecForApiGateway(spec) {
+  delete spec['x-lager'];
+  return spec;
+}
+
+/**
+ * Clean a specification to remove parts specific to lager and ApiGateway
+ * @param {Object} spec - an OpenAPI specification
+ * @returns{Object} - the cleaned OpenAPI specification
+ */
+function cleanSpecForDoc(spec) {
+  // For documentation, we can remove the OPTION methods, the lager extentions
+  // and the extentions from API Gateway Importer
+  delete spec['x-lager'];
+  delete spec['x-amazon-apigateway-auth'];
+  delete spec['x-amazon-apigateway-integration'];
+  return spec;
+}

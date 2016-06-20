@@ -65,8 +65,7 @@ function loadApi(apiSpecPath, identifier) {
     // if the function is called twice
     const apiSpec = _.cloneDeep(require(apiSpecPath));
     apiSpec['x-lager'] = apiSpec['x-lager'] || {};
-    apiSpec['x-lager'].identifier = apiSpec['x-lager'].identifier || identifier;
-    const api = new Api(apiSpec);
+    const api = new Api(identifier, apiSpec);
 
     // This event allows to inject code to alter the API specification
     return lager.fire('afterApiLoad', api);
@@ -210,17 +209,19 @@ function addEndpointsToApis(apis, endpoints) {
 }
 
 /**
- * [function description]
- * @param {[type]} apis [description]
- * @returns{[type]}      [description]
+ * [publishApis description]
+ * @param  {[type]}  apis    [description]
+ * @param  {[type]}  region  [description]
+ * @param  {[type]}  context [description]
+ * @return {Boolean}         [description]
  */
-function publishAllApis(apis, region, stage, environment) {
-  return lager.fire('beforePublishAllApis', apis)
+function publishApis(apis, region, context) {
+  return lager.fire('beforePublishApis', apis)
   .spread((apis) => {
     return Promise.map(apis, (api) => {
-      return api.publish(region, stage, environment)
+      return api.publish(region, context)
       .then(() => {
-        return lager.fire('afterPublishAllApis', apis);
+        return lager.fire('afterPublishApis', apis);
       });
     });
   })
@@ -232,19 +233,20 @@ function publishAllApis(apis, region, stage, environment) {
 /**
  *
  * @param {string} region - AWS where we want to deploy APIs
- * @param {string} stage - the stage to apply to the deployment (typically, the version)
- * @param {string} environment - the environment prefixes the API name in API Gateway
+ * @param {Object} context - an object containing the environment and the stage to apply to the deployment
  * @returns{[type]}
  */
-function deploy(region, stage, environment) {
+function deploy(apiIdentifiers, region, context) {
   // First load API and endpoint specifications
   console.log('Load APIs and Endpoints');
   return Promise.all([loadApis(), loadEndpoints()])
   .spread((apis, endpoints) => {
+    apis = _.filter(apis, api => { return apiIdentifiers.indexOf(api.getIdentifier()) !== -1; });
+
     console.log('Load integrations');
     // The load of API and endpoint specifications succeeded, we can deploy the integrations
     // Typically, il is lambda functions, but it could be anything published by a plugin
-    return Promise.all([loadIntegrations(region, stage, environment), apis, endpoints]);
+    return Promise.all([loadIntegrations(region, context), apis, endpoints]);
   })
   .spread((integrationsDataInjectors, apis, endpoints) => {
     console.log('Add integrations to endpoints');
@@ -258,7 +260,7 @@ function deploy(region, stage, environment) {
   })
   .spread((apis, endpoints) => {
     // Now that we have complete API specifications, we can publish them in API Gateway
-    return publishAllApis(apis, region, stage, environment);
+    return publishApis(apis, region, context);
   });
 }
 
@@ -271,7 +273,7 @@ function getApiSpec(identifier, type, colors) {
     return Promise.all([addEndpointsToApis([api], endpoints), endpoints]);
   })
   .spread((apis, endpoints) => {
-    let json = JSON.stringify(apis[0].genSpec(type), null, 2);
+    let json = JSON.stringify(apis[0].generateSpec(type), null, 2);
     if (colors) {
       json = cardinal.highlight(json, { json: true });
     }
@@ -283,8 +285,7 @@ function getEndpointSpec(method, resourcePath, type, colors) {
   const endpointSpecRootPath = path.join(process.cwd(), 'endpoints');
   return loadEndpoint(endpointSpecRootPath, resourcePath, method)
   .then(endpoint => {
-    // @TODO create Endpoint.genSpec(type) similarly ti Api
-    let json = JSON.stringify(endpoint.getSpec(), null, 2);
+    let json = JSON.stringify(endpoint.generateSpec(type), null, 2);
     if (colors) {
       json = cardinal.highlight(json, { json: true });
     }
