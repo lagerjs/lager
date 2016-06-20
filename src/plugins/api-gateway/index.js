@@ -15,7 +15,7 @@ const Endpoint = require('./endpoint');
  * @returns {Promise<[Api]>} - the promise of an array containing all APIs
  */
 function loadApis() {
-  const apiSpecsPath = path.join(process.cwd(), 'apis');
+  const apiSpecsPath = path.join(plugin.getPath(), 'apis');
 
   // This event allows to inject code before loading all APIs
   return lager.fire('beforeApisLoad')
@@ -80,7 +80,7 @@ function loadApi(apiSpecPath, identifier) {
  */
 function loadEndpoints() {
   const endpointsDirectory = 'endpoints';
-  const endpointSpecsPath = path.join(process.cwd(), endpointsDirectory);
+  const endpointSpecsPath = path.join(plugin.getPath(), endpointsDirectory);
 
   return lager.fire('beforeEndpointsLoad')
   .spread(() => {
@@ -172,12 +172,12 @@ function addEndpointsToApis(apis, endpoints) {
  * @param  {string} environment - environment identifier
  * @returns {[IntegrationObject]} - an array of integrqtion objects
  */
-function loadIntegrations(region, stage, environment) {
+function loadIntegrations(region, context) {
   // The `deployIntegrations` hook takes two arguments
   // A object containing the region, stage and environment of the deployment
   // and nn array that will receive integration results
-  return lager.fire('loadIntegrations', {region, stage, environment}, [])
-  .spread((config, integrationDataInjectors) => {
+  return lager.fire('loadIntegrations', region, context, [])
+  .spread((region, context, integrationDataInjectors) => {
     return Promise.resolve(integrationDataInjectors);
   });
 }
@@ -310,7 +310,7 @@ function registerCommands() {
   });
 }
 
-module.exports = {
+const plugin = {
   name: 'api-gateway',
   hooks: {
     registerCommands
@@ -322,6 +322,8 @@ module.exports = {
   findApi,
   findEndpoint
 };
+
+module.exports = plugin;
 
 
 /**

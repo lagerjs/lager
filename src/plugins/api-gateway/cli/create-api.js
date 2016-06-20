@@ -12,6 +12,8 @@ const icli = lager.import.icli;
 const fs = Promise.promisifyAll(require('fs'));
 const mkdirpAsync = Promise.promisify(require('mkdirp'));
 
+const plugin = lager.getPlugin('api-gateway');
+
 // @TODO propose to select endpoints
 // @TODO reactivate the possibility to select values not proposed in a list
 
@@ -20,10 +22,6 @@ const mkdirpAsync = Promise.promisify(require('mkdirp'));
  * @returns {Promise} - a promise that resolve when the operation is done
  */
 module.exports = () => {
-  // We have to require the plugin inside the function
-  // Otherwise we could have a circular require occuring when Lager is registering it
-  const plugin = lager.getPlugin('api-gateway');
-
   // First, retrieve possible values for the endpoint-identifiers parameter
   return plugin.loadEndpoints()
   .then(endpoints => {
@@ -108,7 +106,7 @@ function getChoices(endpoints) {
  */
 function executeCommand(parameters) {
   // If a name has been provided, we create the project directory
-  const specFilePath = path.join(process.cwd(), 'apis', parameters.apiIdentifier);
+  const specFilePath = path.join(plugin.getPath(), 'apis', parameters.apiIdentifier);
   return mkdirpAsync(specFilePath)
   .then(() => {
     const spec = {

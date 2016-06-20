@@ -9,7 +9,7 @@ const _ = require('lodash');
 const Lambda = require('./lambda');
 
 function loadLambdas() {
-  let lambdaConfigsPath = path.join(process.cwd(), 'lambdas');
+  let lambdaConfigsPath = path.join(plugin.getPath(), 'lambdas');
 
   // This event allows to inject code before loading all APIs
   return lager.fire('beforeLambdasLoad')
@@ -69,7 +69,7 @@ function loadLambda(lambdaConfigPath, identifier) {
 
 let lambdas = [];
 
-module.exports = {
+const plugin = {
   name: 'node-lambda',
 
   hooks: {
@@ -102,18 +102,19 @@ module.exports = {
     /**
      * This hook perform the deployment of lambdas in AWS and return integration data
      * that will be used to configure the related endpoints
-     * @param {Object} config - the deployment config: a object containing the region, satge, and environment
+     * @param {string} region - the AWS region where we doing the deployment
+     * @param {Object} context - a object containing the stage and the environment
      * @param {Array} integrationResults - the collection of integration results
      *                                      we will add our own integrations results
      *                                      to this array
      * @returns {Promise<Array>}
      */
-    loadIntegrations: function loadIntegrations(config, integrationResults) {
+    loadIntegrations: function loadIntegrations(region, context, integrationResults) {
       return Promise.map(lambdas, (lambda) => {
-        return lambda.deploy(config.region, config.stage, config.environment);
+        return lambda.deploy(region, context);
       })
       .then(lambdaIntegrationDataInjectors => {
-        return Promise.resolve([config, _.concat(integrationResults, lambdaIntegrationDataInjectors)]);
+        return Promise.resolve([region, context, _.concat(integrationResults, lambdaIntegrationDataInjectors)]);
       });
     },
 
@@ -127,3 +128,5 @@ module.exports = {
     }
   }
 };
+
+module.exports = plugin;

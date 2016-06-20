@@ -6,8 +6,9 @@
  * @param {Lambda} lambdaData - data returned from the deployment of a lambda
  * @constructor
  */
-let LambdaIntegrationDataInjector = function LambdaIntegrationDataInjector(lambdaData) {
-  this.lambdaData = lambdaData;
+let LambdaIntegrationDataInjector = function LambdaIntegrationDataInjector(lambda, awsLambdaData) {
+  this.lambda = lambda;
+  this.awsLambdaData = awsLambdaData;
 };
 
 /**
@@ -20,12 +21,12 @@ LambdaIntegrationDataInjector.prototype.applyToEndpoint = function applyToEndpoi
   let spec = endpoint.getSpec();
 
   // The integrationDataInjector applies if the endpoint spec refers to its lambda
-  if (spec['x-lager'] && spec['x-lager'].lambda && spec['x-lager'].lambda === this.lambdaData.FunctionName) {
+  if (spec['x-lager'] && spec['x-lager'].lambda && spec['x-lager'].lambda === this.lambda.getIdentifier()) {
     spec['x-amazon-apigateway-integration'].type = 'aws';
     spec['x-amazon-apigateway-integration'].uri = 'arn:aws:apigateway:'
-                                                + this.lambdaData.FunctionArn.split(':')[3]
+                                                + this.awsLambdaData.FunctionArn.split(':')[3]
                                                 + ':lambda:path/2015-03-31/functions/'
-                                                + this.lambdaData.FunctionArn
+                                                + this.awsLambdaData.FunctionArn
                                                 + '/invocations';
   }
   return endpoint;

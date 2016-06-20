@@ -121,7 +121,7 @@ function executeCommand(parameters) {
   const pathParts = parameters.resourcePath.split('/');
   pathParts.push(parameters.httpMethod);
   pathParts.unshift('endpoints');
-  pathParts.unshift(process.cwd());
+  pathParts.unshift(plugin.getPath());
   const specFilePath = path.join.apply(null, pathParts);
 
   return mkdirpAsync(specFilePath)

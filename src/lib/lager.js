@@ -1,5 +1,6 @@
 'use strict';
 
+const path = require('path');
 const Promise = require('bluebird');
 const _ = require('lodash');
 const program = require('commander');
@@ -92,6 +93,11 @@ Lager.prototype.getInquirer = function getInquirer() {
  * @returns {Lager}
  */
 Lager.prototype.registerPlugin = function registerPlugin(plugin) {
+  if (!plugin.name) { throw new Error('A lager plugin MUST have a name property'); }
+  // Lager inject a getPath() method in the plugin
+  plugin.getPath = function getBasePath() {
+    return path.join(process.cwd(), plugin.name);
+  };
   this.plugins.push(plugin);
   return this;
 };

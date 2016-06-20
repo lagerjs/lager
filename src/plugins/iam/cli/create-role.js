@@ -11,6 +11,8 @@ const icli = lager.import.icli;
 const fs = Promise.promisifyAll(require('fs'));
 const mkdirpAsync = Promise.promisify(require('mkdirp'));
 
+const plugin = lager.getPlugin('iam');
+
 /**
  * This module exports a function that enrich the interactive command line and return a promise
  * @returns {Promise} - a promise that resolve when the operation is done
@@ -41,7 +43,7 @@ module.exports = () => {
  * @returns {Promise<null>} - The execution stops here
  */
 function executeCommand(parameters) {
-  const configFilePath = path.join(process.cwd(), 'iam', 'roles');
+  const configFilePath = path.join(plugin.getPath(), 'roles');
   return mkdirpAsync(configFilePath)
   .then(() => {
     // We create the configuration file of the Lambda

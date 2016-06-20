@@ -10,7 +10,7 @@ const Policy = require('./policy');
 const Role = require('./role');
 
 function loadPolicies() {
-  const policyConfigsPath = path.join(process.cwd(), 'iam', 'policies');
+  const policyConfigsPath = path.join(plugin.getPath(), 'iam', 'policies');
 
   // This event allows to inject code before loading all APIs
   return lager.fire('beforePoliciesLoad')
@@ -84,7 +84,7 @@ function findPolicies(identifiers) {
  * @returns {[type]} [description]
  */
 function loadRoles() {
-  const roleConfigsPath = path.join(process.cwd(), 'iam', 'roles');
+  const roleConfigsPath = path.join(plugin.getPath(), 'roles');
 
   // This event allows to inject code before loading all APIs
   return lager.fire('beforeRolesLoad')
@@ -153,7 +153,7 @@ function findRoles(identifiers) {
   });
 }
 
-module.exports = {
+const plugin = {
   name: 'iam',
 
   hooks: {
@@ -193,3 +193,5 @@ module.exports = {
   loadRoles,
   findRoles
 };
+
+module.exports = plugin;
