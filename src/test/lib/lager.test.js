@@ -19,6 +19,7 @@ describe('The lager instance', function() {
 
   it('should register plugins', function (done) {
     lager.registerPlugin({
+      name: 'a-simple-plugin',
       hooks: {
         myEvent: (arg1, arg2) => {
           arg1 += ' modified by a plugin';
@@ -28,6 +29,7 @@ describe('The lager instance', function() {
       }
     });
     lager.registerPlugin({
+      name: 'another-simple-plugin',
       hooks: {
         myEvent: (arg1, arg2) => {
           arg2.baz = 'value from plugin';
