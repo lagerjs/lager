@@ -1,8 +1,7 @@
 language: node_js
+sudo: false
 node_js:
   - "6"
   - "5"
   - "4"
 before_install: cd src
-after_success:
-  - bash <(curl -s https://codecov.io/bash)

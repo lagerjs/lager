@@ -22,7 +22,8 @@
   "devDependencies": {
     "mocha": "2.5.3",
     "codacy-coverage": "1.1.3",
-    "istanbul": "0.4.3"
+    "istanbul": "0.4.3",
+    "codecov": "1.0.1"
   },
   "keywords": [
     "AWS",
@@ -46,6 +47,6 @@
     "test": "test"
   },
   "scripts": {
-    "test": "istanbul cover  --include-all-sources=true ./node_modules/mocha/bin/_mocha --report lcovonly -- --recursive && cat ./coverage/lcov.info | ./node_modules/.bin/codacy-coverage && rm -rf ./coverage"
+    "test": "istanbul cover --include-all-sources=true ./node_modules/mocha/bin/_mocha --report lcovonly -- --recursive && codecov"
   }
 }
