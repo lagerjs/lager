@@ -2,8 +2,14 @@ Lager
 ===
 
 [![Build Status](https://travis-ci.org/lagerjs/lager.svg?branch=dev)](https://travis-ci.org/lagerjs/lager)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/1b7dc562f6c041c0bce705a0191d6357)](https://www.codacy.com/app/alexis_2/lager?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=lagerjs/lager&amp;utm_campaign=Badge_Grade)
-[![Codacy Badge](https://api.codacy.com/project/badge/Coverage/1b7dc562f6c041c0bce705a0191d6357)](https://www.codacy.com/app/alexis_2/lager?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=lagerjs/lager&amp;utm_campaign=Badge_Coverage)
+
+[![codecov](https://codecov.io/gh/lagerjs/lager/branch/dev/graph/badge.svg)](https://codecov.io/gh/lagerjs/lager)
+
+[![bitHound Overall Score](https://www.bithound.io/github/lagerjs/lager/badges/score.svg)](https://www.bithound.io/github/lagerjs/lager)
+
+[![bitHound Dependencies](https://www.bithound.io/github/lagerjs/lager/badges/dependencies.svg)](https://www.bithound.io/github/lagerjs/lager/dev/dependencies/npm)
+
+[![bitHound Code](https://www.bithound.io/github/lagerjs/lager/badges/code.svg)](https://www.bithound.io/github/lagerjs/lager)
 
 AWS Lambda + API Gateway + OpenAPI specification === *Lager*
 

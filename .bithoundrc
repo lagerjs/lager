@@ -1,3 +1,6 @@
 {
   "packageJsonLocation": "src/package.json"
+  "critics": {
+    "lint": {"engine": "eslint"}
+  }
 }
