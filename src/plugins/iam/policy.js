@@ -1,8 +1,9 @@
 'use strict';
 
 const lager = require('@lager/lager/lib/lager');
-const Promise = lager.getPromise();
-const _ = lager.getLodash();
+const Promise = lager.import.Promise;
+const _ = lager.import._;
+
 const AWS = require('aws-sdk');
 const iamHelper = require('./helper');
 

@@ -1,8 +1,8 @@
 'use strict';
 
 const lager = require('@lager/lager/lib/lager');
-const Promise = lager.getPromise();
-const _ = lager.getLodash();
+const Promise = lager.import.Promise;
+const _ = lager.import._;
 
 // We cannot find a policy by name with the AWS SDK (only by ARN)
 // Since we do not know the account id of the environment, we have to list

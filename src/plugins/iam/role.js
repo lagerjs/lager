@@ -1,7 +1,8 @@
 'use strict';
 
 const lager = require('@lager/lager/lib/lager');
-const Promise = lager.getPromise();
+const Promise = lager.import.Promise;
+
 const AWS = require('aws-sdk');
 const iamHelper = require('./helper');
 
@@ -18,12 +19,19 @@ let Role = function Role(config, name, pathPrefix) {
 };
 
 /**
- * [deploy description]
- * @param {[type]} stage       [description]
- * @param {[type]} environment [description]
- * @returns {[type]}             [description]
+ * Returns the name of the role
+ * @return {string} - the role name
  */
-Role.prototype.deploy = function deploy(stage, environment) {
+Role.prototype.getName = function getName() {
+  return this.name;
+};
+
+/**
+ * Deploy the role in AWS
+ * @param {Object} context - an object containing the stage and the environment of the role
+ * @returns {Promise} - a promise that resolve after the deployment
+ */
+Role.prototype.deploy = function deploy(context) {
   const awsIAM = new AWS.IAM();
   const name = this.name;
 

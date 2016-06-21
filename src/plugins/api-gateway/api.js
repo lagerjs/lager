@@ -5,6 +5,7 @@
 const lager = require('@lager/lager/lib/lager');
 const _ = lager.import._;
 const Promise = lager.import.Promise;
+const iamPlugin = lager.getPlugin('iam');
 
 const AWS = require('aws-sdk');
 
@@ -170,11 +171,14 @@ Api.prototype._findIdentificationInName = function _findIdentificationInName(nam
 Api.prototype._createInApiGateway = function _createInApiGateway(awsApiGateway, context) {
   const spec = this.generateSpec('api-gateway', context);
   console.log('Create API ' + spec.info.title);
-  const params = {
-    body: JSON.stringify(spec),
-    failOnWarnings: false
-  };
-  return Promise.promisify(awsApiGateway.importRestApi.bind(awsApiGateway))(params);
+  return applyCredentialsARNs(spec, context)
+  .then(spec => {
+    const params = {
+      body: JSON.stringify(spec),
+      failOnWarnings: false
+    };
+    return Promise.promisify(awsApiGateway.importRestApi.bind(awsApiGateway))(params);
+  });
 };
 
 /**
@@ -187,13 +191,16 @@ Api.prototype._createInApiGateway = function _createInApiGateway(awsApiGateway, 
 Api.prototype._updateInApiGateway = function _updateInApiGateway(awsApiGateway, context, awsApi) {
   const spec = this.generateSpec('api-gateway', context);
   console.log('Update API ' + spec.info.title);
-  const params = {
-    body: JSON.stringify(spec),
-    failOnWarnings: false,
-    restApiId: awsApi.id,
-    mode: 'overwrite'
-  };
-  return Promise.promisify(awsApiGateway.putRestApi.bind(awsApiGateway))(params);
+  return applyCredentialsARNs(spec, context)
+  .then(spec => {
+    const params = {
+      body: JSON.stringify(spec),
+      failOnWarnings: false,
+      restApiId: awsApi.id,
+      mode: 'overwrite'
+    };
+    return Promise.promisify(awsApiGateway.putRestApi.bind(awsApiGateway))(params);
+  });
 };
 
 module.exports = Api;
@@ -234,4 +241,43 @@ function cleanSpecForDoc(spec) {
     });
   });
   return spec;
+}
+
+/**
+ * Replace role references in an OpenAPI spec by their ARN
+ * @param  {Object} spec - an OpenAPI specification that will be imported in AWS
+ * @return {Object} - the altered specification
+ */
+function applyCredentialsARNs(spec, context) {
+  // If the IAM plugin is installed, we use it to replace role names by their ARN
+  if (iamPlugin) {
+    // Retrieve values for integration credentials
+    const credentials = _.reduce(spec.paths, (r1, endpointSpecs, resourcePath) => {
+      const r2 = _.reduce(endpointSpecs, (r2, endpointSpec, method) => {
+        if (endpointSpec['x-amazon-apigateway-integration'].credentials && r2.indexOf(endpointSpec['x-amazon-apigateway-integration'].credentials) === -1) {
+          r2.push(endpointSpec['x-amazon-apigateway-integration'].credentials);
+        }
+        return r2;
+      }, []);
+      return _.concat(r1, r2);
+    }, []);
+
+    // Retrieve ARN for each credential
+    return Promise.map(credentials, credential => {
+      return iamPlugin.retrieveRoleArn(credential, context)
+      .then(arn => { return { identifier: credential, arn }; });
+    })
+    .then(credentialsMap => {
+      // Replace names by ARNs in the spec
+      _.forEach(spec.paths, endpointSpecs => {
+        _.forEach(endpointSpecs, endpointSpec => {
+          if (endpointSpec['x-amazon-apigateway-integration'].credentials) {
+            endpointSpec['x-amazon-apigateway-integration'].credentials = _.find(credentialsMap, o => { return o.identifier === endpointSpec['x-amazon-apigateway-integration'].credentials; }).arn;
+          }
+        });
+      });
+      return spec;
+    });
+  }
+  return Promise.resolve(spec);
 }

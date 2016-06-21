@@ -12,7 +12,8 @@ const icli = lager.import.icli;
 const fs = Promise.promisifyAll(require('fs'));
 const mkdirpAsync = Promise.promisify(require('mkdirp'));
 
-const plugin = lager.getPlugin('api-gateway');
+const apiGatewayPlugin = lager.getPlugin('api-gateway');
+const iamPlugin = lager.getPlugin('iam');
 
 /**
  * This module exports a function that enrich the interactive command line and return a promise
@@ -20,11 +21,8 @@ const plugin = lager.getPlugin('api-gateway');
  */
 module.exports = () => {
   // First, retrieve possible values for the api-identifiers parameter
-  return plugin.loadApis()
-  .then(apis => {
-    // Build the list of available APIs for input verification and interactive selection
-    const choicesLists = getChoices(apis);
-
+  return getChoices()
+  .then(choicesLists => {
     const config = {
       cmd: 'create-endpoint',
       description: 'create a new API endpoint',
@@ -61,7 +59,7 @@ module.exports = () => {
         description: 'A list of MIME types the operation can consume separated by ","',
         type: 'checkbox',
         choices: choicesLists.mimeType,
-        default: choicesLists.mimeType[0],
+        default: [choicesLists.mimeType[0]],
         question: {
           message: 'What are the MIME types that the operation can consume?'
         }
@@ -70,14 +68,36 @@ module.exports = () => {
         description: 'A list of MIME types the operation can produce separated by ","',
         type: 'checkbox',
         choices: choicesLists.mimeType,
-        default: choicesLists.mimeType[0],
+        default: [choicesLists.mimeType[0]],
         question: {
           message: 'What are the MIME types that the operation can produce?'
+        }
+      }, {
+        cmdSpec: '--credentials <role-name|role-arn>',
+        description: 'The credentials used by API Gateway to call the integration',
+        type: 'list',
+        choices: choicesLists.credentials,
+        question: {
+          message: 'What are the credentials used by API Gateway to call the integration?',
+          when(answers, cmdParameterValues) { return choicesLists.credentials && choicesLists.credentials.length > 0; }
+        }
+      }, {
+        type: 'input',
+        question: {
+          name: 'credentialsInput',
+          message: 'What are the credentials used by API Gateway to call the integration?',
+          when(answers, cmdParameterValues) { return !answers.credentials && !cmdParameterValues.credentials; }
         }
       }],
       commanderActionHook() {
         if (arguments[1]) { arguments[1] = arguments[1].toUpperCase(); }
         return arguments;
+      },
+      inquirerPromptHook(answers, commandParameterValues) {
+        if (answers.credentialsInput) {
+          answers.credentials = answers.credentialsInput;
+        }
+        return Promise.resolve([answers, commandParameterValues]);
       }
     };
 
@@ -90,21 +110,32 @@ module.exports = () => {
 
 /**
  * Build the choices for "list" and "checkbox" parameters
- * @param {Array} apis - the list of available API specifications
  * @returns {Object} - collection of lists of choices for "list" and "checkbox" parameters
  */
-function getChoices(apis) {
+function getChoices() {
+  // First, retrieve possible values for the api-identifiers parameter
   const choicesLists = {
-    apis: _.map(apis, api => {
+    httpMethod: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+    mimeType: ['application/json', 'text/plain', { value: 'other', name: 'other (you will be prompted to enter a value)'}]
+  };
+
+  const rolesPromise = iamPlugin ? iamPlugin.loadRoles() : [];
+  return Promise.all([apiGatewayPlugin.loadApis(), rolesPromise])
+  .spread((apis, roles) => {
+    choicesLists.apis = _.map(apis, api => {
       return {
         value: api.getIdentifier(),
         name: icli.format.info(api.getIdentifier()) + (api.spec.info && api.spec.info.title ? ' - ' + api.spec.info.title : '')
       };
-    }),
-    httpMethod: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
-    mimeType: ['application/json', 'text/plain', { value: 'other', name: 'other (you will be prompted to enter a value)'}]
-  };
-  return choicesLists;
+    });
+    choicesLists.credentials = _.map(roles, role => {
+      return {
+        value: role.getName(),
+        name: icli.format.info(role.getName())
+      };
+    });
+    return choicesLists;
+  });
 }
 
 /**
@@ -121,7 +152,7 @@ function executeCommand(parameters) {
   const pathParts = parameters.resourcePath.split('/');
   pathParts.push(parameters.httpMethod);
   pathParts.unshift('endpoints');
-  pathParts.unshift(plugin.getPath());
+  pathParts.unshift(apiGatewayPlugin.getPath());
   const specFilePath = path.join.apply(null, pathParts);
 
   return mkdirpAsync(specFilePath)
@@ -133,7 +164,10 @@ function executeCommand(parameters) {
       },
       summary: parameters.summary,
       consume: parameters.consume,
-      produce: parameters.produce
+      produce: parameters.produce,
+      'x-amazon-apigateway-integration': {
+        credentials: parameters.credentials
+      }
     };
 
     // We save the specification in a json file

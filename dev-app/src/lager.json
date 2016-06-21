@@ -1,8 +1,8 @@
 {
   "name": "dev-app",
   "plugins": [
+    "iam",
     "api-gateway",
-    "node-lambda",
-    "iam"
+    "node-lambda"
   ]
 }
