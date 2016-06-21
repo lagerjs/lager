@@ -3,8 +3,6 @@
 const path = require('path');
 const Promise = require('bluebird');
 const _ = require('lodash');
-const program = require('commander');
-const inquirer = require('inquirer');
 const icli = require('./icli');
 
 
