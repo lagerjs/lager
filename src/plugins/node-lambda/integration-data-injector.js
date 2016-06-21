@@ -6,7 +6,7 @@
  * @param {Lambda} lambdaData - data returned from the deployment of a lambda
  * @constructor
  */
-let LambdaIntegrationDataInjector = function LambdaIntegrationDataInjector(lambda, awsLambdaData) {
+const LambdaIntegrationDataInjector = function LambdaIntegrationDataInjector(lambda, awsLambdaData) {
   this.lambda = lambda;
   this.awsLambdaData = awsLambdaData;
 };
@@ -18,7 +18,7 @@ let LambdaIntegrationDataInjector = function LambdaIntegrationDataInjector(lambd
  * @returns {Endpoint}
  */
 LambdaIntegrationDataInjector.prototype.applyToEndpoint = function applyToEndpoint(endpoint) {
-  let spec = endpoint.getSpec();
+  const spec = endpoint.getSpec();
 
   // The integrationDataInjector applies if the endpoint spec refers to its lambda
   if (spec['x-lager'] && spec['x-lager'].lambda && spec['x-lager'].lambda === this.lambda.getIdentifier()) {

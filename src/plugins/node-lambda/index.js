@@ -10,8 +10,12 @@ const fs = Promise.promisifyAll(require('fs'));
 
 const Lambda = require('./lambda');
 
+/**
+ * Load all lambda configurations
+ * @return {Promise<[Lambda]>} - promise of an array of lambdas
+ */
 function loadLambdas() {
-  let lambdaConfigsPath = path.join(plugin.getPath(), 'lambdas');
+  const lambdaConfigsPath = path.join(plugin.getPath(), 'lambdas');
 
   // This event allows to inject code before loading all APIs
   return lager.fire('beforeLambdasLoad')
@@ -21,9 +25,9 @@ function loadLambdas() {
   })
   .then((subdirs) => {
     // Load all the lambda configurations
-    var lambdaPromises = [];
+    const lambdaPromises = [];
     _.forEach(subdirs, (subdir) => {
-      let lambdaConfigPath = path.join(lambdaConfigsPath, subdir, 'config');
+      const lambdaConfigPath = path.join(lambdaConfigsPath, subdir, 'config');
       // subdir is the identifier of the Lambda, so we pass it as the second argument
       lambdaPromises.push(loadLambda(lambdaConfigPath, subdir));
     });
@@ -44,6 +48,12 @@ function loadLambdas() {
   });
 }
 
+/**
+ * Load a lambda
+ * @param {string} lambdaConfigPath - path to the configuration file
+ * @param {string} identifier - the lambda identifier
+ * @returns {Promise<Lambda>} - the promise of a lambda
+ */
 function loadLambda(lambdaConfigPath, identifier) {
   return lager.fire('beforeLambdaLoad', lambdaConfigPath, identifier)
   .spread((lambdaConfigPath, identifier) => {
@@ -51,7 +61,7 @@ function loadLambda(lambdaConfigPath, identifier) {
     // or the content exported by a node module
     // But because require() caches the content it loads, we clone the result to avoid bugs
     // if the function is called twice
-    let lambdaConfig = _.cloneDeep(require(lambdaConfigPath));
+    const lambdaConfig = _.cloneDeep(require(lambdaConfigPath));
 
     // If the handler path is not specified, we consider it is the same that the config path
     lambdaConfig.handlerPath = lambdaConfig.handlerPath || path.dirname(lambdaConfigPath);
@@ -59,7 +69,7 @@ function loadLambda(lambdaConfigPath, identifier) {
     // If the identifier is not specified, it will be the name of the directory that contains the config
     lambdaConfig.identifier = lambdaConfig.identifier || identifier;
 
-    let lambda = new Lambda(lambdaConfig);
+    const lambda = new Lambda(lambdaConfig);
 
     // This event allows to inject code to alter the Lambda configuration
     return lager.fire('afterLambdaLoad', lambda);
@@ -75,9 +85,10 @@ const plugin = {
   name: 'node-lambda',
 
   hooks: {
+
     /**
-     * [registerCommands description]
-     * @returns {[type]} [description]
+     * Register plugin commands
+     * @returns {Promise} - a promise that resolves when all commands are registered
      */
     registerCommands: function registerCommands() {
       return Promise.all([
@@ -87,7 +98,6 @@ const plugin = {
         return Promise.resolve([]);
       });
     },
-
 
     /**
      * This hook load all lambda configurations

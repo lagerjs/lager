@@ -165,7 +165,7 @@ function executeCommand(parameters) {
       summary: parameters.summary,
       consume: parameters.consume,
       produce: parameters.produce,
-      "x-amazon-apigateway-integration": {
+      'x-amazon-apigateway-integration': {
         credentials: parameters.credentials
       }
     };
