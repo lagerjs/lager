@@ -2,10 +2,12 @@
 
 const file = require('file');
 const path = require('path');
+
 const lager = require('@lager/lager/lib/lager');
-const Promise = lager.getPromise();
+const Promise = lager.import.Promise;
+const _ = lager.import._;
+
 const fs = Promise.promisifyAll(require('fs'));
-const _ = lager.getLodash();
 
 const Api = require('./api');
 const Endpoint = require('./endpoint');

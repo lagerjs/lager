@@ -246,8 +246,11 @@ function getAction(parameters, executeCommand, commanderActionHook, inquirerProm
       if (inquirerPromptHook) {
         return inquirerPromptHook(answers, commandParameterValues);
       }
+      return Promise.resolve([answers, commandParameterValues]);
+    })
+    .then(parameters => {
       // Once we have all parameter values from the command and from the questions, we can execute the command
-      executeCommand(_.merge(commandParameterValues, answers));
+      executeCommand(_.merge(parameters[1], parameters[0]));
     });
   };
 }
@@ -354,18 +357,18 @@ function parametersToQuestions(parameters, cmdParameterValues) {
       };
     }
     if (!question.when) {
-      if (parameter.when) {
-        question.when = (answers) => {
-          // When defined at the "parameter" level, when() provide the command parameter values as an extra argument
-          return parameter.when(answers, cmdParameterValues);
-        };
-      } else {
-        question.when = (answers) => {
-          // skip the question if the value have been set in the command and no other when() parameter has been defined
-          return !cmdParameterValues[parameter.name];
-        };
-      }
+      question.when = (answers) => {
+        // skip the question if the value have been set in the command and no other when() parameter has been defined
+        return !cmdParameterValues[parameter.name];
+      };
+    } else {
+      const extendedWhen = question.when;
+      question.when = (answers) => {
+        // When defined at the "parameter" level, when() provide the command parameter values as an extra argument
+        return extendedWhen(answers, cmdParameterValues);
+      };
     }
+
     questions.push(question);
   });
   return questions;

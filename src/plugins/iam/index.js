@@ -1,14 +1,23 @@
 'use strict';
 
 const path = require('path');
+
 const lager = require('@lager/lager/lib/lager');
-const Promise = lager.getPromise();
+const Promise = lager.import.Promise;
+const _ = lager.import._;
+
 const fs = Promise.promisifyAll(require('fs'));
-const _ = require('lodash');
+
+const AWS = require('aws-sdk');
+const iam = new AWS.IAM();
 
 const Policy = require('./policy');
 const Role = require('./role');
 
+/**
+ * Load all policy configurations
+ * @return {Promise<[Policy]>} - promise of an array of policies
+ */
 function loadPolicies() {
   const policyConfigsPath = path.join(plugin.getPath(), 'iam', 'policies');
 
@@ -44,10 +53,10 @@ function loadPolicies() {
 }
 
 /**
- * [loadPolicy description]
- * @param {[type]} documentPath [description]
- * @param {[type]} name         [description]
- * @returns {[type]}              [description]
+ * Load a policy
+ * @param {string} documentPath - path to the document file
+ * @param {string} name - the policy name
+ * @returns {Promise<Policy>} - the promise of a policy
  */
 function loadPolicy(documentPath, name) {
   return lager.fire('beforePolicyLoad', documentPath, name)
@@ -68,9 +77,9 @@ function loadPolicy(documentPath, name) {
 }
 
 /**
- * [findPolicies description]
- * @param {[type]} identifiers [description]
- * @returns {[type]}             [description]
+ * Retrieve policies by their identifier
+ * @param {Array} identifiers - an array of policy identifiers
+ * @return {Promise<[Policy]>} - promise of an array of policies
  */
 function findPolicies(identifiers) {
   return loadPolicies()
@@ -153,6 +162,34 @@ function findRoles(identifiers) {
   });
 }
 
+/**
+ * @TODO check duplication with iam/helper.retrieveRoleArn()
+ * Takes a role ARN, or a role name as parameter, requests AWS,
+ * and retruns the ARN of a role matching the ARN or the role name or the role name with context informations
+ * @param  {string} identifier - a role ARN, or a role name
+ * @param  {Object} context - an object containing the stage and the environment
+ * @return {string} - an AWS role ARN
+ */
+function retrieveRoleArn(identifier, context) {
+  // First check if the parameter already is an ARN
+  if (/arn:aws:iam::\d{12}:role\/?[a-zA-Z_0-9+=,.@\-_\/]+/.test(identifier)) {
+    return Promise.resolve(identifier);
+  }
+  // Then, we check if a role exists with this name
+  return Promise.promisify(iam.getRole.bind(iam))({ RoleName: identifier })
+  .then((data) => {
+    return Promise.resolve(data.Role.Arn);
+  })
+  .catch((e) => {
+    // If it failed, we try with the environment as prefix
+    return Promise.promisify(iam.getRole.bind(iam))({ RoleName: context.environment + '_' + identifier })
+    .then((data) => {
+      return Promise.resolve(data.Role.Arn);
+    });
+  });
+}
+
+
 const plugin = {
   name: 'iam',
 
@@ -171,27 +208,14 @@ const plugin = {
       .then(() => {
         return Promise.resolve([]);
       });
-    },
-
-    /**
-     * This hook load all role and policy configurations
-     * @returns {Boolean}
-     */
-    beforeApisLoad: function beforeApisLoad() {
-      return loadPolicies()
-      .then((loadedPolicies) => {
-        return loadRoles();
-      })
-      .then((loadedRoles) => {
-        return Promise.resolve([]);
-      });
     }
   },
 
   loadPolicies,
   findPolicies,
   loadRoles,
-  findRoles
+  findRoles,
+  retrieveRoleArn
 };
 
 module.exports = plugin;

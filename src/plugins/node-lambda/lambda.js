@@ -2,9 +2,12 @@
 
 const fs = require('fs');
 const path = require('path');
+
 const lager = require('@lager/lager/lib/lager');
-const Promise = lager.getPromise();
-const _ = require('lodash');
+const Promise = lager.import.Promise;
+const _ = lager.import._;
+const iamPlugin = lager.getPlugin('iam');
+
 const AWS = require('aws-sdk');
 const archiver = require('archiver');
 const IntegrationDataInjector = require('./integration-data-injector');
@@ -155,7 +158,10 @@ Lambda.prototype.isDeployed = function isDeployed(awsLambda) {
  */
 Lambda.prototype.create = function create(awsLambda, context) {
   const params = _.cloneDeep(this.config.params);
-  return Promise.all([this.buildPackage(), lager.retrieveRoleArn(params.Role, context.environment)])
+  return Promise.all([
+    this.buildPackage(),
+    retrieveRoleArn(params.Role, context)
+  ])
   .spread((buffer, roleArn) => {
     params.Code = { ZipFile: buffer };
     params.Role = roleArn;
@@ -178,10 +184,10 @@ Lambda.prototype.update = function update(awsLambda, context) {
       Publish: this.config.params.Publish,
       ZipFile: buffer
     };
-    return [
+    return Promise.all([
       Promise.promisify(awsLambda.updateFunctionCode.bind(awsLambda))(codeParams),
-      lager.retrieveRoleArn(this.config.params.Role, context.environment)
-    ];
+      retrieveRoleArn(this.config.params.Role, context)
+    ]);
   })
   .spread((codeUpdateResponse, roleArn) => {
     // Then, update the configuration
@@ -207,3 +213,18 @@ Lambda.prototype.publishVersion = function publishVersion(awsLambda, alias) {
 };
 
 module.exports = Lambda;
+
+
+/**
+ * [retrieveRoleArn description]
+ * @param  {[type]} input [description]
+ * @return {[type]}       [description]
+ */
+function retrieveRoleArn(input, context) {
+  // Use the iam plugin if it is installed
+  if (iamPlugin) {
+    return iamPlugin.retrieveRoleArn(input, context);
+  }
+  // Or else, the value should already be configured as an ARN
+  return input;
+}

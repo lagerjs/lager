@@ -1,10 +1,12 @@
 'use strict';
 
 const path = require('path');
+
 const lager = require('@lager/lager/lib/lager');
-const Promise = lager.getPromise();
+const Promise = lager.import.Promise;
+const _ = lager.import._;
+
 const fs = Promise.promisifyAll(require('fs'));
-const _ = require('lodash');
 
 const Lambda = require('./lambda');
 

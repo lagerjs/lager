@@ -56,38 +56,6 @@ function Lager() {
 }
 
 /**
- * Lager expose it's bluebird dependency, so plugins don't need to add it as a dependency
- * @returns {Promise} - the bluebird library
- */
-Lager.prototype.getPromise = function getPromise() {
-  return Promise;
-};
-
-/**
- * Lager expose it's lodash dependency, so plugins don't need to add it as a dependency
- * @returns {Object} - the lodash library
- */
-Lager.prototype.getLodash = function getLodash() {
-  return _;
-};
-
-/**
- * Lager expose it's commander dependency, so plugins can add their own commands
- * @returns {Object} - a commander program instance
- */
-Lager.prototype.getProgram = function getProgram() {
-  return program;
-};
-
-/**
- * Lager expose it's inquirer dependency, so plugins can add their own command prompt
- * @returns {Object} - a inquirer instance
- */
-Lager.prototype.getInquirer = function getInquirer() {
-  return inquirer;
-};
-
-/**
  * Add a plugin to the lager instance
  * @param {Object} plugin
  * @returns {Lager}
@@ -117,8 +85,7 @@ Lager.prototype.getPlugin = function getPlugin(name) {
  * Fire a hook/event
  * @param {string} eventName - the name of the hook
  * @param {...*} arg - the list of arguments provided to the hook
- * @returns {Promise<[]>} return the promise of an array containing the hook's arguments
- *         eventually transformed by plugins
+ * @returns {Promise<[]>} return the promise of an array containing the hook's arguments eventually transformed by plugins
  */
 Lager.prototype.fire = function fire() {
   // Extract arguments and eventName
@@ -158,20 +125,12 @@ Lager.prototype.fire = function fire() {
 };
 
 
-
-/* *****************************************************
- * Add helper functions to the Lager constructor
- * *****************************************************/
-// @TODO this should be a Lager plugin
-/**
- * Take a string as parameter and return a role ARN
- * @type {function}
- */
-Lager.prototype.retrieveRoleArn = require('./helper/retrieve-role-arn');
-
-
 const lager = new Lager();
 
+/**
+ * This property allows the lager instance to share some key dependencies with plugins
+ * @type {Object}
+ */
 lager.import = {
   Promise, _, icli
 };

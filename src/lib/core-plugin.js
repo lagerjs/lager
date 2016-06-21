@@ -1,7 +1,7 @@
 'use strict';
 
 const lager = require('@lager/lager/lib/lager');
-const Promise = lager.getPromise();
+const Promise = lager.import.Promise;
 
 function registerCommands() {
   return Promise.all([
