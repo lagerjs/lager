@@ -8,22 +8,22 @@
   },
   "dependencies": {
     "archiver": "1.0.0",
-    "aws-sdk": "2.3.17",
-    "bluebird": "3.4.0",
+    "aws-sdk": "^2.3.17",
+    "bluebird": "^3.4.0",
     "cardinal": "0.7.1",
-    "commander": "2.9.0",
+    "commander": "^2.9.0",
     "file": "0.2.2",
-    "inquirer": "1.0.3",
-    "lodash": "4.13.1",
+    "inquirer": "^1.0.3",
+    "lodash": "^4.13.1",
     "mkdirp": "0.5.1",
     "ncp": "2.0.0",
     "pretty-error": "2.0.0"
   },
   "devDependencies": {
-    "mocha": "2.5.3",
-    "codacy-coverage": "1.1.3",
-    "istanbul": "0.4.3",
-    "codecov": "1.0.1"
+    "mocha": "^2.5.3",
+    "codacy-coverage": "^1.1.3",
+    "istanbul": "^0.4.3",
+    "codecov": "^1.0.1"
   },
   "keywords": [
     "AWS",
