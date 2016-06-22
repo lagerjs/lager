@@ -11,9 +11,9 @@ General
 *   Document IAM permission needed *for each plugin* **M**
 *   Add a logging system (use bunyan) **M**
 *   Update the dev application to create the "Planet Express" apis **L**
-*   Create the notion of `context` (environment + stage/version) **M**
+*   ~~Create the notion of `context` (environment + stage/version)~~ **M**
 *   Organize `lager --help` output into plugin sections **S**
-*   Alter folder structure to have a directory per plugin **M**
+*   ~~Alter folder structure to have a directory per plugin~~ **M**
 *   Write unit tests
 *   ~~Setup continuous integration~~ (Alexis)
 *   ~~Setup quality tools~~ (Alexis)
@@ -38,8 +38,8 @@ General
 *   Publish stages (Pedro) **S**
 *   ~~Complete `api-gateway` command line~~ (alexis) **XL**
 *   ~~Add syntax highlighting to inspection commands~~ **S**
-*   Integration with the `iam` plugin **M**
-*   Use the OpenAPI info.title property to set the API name in API Gateway (not the api identifier) **S**
+*   ~~Integration with the `iam` plugin~~ **M**
+*   ~~Use the OpenAPI info.title property to set the API name in API Gateway (not the api identifier)~~ **S**
 *   Beautify deploy output (ASCII array describing configuration?) **M**
 
 `mock-integration` core plugin
@@ -53,7 +53,7 @@ General
 
 *   ~~Complete `node-lambda` command line~~ (Alexis) **M**
 *   Use aliases for versioning (Pedro) **S**
-*   Integration with the `iam` plugin **M**
+*   ~~Integration with the `iam` plugin~~ **M**
 *   Beautify deploy output **M**
 
 Other plugins
