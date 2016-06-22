@@ -1,6 +1,5 @@
 codecov:
   branch: dev
-  bot: null
 coverage:
   precision: 2
   round: down
