@@ -1,8 +1,9 @@
 codecov:
   branch: dev
   bot: null
-
 coverage:
   precision: 2
   round: down
   range: "50...100"
+  ignore:
+    - dev-app/*
