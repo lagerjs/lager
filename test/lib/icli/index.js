@@ -2,7 +2,7 @@
 'use strict';
 
 const assert = require('assert');
-const icli = require('../../../lib/icli');
+const icli = require.main.require('src/lib/icli');
 
 describe('The interactive command line', function() {
 

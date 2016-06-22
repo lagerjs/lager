@@ -1,10 +1,13 @@
 {
   "name": "@lager/lager",
-  "version": "0.0.7",
+  "version": "0.0.11",
   "description": "AWS Lambda / API Gateway / Endpoint Router",
-  "main": "index.js",
+  "files": [
+    "src",
+    "index.js"
+  ],
   "bin": {
-    "lager": "./bin/lager"
+    "lager": "src/bin/lager"
   },
   "dependencies": {
     "archiver": "1.0.0",
@@ -23,8 +26,8 @@
     "mocha": "^2.5.3",
     "codacy-coverage": "^1.1.3",
     "istanbul": "^0.4.3",
-    "eslint": "^2.13.1",
-    "codecov": "^1.0.1"
+    "codecov": "^1.0.1",
+    "eslint": "^2.13.1"
   },
   "keywords": [
     "AWS",
@@ -48,10 +51,8 @@
     "test": "test"
   },
   "scripts": {
-    "test": "istanbul cover --include-all-sources=true ./node_modules/mocha/bin/_mocha -- --recursive && rm -rf ./coverage",
-    "test-ci": "istanbul cover --include-all-sources=true ./node_modules/mocha/bin/_mocha --report lcovonly -- --recursive && codecov",
-    "eslint": "eslint",
-    "prepublish": "cp ../README.md ./README.md",
-    "postpublish": "rm ./README.md"
+    "test": "NODE_PATH=NODE_PATH:. istanbul cover --include-all-sources=true ./node_modules/mocha/bin/_mocha -- --recursive && rm -rf ./coverage",
+    "test-ci": "NODE_PATH=NODE_PATH:. istanbul cover --include-all-sources=true ./node_modules/mocha/bin/_mocha --report lcovonly -- --recursive && codecov",
+    "eslint": "eslint **/*.js; exit 0"
   }
 }

@@ -3,7 +3,7 @@
 
 const assert = require('assert');
 const Promise = require('bluebird');
-const lager = require('../../lib/lager');
+const lager = require.main.require('src/lib/lager');
 
 
 describe('The lager instance', function() {

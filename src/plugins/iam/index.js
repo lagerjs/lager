@@ -2,7 +2,7 @@
 
 const path = require('path');
 
-const lager = require('@lager/lager/lib/lager');
+const lager = require('@lager/lager/src/lib/lager');
 const Promise = lager.import.Promise;
 const _ = lager.import._;
 

@@ -1,12 +1,12 @@
 'use strict';
 
-const lager = require('@lager/lager/lib/lager');
+const lager = require('./lager');
 const Promise = lager.import.Promise;
 
 function registerCommands() {
   return Promise.all([
-    require('@lager/lager/cli/disable-default')(),
-    require('@lager/lager/cli/new')()
+    require('../cli/disable-default')(),
+    require('../cli/new')()
   ])
   .then(() => {
     return Promise.resolve([]);

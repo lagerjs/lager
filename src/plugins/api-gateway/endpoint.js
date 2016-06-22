@@ -1,8 +1,8 @@
 'use strict';
 
 // Nice ES6 syntax
-// const { Promise, _, icli } = require('@lager/lager/lib/lager').import;
-const lager = require('@lager/lager/lib/lager');
+// const { Promise, _, icli } = require('@lager/lager/src/lib/lager').import;
+const lager = require('@lager/lager/src/lib/lager');
 const _ = lager.import._;
 
 /**

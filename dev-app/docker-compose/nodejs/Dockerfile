@@ -12,6 +12,6 @@ FROM lagerjs/node-dev
 RUN npm install -g mocha istanbul
 
 # Create symlink to enable the Lager cli
-RUN cd ~/.node/bin && ln -s ../lib/node_modules/@lager/lager/bin/lager lager
+RUN cd ~/.node/bin && ln -s ../lib/node_modules/@lager/lager/src/bin/lager lager
 
 CMD ["npm", "test"]
