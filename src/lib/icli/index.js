@@ -31,7 +31,7 @@ const icli = {
     custom: (msg, code) => { return code + msg + '\x1b[0m'; },
     // aliases
     ko: msg => { return icli.format.error(msg); },
-    ok: msg => { return icli.format.success(msg); },
+    ok: msg => { return icli.format.success(msg); }
   },
 
   highlight(input, options) {
@@ -272,6 +272,7 @@ function processCliArgs(cliArgs, validations) {
   // If an argument is a comma separated list, we could also transform it into an Array here
   const validationResult = validateParameters(parameters, validations);
   if (validationResult !== true) {
+    /* eslint-disable no-console */
     console.log('\n  ' + icli.format.ko('Error') + ':\n\n    ' + validationResult.join('\n    ') + '\n');
     process.exit(1);
   }

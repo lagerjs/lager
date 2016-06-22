@@ -47,6 +47,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "istanbul cover --include-all-sources=true ./node_modules/mocha/bin/_mocha --report lcovonly -- --recursive && codecov"
+    "test": "istanbul cover --include-all-sources=true ./node_modules/mocha/bin/_mocha -- --recursive && rm -rf ./coverage",
+    "test-ci": "istanbul cover --include-all-sources=true ./node_modules/mocha/bin/_mocha --report lcovonly -- --recursive && codecov"
   }
 }
