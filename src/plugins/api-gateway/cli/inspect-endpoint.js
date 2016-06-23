@@ -23,6 +23,7 @@ module.exports = () => {
     const choicesLists = getChoices(endpoints);
 
     const config = {
+      section: 'Api Gateway plugin',
       cmd: 'inspect-endpoint',
       description: 'inspect an endpoint specification',
       parameters: [{

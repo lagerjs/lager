@@ -20,6 +20,7 @@ module.exports = () => {
   const choicesLists = getChoices();
 
   const config = {
+    section: 'Core plugin',
     cmd: 'new',
     description: 'create a new project',
     parameters: [{

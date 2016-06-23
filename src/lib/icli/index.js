@@ -2,16 +2,72 @@
 
 const _ = require('lodash');
 const cardinal = require('cardinal');
+const program = require('commander');
+const prompt = require('inquirer');
 
 /**
- * Private variable to store commander instance
+ * Override commander help generator to group commands by plugin
+ * @return {string} - the command help
  */
-let program;
+program.commandHelp = function() {
+  if (!this.commands.length) return '';
+
+  var commands = this.commands.filter(function(cmd) {
+    return !cmd._noHelp;
+  }).map(function(cmd) {
+    var args = cmd._args.map(function(arg) {
+      return humanReadableArgName(arg);
+    }).join(' ');
+
+    return [
+      cmd._name
+        + (cmd._alias ? '|' + cmd._alias : '')
+        + (cmd.options.length ? ' [options]' : '')
+        + ' ' + args
+      , cmd._description
+      , cmd._section
+    ];
+  });
+
+  var width = commands.reduce(function(max, command) {
+    return Math.max(max, command[0].length);
+  }, 0);
+
+  const sections = {};
+  _.forEach(commands, cmd => {
+    const sectionName = cmd[2] ? cmd[2] + ':\n\n' : '';
+    sections[sectionName] = sections[sectionName] || [];
+    sections[sectionName].push(cmd);
+  });
+
+  return [
+    ''
+    , '  Commands:'
+    , ''
+    , _.map(sections, function(commands, sectionName) {
+      return sectionName + commands.map(function(cmd) {
+        var desc = cmd[1] ? '  ' + cmd[1] : '';
+        return _.padEnd(cmd[0], width) + desc;
+      }).join('\n').replace(/^/gm, '  ');
+    }).join('\n\n').replace(/^/gm, '    ')
+    , ''
+  ].join('\n');
+};
+
 
 /**
- * Private variable to store inquirer instance
+ * Takes an argument an returns its human readable equivalent for help usage.
+ * @param {Object} arg
+ * @return {String}
+ * @api private
  */
-let prompt;
+function humanReadableArgName(arg) {
+  var nameOutput = arg.name + (arg.variadic === true ? '...' : '');
+  return arg.required
+    ? '<' + nameOutput + '>'
+    : '[' + nameOutput + ']';
+}
+
 
 /**
  * Interactive Command Line Interface
@@ -34,6 +90,12 @@ const icli = {
     ok: msg => { return icli.format.success(msg); }
   },
 
+  /**
+   * highlight code with cardinal
+   * @param  {strinf} input - the text to highlight
+   * @param  {Object} options - cardinal options
+   * @return {void}
+   */
   highlight(input, options) {
     return cardinal.highlight(input, options);
   },
@@ -47,28 +109,6 @@ const icli = {
   },
 
   /**
-   * Commander instance setter
-   * @param {Object} p - commander instance
-   * @returns {Object} - the icli instance
-   */
-  setProgram(p) {
-    program = p;
-    // Remove the "help" command because we do no use separate executable commands
-    program.executables = false;
-    return this;
-  },
-
-  /**
-   * Inquirer instance setter
-   * @param {Object} p - inquirer instance
-   * @returns {Object} - the icli instance
-   */
-  setPrompt(p) {
-    prompt = p;
-    return this;
-  },
-
-  /**
    * Create a new interactive command
    * @param {Object} config - a configuration object
    * @param {function} executeCommand - callback processing the property values once defined by the command line and the prompt
@@ -78,6 +118,7 @@ const icli = {
     // create the command
     const cmd = program.command(config.cmd, null, config.options);
     cmd.description(config.description);
+    cmd._section = config.section;
 
     // Extract commander arguments and options from the list of parameters
     // Also enrich parameter configs with a name calculated from "cmdSpec"
@@ -102,7 +143,6 @@ const icli = {
 
     cmd.action(getAction(config.parameters, executeCommand, config.commanderActionHook, config.inquirerPromptHook));
   },
-
 
   /**
    * Generate a function that check if an item belongs to a list

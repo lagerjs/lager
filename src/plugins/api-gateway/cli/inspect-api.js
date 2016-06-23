@@ -23,6 +23,7 @@ module.exports = () => {
     const choicesLists = getChoices(apis);
 
     const config = {
+      section: 'Api Gateway plugin',
       cmd: 'inspect-api',
       description: 'inspect an api specification',
       parameters: [{
