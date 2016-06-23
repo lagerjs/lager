@@ -1,10 +1,11 @@
-Just some ideas about how the Sequelize-rest-blueprints plugin could be implemented
----
+Some ideas about how the Sequelize-rest-blueprints plugin could be implemented
+===
 
 Configuration:
-* Select the APIs where we have to apply the blueprints (defaults to all)
-* Select the Lambda that has to execute the code
-* A folder `libs/db-models` contains the models definitions
+
+*   Select the APIs where we have to apply the blueprints (defaults to all)
+*   Select the Lambda that has to execute the code
+*   A folder `libs/db-models` contains the models definitions
 
 ```javascript
 // Pseudo code to implement the sequelize blueprints

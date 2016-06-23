@@ -44,7 +44,10 @@ module.exports = () => {
           // the user will have choosen a value in a list and cannot enter something wrong
           // but we test the "answer" parameter anyway to show an example
           const resourcePath = (answers ? answers.resourcePath : null) || cliParameters.resourcePath;
-          const validator = icli.generateListValidation(choicesLists.httpMethod[resourcePath], 'http method for the resource path ' + icli.format.info(resourcePath));
+          const validator = icli.generateListValidation(
+            choicesLists.httpMethod[resourcePath],
+            'http method for the resource path ' + icli.format.info(resourcePath)
+          );
           return validator(value);
         },
         question: {

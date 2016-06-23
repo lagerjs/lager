@@ -12,7 +12,7 @@ const iamHelper = require('./helper');
  * @param {[type]} name       [description]
  * @param {[type]} pathPrefix [description]
  */
-let Role = function Role(config, name, pathPrefix) {
+const Role = function Role(config, name, pathPrefix) {
   this.config = config;
   this.name = name;
   this.pathPrefix = pathPrefix || '/';

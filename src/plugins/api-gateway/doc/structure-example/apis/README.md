@@ -11,14 +11,14 @@ sharing some of their endpoints:
 
 The endpoints should be configured to apply to different APIs:
 
-*  `POST   /delivery` should be available in APIs `bo` and `sender` to create new delivery
-*  `GET    /delivery/{id}` should be available in APIs `bo`, `sender` and `receiver` to track a delivery
-*  `PATCH  /delivery/{id}` should be available in APIs `bo`, `receiver` to update the status of a delivery to **received**
-*  `DELETE /delivery/{id}` should be available in API `bo` to delete an old delivery
+*   `POST   /delivery` should be available in APIs `bo` and `sender` to create new delivery
+*   `GET    /delivery/{id}` should be available in APIs `bo`, `sender` and `receiver` to track a delivery
+*   `PATCH  /delivery/{id}` should be available in APIs `bo`, `receiver` to update the status of a delivery to **received**
+*   `DELETE /delivery/{id}` should be available in API `bo` to delete an old delivery
 
 The structure of the `apis` folder of this application should look like this:
 
-```
+```text
 └── apis
     ├── bo
     |   └── spec.json

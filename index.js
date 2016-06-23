@@ -11,7 +11,7 @@ let config;
 try {
   config = require(path.join(process.cwd(), 'lager.json'));
   // console.log('Lager project configuration loaded');
-} catch(e) {
+} catch (e) {
   // console.error('Unable to load the Lager configuration. Are you in a Lager project folder?');
   config = {};
 }

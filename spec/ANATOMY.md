@@ -1,4 +1,4 @@
-```
+```text
 ├── apis                              The APIs defined by the application
 |   ├── {an-api-identifier}           A custom identifier for the API
 |   |   └── spec.json                 The API's specification that will be completed by Lager

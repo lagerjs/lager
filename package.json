@@ -28,7 +28,9 @@
     "codecov": "^1.0.1",
     "eslint": "^2.13.1",
     "istanbul": "^0.4.3",
-    "mocha": "^2.5.3"
+    "mocha": "^2.5.3",
+    "remark-cli": "^1.0.0",
+    "remark-lint": "^4.0.1"
   },
   "keywords": [
     "AWS",
@@ -54,6 +56,8 @@
   "scripts": {
     "test": "NODE_PATH=NODE_PATH:. istanbul cover --include-all-sources=true ./node_modules/mocha/bin/_mocha -- --recursive && rm -rf ./coverage",
     "test-ci": "NODE_PATH=NODE_PATH:. istanbul cover --include-all-sources=true ./node_modules/mocha/bin/_mocha --report lcovonly -- --recursive && codecov",
-    "eslint": "eslint **/*.js; exit 0"
+    "eslint": "eslint --ignore-path .gitignore **/*.js && echo \"  JS lint passed\n\"; exit 0",
+    "mdlint": "remark -qf . && echo \"  Markdown lint passed\n\"; exit 0",
+    "lint": "eslint --ignore-path .gitignore **/*.js && remark -qf . && echo \"  JS lint and markdown lint passed\n\"; exit 0"
   }
 }

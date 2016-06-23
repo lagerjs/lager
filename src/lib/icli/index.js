@@ -249,12 +249,12 @@ function parseArgumentSpec(parameter) {
  */
 function getCoercionForType(type) {
   switch (type) {
-  case 'int':
-    return parseInt;
-  case 'checkbox':
-    return val => { return _.map(val.split(','), _.trim); };
-  default:
-    return null;
+    case 'int':
+      return parseInt;
+    case 'checkbox':
+      return val => { return _.map(val.split(','), _.trim); };
+    default:
+      return null;
   }
 }
 
@@ -351,7 +351,7 @@ function cliArgsToParameters(cliArgs) {
 function validateParameters(parameters, validations) {
   let messages = [];
   _.forEach(parameters, (value, key) => {
-    if (value && validations[key] ) {
+    if (value && validations[key]) {
       const validation = validations[key](value);
       if (validation !== true) {
         if (validation === false) {

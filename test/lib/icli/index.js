@@ -11,7 +11,7 @@ describe('The interactive command line', function() {
     assert.equal(icli.format.info('an info'), '\x1b[36man info\x1b[0m', 'information is colorised');
     assert.equal(icli.format.error('an error'), '\x1b[31man error\x1b[0m', 'errors are colorised');
     assert.equal(icli.format.success('a success message'), '\x1b[32ma success message\x1b[0m', 'success messages are colorised');
-    assert.equal(icli.format.custom('a custom message',  '\x1b[35m'), '\x1b[35ma custom message\x1b[0m', 'it is possible to customize text format');
+    assert.equal(icli.format.custom('a custom message', '\x1b[35m'), '\x1b[35ma custom message\x1b[0m', 'it is possible to customize text format');
     assert.equal(icli.format.ok('ok'), '\x1b[32mok\x1b[0m', '"ok" messages are colorised');
     assert.equal(icli.format.ko('ko'), '\x1b[31mko\x1b[0m', '"ko" messages are colorised');
   });

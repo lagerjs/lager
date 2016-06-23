@@ -10,7 +10,7 @@ describe('The lager instance', function() {
 
   it('should fire events', () => {
     return lager.fire('superEvent', 'a string', { foo: 'lager', bar: 100 })
-    .spread(function (arg1, arg2) {
+    .spread((arg1, arg2) => {
       assert.equal(arg1, 'a string', 'the first argument is correctly retrieved');
       assert.equal(arg2.foo, 'lager', 'the second argument is correctly retrieved (1)');
       assert.equal(arg2.bar, 100, 'the second argument is correctly retrieved (2)');
@@ -45,7 +45,7 @@ describe('The lager instance', function() {
 
   it('should retrieve data altered by plugins', () => {
     return lager.fire('myEvent', 'a string', { foo: 'lager', bar: 100 })
-    .spread(function(arg1, arg2) {
+    .spread((arg1, arg2) => {
       assert.equal(arg1, 'a string modified by a plugin', 'the first argument is correctly retrieved');
       assert.equal(arg2.foo, 'lager', 'the second argument is correctly retrieved (1)');
       assert.equal(arg2.bar, 123, 'the second argument is correctly retrieved (2)');

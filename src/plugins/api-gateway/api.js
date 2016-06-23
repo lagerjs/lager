@@ -272,7 +272,9 @@ function applyCredentialsARNs(spec, context) {
       _.forEach(spec.paths, endpointSpecs => {
         _.forEach(endpointSpecs, endpointSpec => {
           if (endpointSpec['x-amazon-apigateway-integration'].credentials) {
-            endpointSpec['x-amazon-apigateway-integration'].credentials = _.find(credentialsMap, o => { return o.identifier === endpointSpec['x-amazon-apigateway-integration'].credentials; }).arn;
+            endpointSpec['x-amazon-apigateway-integration'].credentials = _.find(credentialsMap, o => {
+              return o.identifier === endpointSpec['x-amazon-apigateway-integration'].credentials; }
+            ).arn;
           }
         });
       });

@@ -108,7 +108,7 @@ function executeCommand(parameters) {
   return mkdirpAsync(configFilePath)
   .then(() => {
     // We create the configuration file of the Lambda
-    let config = {
+    const config = {
       params: {
         Timeout: parameters.timeout,
         MemorySize: parameters.memory,
@@ -123,7 +123,7 @@ function executeCommand(parameters) {
   })
   .then(() => {
     // We create the lambda handler
-    const src = path.join(__dirname, 'templates','lambda.js');
+    const src = path.join(__dirname, 'templates', 'lambda.js');
     const dest = path.join(configFilePath, 'lambdas.js');
     return ncpAsync(src, dest);
   })

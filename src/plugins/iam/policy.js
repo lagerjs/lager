@@ -13,7 +13,7 @@ const iamHelper = require('./helper');
  * @param {string} name - policy name
  * @constructor
  */
-let Policy = function Policy(document, name, pathPrefix) {
+const Policy = function Policy(document, name, pathPrefix) {
   this.document = document;
   this.name = name;
   this.pathPrefix = pathPrefix || '/';
