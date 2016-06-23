@@ -4,10 +4,10 @@ Contribute
 Rules
 ---
 
-*   Follow the ROADMAP.md file for priorities and task t-shirt sizing
+*   Comment on the issue you want to work on o create one if it does not exist
 *   Update the specs and docs along with the code
 *   Write / rewrite ES6 code compatible with node v4
-*   Follow the rules of the .jshint.rc and .mdastrc files
+*   Follow the rules of the .eslintrc and .mdastrc files
 *   Respect conventions for case: ConstructorFunctionName, instanceName, functionName, node-module-file-name.js
 *   Code coverage objective: 80%
 
@@ -22,7 +22,7 @@ Indeed, it installs the `lager` command line like `npm install @lager/lager -g` 
 
 *   Install docker and docker-compose
 *   Clone the repo `git clone git@github.com:lagerjs/lager.git`
-*   Install dependencies `cd lager/src && npm install`
+*   Install dependencies `npm install`
 *   Setup environment for the development application `cd ../dev-app && cp docker-compose.env.example docker-compose.env`
 *   Configure the file `docker-compose.env` with AWS credentials that you want to use to perform deployment tests
 
@@ -75,13 +75,11 @@ $ # Inside the node container
 $ lager -h
 ```
 
-### Unit tests container
+### Before creating the pull request
 
-!! TODO !! improve test runner and document it
-
-~~There is a specific container to run tests, so we can define a different execution environment
-and be sure to isolate the execution of tests.~~
+Run the unit tests and check the code style
 
 ```bash
-$ docker-compose run test
+$ npm test
+$ npm run eslint
 ```
