@@ -24,6 +24,7 @@ module.exports = () => {
   const choicesLists = getChoices();
 
   const config = {
+    section: 'Node Lambda plugin',
     cmd: 'create-lambda',
     description: 'create a new lambda',
     parameters: [{

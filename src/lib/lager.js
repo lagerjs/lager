@@ -32,10 +32,6 @@ if (process.env.NODE_ENV === 'development') {
   });
 }
 
-
-icli.setProgram(require('commander'))
-    .setPrompt(require('inquirer'));
-
 /**
  * Construct the lager instance
  *
@@ -122,6 +118,19 @@ Lager.prototype.fire = function fire() {
   return callPluginsSequencialy.bind(this)(0, args);
 };
 
+/**
+ * Create a subcommand with icli
+ * We wrap the call to icli here to fire hooks
+ * @param {Object} config - a configuration object
+ * @param {function} executeCommand - callback processing the property values once defined by the command line and the prompt
+ * @return {Promise} - a promise that resolve once the operation is finished
+ */
+Lager.prototype.createSubCommand = function createSubCommand(config, executeCommand) {
+  return lager.fire('beforeCreateCommand', config, executeCommand)
+  .spread((config, executeCommand) => {
+    return icli.createSubCommand(config, executeCommand);
+  });
+};
 
 const lager = new Lager();
 

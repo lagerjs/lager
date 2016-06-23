@@ -19,6 +19,7 @@ const plugin = lager.getPlugin('iam');
  */
 module.exports = () => {
   const config = {
+    section: 'IAM plugin',
     cmd: 'create-role',
     description: 'create a new role',
     parameters: [{

@@ -24,6 +24,7 @@ module.exports = () => {
   return getChoices()
   .then(choicesLists => {
     const config = {
+      section: 'Api Gateway plugin',
       cmd: 'create-endpoint',
       description: 'create a new API endpoint',
       parameters: [{

@@ -18,6 +18,7 @@ module.exports = () => {
   return getChoices()
   .then(choicesLists => {
     const config = {
+      section: 'IAM plugin',
       cmd: 'deploy-policies',
       description: 'deploy policies',
       parameters: [{

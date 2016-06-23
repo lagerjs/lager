@@ -18,6 +18,7 @@ module.exports = () => {
   return getChoices()
   .then(choicesLists => {
     const config = {
+      section: 'Api Gateway plugin',
       cmd: 'deploy-apis',
       description: 'deploy apis',
       parameters: [{
