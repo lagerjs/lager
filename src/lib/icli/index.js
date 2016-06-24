@@ -377,6 +377,9 @@ function parametersToQuestions(parameters, cmdParameterValues) {
     // the question parameter is already an inquirer question
     const question = parameter.question;
 
+    // shortcut if there is no question
+    if (!question) { return void 0; }
+
     // But we can extend it with data that comes from the parameter configuration
     question.default = question.default || parameter.default;
     question.type = question.type || parameter.type;
