@@ -15,6 +15,7 @@
     "bluebird": "^3.4.0",
     "cardinal": "0.7.1",
     "commander": "^2.9.0",
+    "figlet": "^1.1.2",
     "file": "0.2.2",
     "inquirer": "^1.0.3",
     "lodash": "^4.13.1",
