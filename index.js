@@ -1,26 +1,3 @@
 'use strict';
 
-const path = require('path');
-const lager = require('./src/lib/lager');
-const _ = require('lodash');
-
-// We register the core plugin that create basic cli commands
-lager.registerPlugin(require('./src/lib/core-plugin'));
-
-let config;
-try {
-  config = require(path.join(process.cwd(), 'lager.json'));
-  // console.log('Lager project configuration loaded');
-} catch (e) {
-  // console.error('Unable to load the Lager configuration. Are you in a Lager project folder?');
-  config = {};
-}
-
-config.plugins = config.plugins || [];
-
-_.forEach(config.plugins, pluginIdentifier => {
-  // console.log('Loading plugin "' + pluginIdentifier + '"');
-  lager.registerPlugin(require('.' + path.sep + path.join('src', 'plugins', pluginIdentifier)));
-});
-
-module.exports = lager;
+module.exports = require('./src/lib/lager');

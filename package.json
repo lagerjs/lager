@@ -10,17 +10,11 @@
     "lager": "src/bin/lager"
   },
   "dependencies": {
-    "archiver": "1.0.0",
     "aws-sdk": "^2.3.17",
     "bluebird": "^3.4.0",
-    "cardinal": "0.7.1",
-    "commander": "^2.9.0",
     "figlet": "^1.1.2",
-    "file": "0.2.2",
-    "inquirer": "^1.0.3",
     "lodash": "^4.13.1",
-    "mkdirp": "0.5.1",
-    "ncp": "2.0.0",
+    "pebo": "0.0.1",
     "pretty-error": "2.0.0"
   },
   "devDependencies": {
