@@ -1,14 +1,11 @@
 {
   "name": "@lager/lager",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "AWS Lambda / API Gateway / Endpoint Router",
   "files": [
     "src",
     "index.js"
   ],
-  "bin": {
-    "lager": "src/bin/lager"
-  },
   "dependencies": {
     "aws-sdk": "^2.4.8",
     "bluebird": "^3.4.0",

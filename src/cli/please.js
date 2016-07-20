@@ -85,11 +85,11 @@ module.exports = (icli) => {
       description: 'create a new project',
       options: { noHelp: true },
       parameters: [{
-        cmdSpec: '--language <language>',
+        cmdSpec: '-l, --language <language>',
         type: 'list',
         choices: choicesLists.language
       }, {
-        cmdSpec: '--font <font name>',
+        cmdSpec: '-f, --font <font name>',
         type: 'list',
         choices: choicesLists.font
       }]
