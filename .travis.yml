@@ -6,4 +6,4 @@ node_js:
   - "4"
 script:
   - npm run test-ci
-  - bithound check git@github.com:lagerjs/lager.git
+  # - bithound check git@github.com:lagerjs/lager.git
