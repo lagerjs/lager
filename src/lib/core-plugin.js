@@ -1,16 +1,13 @@
 'use strict';
 
-const lager = require('./lager');
-const Promise = lager.import.Promise;
+const Promise = require('bluebird');
 
-function registerCommands() {
+function registerCommands(icli) {
   return Promise.all([
-    require('../cli/disable-default')(),
-    require('../cli/new')(),
-    require('../cli/please')()
+    require('../cli/please')(icli)
   ])
   .then(() => {
-    return Promise.resolve([]);
+    return Promise.resolve([icli]);
   });
 }
 

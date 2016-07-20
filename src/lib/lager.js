@@ -49,6 +49,7 @@ class Lager extends Pebo {
   constructor() {
     super();
     this.plugins = [];
+    this.registerPlugin(require('./core-plugin'));
   }
 
   /**
