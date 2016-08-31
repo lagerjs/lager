@@ -39,7 +39,7 @@ Test that the `lager` command line is correctly installed.
 lager -h
 ```
 
-![lager -h](img/lager-h.png)
+![lager -h](https://raw.githubusercontent.com/lagerjs/lager/master/img/lager-h.png)
 
 The only available sub-command for now will be `lager new`. We can see its options and arguments definition with `lager new -h`.
 
@@ -48,7 +48,7 @@ Create a new project
 
 `lager new` is the command that creates new projects. `lager new -h` outputs its usage information.
 
-![lager new -h](img/lager-h.png)
+![lager new -h](https://raw.githubusercontent.com/lagerjs/lager/master/img/lager-h.png)
 
 *   It has one argument: the name of the project
 *   It has one option: '-p, --plugins <plugins-names>', where the value is a comma-separated list of plugins that will be used by the project.
@@ -60,7 +60,7 @@ If the argument and/or the option is not specified, we will be prompted to choos
 lager new
 ```
 
-![lager new prompt](img/prompt.gif)
+![lager new prompt](https://raw.githubusercontent.com/lagerjs/lager/master/img/prompt.gif)
 
 If the argument and the option are both specified, the project will be created without needing a user interaction.
 
@@ -73,4 +73,4 @@ lager new my-project -p @lager/api-gateway,@lager/node-lambda
 
 Once the project is created we can enter its folder and access to sub-commands provided by the plugins.
 
-![lager -h](img/lager-h2.png)
+![lager -h](https://raw.githubusercontent.com/lagerjs/lager/master/img/lager-h2.png)
