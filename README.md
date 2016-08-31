@@ -46,14 +46,11 @@ The only available sub-command for now will be `lager new`. We can see its optio
 Create a new project
 ---
 
-`lager new` is the command that creates new projects. `lager new -h` outputs its usage information.
+`lager new` is the command that creates new projects. It can be used interactively or using its argument and option.
 
-![lager new -h](https://raw.githubusercontent.com/lagerjs/lager/master/img/lager-h.png)
+### Using the interactive prompt
 
-*   It has one argument: the name of the project
-*   It has one option: '-p, --plugins <plugins-names>', where the value is a comma-separated list of plugins that will be used by the project.
-
-If the argument and/or the option is not specified, we will be prompted to choose a value.
+If `lager new` is called without argument and/or option, we will provide a prompt to define the configuration of the project.
 
 ```bash
 # Using the command without option and argument, the user will be prompted to give information about the project configuration
@@ -62,6 +59,15 @@ lager new
 
 ![lager new prompt](https://raw.githubusercontent.com/lagerjs/lager/master/img/prompt.gif)
 
+### Using argument and option
+
+ `lager new -h` outputs the sub-command usage information.
+
+![lager new -h](https://raw.githubusercontent.com/lagerjs/lager/master/img/lager-h.png)
+
+*   It has one argument: the name of the project
+*   It has one option: `-p, --plugins <plugins-names>`, where the value is a comma-separated list of plugins that will be used by the project.
+
 If the argument and the option are both specified, the project will be created without needing a user interaction.
 
 ```bash
@@ -69,8 +75,14 @@ If the argument and the option are both specified, the project will be created w
 lager new my-project -p @lager/api-gateway,@lager/node-lambda
 ```
 
-`lager new` will create a project folder, install the later version of `Lager` and the specified plugins and create a `lager.json` configuration file.
+### Installation result
 
-Once the project is created we can enter its folder and access to sub-commands provided by the plugins.
+`lager new` will perform 3 operations:
+
+*   create a project folder
+*   install the later version of `Lager` and the specified plugins using `npm install --save`
+*   create a `lager.json` configuration file
+
+Once the project is created we can enter its folder and access to sub-commands added to the `lager` command by the project's plugins.
 
 ![lager -h](https://raw.githubusercontent.com/lagerjs/lager/master/img/lager-h2.png)
