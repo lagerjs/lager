@@ -7,7 +7,7 @@ Lager
 [![bitHound Code](https://www.bithound.io/github/lagerjs/lager/badges/code.svg)](https://www.bithound.io/github/lagerjs/lager)
 [![codecov](https://codecov.io/gh/lagerjs/lager/branch/dev/graph/badge.svg)](https://codecov.io/gh/lagerjs/lager)
 
-![lager logo](img/lager-logo2.png)
+<img align="right" alt="lager logo" src="https://raw.githubusercontent.com/lagerjs/lager/master/img/lager-logo2.png" />
 
 AWS Lambda + API Gateway + OpenAPI specification === *Lager*
 
@@ -92,11 +92,11 @@ Once the project is created we can enter its folder and access to sub-commands a
 Cheers!
 ---
 
-![lager logo](img/lager-logo1.png)
+![lager logo](https://raw.githubusercontent.com/lagerjs/lager/master/img/lager-logo1.png)
 
 Licence
 ---
 
-[MIT](LICENCE)
+[MIT](LICENSE)
 
 Logo: Copyright © [Julien Devos](http://devos.ju.free.fr)
