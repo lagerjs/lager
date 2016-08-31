@@ -7,6 +7,8 @@ Lager
 [![bitHound Code](https://www.bithound.io/github/lagerjs/lager/badges/code.svg)](https://www.bithound.io/github/lagerjs/lager)
 [![codecov](https://codecov.io/gh/lagerjs/lager/branch/dev/graph/badge.svg)](https://codecov.io/gh/lagerjs/lager)
 
+![lager logo](img/lager-logo2.png)
+
 AWS Lambda + API Gateway + OpenAPI specification === *Lager*
 
 The **Lambda API Gateway Endpoints Router**
@@ -86,3 +88,15 @@ lager new my-project -p @lager/api-gateway,@lager/node-lambda
 Once the project is created we can enter its folder and access to sub-commands added to the `lager` command by the project's plugins.
 
 ![lager -h](https://raw.githubusercontent.com/lagerjs/lager/master/img/lager-h2.png)
+
+Cheers!
+---
+
+![lager logo](img/lager-logo1.png)
+
+Licence
+---
+
+[MIT](LICENCE)
+
+Logo: Copyright © [Julien Devos](http://devos.ju.free.fr)
