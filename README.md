@@ -1,3 +1,5 @@
+<img align="right" alt="lager logo" src="https://raw.githubusercontent.com/lagerjs/lager/master/img/lager-logo2.png" />
+
 Lager
 ===
 
@@ -6,8 +8,6 @@ Lager
 [![bitHound Dependencies](https://www.bithound.io/github/lagerjs/lager/badges/dependencies.svg)](https://www.bithound.io/github/lagerjs/lager/dev/dependencies/npm)
 [![bitHound Code](https://www.bithound.io/github/lagerjs/lager/badges/code.svg)](https://www.bithound.io/github/lagerjs/lager)
 [![codecov](https://codecov.io/gh/lagerjs/lager/branch/dev/graph/badge.svg)](https://codecov.io/gh/lagerjs/lager)
-
-<img align="right" alt="lager logo" src="https://raw.githubusercontent.com/lagerjs/lager/master/img/lager-logo2.png" />
 
 AWS Lambda + API Gateway + OpenAPI specification === *Lager*
 
