@@ -67,7 +67,7 @@ lager new
 
  `lager new -h` outputs the sub-command usage information.
 
-![lager new -h](https://raw.githubusercontent.com/lagerjs/lager/master/img/lager-h.png)
+![lager new -h](https://raw.githubusercontent.com/lagerjs/lager/master/img/lager-new-h.png)
 
 *   It has one argument: the name of the project
 *   It has one option: `-p, --plugins <plugins-names>`, where the value is a comma-separated list of plugins that will be used by the project.
