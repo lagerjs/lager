@@ -3,7 +3,7 @@
 
 // Nice ES6 syntax
 // const { Promise, _, icli } = require('@lager/lager/src/lib/lager').import;
-const lager = require('@lager/lager/src/lib/lager');
+const lager = require('../lib/lager');
 const _ = lager.import._;
 const Promise = lager.import.Promise;
 const figlet = Promise.promisify(require('figlet'));
