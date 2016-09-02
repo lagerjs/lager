@@ -12,15 +12,15 @@ General
 *   Add a logging system (use bunyan) **M**
 *   Update the dev application to create the "Planet Express" apis **L**
 *   ~~Create the notion of `context` (environment + stage/version)~~ **M**
-*   Organize `lager --help` output into plugin sections **S**
+*   ~~Organize `lager --help` output into plugin sections~~ **S**
 *   ~~Alter folder structure to have a directory per plugin~~ **M**
 *   Write unit tests
 *   ~~Setup continuous integration~~ (Alexis)
 *   ~~Setup quality tools~~ (Alexis)
 *   Create a local webserver (Koa or Hapi?) **XL**
-*   Put core plugins in their own NPM modules **M**
-*   Bonus 1: put the promise based event/observer in its own node module
-*   Bonus 2: put the interactive command line module in its own node module
+*   ~~Put core plugins in their own NPM modules~~ **M**
+*   ~~Bonus 1: put the promise based event/observer in its own node module~~
+*   ~~Bonus 2: put the interactive command line module in its own node module~~
 
 `iam` core plugin
 ---
@@ -70,5 +70,5 @@ Other plugins
 Possible side projects
 ---
 
-*   A NPM module containing the promise based Event/Observer implementation of `Lager`
-*   A NPM module that facilitate the use of `inquirer` with `commander`
+*   ~~A NPM module containing the promise based Event/Observer implementation of `Lager`~~
+*   ~~A NPM module that facilitate the use of `inquirer` with `commander`~~

@@ -69,7 +69,7 @@ const cheers = {
 };
 
 const latinFonts = ['Big', 'Slant', 'Small', 'Small Slant', 'Standard', 'Block', 'Def Leppard', 'Efti Font', 'Efti Italic',
-               'Georgi16', 'Georgia11', 'Lean', 'Mini', 'Mirror', 'Mnemonic', 'Script', 'Shadow', 'Wavy'];
+                    'Georgi16', 'Georgia11', 'Lean', 'Mini', 'Mirror', 'Mnemonic', 'Script', 'Shadow', 'Wavy'];
 
 /**
  * This module exports a function that enrich the interactive command line and return a promise
@@ -116,6 +116,11 @@ module.exports = (icli) => {
     });
   }
 
+  /**
+   * The following code cannot be correcltly tested because icli.getProgram().parse() fire an event to execute it and we cannot
+   * know when its execution is finished. Pebo could gracefully handle this kind of behavior.
+   */
+  /* istanbul ignore next */
   /**
    * Create the new project
    * @param {Object} parameters - the parameters provided in the command and in the prompt

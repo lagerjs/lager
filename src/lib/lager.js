@@ -1,37 +1,16 @@
 'use strict';
 
-const path = require('path');
 const Promise = require('bluebird');
 const _ = require('lodash');
 const Pebo = require('pebo');
 Pebo.setPromise(Promise);
 
-if (process.env.NODE_ENV === 'development') {
-  // Configure error reporting for dev environment
-  // @TODO use bunyan for logs, including errors
-  const PrettyError = require('pretty-error');
-  const pe = new PrettyError();
-
-  // To render exceptions thrown in non-promies code:
-  process.on('uncaughtException', e => {
-    console.log('Uncaught exception');
-    console.log(pe.render(e));
-  });
-
-  // To render unhandled rejections created in BlueBird:
-  process.on('unhandledRejection', r => {
-    console.log('Unhandled rejection');
-    console.log(pe.render(r));
-  });
-
-  Promise.config({
-    warnings: true,
-    longStackTraces: true,
-    cancellation: true,
-    monitoring: true
-  });
-}
-
+/**
+ * Lager singleton definition
+ *
+ * The instance will register plugins and emit events
+ * It is an Pebo event emitter
+ */
 class Lager extends Pebo {
   /**
    * Construct the lager instance
@@ -58,11 +37,6 @@ class Lager extends Pebo {
    * @returns {Lager}
    */
   registerPlugin(plugin, identifier) {
-    if (!plugin.name) { throw new Error('A lager plugin MUST have a name property'); }
-    // Lager inject a getPath() method in the plugin
-    plugin.getPath = function getBasePath() {
-      return path.join(process.cwd(), plugin.name);
-    };
     this.plugins.push(plugin);
 
     // add hooks/event listeners
@@ -79,9 +53,13 @@ class Lager extends Pebo {
    * @returns {Object}
    */
   getPlugin(name) {
-    return _.find(this.plugins, plugin => {
+    const plugin = _.find(this.plugins, plugin => {
       return plugin.name === name;
     });
+    if (!plugin) {
+      throw new Error('The plugin "' + name + '" is not registered in the Lager instance');
+    }
+    return plugin;
   }
 
   /**
@@ -92,9 +70,13 @@ class Lager extends Pebo {
   init(config) {
     config.plugins = config.plugins || [];
 
-    _.forEach(config.plugins, pluginIdentifier => {
-      lager.registerPlugin(require(pluginIdentifier), pluginIdentifier);
-    });
+    try {
+      _.forEach(config.plugins, pluginIdentifier => {
+        lager.registerPlugin(require(pluginIdentifier), pluginIdentifier);
+      });
+    } catch (e) {
+      return Promise.reject(e);
+    }
 
     return Promise.resolve();
   }
