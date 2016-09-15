@@ -5,32 +5,6 @@ const _ = require('lodash');
 const Pebo = require('pebo');
 Pebo.setPromise(Promise);
 
-//if (process.env.NODE_ENV === 'development') {
-  // Configure error reporting for dev environment
-  // @TODO use bunyan for logs, including errors
-  const PrettyError = require('pretty-error');
-  const pe = new PrettyError();
-
-  // To render exceptions thrown in non-promies code:
-  process.on('uncaughtException', e => {
-    console.log('Uncaught exception');
-    console.log(pe.render(e));
-  });
-
-  // To render unhandled rejections created in BlueBird:
-  process.on('unhandledRejection', r => {
-    console.log('Unhandled rejection');
-    console.log(pe.render(r));
-  });
-
-  Promise.config({
-    warnings: true,
-    longStackTraces: true,
-    cancellation: true,
-    monitoring: true
-  });
-//}
-
 /**
  * Lager singleton definition
  *
