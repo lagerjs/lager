@@ -1,4 +1,4 @@
-Create and configure several APIs with one `Lager` application
+Create several APIs with one `Lager` application
 ===
 
 The need
@@ -33,7 +33,7 @@ These three APIs belong to the same application and share the same code base. Th
 consumers of the `sender` and the `recipient` APIs will only have access to endpoints that are useful for them.
 
 |                          | `sender` | `recipient` | `back-office` |
-| ------------------------ | -------- | ----------- | ------------- |
+| ------------------------ | :------: | :---------: | :-----------: |
 | `PUT /delivery`          | X        |             | X             |
 | `GET /delivery/{id}`     | X        | X           | X             |
 | `PATCH /delivery/{id}`   |          |             | X             |
