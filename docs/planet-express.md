@@ -22,11 +22,12 @@ Following REST principles, a simplified API implementing these functionalities s
 *   `PATCH /delivery/{id}` to perform modifications on a delivery
 *   `DELETE /delivery/{id}` to delete a delivery
 
-To simplify the application, a *sender* cannot modify a delivery once created and a *recipient* deletes a delivery when it receives it.
+To simplify the application, a **sender** cannot modify a delivery once created and a **recipient** deletes a delivery when it receives it.
 
-*Planet Express* wants to provide an `OpenAPI` (aka `Swagger`) specification to document the endpoints so *senders*, *recipients* and the *back office*
-development teams can integrate the service. To avoid exposing and documenting endpoints not needed by API consumers, *Planet Express* wants a different API
-for each type of client application : `sender`, `recipients` and `back-office`.
+*Planet Express* wants to provide an `OpenAPI` (aka `Swagger`) specification to document the endpoints for development teams that integrate the services.
+
+To avoid exposing and documenting endpoints not needed by some API consumers, *Planet Express* wants a different API for each type of client application :
+`sender`, `recipients` and `back-office`.
 
 These three APIs belong to the same application and share the same code base. The `back-office` API will provide access to all functionalities while the
 consumers of the `sender` and the `recipient` APIs will only have access to endpoints that are useful for them.
@@ -54,7 +55,7 @@ cd planet-express
 ### Create lambda execution role
 
 ```bash
-lager create-role PlanetExpressLambdaExecution -p "LambdaBasicExecutionRole"
+lager create-role PlanetExpressLambdaExecution -p "LambdaBasicExecutionRoleshould"
 lager deploy-roles PlanetExpressLambdaExecution
 ```
 
