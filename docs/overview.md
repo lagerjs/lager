@@ -1,6 +1,9 @@
 An overview of Lager and its main plugins
 ===
 
+This document is more about the implementation of Lager itself than about how to create a project with it.
+Nevertheless, it can be useful to read for people that plan to use Lager.
+
 Prerequisites
 ---
 
@@ -99,8 +102,8 @@ General information about AWS plugins
 
 ### Permissions needed to deploy the project in AWS
 
-Lager plugins that manage AWS resources need to have permissions to execute some operations. When a command line needs this permissions, Lager will use
-the AWS credentials provided by the environment.
+Lager plugins that manage AWS resources need to have permissions to execute commands that communicate with the AWS API. When a command needs these
+permissions, Lager will use the AWS credentials provided by the environment.
 
 Each Lager plugin calling the AWS API should document which IAM permissions are needed for each command. Thereby a Lager developer can optimize the
 configuration of the IAM policies, users and roles he needs to deploy a project.
@@ -124,34 +127,34 @@ reference a role as `MyProjectLambdaExecution`. When deploying the Lambda in AWS
 find the correct ARN to use. For example: `arn:aws:iam::012345678912:role/MyProjectLambdaExecution` or
 `arn:aws:iam::012345678912:role/DEV_MyProjectLambdaExecution`
 
-However, this kind of functionality must always be optional. Indeed, a project should be able to use permissive IAM policies to perform tasks in a
-developer environment to facilitate development but require a more restrictive configuration for the production environment. For the above example, in
+However, this kind of functionality must always be optional. Indeed, a project can be able to use permissive IAM policies to perform tasks in a
+developer environment to facilitate development but should require a more restrictive configuration for the production environment. For the above example, in
 production environment, the role ARN should be directly configured instead of `MyProjectLambdaExecution` and the `@lager/iam` plugin would detect that
 it is not necessary to call AWS to retrieve the ARN.
 
-Lambda plugin
+Node Lambda plugin
 ---
 
 The `@lager/node-lambda` plugin allows to define and deploy AWS Lambda function. It manages `Node.js` modules and Lambda configurations.
 
 ### Node.js modules
 
-A Lager project using `@lager/node-lambda` is composed of a collection of `Node.js` modules containing the application's logic. These modules are not
-dependent of AWS Lambda and should be able to be used in any execution environment. It is the developer's responsibility to decide how to write, test
+A Lager project using `@lager/node-lambda` is composed of a collection of `Node.js` modules containing the application's logic. These modules are
+independent of AWS Lambda and should be able to be used in any execution environment. It is the developer's responsibility to decide how to write, test
 and build them. Lager does not interfere with it.
 
 Examples of possible modules:
 
-*   `log` could be used to define logs levels and write logs in various places.    
-*   `data-access` could be used to define models and expose them. Possibly using tools like `sequelize` or `mongoose` or `DynamoDB` etc ...
-*   `graphql` could be used to define a GraphQL schema and expose a function that resolves queries.
+*   A module named `log` could be used to define logs levels and write logs in various places.    
+*   A module named `data-access` could be used to define models and expose them. Possibly using tools like `sequelize` or `mongoose` or `DynamoDB` etc ...
+*   A module named `graphql-server` could be used to define a GraphQL schema and expose a function that resolves queries.
 
 ### Lambda functions
 
 A Lambda is defined by three files:
 
 *   A `config.json` file that contains the configuration : timeout, memory, execution role, dependencies with Node.js module cited above ...
-*   A `lambda.js` file that contains the handler that will be invoked. All the code dependent to Lambda (mostly calls on the `context` parameter)
+*   A `lambda.js` file that contains the handler that will be invoked. All the code that has dependency with to Lambda (mostly calls on the `context` parameter)
     should be located there.
 *   A `exec.js` file that exposes a function that be called by the handler and perform the calls to the node modules.
 
@@ -178,20 +181,21 @@ However, `@lager/api-gateway` separates the definitions of endpoints from the de
 
 ### APIs
 
-It is possible to define several APIs to manage with `@lager/api-gateway`. This allows a Lager application to expose APIs for different consumers. For example,
-an API could expose some endpoints useful for a Back Office and another one could expose some endpoints useful for third party applications.
+It is possible to define several APIs to manage with `@lager/api-gateway`. This allows a Lager application to expose various APIs for different consumers of
+the same application. For example, an API could expose some endpoints useful for a Back Office and another one could expose some endpoints useful for third
+party applications.
 
 ### Endpoints
 
 The definition of an endpoint with `@lager/api-gateway` is a portion of Swagger specification that will be added to an API specification. A Lager extension
-to Swagger allow to indicate the APIs that have to expose the endpoint.
+to Swagger allows to indicate the APIs that have to expose the endpoint.
 
 The specification is located in a path that represents the resource and the method of the action. Examples: `my-resource/PUT/spec.json`,
 `my-resource/{id}/GET/spec.json`, `my-resource/{id}/PATCH/spec.json`, `my-resource/{id}/nested-resource/GET/spec.json`.
 
 ### API deployment
 
-When deploying an API, its name API Gateway will be composed of the `context`'s' environment and the API identifier. Examples: `DEVELOPER_JANE_back-office`,
+When deploying an API, its name API Gateway will be composed of the `context`'s environment and the API identifier. Examples: `DEVELOPER_JANE_back-office`,
 `DEV_back-office`, `DEV_client-app` ...
 
 Lager will deploy a stage corresponding to the `context`'s stage.
