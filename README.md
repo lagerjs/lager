@@ -13,13 +13,15 @@ AWS Lambda + API Gateway + OpenAPI specification === *Lager*
 
 The **Lambda API Gateway Endpoints Router**
 
-`Lager` is a framework created to simplify the conception and the deployment of applications with [`Amazon API Gateway`](https://aws.amazon.com/api-gateway/) and [`AWS Lambda`](https://aws.amazon.com/lambda/).
-It is composed of *a plugin system and a command line*. In fact, `lager` does not have any dependency with AWS in it's core.
+Lager is a framework created to simplify the conception and the deployment of serverless applications with
+[`Amazon API Gateway`](https://aws.amazon.com/api-gateway/) and [`AWS Lambda`](https://aws.amazon.com/lambda/).
+It is composed of *a plugin system and a command line*. In fact, Lager does not have any dependency with AWS in it's core.
 
-Each plugin installed in a project extends the capabilities of `Lager` and can add new sub-commands to the command line.
+Each plugin installed in a project extends the capabilities of Lager and can add new sub-commands to the command line.
 *Official* plugins have a node package identifier in the `@lager` namespace. Here is a list of the main ones:
 
-*   [`@lager/api-gateway`](https://www.npmjs.com/package/@lager/api-gateway) to define endpoints, associate them withs APIs and deploy them in `Amazon API Gateway`
+*   [`@lager/api-gateway`](https://www.npmjs.com/package/@lager/api-gateway) to define endpoints, associate them withs APIs and deploy them in
+    `Amazon API Gateway`
 *   [`@lager/node-lambda`](https://www.npmjs.com/package/@lager/node-lambda) to deploy node functions in `AWS Lambda`
 *   [`@lager/iam`](https://www.npmjs.com/package/@lager/iam) to manage `AWS IAM` (Identity and Access Management) policies and roles
 
@@ -50,11 +52,8 @@ The only available sub-command for now is `lager new`. We can see its options an
 Create a new project
 ---
 
-`lager new` is the command that creates new projects. It can be used interactively or using its argument and option.
-
-### Using the interactive prompt
-
-If `lager new` is called without argument and/or option, it will provide a prompt to define the configuration of the project.
+`lager new` is the command that creates new projects.
+If it is called without argument and/or option, it will provide a prompt to define the configuration of the project.
 
 ```bash
 # Using the command without option and argument, the user will be prompted to give information about the project configuration
@@ -63,38 +62,27 @@ lager new
 
 ![lager new prompt](https://raw.githubusercontent.com/lagerjs/lager/master/img/prompt.gif)
 
-### Using argument and option
-
- `lager new -h` outputs the sub-command usage information.
-
-![lager new -h](https://raw.githubusercontent.com/lagerjs/lager/master/img/lager-new-h.png)
-
-*   It has one argument: the name of the project
-*   It has one option: `-p, --plugins <plugins-names>`, where the value is a comma-separated list of plugins that will be used by the project.
-
-If the argument and the option are both specified, the project will be created without needing a user interaction.
-
-```bash
-# This command will create a lager project with the api-gateway and the node-lambda plugins without the need to prompt the user
-lager new my-project -p @lager/api-gateway,@lager/node-lambda
-```
-
 ### Installation result
 
 `lager new` will perform 3 operations:
 
 *   create a project folder
-*   install the latest version of `Lager` and the project's plugins using `npm install --save`
+*   install the latest version of Lager and the project's plugins using `npm install --save`
 *   create a `lager.json` configuration file
 
 Once the project is created we can enter its folder and access to sub-commands added to the `lager` command by the project's plugins.
 
 ![lager -h](https://raw.githubusercontent.com/lagerjs/lager/master/img/lager-h2.png)
 
-Working on a project
+Working on a Lager project
 ---
 
 This documentation is currently under construction. This section will contain links to the documentation of plugins and some use case examples.
+
+*   [Overview of Lager and it's main plugins]('docs/overview#readme')
+*   [Create an application exposing several APIs]('docs/planet-express.md#readme')
+
+Installing `@lager/cli` and testing it helps to discover Lager too.
 
 Cheers!
 ---
