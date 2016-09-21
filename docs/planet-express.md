@@ -6,10 +6,10 @@ The need: APIs exposing various functionalities
 
 *Planet Express* is a space delivery company that have two types of customers :
 
-*   **Senders** like *MomCorp* and the *Slurm factory* that uses *Planet Express* services to deliver products
-*   **Recipients** like the *Luna Park* or the *Mars Vegas Casinos* that receives these products
+*   **Senders** like *MomCorp* and the *Slurm factory* that use *Planet Express* services to deliver products
+*   **Recipients** like the *Luna Park* or the *Mars Vegas Casinos* that receive these products
 
-*Planet Express*, as a *futurist* company, wants to provide *serverless APIs*, web applications and mobile applications for their customers to use its services.
+*Planet Express*, as a *futurist* company, wants to provide *serverless APIs*, web and mobile applications for their customers.
 
 *   **Senders** need an API to create and track deliveries
 *   **Recipients** need an API to track and validate the reception of deliveries
@@ -26,8 +26,8 @@ We state that a **sender** cannot modify a delivery once created and a **recipie
 
 *Planet Express* wants to provide an `OpenAPI` (aka `Swagger`) specification to document the endpoints for development teams that integrate the services.
 
-To avoid exposing and documenting endpoints not needed by some API consumers, *Planet Express* wants a different API for each type of client application :
-`sender`, `recipients` and `back-office`.
+To avoid exposing and documenting endpoints not needed by some API consumers, *Planet Express* wants a specific API for each type of client application :
+`sender`, `recipient` and `back-office`.
 
 These three APIs belong to the same application and share the same code base. The `back-office` API will provide access to all functionalities while the
 consumers of the `sender` and the `recipient` APIs will only have access to endpoints that are useful for them.
@@ -45,7 +45,7 @@ of the application that do not rely on `Lager`. They are implemented in `node.js
 The creation of the application with `Lager`
 ---
 
-For each command used in the following sections, it is possible to have it's documentation using `lager <command> -h`. Note that the cli itself only contains
+For each command used in the following sections, it is possible to see its documentation using `lager <command> -h`. Note that the `Lager` cli itself only contains
 the command `lager new`. Other commands are injected by `Lager` plugins when the cli is executed in the project folder.
 
 ### Initialization of the project
@@ -53,6 +53,7 @@ the command `lager new`. Other commands are injected by `Lager` plugins when the
 We create a new `Lager` project named `planet-express`.
 
 ```bash
+npm install -g @lager/cli
 lager new planet-express -p @lager/iam,@lager/api-gateway,@lager/node-lambda
 cd planet-express
 ```
@@ -134,7 +135,7 @@ lager create-endpoint /delivery put -a back-office,sender -s "View a delivery" -
 lager create-endpoint /delivery delete -a back-office,recipient -s "View a delivery" -c "application/json" -p "application/json" --auth none --credentials PlanetExpressLambdaInvocation -l api-generic
 ```
 
-#### Deployment
+### Deployment
 
 We deploy the stage `v0` of the three APIs on the `DEV` environment.
 
