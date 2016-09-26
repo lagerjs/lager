@@ -1,7 +1,7 @@
 Create several APIs with one `Lager` application
 ===
 
-The need: APIs exposing various functionalities
+The need: one application, several APIs exposing various functionalities
 ---
 
 *Planet Express* is a space delivery company that have two types of customers :
