@@ -1,5 +1,6 @@
 'use strict';
 
+const path = require('path');
 const Promise = require('bluebird');
 const _ = require('lodash');
 const Pebo = require('pebo');
@@ -36,7 +37,7 @@ class Lager extends Pebo {
    * @param {Object} plugin
    * @returns {Lager}
    */
-  registerPlugin(plugin, identifier) {
+  registerPlugin(plugin) {
     this.plugins.push(plugin);
 
     // add hooks/event listeners
@@ -72,7 +73,23 @@ class Lager extends Pebo {
 
     try {
       _.forEach(config.plugins, pluginIdentifier => {
-        lager.registerPlugin(require(pluginIdentifier), pluginIdentifier);
+        let requireArg = pluginIdentifier;
+        try {
+          // Try to load plugins installed in node_modules
+          require.resolve(requireArg);
+        } catch (e) {
+          try {
+            // Try to load project specific plugins
+            requireArg = path.join(process.cwd(), pluginIdentifier);
+            require.resolve(requireArg);
+          } catch (e) {
+            requireArg = false;
+            console.log('WARN: Lager could not find the plugin "' + pluginIdentifier + '"');
+          }
+        }
+        if (requireArg) {
+          lager.registerPlugin(require(requireArg), pluginIdentifier);
+        }
       });
     } catch (e) {
       return Promise.reject(e);
