@@ -38,6 +38,9 @@ class Lager extends Pebo {
    * @returns {Lager}
    */
   registerPlugin(plugin) {
+    if (plugin.setLagerInstance) {
+      plugin.setLagerInstance(this);
+    }
     this.plugins.push(plugin);
 
     // add hooks/event listeners
