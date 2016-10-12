@@ -29,6 +29,7 @@ class Lager extends Pebo {
   constructor() {
     super();
     this.plugins = [];
+    this.extensions = [];
     this.registerPlugin(require('./core-plugin'));
   }
 
@@ -48,6 +49,13 @@ class Lager extends Pebo {
     _.map(plugin.hooks, (fn, event) => {
       this.when(event, fn);
     });
+
+    // add extensions: functions that extends the Lager instance
+    plugin.extensions = plugin.extensions || [];
+    _.map(plugin.extensions, (fn, extensionName) => {
+      this.extensions[plugin.name + ':' + extensionName] = fn;
+    });
+
     return this;
   }
 
@@ -64,6 +72,22 @@ class Lager extends Pebo {
       throw new Error('The plugin "' + name + '" is not registered in the Lager instance');
     }
     return plugin;
+  }
+
+  /**
+   * Call an extension
+   * In case the extension has not been added to the Lager instance,
+   * A Promise of the last argument will be returned
+   * @return {Promise}
+   */
+  call() {
+    // Extract arguments and extension name
+    const args = Array.prototype.slice.call(arguments);
+    const name = args.shift();
+    if (this.extensions[name]) {
+      return this.extensions[name].apply(null, args);
+    }
+    return Promise.resolve(args[args.length - 1]);
   }
 
   /**
