@@ -70,8 +70,8 @@ The Lambda needs to be associated to an IAM role that defines its authorizations
 implementation of the application. For now, we use a role that allows the Lambda to write logs in CloudWatch.
 
 ```bash
-lager create-role PlanetExpressLambdaExecution -p "LambdaBasicExecutionRole"
-lager deploy-roles PlanetExpressLambdaExecution
+lager create-role PlanetExpressLambdaExecution -p LambdaBasicExecutionRole
+lager deploy-roles PlanetExpressLambdaExecution -e DEV -v v0
 ```
 
 #### Creation of node modules that can be packaged in the Lambda
@@ -120,8 +120,8 @@ lager create-api recipient   -t "Recipient"   -d "Planet Express API for recipie
 The API endpoints need to be associated to an IAM role that allows to invoke the Lambda.
 
 ```bash
-lager create-role PlanetExpressLambdaInvocation -p "APIGatewayLambdaInvocation"
-lager deploy-roles PlanetExpressLambdaInvocation
+lager create-role PlanetExpressLambdaInvocation -p APIGatewayLambdaInvocation
+lager deploy-roles PlanetExpressLambdaInvocation -e DEV -v v0
 ```
 
 #### Creation of the endpoints
