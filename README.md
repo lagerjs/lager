@@ -84,6 +84,23 @@ This documentation is currently under construction. This section will contain li
 
 Installing `@lager/cli` and testing it helps to discover Lager too.
 
+Main plugins
+---
+
+| NPM module | Repository | Build status | Code analysis | Code coverage |
+| ---------- |------------| ------------ | ------------- | ------------- |
+| [@lager/lager](https://www.npmjs.com/package/@lager/lager) | [lagerjs/lager](https://github.com/lagerjs/lager) | [![Build Status](https://travis-ci.org/lagerjs/lager.svg)](https://travis-ci.org/lagerjs/lager) | [![bitHound Overall Score](https://www.bithound.io/github/lagerjs/lager/badges/score.svg)](https://www.bithound.io/github/lagerjs/lager) | [![codecov](https://codecov.io/gh/lagerjs/lager/branch/master/graph/badge.svg)](https://codecov.io/gh/lagerjs/lager) |
+
+
+| [@lager/cli](https://www.npmjs.com/package/@lager/cli) | [lagerjs/cli](https://github.com/lagerjs/cli) | [![Build Status](https://travis-ci.org/lagerjs/cli.svg)](https://travis-ci.org/lagerjs/cli) | [![bitHound Overall Score](https://www.bithound.io/github/lagerjs/cli/badges/score.svg)](https://www.bithound.io/github/lagerjs/cli) | [![codecov](https://codecov.io/gh/lagerjs/cli/branch/master/graph/badge.svg)](https://codecov.io/gh/lagerjs/cli) |
+
+
+| [@lager/node-lambda](https://www.npmjs.com/package/@lager/node-lambda) | [lagerjs/node-lambda](https://github.com/lagerjs/node-lambda) | [![Build Status](https://travis-ci.org/lagerjs/node-lambda.svg)](https://travis-ci.org/lagerjs/node-lambda) | [![bitHound Overall Score](https://www.bithound.io/github/lagerjs/node-lambda/badges/score.svg)](https://www.bithound.io/github/lagerjs/node-lambda) | [![codecov](https://codecov.io/gh/lagerjs/node-lambda/branch/master/graph/badge.svg)](https://codecov.io/gh/lagerjs/node-lambda) |
+
+| [@lager/api-gateway](https://www.npmjs.com/package/@lager/api-gateway) | [lagerjs/api-gateway](https://github.com/lagerjs/api-gateway) | [![Build Status](https://travis-ci.org/lagerjs/api-gateway.svg)](https://travis-ci.org/lagerjs/api-gateway) | [![bitHound Overall Score](https://www.bithound.io/github/lagerjs/api-gateway/badges/score.svg)](https://www.bithound.io/github/lagerjs/api-gateway) | [![codecov](https://codecov.io/gh/lagerjs/api-gateway/branch/master/graph/badge.svg)](https://codecov.io/gh/lagerjs/api-gateway) |
+
+| [@lager/iam](https://www.npmjs.com/package/@lager/iam) | [lagerjs/iam](https://github.com/lagerjs/iam) | [![Build Status](https://travis-ci.org/lagerjs/iam.svg)](https://travis-ci.org/lagerjs/iam) | [![bitHound Overall Score](https://www.bithound.io/github/lagerjs/iam/badges/score.svg)](https://www.bithound.io/github/lagerjs/iam) | [![codecov](https://codecov.io/gh/lagerjs/iam/branch/master/graph/badge.svg)](https://codecov.io/gh/lagerjs/iam) |
+
 Cheers!
 ---
 
