@@ -6,6 +6,19 @@ const _ = require('lodash');
 const Pebo = require('pebo');
 Pebo.setPromise(Promise);
 
+Promise.config({
+  longStackTraces: true
+});
+
+process.on('uncaughtException', (e) => {
+  console.log('Unhandled Exception at: ', e);
+});
+
+process.on('unhandledRejection', (reason, p) => {
+  console.log('Unhandled Rejection at: Promise ', p, ' reason: ', reason);
+});
+
+
 /**
  * Lager singleton definition
  *
@@ -41,6 +54,8 @@ class Lager extends Pebo {
   registerPlugin(plugin) {
     if (plugin.setLagerInstance) {
       plugin.setLagerInstance(this);
+    } else {
+      plugin.lager = this;
     }
     this.plugins.push(plugin);
 

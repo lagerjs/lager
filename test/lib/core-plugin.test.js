@@ -1,9 +1,10 @@
 /*eslint-env mocha */
+/* global testRequire */
 'use strict';
 
 const assert = require('assert');
-const corePlugin = require('src/lib/core-plugin');
 const icli = require('comquirer');
+const corePlugin = testRequire('src/lib/core-plugin');
 
 describe('The lager core plugin', function() {
 

@@ -1,8 +1,9 @@
 /*eslint-env mocha */
+/* global testRequire */
 'use strict';
 
 const assert = require('assert');
-const lager = require('src/lib/lager');
+const lager = testRequire('src/lib/lager');
 
 describe('The lager instance', function() {
 

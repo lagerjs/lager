@@ -1,6 +1,6 @@
 {
   "name": "@lager/lager",
-  "version": "0.0.23",
+  "version": "0.0.24",
   "description": "AWS Lambda / API Gateway / Endpoint Router",
   "files": [
     "src"
@@ -45,8 +45,8 @@
     "test": "test"
   },
   "scripts": {
-    "test": "NODE_PATH=NODE_PATH:. istanbul cover --include-all-sources=true ./node_modules/mocha/bin/_mocha -- --recursive && rm -rf ./coverage",
-    "test-ci": "NODE_PATH=NODE_PATH:. istanbul cover --include-all-sources=true ./node_modules/mocha/bin/_mocha --report lcovonly -- --recursive && codecov",
+    "test": "NODE_ENV=test istanbul cover --include-all-sources=true ./node_modules/mocha/bin/_mocha -- --recursive && rm -rf ./coverage",
+    "test-ci": "NODE_ENV=test istanbul cover --include-all-sources=true ./node_modules/mocha/bin/_mocha --report lcovonly -- --recursive && codecov",
     "eslint": "eslint --ignore-path .gitignore **/*.js && echo \"  JS lint passed\n\"; exit 0",
     "mdlint": "remark -qf . && echo \"  Markdown lint passed\n\"; exit 0",
     "lint": "eslint --ignore-path .gitignore **/*.js && remark -qf . && echo \"  JS lint and markdown lint passed\n\"; exit 0"
