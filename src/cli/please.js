@@ -1,11 +1,8 @@
 #!/usr/bin/env node
 'use strict';
 
-// Nice ES6 syntax
-// const { Promise, _, icli } = require('@lager/lager/src/lib/lager').import;
-const lager = require('../lib/lager');
-const _ = lager.import._;
-const Promise = lager.import.Promise;
+const _ = require('lodash');
+const Promise = require('bluebird');
 const figlet = Promise.promisify(require('figlet'));
 figlet.fonts = Promise.promisify(figlet.fonts);
 
@@ -82,7 +79,7 @@ module.exports = (icli) => {
     const config = {
       section: 'Core plugin',
       cmd: 'please',
-      description: 'create a new project',
+      description: 'Have a beer! You deserve it',
       options: { noHelp: true },
       parameters: [{
         cmdSpec: '-l, --language <language>',

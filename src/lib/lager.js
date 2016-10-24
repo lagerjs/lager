@@ -5,18 +5,21 @@ const Promise = require('bluebird');
 const _ = require('lodash');
 const Pebo = require('pebo');
 Pebo.setPromise(Promise);
+const log = require('./log');
 
-Promise.config({
-  longStackTraces: true
-});
+if (['test', 'dev', 'debug'].indexOf(process.NODE_ENV) > 1) {
+  Promise.config({
+    longStackTraces: true
+  });
 
-process.on('uncaughtException', (e) => {
-  console.log('Unhandled Exception at: ', e);
-});
+  process.on('uncaughtException', (e) => {
+    console.log('Unhandled Exception at: ', e);
+  });
 
-process.on('unhandledRejection', (reason, p) => {
-  console.log('Unhandled Rejection at: Promise ', p, ' reason: ', reason);
-});
+  process.on('unhandledRejection', (reason, p) => {
+    console.log('Unhandled Rejection at: Promise ', p, ' reason: ', reason);
+  });
+}
 
 
 /**
@@ -41,6 +44,7 @@ class Lager extends Pebo {
    */
   constructor() {
     super();
+    this.log = log;
     this.plugins = [];
     this.extensions = [];
     this.registerPlugin(require('./core-plugin'));
@@ -126,7 +130,7 @@ class Lager extends Pebo {
             require.resolve(requireArg);
           } catch (e) {
             requireArg = false;
-            console.log('WARN: Lager could not find the plugin "' + pluginIdentifier + '"');
+            lager.log.warn('Lager could not find the plugin "' + pluginIdentifier + '"');
           }
         }
         if (requireArg) {
@@ -142,13 +146,5 @@ class Lager extends Pebo {
 }
 
 const lager = new Lager();
-
-/**
- * This property allows the lager instance to share some key dependencies with plugins
- * @type {Object}
- */
-lager.import = {
-  Promise, _
-};
 
 module.exports = lager;
