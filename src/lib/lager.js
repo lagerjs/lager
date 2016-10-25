@@ -7,17 +7,19 @@ const Pebo = require('pebo');
 Pebo.setPromise(Promise);
 const log = require('./log');
 
-if (['test', 'dev', 'debug'].indexOf(process.NODE_ENV) > 1) {
+if (['test', 'dev', 'development', 'debug'].indexOf(process.env.NODE_ENV) > -1) {
   Promise.config({
     longStackTraces: true
   });
 
   process.on('uncaughtException', (e) => {
-    console.log('Unhandled Exception at: ', e);
+    log.fatal(e, 'Unhandled Exception');
+    console.log(e);
   });
 
-  process.on('unhandledRejection', (reason, p) => {
-    console.log('Unhandled Rejection at: Promise ', p, ' reason: ', reason);
+  process.on('unhandledRejection', (reason, promise) => {
+    log.fatal({promise: promise, reason: reason}, 'Unhandled Rejection');
+    console.log(promise, reason);
   });
 }
 
@@ -48,6 +50,14 @@ class Lager extends Pebo {
     this.plugins = [];
     this.extensions = [];
     this.registerPlugin(require('./core-plugin'));
+    const originalFire = this.fire;
+
+    // Overide Pebo.fire() to log calls
+    this.fire = function() {
+      const nbListeners = this.events[arguments[0]] ? this.eventslength : 0;
+      this.log.debug('Event ' + arguments[0] + ' has been fired for ' + nbListeners + ' listeners');
+      return originalFire.apply(this, arguments);
+    }.bind(this);
   }
 
   /**
