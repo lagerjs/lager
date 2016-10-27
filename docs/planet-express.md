@@ -71,7 +71,7 @@ implementation of the application. For now, we use a role that allows the Lambda
 
 ```bash
 lager create-role PlanetExpressLambdaExecution -p LambdaBasicExecutionRole
-lager deploy-roles PlanetExpressLambdaExecution -e DEV -v v0
+lager deploy-roles PlanetExpressLambdaExecution -e DEV -s v0
 ```
 
 #### Creation of node modules that can be packaged in the Lambda
@@ -154,7 +154,7 @@ lager new planet-express -p @lager/iam,@lager/api-gateway,@lager/node-lambda
 cd planet-express
 
 lager create-role PlanetExpressLambdaExecution -p LambdaBasicExecutionRole
-lager deploy-roles PlanetExpressLambdaExecution -e DEV -v v0
+lager deploy-roles PlanetExpressLambdaExecution -e DEV -s v0
 
 lager create-node-module log
 lager create-node-module data-access -d log
