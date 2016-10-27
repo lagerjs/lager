@@ -121,7 +121,7 @@ The API endpoints need to be associated to an IAM role that allows to invoke the
 
 ```bash
 lager create-role PlanetExpressLambdaInvocation -p APIGatewayLambdaInvocation
-lager deploy-roles PlanetExpressLambdaInvocation -e DEV -v v0
+lager deploy-roles PlanetExpressLambdaInvocation -e DEV -s v0
 ```
 
 #### Creation of the endpoints
@@ -140,6 +140,39 @@ lager create-endpoint /delivery delete -a back-office,recipient -s "View a deliv
 We deploy the stage `v0` of the three APIs on the `DEV` environment.
 
 ```bash
+lager deploy-apis back-office -r us-east-1 -s v0 -e DEV
+lager deploy-apis sender -r us-east-1 -s v0 -e DEV
+lager deploy-apis recipient -r us-east-1 -s v0 -e DEV
+```
+
+Altogether
+---
+
+```bash
+npm install -g @lager/cli
+lager new planet-express -p @lager/iam,@lager/api-gateway,@lager/node-lambda
+cd planet-express
+
+lager create-role PlanetExpressLambdaExecution -p LambdaBasicExecutionRole
+lager deploy-roles PlanetExpressLambdaExecution -e DEV -v v0
+
+lager create-node-module log
+lager create-node-module data-access -d log
+
+lager create-node-lambda api-generic -t 20 -m 256 -r PlanetExpressLambdaExecution --template api-endpoints --modules data-access,log
+
+lager create-api back-office -t "Back Office" -d "Planet Express API for Back Office"
+lager create-api sender      -t "Sender"      -d "Planet Express API for sender application"
+lager create-api recipient   -t "Recipient"   -d "Planet Express API for recipient application"
+
+lager create-role PlanetExpressLambdaInvocation -p APIGatewayLambdaInvocation
+lager deploy-roles PlanetExpressLambdaInvocation -e DEV -s v0
+
+lager create-endpoint /delivery get -a back-office,recipient,sender -s "View a delivery" -c "application/json" -p "application/json" --auth none --credentials PlanetExpressLambdaInvocation -l api-generic
+lager create-endpoint /delivery patch -a back-office -s "View a delivery" -c "application/json" -p "application/json" --auth none --credentials PlanetExpressLambdaInvocation -l api-generic
+lager create-endpoint /delivery put -a back-office,sender -s "View a delivery" -c "application/json" -p "application/json" --auth none --credentials PlanetExpressLambdaInvocation -l api-generic
+lager create-endpoint /delivery delete -a back-office,recipient -s "View a delivery" -c "application/json" -p "application/json" --auth none --credentials PlanetExpressLambdaInvocation -l api-generic
+
 lager deploy-apis back-office -r us-east-1 -s v0 -e DEV
 lager deploy-apis sender -r us-east-1 -s v0 -e DEV
 lager deploy-apis recipient -r us-east-1 -s v0 -e DEV
