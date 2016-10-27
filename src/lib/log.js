@@ -14,7 +14,7 @@ const fileStream = {
 };
 
 const log = bunyan.createLogger({
-  name: 'city-voices',
+  name: 'lager',
   streams: [stdoutStream, fileStream],
   src: false
 });
