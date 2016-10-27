@@ -54,7 +54,7 @@ We create a new `Lager` project named `planet-express`.
 
 ```bash
 npm install -g @lager/cli
-lager new planet-express -p @lager/iam,@lager/api-gateway,@lager/node-lambda
+lager new planet-express @lager/iam @lager/api-gateway @lager/node-lambda
 cd planet-express
 ```
 
@@ -140,9 +140,7 @@ lager create-endpoint /delivery delete -a back-office,recipient -s "View a deliv
 We deploy the stage `v0` of the three APIs on the `DEV` environment.
 
 ```bash
-lager deploy-apis back-office -r us-east-1 -s v0 -e DEV
-lager deploy-apis sender -r us-east-1 -s v0 -e DEV
-lager deploy-apis recipient -r us-east-1 -s v0 -e DEV
+lager deploy-apis back-office sender recipient -r us-east-1 -s v0 -e DEV
 ```
 
 Altogether
@@ -150,7 +148,7 @@ Altogether
 
 ```bash
 npm install -g @lager/cli
-lager new planet-express -p @lager/iam,@lager/api-gateway,@lager/node-lambda
+lager new planet-express @lager/iam @lager/api-gateway @lager/node-lambda
 cd planet-express
 
 lager create-role PlanetExpressLambdaExecution -p LambdaBasicExecutionRole
@@ -173,7 +171,5 @@ lager create-endpoint /delivery patch -a back-office -s "View a delivery" -c "ap
 lager create-endpoint /delivery put -a back-office,sender -s "View a delivery" -c "application/json" -p "application/json" --auth none --credentials PlanetExpressLambdaInvocation -l api-generic
 lager create-endpoint /delivery delete -a back-office,recipient -s "View a delivery" -c "application/json" -p "application/json" --auth none --credentials PlanetExpressLambdaInvocation -l api-generic
 
-lager deploy-apis back-office -r us-east-1 -s v0 -e DEV
-lager deploy-apis sender -r us-east-1 -s v0 -e DEV
-lager deploy-apis recipient -r us-east-1 -s v0 -e DEV
+lager deploy-apis back-office sender recipient -r us-east-1 -s v0 -e DEV
 ```
