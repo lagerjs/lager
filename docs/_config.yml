@@ -11,7 +11,7 @@ site_title: Lager documentation
 company_name: Lager
 # this appears in the footer
 
-github_editme_path: lagerjs/lager/tree/master/docs/
+github_editme_path: lagerjs/lager/blob/master/docs/pages/
 # if you're using Github, provide the basepath to the branch you've created for reviews, following the sample here. if not, leave this value blank.
 
 disqus_shortname:
@@ -103,4 +103,4 @@ description: "Documentation of Lager - a framework that aims to simplify the def
 # the description is used in the feed.xml file
 
 # needed for sitemap.xml file only
-url: http://lagerjs.github.com
+url: http://lagerjs.github.io/lager/
