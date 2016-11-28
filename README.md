@@ -77,10 +77,7 @@ Once the project is created we can enter its folder and access to sub-commands a
 Working on a Lager project
 ---
 
-This documentation is currently under construction. This section will contain links to the documentation of plugins and some use case examples.
-
-*   [Overview of Lager and it's main plugins](docs/overview.md#readme)
-*   [Create an application exposing several APIs](docs/planet-express.md#readme)
+The documentation is currently under construction. You can already have a look at it and/or help to write it at [https://lagerjs.github.io/lager](https://lagerjs.github.io/lager).
 
 Installing `@lager/cli` and testing it helps to discover Lager too.
 
