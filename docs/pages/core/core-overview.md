@@ -1,3 +1,14 @@
+---
+title: An overview of Lager and its main plugins
+keywords: lager, core
+last_updated: July 3, 2016
+tags: [getting_started]
+summary: "An overview of Lager."
+sidebar: core_sidebar
+permalink: core-overview.html
+folder: core
+---
+
 An overview of Lager and its main plugins
 ===
 
@@ -199,3 +210,5 @@ When deploying an API, its name API Gateway will be composed of the `context`'s 
 `DEV_back-office`, `DEV_client-app` ...
 
 Lager will deploy a stage corresponding to the `context`'s stage.
+
+{% include links.html %}

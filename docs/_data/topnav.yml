@@ -1,0 +1,28 @@
+## Topnav single links
+## if you want to list an external url, use external_url instead of url. the theme will apply a different link base.
+topnav:
+- title: Topnav
+  items:
+    - title: News
+      url: /news
+
+#Topnav dropdowns
+topnav_dropdowns:
+- title: Topnav dropdowns
+  folders:
+    - title: Documentation
+      folderitems:
+        - title: Core
+          url: /core-overview.html
+        - title: Command line
+          url: /cli-overview.html
+        - title: IAM plugin
+          url: /iam-overview.html
+        - title: Node Lambda plugin
+          url: /node-lambda-overview.html
+        - title: API Gateway plugin
+          url: /api-gateway-overview.html
+    - title: Tutorials
+      folderitems:
+        - title: Planet express example
+          url: /planet-express.html

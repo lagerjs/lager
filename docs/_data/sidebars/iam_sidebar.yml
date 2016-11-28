@@ -1,0 +1,43 @@
+# This is your sidebar TOC. The sidebar code loops through sections here and provides the appropriate formatting.
+
+
+entries:
+- title: Sidebar
+  product: IAM plugin
+  version: 1.0
+  folders:
+
+  - title: Getting Started
+    output: web
+    folderitems:
+    - title: Overview
+      url: /iam-overview.html
+      output: web
+
+    - title: Managing policies
+      url: /iam-managing-policies.html
+      output: web
+
+    - title: Managing roles
+      url: /iam-managing-roles.html
+      output: web
+
+    - title: Customising the configuration
+      url: /iam-custom-config.html
+      output: web
+
+  - title: Integration with other plugins
+    output: web
+
+    folderitems:
+    - title: Overview
+      url: /iam-integration-overview.html
+      output: web
+
+    - title: With the node-lambda plugin
+      url: /iam-lambda.html
+      output: web
+
+    - title: With the api-gateway plugin
+      url: /iam-api-gateway.html
+      output: web

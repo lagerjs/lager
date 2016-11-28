@@ -1,0 +1,18 @@
+{% if page.sidebar == "core_sidebar" %}
+{% assign sidebar = site.data.sidebars.core_sidebar.entries %}
+
+{% elsif page.sidebar == "cli_sidebar" %}
+{% assign sidebar = site.data.sidebars.cli_sidebar.entries %}
+
+{% elsif page.sidebar == "iam_sidebar" %}
+{% assign sidebar = site.data.sidebars.iam_sidebar.entries %}
+
+{% elsif page.sidebar == "lambda_sidebar" %}
+{% assign sidebar = site.data.sidebars.lambda_sidebar.entries %}
+
+{% elsif page.sidebar == "api-gateway_sidebar" %}
+{% assign sidebar = site.data.sidebars.api-gateway_sidebar.entries %}
+
+{% else %}
+{% assign sidebar = site.data.sidebars.home_sidebar.entries %}
+{% endif %}

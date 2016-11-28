@@ -1,0 +1,25 @@
+# This is your sidebar TOC. The sidebar code loops through sections here and provides the appropriate formatting.
+
+entries:
+- title: Sidebar
+  levels: one
+  folders:
+
+  - title: Documentation
+    output: web
+    folderitems:
+    - title: Core
+      url: /core-overview.html
+      output: web
+    - title: Command line
+      url: /cli-overview.html
+      output: web
+    - title: IAM plugin
+      url: /iam-overview.html
+      output: web
+    - title: Node Lambda plugin
+      url: /node-lambda-overview.html
+      output: web
+    - title: API Gateway plugin
+      url: /api-gateway-overview.html
+      output: web
