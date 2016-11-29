@@ -14,7 +14,9 @@ company_name: Lager
 github_editme_path: lagerjs/lager/blob/master/docs/pages/
 # if you're using Github, provide the basepath to the branch you've created for reviews, following the sample here. if not, leave this value blank.
 
-disqus_shortname:
+repository: lagerjs/lager
+
+disqus_shortname: lager
 # if you're using disqus for comments, add the shortname here. if not, leave this value blank.
 
 host: 127.0.0.1

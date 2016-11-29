@@ -1,9 +1,9 @@
 ---
-title: "Mobile Pages"
+title: "IAM plugin pages"
+tagName: iam
 search: exclude
-tagName: mobile
-permalink: tag_mobile.html
-sidebar: mydoc_sidebar
+permalink: tag_iam.html
+sidebar: iam_sidebar
 folder: tags
 ---
 {% include taglogic.html %}

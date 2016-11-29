@@ -1,8 +1,8 @@
 ---
-title: "Getting started pages"
-tagName: getting_started
+title: "Lager events pages"
+tagName: events
 search: exclude
-permalink: tag_getting_started.html
+permalink: tag_events.html
 sidebar: home_sidebar
 folder: tags
 ---

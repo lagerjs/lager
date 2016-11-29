@@ -1,8 +1,8 @@
 ---
-title: "Getting started pages"
-tagName: getting_started
+title: "Configuration pages"
+tagName: configuration
 search: exclude
-permalink: tag_getting_started.html
+permalink: tag_configuration.html
 sidebar: home_sidebar
 folder: tags
 ---

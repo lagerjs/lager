@@ -1,8 +1,8 @@
 ---
-title: "Getting started pages"
-tagName: getting_started
+title: "Lager extensions pages"
+tagName: extensions
 search: exclude
-permalink: tag_getting_started.html
+permalink: tag_extensions.html
 sidebar: home_sidebar
 folder: tags
 ---

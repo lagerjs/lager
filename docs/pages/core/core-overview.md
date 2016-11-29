@@ -1,7 +1,6 @@
 ---
 title: An overview of Lager and its main plugins
 keywords: lager, core
-last_updated: July 3, 2016
 tags: [getting_started]
 summary: "An overview of Lager."
 sidebar: core_sidebar
