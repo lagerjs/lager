@@ -16,6 +16,7 @@ github_editme_path: lagerjs/lager/blob/master/docs/pages/
 
 repository: lagerjs/lager
 
+disqus: true
 disqus_shortname: lager
 # if you're using disqus for comments, add the shortname here. if not, leave this value blank.
 
