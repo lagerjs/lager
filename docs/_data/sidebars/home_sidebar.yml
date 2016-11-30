@@ -8,6 +8,9 @@ entries:
   - title: Documentation
     output: web
     folderitems:
+    - title: Home
+      url: /index.html
+      output: web
     - title: Core
       url: /core-overview.html
       output: web

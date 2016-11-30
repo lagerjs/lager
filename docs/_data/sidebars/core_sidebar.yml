@@ -4,7 +4,6 @@
 entries:
 - title: Sidebar
   product: Core
-  version: 1.0
   folders:
 
   - title: Getting Started

@@ -3,62 +3,54 @@
 
 entries:
 - title: Sidebar
-  product: IAM plugin
+  product: Node Lambda plugin
   folders:
 
   - title: Usage
     output: web
     folderitems:
     - title: Overview
-      url: /iam-overview.html
+      url: /node-lambda-overview.html
       output: web
 
     - title: Required IAM permissions
-      url: /iam-permissions.html
+      url: /node-lambda-permissions.html
       output: web
 
     - title: Command line
-      url: /iam-commands.html
+      url: /node-lambda-commands.html
       output: web
 
-    - title: Managing policies
-      url: /iam-policies.html
+    - title: Managing Lambdas
+      url: /node-lambda-lambdas.html
       output: web
 
-    - title: Managing roles
-      url: /iam-roles.html
+    - title: Managing modules
+      url: /node-lambda-modules.html
       output: web
 
     - title: Deploying in AWS
-      url: /iam-deploy.html
+      url: /node-lambda-deploy.html
       output: web
 
     - title: Custom configuration
-      url: /iam-config.html
+      url: /node-lambda-config.html
       output: web
 
   - title: Extending the plugin
     output: web
     folderitems:
     - title: Events
-      url: /iam-events.html
+      url: /node-lambda-events.html
       output: web
 
     - title: Lager extensions
-      url: /iam-extensions.html
+      url: /node-lambda-extensions.html
       output: web
 
   - title: Integration with other plugins
     output: web
     folderitems:
-    - title: Overview
-      url: /iam-integration-overview.html
-      output: web
-
-    - title: With the node-lambda plugin
-      url: /iam-node-lambda.html
-      output: web
-
     - title: With the api-gateway plugin
-      url: /iam-api-gateway.html
+      url: /node-lambda-api-gateway.html
       output: web
