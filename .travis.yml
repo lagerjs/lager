@@ -3,13 +3,20 @@ sudo: false
 cache:
   directories:
     - node_modules
-node_js:
-  - "6"
-  - "5"
-  - "4"
 install:
   - npm install
   - npm run lerna bootstrap
+# Matrix begin
+node_js:
+- "6"
+- "4"
+env:
+  - TEST_PKG=lager
+  - TEST_PKG=cli
+  - TEST_PKG=iam
+  - TEST_PKG=node-lambda
+  - TEST_PKG=api-gateway
+# Matrix end
 script:
-  - npm run test-ci
+  - cd packages/$TEST_PKG && npm run test-ci
   # - bithound check git@github.com:lagerjs/lager.git
