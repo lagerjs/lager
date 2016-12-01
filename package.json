@@ -3,6 +3,7 @@
     "lerna": "2.0.0-beta.30"
   },
   "scripts": {
+    "lerna": "lerna",
     "test": "lerna run test",
     "test-ci": "lerna run test-ci"
   }
