@@ -10,10 +10,6 @@
     "mdlint": "remark -qf . && echo \"  Markdown lint passed\n\"; exit 0",
     "lint": "eslint --ignore-path .gitignore **/*.js && remark -qf . && echo \"  JS lint and markdown lint passed\n\"; exit 0"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/lagerjs/iam.git"
-  },
   "keywords": [
     "Lager",
     "plugin",
@@ -22,11 +18,15 @@
     "policy"
   ],
   "author": "Alexis Hénaut",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lagerjs/lager.git"
+  },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/lagerjs/iam/issues"
+    "url": "https://github.com/lagerjs/lager/issues"
   },
-  "homepage": "https://github.com/lagerjs/iam#readme",
+  "homepage": "https://github.com/lagerjs/lager#readme",
   "dependencies": {
     "aws-sdk": "^2.4.3",
     "bluebird": "^3.4.6",

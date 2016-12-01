@@ -13,19 +13,20 @@
   "bin": {
     "lager": "src/bin/lager"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/lagerjs/cli.git"
-  },
   "keywords": [
     "lager",
     "cli"
   ],
   "author": "Alexis Hénaut",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lagerjs/lager.git"
+  },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/lagerjs/cli/issues"
+    "url": "https://github.com/lagerjs/lager/issues"
   },
+  "homepage": "https://github.com/lagerjs/lager#readme",
   "homepage": "https://github.com/lagerjs/cli#readme",
   "dependencies": {
     "bluebird": "^3.4.1",
