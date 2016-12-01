@@ -1,0 +1,7 @@
+test
+test-assets
+.bithoundrc
+.eslintrc
+.remarkrc
+.travis.yml
+codecov.yml

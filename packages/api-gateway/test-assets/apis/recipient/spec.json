@@ -1,0 +1,13 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Recipient",
+    "description": "Planet Express API for recipient application"
+  },
+  "schemes": [
+    "https"
+  ],
+  "host": "API_ID.execute-api.REGION.amazonaws.com",
+  "paths": {},
+  "definitions": {}
+}

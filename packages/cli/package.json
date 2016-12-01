@@ -1,0 +1,47 @@
+{
+  "name": "@lager/cli",
+  "version": "0.0.9",
+  "description": "The lager CLI",
+  "main": "index.js",
+  "scripts": {
+    "test": "NODE_ENV=test istanbul cover --include-all-sources=true ./node_modules/mocha/bin/_mocha -- --recursive && rm -rf ./coverage",
+    "test-ci": "NODE_ENV=test istanbul cover --include-all-sources=true ./node_modules/mocha/bin/_mocha --report lcovonly -- --recursive && codecov",
+    "eslint": "eslint --ignore-path .gitignore **/*.js && echo \"  JS lint passed\n\"; exit 0",
+    "mdlint": "remark -qf . && echo \"  Markdown lint passed\n\"; exit 0",
+    "lint": "eslint --ignore-path .gitignore **/*.js && remark -qf . && echo \"  JS lint and markdown lint passed\n\"; exit 0"
+  },
+  "bin": {
+    "lager": "src/bin/lager"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lagerjs/cli.git"
+  },
+  "keywords": [
+    "lager",
+    "cli"
+  ],
+  "author": "Alexis Hénaut",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lagerjs/cli/issues"
+  },
+  "homepage": "https://github.com/lagerjs/cli#readme",
+  "dependencies": {
+    "bluebird": "^3.4.1",
+    "comquirer": "0.0.5",
+    "lodash": "^4.13.1"
+  },
+  "devDependencies": {
+    "bithound": "^1.3.0",
+    "codecov": "^1.0.1",
+    "eslint": "^3.8.1",
+    "istanbul": "^0.4.4",
+    "mocha": "^3.1.2",
+    "remark-cli": "^2.0.0",
+    "remark-lint": "^5.1.0"
+  },
+  "directories": {
+    "test": "test"
+  }
+}

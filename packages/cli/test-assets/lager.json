@@ -1,0 +1,7 @@
+{
+  "name": "dev-app",
+  "plugins": [
+    "plugins/hello",
+    "plugins/world"
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "x-lager": {
+    "dependencies": [
+      "log"
+    ]
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

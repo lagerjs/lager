@@ -5,6 +5,3 @@ test-assets
 .remarkrc
 .travis.yml
 codecov.yml
-lager.log
-docs
-spec

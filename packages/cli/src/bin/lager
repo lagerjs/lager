@@ -1,0 +1,21 @@
+#!/usr/bin/env node
+'use strict';
+
+const icli = require('comquirer');
+
+// Add base commands
+require('../cli/new')(icli);
+require('../cli/disable-default')(icli);
+
+icli.getProgram().commandHelp = require('../commander-help-override');
+
+// Check if the user calls the command from a lager project
+require('../load-lager-project')(icli)
+.then(lager => {
+  icli.getProgram().parse(process.argv);
+
+  // If no arguments where provided, we call the help option
+  if (!process.argv.slice(2).length) {
+    icli.getProgram().outputHelp();
+  }
+});

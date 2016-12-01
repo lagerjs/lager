@@ -1,0 +1,34 @@
+{
+  "x-lager": {
+    "apis": [
+      "bo",
+      "recipient",
+      "sender"
+    ],
+    "lambda": "api-generic"
+  },
+  "summary": "View a delivery",
+  "consume": [
+    "application/json"
+  ],
+  "produce": [
+    "application/json"
+  ],
+  "responses": {
+    "200": {}
+  },
+  "x-amazon-apigateway-auth": {
+    "type": "none"
+  },
+  "x-amazon-apigateway-integration": {
+    "credentials": "PlanetExpressLambdaInvocation",
+    "requestTemplates": {
+      "application/json": null
+    },
+    "responses": {
+      "default": {
+        "statusCode": 200
+      }
+    }
+  }
+}
