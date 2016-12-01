@@ -1,5 +1,9 @@
 {
   "devDependencies": {
     "lerna": "2.0.0-beta.30"
+  },
+  "scripts": {
+    "test": "lerna run test",
+    "test-ci": "lerna run test-ci"
   }
 }
