@@ -1,0 +1,8 @@
+{
+  "name": "planet-express",
+  "plugins": [
+    "@lager/iam",
+    "@lager/api-gateway",
+    "@lager/node-lambda"
+  ]
+}

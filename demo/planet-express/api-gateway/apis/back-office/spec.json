@@ -1,0 +1,13 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Back Office",
+    "description": "Planet Express API for Back Office"
+  },
+  "schemes": [
+    "https"
+  ],
+  "host": "API_ID.execute-api.REGION.amazonaws.com",
+  "paths": {},
+  "definitions": {}
+}

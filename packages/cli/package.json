@@ -1,6 +1,6 @@
 {
   "name": "@lager/cli",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "The lager CLI",
   "main": "index.js",
   "scripts": {
@@ -26,7 +26,6 @@
   "bugs": {
     "url": "https://github.com/lagerjs/lager/issues"
   },
-  "homepage": "https://github.com/lagerjs/lager#readme",
   "homepage": "https://github.com/lagerjs/cli#readme",
   "dependencies": {
     "bluebird": "^3.4.1",

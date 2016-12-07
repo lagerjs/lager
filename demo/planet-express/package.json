@@ -1,0 +1,18 @@
+{
+  "name": "planet-express",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@lager/api-gateway": "0.0.8",
+    "@lager/iam": "0.0.8",
+    "@lager/lager": "0.0.27",
+    "@lager/node-lambda": "0.0.11"
+  }
+}

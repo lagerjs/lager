@@ -8,16 +8,14 @@ permalink: api-gateway-overview.html
 folder: api-gateway
 ---
 
-Prerequisites
----
+## Prerequisites
 
 To use the `@lager/api-gateway` plugin, you should have a minimal knowledge about [Amazon API Gateway](https://aws.amazon.com/api-gateway/)
 and the [Swagger v2.0](http://swagger.io/specification/) specification.
 
 `@lager/api-gateway` uses the API Gateway Import API feature.
 
-Installation
----
+## Installation
 
 In the root folder of a lager project:
 
@@ -38,8 +36,7 @@ Then enable the plugin in the `lager.json` config file:
 
 Once the plugin is installed and enabled, the `lager` command line will provide new sub-commands to manage and deploy APIs.
 
-Project anatomy
----
+## Project anatomy
 
 The content managed by `@lager/api-gateway` is located in an `api-gateway` directory in the root directory of the project.
 
@@ -108,7 +105,7 @@ in a Lager extension for Swagger.
   "x-lager": {
     "apis": [
       "back-office",
-      "third-party"
+      "mobile-app"
     ]
   }
   ... rest of the endpoint specification
@@ -117,55 +114,3 @@ in a Lager extension for Swagger.
 
 `@lager/api-gateway` uses the API Gateway Import API feature. Therefore, the configuration of AWS-specific authorization
 and API Gateway-specific API integrations is done with the [API Gateway extensions to Swagger](http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-swagger-extensions.html).
-
-Inject environment specific configuration
----
-
-When deploying APIs, we should be able to customise some parameters like ARN value.
-
-There are two main technics to realize that with `@lager/api-gateway`:
-
-*   writing the specification files as node modules
-*   writing a Lager plugin
-
-### Writing a specification file as a node module
-
-When it loads `spec.json` files, `@lager/api-gateway` use `require()`. Therefore, it is possible to rename `spec.json` as `spec.js` and export
-the specification as an object.
-
-Example:
-
-```javascript
-// in /endpoints/resource-a/PUT/spec.js
-
-// We load the arn of the role used to call the integration and the AWS account id from environment variables
-// This can be useful to deploy the API in different environments like "development" and "production"
-const role = process.env.MY_AUTHORIZATION_ROLE_ARN;
-const uri = "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:"
-          + process.env.AWS_ACCOUNT_ID
-          + ":function:my-lambda:v0/invocations";
-
-module.exports = {
-  "x-lager": {
-    "apis": [
-      "back-office"
-    ]
-  },
-  "consume": [
-    "application/json"
-  ],
-  "produce": [
-    "application/json"
-  ],
-  "x-amazon-apigateway-integration": {
-    "credentials": role,
-    "uri": uri
-    // ... rest of the integration configuration
-  }
-  // ... rest of the endpoint specification
-}
-```
-
-### Writting a Lager plugins
-
-@TODO: write this section

@@ -90,28 +90,39 @@ the `spec.json` file of the endpoint will look like this:
 ### Dynamically alter a specification
 
 When reading a specification file, `@lager/api-gateway` is using `require("api-gateway/endpoints/<resource-path>/<METHOD>/spec")`. So a `spec.json` file can be
-rewritten into a `spec.js` node module that exports the desired specification.
+rewritten into a `spec.js` node module that exports the desired specification as an object.
 
-As a dummy example, if we want to dynamically set the summary of an endpoint according to an environment variable, the `spec.js` file of the endpoint will
-look like this:
+For example, if we want to dynamically set some values according to environment variables, the `spec.js` file of the endpoint could look like this:
 
 ```javascript
-module.exports = `{
+// in /endpoints/delivery/PUT/spec.js
+
+// We load the arn of the role used to call the integration and the AWS account id from environment variables
+// This can be useful to deploy the API in different environments
+const role = process.env.AUTHORIZATION_ROLE_ARN;
+const uri = "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:"
+          + process.env.AWS_ACCOUNT_ID
+          + ":function:my-lambda:v0/invocations";
+
+module.exports = {
   "x-lager": {
     "apis": [
       "back-office"
     ]
   },
-  "summary": "${process.env.MY_DYNAMIC_SUMMARY}",
   "consume": [
     "application/json"
   ],
   "produce": [
     "application/json"
   ],
-  "responses": {
-    "200": {}
-  }`;
+  "x-amazon-apigateway-integration": {
+    "credentials": role,
+    "uri": uri
+    // ... rest of the integration configuration
+  }
+  // ... rest of the endpoint specification
+}
 ```
 
 Another method to dynamically alter a specification is to write a Lager plugin that listens for `@lager/api-gateway` events.

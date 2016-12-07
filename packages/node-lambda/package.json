@@ -1,6 +1,6 @@
 {
   "name": "@lager/node-lambda",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "A Lager plugin to manage AWS lambda functions and deploy them.",
   "main": "src/index.js",
   "scripts": {
