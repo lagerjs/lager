@@ -1,65 +1,9 @@
 Lager `api-gateway` plugin
 ===
 
-[![Build Status](https://travis-ci.org/lagerjs/api-gateway.svg)](https://travis-ci.org/lagerjs/api-gateway)
-[![bitHound Overall Score](https://www.bithound.io/github/lagerjs/api-gateway/badges/score.svg)](https://www.bithound.io/github/lagerjs/api-gateway)
-[![bitHound Dependencies](https://www.bithound.io/github/lagerjs/api-gateway/badges/dependencies.svg)](https://www.bithound.io/github/lagerjs/api-gateway/dev/dependencies/npm)
-[![bitHound Code](https://www.bithound.io/github/lagerjs/api-gateway/badges/code.svg)](https://www.bithound.io/github/lagerjs/api-gateway)
 [![codecov](https://codecov.io/gh/lagerjs/api-gateway/branch/dev/graph/badge.svg)](https://codecov.io/gh/lagerjs/api-gateway)
 
 A Lager plugin to define APIs with the OpenAPI Specification (fka Swagger Specification) and deploy them in AWS API Gateway.
-
-Prerequisites
----
-
-To use the `@lager/api-gateway` plugin, you should have a minimal knowledge about [Amazon API Gateway](https://aws.amazon.com/api-gateway/)
-and the [Swagger v2.0](http://swagger.io/specification/) specification.
-
-`@lager/api-gateway` uses the API Gateway Import API feature.
-
-Installation
----
-
-In the root folder of a lager project:
-
-```bash
-npm install -g @lager/api-gateway
-```
-
-Then enable the plugin in the `lager.json` config file:
-
-```json
-{
-  "name": "my-app",
-  "plugins": [
-    "@lager/api-gateway"
-  ]
-}
-```
-
-Once the plugin is installed and enabled in the project, the `lager` command line will provide new sub-commands to manage and deploy APIs.
-
-CLI usage
----
-
-The Lager CLI must be installed to use `@lager/api-gateway` subcommands. When called within a Lager project with the `@lager/api-gateway`
-plugin installed and activated, the `lager` command will be enriched with subcommands to work with `@lager/api-gateway`.
-
-```bash
-npm install -g @lager/cli
-
-# Inside a Lager project directory, list available subcommands.
-lager -h
-
-# It is possible to have a description of each subcommand. For example:
-lager create-api -h
-```
-
-The `create-api` and `create-endpoint` sub-commands help to create the structure of the project.
-
-The `inspect-api` and `inspect-endpoint` sub-commands help to check the configuration of APIs and endpoints.
-
-The `deploy-apis` sub-command allows to deploy one or more APIs in Amazon API Gateway.
 
 Project anatomy
 ---
