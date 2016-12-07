@@ -30,22 +30,23 @@ For example, an application that creates and track deliveries could provide thes
 The structure of the `endpoints` folder of this application should look like this:
 
 ```text
-└── endpoints
-    └── delivery
-        ├── spec.json          // The specification written in this file will apply
-        |                      // to all endpoints having a resource path that begins with /delivery
-        ├── POST
-        |   └── spec.json
-        └── {id}
-            ├── spec.json      // The specification written in this file will apply
-            |                  // to all endpoints having a resource path that begins with /delivery/{id}
-            ├── DELETE
-            |   └── spec.json  // The specification written in this file will apply
-            |                  // to the endpoint DELETE /delivery/{id}
-            ├── GET
+└── api-gateway
+    └── endpoints
+        └── delivery
+            ├── spec.json          // The specification written in this file will apply
+            |                      // to all endpoints having a resource path that begins with /delivery
+            ├── POST
             |   └── spec.json
-            └── PATCH
-                └── spec.json
+            └── {id}
+                ├── spec.json      // The specification written in this file will apply
+                |                  // to all endpoints having a resource path that begins with /delivery/{id}
+                ├── DELETE
+                |   └── spec.json  // The specification written in this file will apply
+                |                  // to the endpoint DELETE /delivery/{id}
+                ├── GET
+                |   └── spec.json
+                └── PATCH
+                    └── spec.json
 ```
 
 ## Specification of an endpoint
