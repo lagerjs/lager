@@ -20,7 +20,7 @@ and the [Swagger v2.0](http://swagger.io/specification/) specification.
 In the root folder of a lager project:
 
 ```bash
-npm install -g @lager/api-gateway
+npm install @lager/api-gateway
 ```
 
 Then enable the plugin in the `lager.json` config file:
