@@ -1,9 +1,9 @@
 ---
-title: Integration of @lager/iam in @lager/api-gateway
-keywords: lager, iam
-tags: [iam, api-gateway]
-summary: "The @lager/iam plugin allows to define simplify the configuration of the @lager/api-gateway plugin."
-sidebar: iam_sidebar
-permalink: iam-api-gateway.html
-folder: iam
+title: Integration of @lager/node-lambda in @lager/api-gateway
+keywords: lager, node-lambda
+tags: [node-lambda, api-gateway]
+summary: "Lambdas defined by @lager/node-lambda can be associated to endpoints defined by @lager/api-gateway."
+sidebar: node-lambda_sidebar
+permalink: node-lambda-api-gateway.html
+folder: node-lambda
 ---

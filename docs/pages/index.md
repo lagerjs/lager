@@ -7,7 +7,9 @@ permalink: index.html
 summary: Documentation under construction.
 ---
 
-AWS Lambda + API Gateway + OpenAPI specification === *Lager*
+<img align="right" alt="lager logo" src="https://raw.githubusercontent.com/lagerjs/lager/master/img/lager-logo2.png" />
+
+AWS Lambda + API Gateway + Swagger specification === *Lager*
 
 The **Lambda API Gateway Endpoints Router**
 
@@ -25,8 +27,7 @@ Each plugin installed in a project extends the capabilities of Lager and can add
 
 These plugins can interact with each other but can also be used independently.
 
-Installation
----
+## Installation
 
 **Prerequisite**: `node` (version 4 minimum) and `npm` must be installed.
 
@@ -43,24 +44,20 @@ We can check that the `lager` command line is correctly installed.
 lager -h
 ```
 
-![lager -h](https://raw.githubusercontent.com/lagerjs/lager/master/img/lager-h.png)
+<script type="text/javascript" src="https://asciinema.org/a/4vauduaavqjb0010i2jp1fenj.js" id="asciicast-4vauduaavqjb0010i2jp1fenj" async></script>
 
 The only available sub-command for now is `lager new`. We can see its options and arguments definition using `lager new -h`.
 
-Create a new project
----
+## Create a new project
 
 `lager new` is the command that creates new projects.
 If it is called without argument and/or option, it will provide a prompt to define the configuration of the project.
 
 ```bash
-# Using the command without option and argument, the user will be prompted to give information about the project configuration
+# Using the command without option and argument,
+# the user will be prompted to give information about the project configuration
 lager new
 ```
-
-![lager new prompt](https://raw.githubusercontent.com/lagerjs/lager/master/img/prompt.gif)
-
-### Installation result
 
 `lager new` will perform 3 operations:
 
@@ -68,12 +65,12 @@ lager new
 *   install the latest version of Lager and the project's plugins using `npm install --save`
 *   create a `lager.json` configuration file
 
-Once the project is created we can enter its folder and access to sub-commands added to the `lager` command by the project's plugins.
+Once the project is created we can enter its folder. Using `lager -h` we can see that new `lager` sub-commands are available. They are provided by plugins
+that have been installed in the project.
 
-![lager -h](https://raw.githubusercontent.com/lagerjs/lager/master/img/lager-h2.png)
+<script type="text/javascript" src="https://asciinema.org/a/eexixm2j0z6og6cbmnjnur9b8.js" id="asciicast-eexixm2j0z6og6cbmnjnur9b8" async></script>
 
-Working on a Lager project
----
+## Working on a Lager project
 
 This documentation is currently under construction. This section will contain links to the documentation of plugins and some use case examples.
 
