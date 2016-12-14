@@ -1,0 +1,8 @@
+*
+!gitignore
+!node_modules/@lager
+!lager.json
+!package.json
+!run.sh
+!env.list.example
+!README.md
