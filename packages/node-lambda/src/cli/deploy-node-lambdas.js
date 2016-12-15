@@ -33,20 +33,26 @@ module.exports = (icli) => {
           message: 'On which AWS region do you want to deploy?'
         }
       }, {
-        cmdSpec: '-s, --stage [stage]',
-        description: 'select the stage (aka Lambda alias) to apply',
-        type: 'input',
-        default: 'v0',
-        question: {
-          message: 'Which stage (aka Lambda alias) do you want to apply?'
-        }
-      }, {
         cmdSpec: '-e, --environment [environment]',
         description: 'select the environment',
         type: 'input',
         default: 'DEV',
         question: {
-          message: 'On which environment do you want to deploy?'
+          message: 'On which environment do you want to deploy?',
+          when: (answers, cmdParameterValues) => {
+            return cmdParameterValues['environment'] === undefined && plugin.lager.getConfig('environment') === undefined;
+          }
+        }
+      }, {
+        cmdSpec: '-s, --stage [stage]',
+        description: 'select the stage (aka Lambda alias) to apply',
+        type: 'input',
+        default: 'v0',
+        question: {
+          message: 'Which stage (aka Lambda alias) do you want to apply?',
+          when: (answers, cmdParameterValues) => {
+            return cmdParameterValues['stage'] === undefined && plugin.lager.getConfig('stage') === undefined;
+          }
         }
       }]
     };
@@ -107,6 +113,9 @@ module.exports = (icli) => {
    * @returns {Promise<null>} - The execution stops here
    */
   function executeCommand(parameters) {
+    if (parameters.environment === undefined) { parameters.environment = plugin.lager.getConfig('environment'); }
+    if (parameters.stage === undefined) { parameters.stage = plugin.lager.getConfig('stage'); }
+
     console.log();
     console.log('Deploying ' + icli.format.info(parameters.lambdaIdentifiers.length) + ' Lambdas:');
     console.log('  region: ' + icli.format.info(parameters.region));

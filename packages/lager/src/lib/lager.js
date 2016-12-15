@@ -31,6 +31,7 @@ if (['test', 'dev', 'development', 'debug'].indexOf(process.env.NODE_ENV) > -1) 
  * It is an Pebo event emitter
  */
 class Lager extends Pebo {
+
   /**
    * Construct the lager instance
    *
@@ -47,6 +48,7 @@ class Lager extends Pebo {
   constructor() {
     super();
     this.log = log;
+    this.config = [];
     this.plugins = [];
     this.extensions = [];
     this.registerPlugin(require('./core-plugin'));
@@ -66,10 +68,10 @@ class Lager extends Pebo {
    * @returns {Lager}
    */
   registerPlugin(plugin) {
-    if (plugin.setLagerInstance) {
-      plugin.setLagerInstance(this);
-    } else {
-      plugin.lager = this;
+    plugin.lager = this;
+    const pluginConfig = this.getConfig(plugin.name);
+    if (pluginConfig !== undefined) {
+      plugin.config = _.assign(plugin.config, pluginConfig);
     }
     this.plugins.push(plugin);
 
@@ -125,6 +127,9 @@ class Lager extends Pebo {
    * @return {Promise} - a promise that resolves when the initialisation is finished
    */
   init(config) {
+    // Set configuration from lager.json
+    this.config = config.config;
+
     config.plugins = config.plugins || [];
 
     try {
@@ -152,6 +157,31 @@ class Lager extends Pebo {
     }
 
     return Promise.resolve();
+  }
+
+  getConfig(key) {
+    if (key === undefined) {
+      return this.config;
+    }
+
+    // First check if the configuration exist in environment variables
+    const envVarName = 'LAGER_' + key.toUpperCase().replace('.', '_');
+    if (process.env[envVarName]) {
+      return process.env[envVarName];
+    }
+
+    // If the key has the form "my.config.key"
+    // We look for a value in this.config["my"]["config"]["key"]
+    const configParts = key.split('.');
+    let part = this.config[configParts.shift()];
+    while (configParts.length > 0) {
+      if (part === undefined) {
+        // If the nested structure does not exist, we return undefined immediately
+        return undefined;
+      }
+      part = part[configParts.shift()];
+    }
+    return part;
   }
 }
 

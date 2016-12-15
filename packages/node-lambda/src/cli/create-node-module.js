@@ -18,7 +18,6 @@ module.exports = (icli) => {
   // Build the lists of choices
   return getChoices()
   .then(choicesLists => {
-
     const config = {
       section: 'Node Lambda plugin',
       cmd: 'create-node-module',
@@ -29,17 +28,6 @@ module.exports = (icli) => {
         validate: input => { return /^[a-z0-9_-]+$/i.test(input); },
         question: {
           message: 'Choose a unique name for the module (alphanumeric caracters, "_" and "-" accepted)'
-        }
-      }, {
-        cmdSpec: '-l, --lambdas <lambda>',
-        description: 'select the Lambdas that must be configured to embed the module',
-        type: 'checkbox',
-        choices: choicesLists.lambdas,
-        question: {
-          message: 'Choose the Lambdas that must be configured to embed the module',
-          when(answers, cmdParameterValues) {
-            return !cmdParameterValues.lambdas && choicesLists.lambdas && choicesLists.lambdas.length > 0;
-          }
         }
       }, {
         cmdSpec: '-d, --dependencies <dependent-modules>',
@@ -70,12 +58,6 @@ module.exports = (icli) => {
     const choicesLists = {};
     return Promise.all([plugin.loadLambdas(), plugin.loadModules()])
     .spread((lambdas, modules) => {
-      choicesLists.lambdas = _.map(lambdas, lambda => {
-        return {
-          value: lambda.getIdentifier(),
-          name: icli.format.info(lambda.getIdentifier())
-        };
-      });
       choicesLists.dependencies = _.map(modules, p => {
         return {
           value: p.getName(),
@@ -92,10 +74,9 @@ module.exports = (icli) => {
    * @returns {Promise<null>} - The execution stops here
    */
   function executeCommand(parameters) {
-    const configFilePath = path.join(process.cwd(), 'node-lambda', 'modules', parameters.name);
+    const configFilePath = path.join(process.cwd(), plugin.config.modulesPath, parameters.name);
     return mkdirpAsync(configFilePath)
     .then(() => {
-      // @TODO update configuration of lambdas that embed the node-module
       // We create the package.json file
       const packageJson = {
         'x-lager': {
@@ -108,7 +89,10 @@ module.exports = (icli) => {
     })
     .then(() => {
       const msg = '\n  The node module ' + icli.format.info(parameters.name) + ' has been created\n\n'
-                + '  It is located in ' + icli.format.info(configFilePath) + '\n';
+                + '  It is located in ' + icli.format.info(configFilePath) + ' you can start to implement it there.\n\n'
+                + '  To import it in an existing Lambda, edit the file '
+                + icli.format.info(path.join(process.cwd(), plugin.config.modulesPath, '<lambda-identifier>', 'config.json'))
+                + ' and add ' + icli.format.info(parameters.name) + ' in the section ' + icli.format.info('modules') + '\n';
       console.log(msg);
     });
   }

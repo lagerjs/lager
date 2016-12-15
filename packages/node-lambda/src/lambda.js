@@ -85,7 +85,7 @@ Lambda.prototype.getNodeModules = function getNodeModules() {
 Lambda.prototype.deploy = function deploy(region, context) {
   const awsLambda = new AWS.Lambda({ region });
 
-  const functionName = context.environment + '-' + this.identifier;
+  const functionName = (context.environment ? context.environment + '-' : '') + this.identifier;
   this.config.params.FunctionName = functionName;
   const report = { name: functionName };
 

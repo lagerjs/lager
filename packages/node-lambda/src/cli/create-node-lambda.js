@@ -149,7 +149,7 @@ module.exports = (icli) => {
     if (!parameters.role && parameters.roleManually) {
       parameters.role = parameters.roleManually;
     }
-    const configFilePath = path.join(process.cwd(), plugin.name, 'lambdas', parameters.identifier);
+    const configFilePath = path.join(process.cwd(), plugin.config.lambdasPath, parameters.identifier);
     return mkdirpAsync(configFilePath)
     .then(() => {
       // We create the configuration file of the Lambda
@@ -160,7 +160,7 @@ module.exports = (icli) => {
           Role: parameters.role
         },
         includeEndpoints: parameters.template === 'api-endpoints',
-        modules: parameters.modules
+        modules: parameters.modules || []
       };
 
       // We save the configuration in a json file

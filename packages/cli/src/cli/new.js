@@ -119,7 +119,6 @@ module.exports = (icli) => {
         msg += '  You should now enter in the ' + icli.format.info(parameters.projectName) + ' folder to start working\n';
       }
       msg += '  Execute ' + icli.format.cmd('lager -h') + ' in the root folder of the project to see available commands\n';
-      msg += '  Execute ' + icli.format.cmd('npm init') + ' to complete the configuration of the project\'s ' + icli.format.info('package.json') + ' file\n';
       console.log(msg);
     });
   }

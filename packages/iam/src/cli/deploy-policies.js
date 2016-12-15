@@ -30,7 +30,10 @@ module.exports = (icli) => {
         type: 'input',
         default: 'DEV',
         question: {
-          message: 'Enter an environment identifier that will be used as a prefix'
+          message: 'Enter an environment identifier that will be used as a prefix',
+          when: (answers, cmdParameterValues) => {
+            return cmdParameterValues['environment'] === undefined && plugin.lager.getConfig('environment') === undefined;
+          }
         }
       }, {
         cmdSpec: '-s, --stage [stage]',
@@ -38,7 +41,10 @@ module.exports = (icli) => {
         type: 'input',
         default: 'v0',
         question: {
-          message: 'Enter a stage identifier that will be used as a suffix'
+          message: 'Enter a stage identifier that will be used as a suffix',
+          when: (answers, cmdParameterValues) => {
+            return cmdParameterValues['stage'] === undefined && plugin.lager.getConfig('stage') === undefined;
+          }
         }
       }]
     };
@@ -75,6 +81,8 @@ module.exports = (icli) => {
    * @returns {Promise<null>} - The execution stops here
    */
   function executeCommand(parameters) {
+    if (parameters.environment === undefined) { parameters.environment = plugin.lager.getConfig('environment'); }
+    if (parameters.stage === undefined) { parameters.stage = plugin.lager.getConfig('stage'); }
     const context = {
       stage: parameters.stage,
       environment: parameters.environment

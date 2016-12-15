@@ -4,5 +4,9 @@
     "@lager/iam",
     "@lager/api-gateway",
     "@lager/node-lambda"
-  ]
+  ],
+  "config": {
+    "environment": "",
+    "stage": "v0"
+  }
 }

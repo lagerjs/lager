@@ -92,6 +92,8 @@ function getConfig() {
     return config;
   }
 
+  config.config = config.config || {};
+
   // Load sub-configuration files
   config.configPath = config.configPath || './config';
   const configPath = path.join(process.cwd(), config.configPath);
@@ -106,7 +108,7 @@ function getConfig() {
     const parse = path.parse(file);
     // We load all .js and .json files in the configuration directory
     if (['.js', '.json'].indexOf(parse.ext)) {
-      config[parse.name] = require(path.join(configPath, file));
+      config.config[parse.name] = require(path.join(configPath, file));
     }
   });
 
