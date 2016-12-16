@@ -37,7 +37,7 @@
     "ncp": "^2.0.0"
   },
   "devDependencies": {
-    "@lager/lager": "0.0.24",
+    "@lager/lager": "^0.0.28",
     "bithound": "^1.3.0",
     "codacy-coverage": "^1.1.3",
     "codecov": "^1.0.1",

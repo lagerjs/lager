@@ -19,7 +19,7 @@ const path = require('path');
 const Promise = require('bluebird');
 const _ = require('lodash');
 const lager = require('@lager/lager');
-const nodeLambdaPlugin = testRequire('src/index');
+const iamPlugin = testRequire('src/index');
 
 Promise.config({
   longStackTraces: true
@@ -38,13 +38,13 @@ process.on('unhandledRejection', (reason, p) => {
  * @return Promise
  */
 before(function() {
-  _.assign(nodeLambdaPlugin.config, {
+  _.assign(iamPlugin.config, {
     policiesPath: 'test-assets' + path.sep + 'policies',
     rolesPath: 'test-assets' + path.sep + 'roles'
   });
-  assert.equal(nodeLambdaPlugin.lager, undefined);
-  lager.registerPlugin(nodeLambdaPlugin);
-  assert.equal(nodeLambdaPlugin.lager, lager);
+  assert.equal(iamPlugin.lager, undefined);
+  lager.registerPlugin(iamPlugin);
+  assert.equal(iamPlugin.lager, lager);
 });
 
 
