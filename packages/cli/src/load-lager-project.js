@@ -21,7 +21,7 @@ module.exports = function loadLagerProject(icli) {
     return lager.init(getConfig())
     .then(() => {
       // We fire the "registerCommands" event so plugins can add their own commands
-      return lager.fireConcurrently('registerCommands', icli);
+      return lager.fire('registerCommands', icli);
     })
     .then(() => {
       return lager;

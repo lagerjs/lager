@@ -1,0 +1,22 @@
+# This is your sidebar TOC. The sidebar code loops through sections here and provides the appropriate formatting.
+
+
+entries:
+- title: Sidebar
+  product: Core
+  folders:
+
+  - title: Lager core
+    output: web
+    folderitems:
+    - title: Overview
+      url: /core-overview.html
+      output: web
+
+    - title: Configuration to work with AWS
+      url: /core-aws-config.html
+      output: web
+
+    - title: Plugins definition
+      url: /core-plugins.html
+      output: web
