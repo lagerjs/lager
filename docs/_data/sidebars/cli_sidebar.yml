@@ -3,20 +3,12 @@
 
 entries:
 - title: Sidebar
-  product: Core
+  product: Command line
   folders:
 
-  - title: Lager core
+  - title: Command line
     output: web
     folderitems:
     - title: Overview
-      url: /core-overview.html
-      output: web
-
-    - title: Configuration to work with AWS
-      url: /core-aws-config.html
-      output: web
-
-    - title: Plugins definition
-      url: /core-plugins.html
+      url: /cli-overview.html
       output: web
