@@ -8,6 +8,9 @@ const AWS = require('aws-sdk');
 const archiver = require('archiver');
 const Promise = require('bluebird');
 const _ = require('lodash');
+const ncp = Promise.promisify(require('ncp'));
+const mkdirp = Promise.promisify(require('mkdirp'));
+const exec = Promise.promisify(require('child_process').exec, { multiArgs: true });
 
 const IntegrationDataInjector = require('./integration-data-injector');
 const plugin = require('./index');
@@ -49,6 +52,14 @@ Lambda.prototype.getIdentifier = function getIdentifier() {
  */
 Lambda.prototype.toString = function toString() {
   return 'Node Lambda ' + this.identifier;
+};
+
+/**
+ * Returns the lambda location on the file system
+ * @returns {string}
+ */
+Lambda.prototype.getFsPath = function getFsPath() {
+  return path.join(process.cwd(), plugin.config.lambdasPath, this.identifier, 'lambda.js');
 };
 
 /**
@@ -131,6 +142,47 @@ Lambda.prototype.deploy = function deploy(region, context) {
       report: report,
       integrationDataInjector: new IntegrationDataInjector(this, data)
     };
+  });
+};
+
+/**
+ * Create a zip package for a lambda and provide it's content in a buffer
+ * @returns {Promise<Buffer>}
+ */
+Lambda.prototype.installLocally = function install() {
+  return this.getNodeModules()
+  .then(nodeModules => {
+    // Retrieve the content to put in the "node_module" folder of the Lambda package
+    const modules = _.map(nodeModules, nodeModule => {
+      return {
+        name: nodeModule.getName(),
+        fsPath: nodeModule.getFsPath()
+      };
+    });
+    if (this.config.includeEndpoints) {
+      modules.push({
+        name: 'endpoints',
+        fsPath: path.join(plugin.lager.getPlugin('api-gateway').getPath(), 'endpoints')
+      });
+    }
+
+    // Add the node modules to the node_modules folder of the lambda
+    Promise.map(modules, nodeModule => {
+      const nodeModulePath = path.join(this.config.handlerPath, 'node_modules');
+      const modulePath = path.join(nodeModulePath, nodeModule.name);
+      return mkdirp(nodeModulePath)
+      .then(() => {
+        return ncp(nodeModule.fsPath, modulePath);
+      })
+      .then(() => {
+        // Install dependencies of the module
+        return exec('npm install --only=production', { cwd: modulePath });
+      })
+      .spread((stdOut, stdErr) => {
+        console.log(stdOut);
+        console.log(stdErr);
+      });
+    });
   });
 };
 

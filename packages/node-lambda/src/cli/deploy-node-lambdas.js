@@ -118,7 +118,7 @@ module.exports = (icli) => {
 
     console.log();
     console.log('Deploying ' + icli.format.info(parameters.lambdaIdentifiers.length) + ' Lambdas:');
-    console.log('  region: ' + icli.format.info(parameters.region));
+    console.log('  AWS region: ' + icli.format.info(parameters.region));
     console.log('  Lager environement (prefix for Lambdas names): ' + icli.format.info(parameters.environment));
     console.log('  Lager stage (aka Lambda alias): ' + icli.format.info(parameters.stage));
     console.log();
