@@ -39,7 +39,7 @@ module.exports = (icli) => {
           message: 'Choose the timeout (in seconds)'
         }
       }, {
-        cmdSpec: '-m, --memory <memory>>',
+        cmdSpec: '-m, --memory <memory>',
         description: 'select the memory (in MB)',
         type: 'list',
         choices: choicesLists.memory,
@@ -76,12 +76,12 @@ module.exports = (icli) => {
         }
       }, {
         cmdSpec: '--template <template>',
-        description: 'select an template to initialise the Lamba function (aka handler)',
+        description: 'select an template to initialise the Lambda function (aka handler)',
         type: 'list',
         choices: choicesLists.template,
         default: choicesLists.template[0],
         question: {
-          message: 'Select an template to initialise the Lamba function (aka handler)'
+          message: 'Select an template to initialise the Lambda function (aka handler)'
         }
       }]
     };
