@@ -11,49 +11,48 @@ const plugin = require('../index');
  */
 module.exports = (icli) => {
   // First, retrieve possible values for the endpoint-identifiers parameter
-  return getChoices()
-  .then(choicesLists => {
-    const config = {
-      section: 'IAM plugin',
-      cmd: 'deploy-roles',
-      description: 'deploy roles',
-      parameters: [{
-        cmdSpec: '[role-identifiers]',
-        type: 'checkbox',
-        choices: choicesLists.roleIdentifiers,
-        question: {
-          message: 'Which roles do you want to deploy?'
-        }
-      }, {
-        cmdSpec: '-e, --environment [environment]',
-        description: 'An environment identifier that will be used as a prefix',
-        type: 'input',
-        default: plugin.lager.getConfig('environment') || 'DEV',
-        question: {
-          message: 'Enter an environment identifier that will be used as a prefix',
-          when: (answers, cmdParameterValues) => {
-            return cmdParameterValues['environment'] === undefined && plugin.lager.getConfig('environment') === undefined;
-          }
-        }
-      }, {
-        cmdSpec: '-s, --stage [stage]',
-        description: 'A stage identifier that will be used as a suffix',
-        type: 'input',
-        default: plugin.lager.getConfig('stage') || 'v0',
-        question: {
-          message: 'Enter a stage identifier that will be used as a suffix',
-          when: (answers, cmdParameterValues) => {
-            return cmdParameterValues['stage'] === undefined && plugin.lager.getConfig('stage') === undefined;
-          }
-        }
-      }]
-    };
+  const choicesLists = getChoices();
 
-    /**
-     * Create the command and the promp
-     */
-    return icli.createSubCommand(config, executeCommand);
-  });
+  const config = {
+    section: 'IAM plugin',
+    cmd: 'deploy-roles',
+    description: 'deploy roles',
+    parameters: [{
+      cmdSpec: '[role-identifiers]',
+      type: 'checkbox',
+      choices: choicesLists.roleIdentifiers,
+      question: {
+        message: 'Which roles do you want to deploy?'
+      }
+    }, {
+      cmdSpec: '-e, --environment [environment]',
+      description: 'An environment identifier that will be used as a prefix',
+      type: 'input',
+      default: plugin.lager.getConfig('environment') || 'DEV',
+      question: {
+        message: 'Enter an environment identifier that will be used as a prefix',
+        when: (answers, cmdParameterValues) => {
+          return cmdParameterValues['environment'] === undefined && plugin.lager.getConfig('environment') === undefined;
+        }
+      }
+    }, {
+      cmdSpec: '-s, --stage [stage]',
+      description: 'A stage identifier that will be used as a suffix',
+      type: 'input',
+      default: plugin.lager.getConfig('stage') || 'v0',
+      question: {
+        message: 'Enter a stage identifier that will be used as a suffix',
+        when: (answers, cmdParameterValues) => {
+          return cmdParameterValues['stage'] === undefined && plugin.lager.getConfig('stage') === undefined;
+        }
+      }
+    }]
+  };
+
+  /**
+   * Create the command and the promp
+   */
+  return icli.createSubCommand(config, executeCommand);
 
   /**
    * Build the choices for "list" and "checkbox" parameters
@@ -61,18 +60,20 @@ module.exports = (icli) => {
    * @returns {Object} - collection of lists of choices for "list" and "checkbox" parameters
    */
   function getChoices() {
-    return plugin.loadRoles()
-    .then(roles => {
-      // Build the list of available roles for input verification and interactive selection
-      return Promise.resolve({
-        roleIdentifiers: _.map(roles, role => {
-          return {
-            value: role.name,
-            name: role.name + (role.description ? ' - ' + role.description : '')
-          };
-        })
-      });
-    });
+    return {
+      roleIdentifiers: () => {
+        return plugin.loadRoles()
+        .then(roles => {
+          // Build the list of available roles for input verification and interactive selection
+          return _.map(roles, role => {
+            return {
+              value: role.name,
+              name: role.name + (role.description ? ' - ' + role.description : '')
+            };
+          });
+        });
+      }
+    };
   }
 
   /**

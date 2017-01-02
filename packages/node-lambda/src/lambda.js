@@ -59,7 +59,27 @@ Lambda.prototype.toString = function toString() {
  * @returns {string}
  */
 Lambda.prototype.getFsPath = function getFsPath() {
-  return path.join(process.cwd(), plugin.config.lambdasPath, this.identifier, 'lambda.js');
+  return path.join(process.cwd(), plugin.config.lambdasPath, this.identifier);
+};
+
+/**
+ * Returns the list of event examples
+ * @returns {Array}
+ */
+Lambda.prototype.getEventExamples = function getEventExamples() {
+  const basePath = this.getFsPath();
+  return fs.readdirAsync(path.join(this.getFsPath(), 'events'))
+  .then(eventFiles => {
+    const events = {};
+    eventFiles.forEach(eventFile => {
+      const filePath = path.parse(basePath + path.sep + eventFile);
+      const parse = path.parse(filePath);
+      if (['.js', '.json'].indexOf(parse.ext) !== -1) {
+        events[parse.name] = require(filePath);
+      }
+    });
+    return Promise.resolve(events);
+  });
 };
 
 /**

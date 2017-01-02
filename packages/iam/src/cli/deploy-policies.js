@@ -11,49 +11,48 @@ const plugin = require('../index');
  */
 module.exports = (icli) => {
   // First, retrieve possible values for the endpoint-identifiers parameter
-  return getChoices()
-  .then(choicesLists => {
-    const config = {
-      section: 'IAM plugin',
-      cmd: 'deploy-policies',
-      description: 'deploy policies',
-      parameters: [{
-        cmdSpec: '[policy-identifiers]',
-        type: 'checkbox',
-        choices: choicesLists.policyIdentifiers,
-        question: {
-          message: 'Which policies do you want to deploy?'
-        }
-      }, {
-        cmdSpec: '-e, --environment [environment]',
-        description: 'An environment identifier that will be used as a prefix',
-        type: 'input',
-        default: 'DEV',
-        question: {
-          message: 'Enter an environment identifier that will be used as a prefix',
-          when: (answers, cmdParameterValues) => {
-            return cmdParameterValues['environment'] === undefined && plugin.lager.getConfig('environment') === undefined;
-          }
-        }
-      }, {
-        cmdSpec: '-s, --stage [stage]',
-        description: 'A stage identifier that will be used as a suffix',
-        type: 'input',
-        default: 'v0',
-        question: {
-          message: 'Enter a stage identifier that will be used as a suffix',
-          when: (answers, cmdParameterValues) => {
-            return cmdParameterValues['stage'] === undefined && plugin.lager.getConfig('stage') === undefined;
-          }
-        }
-      }]
-    };
+  const choicesLists = getChoices();
 
-    /**
-     * Create the command and the promp
-     */
-    return icli.createSubCommand(config, executeCommand);
-  });
+  const config = {
+    section: 'IAM plugin',
+    cmd: 'deploy-policies',
+    description: 'deploy policies',
+    parameters: [{
+      cmdSpec: '[policy-identifiers]',
+      type: 'checkbox',
+      choices: choicesLists.policyIdentifiers,
+      question: {
+        message: 'Which policies do you want to deploy?'
+      }
+    }, {
+      cmdSpec: '-e, --environment [environment]',
+      description: 'An environment identifier that will be used as a prefix',
+      type: 'input',
+      default: 'DEV',
+      question: {
+        message: 'Enter an environment identifier that will be used as a prefix',
+        when: (answers, cmdParameterValues) => {
+          return cmdParameterValues['environment'] === undefined && plugin.lager.getConfig('environment') === undefined;
+        }
+      }
+    }, {
+      cmdSpec: '-s, --stage [stage]',
+      description: 'A stage identifier that will be used as a suffix',
+      type: 'input',
+      default: 'v0',
+      question: {
+        message: 'Enter a stage identifier that will be used as a suffix',
+        when: (answers, cmdParameterValues) => {
+          return cmdParameterValues['stage'] === undefined && plugin.lager.getConfig('stage') === undefined;
+        }
+      }
+    }]
+  };
+
+  /**
+   * Create the command and the promp
+   */
+  return icli.createSubCommand(config, executeCommand);
 
   /**
    * Build the choices for "list" and "checkbox" parameters
@@ -61,18 +60,20 @@ module.exports = (icli) => {
    * @returns {Object} - collection of lists of choices for "list" and "checkbox" parameters
    */
   function getChoices() {
-    return plugin.loadPolicies()
-    .then(policies => {
-      // Build the list of available policies for input verification and interactive selection
-      return Promise.resolve({
-        policyIdentifiers: _.map(policies, policy => {
-          return {
-            value: policy.name,
-            name: policy.name + (policy.description ? ' - ' + policy.description : '')
-          };
-        })
-      });
-    });
+    return {
+      policyIdentifiers: () => {
+        return plugin.loadPolicies()
+        .then(policies => {
+          // Build the list of available policies for input verification and interactive selection
+          return _.map(policies, policy => {
+            return {
+              value: policy.name,
+              name: policy.name + (policy.description ? ' - ' + policy.description : '')
+            };
+          });
+        });
+      }
+    };
   }
 
   /**

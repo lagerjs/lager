@@ -8,123 +8,132 @@ const fs = Promise.promisifyAll(require('fs'));
 const mkdirpAsync = Promise.promisify(require('mkdirp'));
 const ncpAsync = Promise.promisify(require('ncp'));
 
+const plugin = require('../index');
+
 /**
  * This module exports a function that enrich the interactive command line and return a promise
  * @returns {Promise} - a promise that resolve when the operation is done
  */
 module.exports = (icli) => {
 
-  const plugin = require('..');
+  // Build the lists of choices
+  const choicesLists = getChoices();
 
-  // First, retrieve possible values for the api-identifiers parameter
-  return getChoices()
-  .then(choicesLists => {
-    const config = {
-      section: 'Api Gateway plugin',
-      cmd: 'create-endpoint',
-      description: 'create a new API endpoint',
-      parameters: [{
-        cmdSpec: '[resource-path]',
-        type: 'input',
-        question: {
-          message: 'What is the resource path?'
-        }
-      }, {
-        cmdSpec: '[http-method]',
-        type: 'list',
-        choices: choicesLists.httpMethod,
-        question: {
-          message: 'What is the HTTP method?'
-        }
-      }, {
-        cmdSpec: '-a, --apis <api-identifiers>',
-        description: 'The identifiers of APIs that expose the endpoint separated by ","',
-        type: 'checkbox',
-        choices: choicesLists.apis,
-        question: {
-          message: 'Which APIs should expose this endpoint?'
-        }
-      }, {
-        cmdSpec: '-s, --summary <endpoint summary>',
-        description: 'A short summary of what the operation does',
-        type: 'input',
-        question: {
-          message: 'Shortly, what does the operation do?'
-        }
-      }, {
-        cmdSpec: '-c, --consume <mime-types>',
-        description: 'A list of MIME types the operation can consume separated by ","',
-        type: 'checkbox',
-        choices: choicesLists.mimeType,
-        default: [choicesLists.mimeType[0]],
-        question: {
-          message: 'What are the MIME types that the operation can consume?'
-        }
-      }, {
-        cmdSpec: '-p, --produce <mime-types>',
-        description: 'A list of MIME types the operation can produce separated by ","',
-        type: 'checkbox',
-        choices: choicesLists.mimeType,
-        default: [choicesLists.mimeType[0]],
-        question: {
-          message: 'What are the MIME types that the operation can produce?'
-        }
-      }, {
-        cmdSpec: '--auth <authentication-type>',
-        description: 'The type of authentication used to call the endpoint (aws_iam|none)',
-        type: 'list',
-        choices: choicesLists.auth,
-        question: {
-          message: 'What is the authentication type used to access to this endpoint?'
-        }
-      }, {
-        cmdSpec: '-l --lambda <lambda-name|lambda-arn>',
-        description: 'The Lambda to integrate with the endpoint',
-        type: 'list',
-        choices: choicesLists.lambdas,
-        question: {
-          message: 'What is the Lambda to integrate with the endpoint?',
-          when(answers, cmdParameterValues) {
-            return !cmdParameterValues.lambda && choicesLists.lambdas && choicesLists.lambdas.length > 0;
-          }
-        }
-      }, {
-        cmdSpec: '--credentials <role-name|role-arn>',
-        description: 'The credentials used by API Gateway to call the integration',
-        type: 'list',
-        choices: choicesLists.credentials,
-        question: {
-          message: 'What are the credentials (aka the AWS role) used by API Gateway to call the integration?',
-          when(answers, cmdParameterValues) {
-            return !cmdParameterValues.credentials && choicesLists.credentials && choicesLists.credentials.length > 0;
-          }
-        }
-      }, {
-        type: 'input',
-        question: {
-          name: 'credentialsInput',
-          message: 'Enter the credentials (aka the AWS role) used by API Gateway to call the integration',
-          when(answers, cmdParameterValues) { return !answers.credentials && !cmdParameterValues.credentials; }
-        }
-      }],
-      commanderActionHook() {
-        // Uppercase the HTTP method
-        if (arguments[1]) { arguments[1] = arguments[1].toUpperCase(); }
-        return arguments;
-      },
-      inquirerPromptHook(answers, commandParameterValues) {
-        if (answers.credentialsInput) {
-          answers.credentials = answers.credentialsInput;
-        }
-        return Promise.resolve([answers, commandParameterValues]);
+  const config = {
+    section: 'Api Gateway plugin',
+    cmd: 'create-endpoint',
+    description: 'create a new API endpoint',
+    parameters: [{
+      cmdSpec: '[resource-path]',
+      type: 'input',
+      question: {
+        message: 'What is the resource path?'
       }
-    };
+    }, {
+      cmdSpec: '[http-method]',
+      type: 'list',
+      choices: choicesLists.httpMethod,
+      question: {
+        message: 'What is the HTTP method?'
+      }
+    }, {
+      cmdSpec: '-a, --apis <api-identifiers>',
+      description: 'The identifiers of APIs that expose the endpoint separated by ","',
+      type: 'checkbox',
+      choices: choicesLists.apis,
+      question: {
+        message: 'Which APIs should expose this endpoint?'
+      }
+    }, {
+      cmdSpec: '-s, --summary <endpoint summary>',
+      description: 'A short summary of what the operation does',
+      type: 'input',
+      question: {
+        message: 'Shortly, what does the operation do?'
+      }
+    }, {
+      cmdSpec: '-c, --consume <mime-types>',
+      description: 'A list of MIME types the operation can consume separated by ","',
+      type: 'checkbox',
+      choices: choicesLists.mimeType,
+      default: [choicesLists.mimeType[0]],
+      question: {
+        message: 'What are the MIME types that the operation can consume?'
+      }
+    }, {
+      cmdSpec: '-p, --produce <mime-types>',
+      description: 'A list of MIME types the operation can produce separated by ","',
+      type: 'checkbox',
+      choices: choicesLists.mimeType,
+      default: [choicesLists.mimeType[0]],
+      question: {
+        message: 'What are the MIME types that the operation can produce?'
+      }
+    }, {
+      cmdSpec: '--auth <authentication-type>',
+      description: 'The type of authentication used to call the endpoint (aws_iam|none)',
+      type: 'list',
+      choices: choicesLists.auth,
+      question: {
+        message: 'What is the authentication type used to access to this endpoint?'
+      }
+    }, {
+      cmdSpec: '-l --lambda <lambda-name|lambda-arn>',
+      description: 'The Lambda to integrate with the endpoint',
+      type: 'list',
+      choices: choicesLists.lambdas,
+      question: {
+        message: 'What is the Lambda to integrate with the endpoint?',
+        when(answers, cmdParameterValues) {
+          if (cmdParameterValues.lambda) {
+            return false;
+          }
+          return choicesLists.lambdas().then(lambdas => {
+            return lambdas.length > 0;
+          });
+        }
+      }
+    }, {
+      cmdSpec: '--credentials <role-name|role-arn>',
+      description: 'The credentials used by API Gateway to call the integration',
+      type: 'list',
+      choices: choicesLists.credentials,
+      question: {
+        message: 'What are the credentials (aka the AWS role) used by API Gateway to call the integration?',
+        when(answers, cmdParameterValues) {
+          if (cmdParameterValues.credentials) {
+            return false;
+          }
+          return choicesLists.credentials().then(credentials => {
+            return credentials.length > 0;
+          });
+        }
+      }
+    }, {
+      type: 'input',
+      question: {
+        name: 'credentialsInput',
+        message: 'Enter the credentials (aka the AWS role) used by API Gateway to call the integration',
+        when(answers, cmdParameterValues) { return !answers.credentials && !cmdParameterValues.credentials; }
+      }
+    }],
+    commanderActionHook() {
+      // Uppercase the HTTP method
+      if (arguments[1]) { arguments[1] = arguments[1].toUpperCase(); }
+      return arguments;
+    },
+    inquirerPromptHook(answers, commandParameterValues) {
+      if (answers.credentialsInput) {
+        answers.credentials = answers.credentialsInput;
+      }
+      return Promise.resolve([answers, commandParameterValues]);
+    }
+  };
 
-    /**
-     * Create the command and the promp
-     */
-    return icli.createSubCommand(config, executeCommand);
-  });
+  /**
+   * Create the command and the promp
+   */
+  return icli.createSubCommand(config, executeCommand);
 
   /**
    * Build the choices for "list" and "checkbox" parameters
@@ -141,37 +150,51 @@ module.exports = (icli) => {
       ]
     };
 
-    const rolesPromise = plugin.lager.call('iam:getRoles', []);
-    const lambdasPromise = plugin.lager.call('node-lambda:getLambdas', []);
-    return Promise.all([plugin.loadApis(), rolesPromise, lambdasPromise])
-    .spread((apis, roles, lambdas) => {
-      choicesLists.apis = _.map(apis, api => {
-        return {
-          value: api.getIdentifier(),
-          name: icli.format.info(api.getIdentifier()) + (api.spec.info && api.spec.info.title ? ' - ' + api.spec.info.title : '')
-        };
-      });
-      choicesLists.credentials = _.map(roles, role => {
-        return {
-          value: role.getName(),
-          name: icli.format.info(role.getName())
-        };
-      });
-      if (choicesLists.credentials.length > 0) {
-        choicesLists.credentials.push({
-          value: 'show-input-question',
-          name: 'The AWS role is not managed by Lager, let me write the value'
+    choicesLists.apis = () => {
+      return plugin.loadApis()
+      .then(apis => {
+        return _.map(apis, api => {
+          return {
+            value: api.getIdentifier(),
+            name: icli.format.info(api.getIdentifier()) + (api.spec.info && api.spec.info.title ? ' - ' + api.spec.info.title : '')
+          };
         });
-      }
-      choicesLists.lambdas = _.map(lambdas, lambda => {
-        // @TODO add possibilty to enter value manually or to not integrate with Lambda
-        return {
-          value: lambda.getIdentifier(),
-          name: icli.format.info(lambda.getIdentifier())
-        };
       });
-      return choicesLists;
-    });
+    };
+
+    choicesLists.credentials = () => {
+      return plugin.lager.call('iam:getRoles', [])
+      .then(roles => {
+        const credentials = _.map(roles, role => {
+          return {
+            value: role.getName(),
+            name: icli.format.info(role.getName())
+          };
+        });
+        if (credentials.length > 0) {
+          credentials.push({
+            value: 'show-input-question',
+            name: 'The AWS role is not managed by Lager, let me write the value'
+          });
+        }
+        return credentials;
+      });
+    };
+
+    choicesLists.lambdas = () => {
+      return plugin.lager.call('node-lambda:getLambdas', [])
+      .then(lambdas => {
+        return _.map(lambdas, lambda => {
+          // @TODO add possibilty to enter value manually
+          return {
+            value: lambda.getIdentifier(),
+            name: icli.format.info(lambda.getIdentifier())
+          };
+        });
+      });
+    };
+
+    return choicesLists;
   }
 
   /**

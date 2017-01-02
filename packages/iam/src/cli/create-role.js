@@ -16,47 +16,51 @@ const plugin = require('../index');
  */
 module.exports = (icli) => {
   // Build the lists of choices
-  return getChoices()
-  .then(choicesLists => {
-    const config = {
-      section: 'IAM plugin',
-      cmd: 'create-role',
-      description: 'create a new role',
-      parameters: [{
-        cmdSpec: '[identifier]',
-        type: 'input',
-        validate:  input => { return /^[a-z0-9_-]+$/i.test(input); },
-        question: {
-          message: 'Choose a unique identifier for the role (alphanumeric caracters, "_" and "-" accepted)'
-        }
-      }, {
-        cmdSpec: '-p, --preset-config <identifier>',
-        description: 'select a role configuration already defined by @lager/iam',
-        type: 'list',
-        choices: choicesLists.presetConfigs,
-        question: {
-          message: 'Choose a configuration already defined by @lager/iam',
-        }
-      }, {
-        cmdSpec: '--managed-policies <managed-policies>',
-        description: 'select the managed policies to apply to the role',
-        type: 'checkbox',
-        choices: choicesLists.managedPolicies,
-        question: {
-          message: 'Choose the managed policies to apply to the role',
-          when(answers, cmdParameterValues) {
-            return (answers.presetConfig === 'none' || cmdParameterValues.presetConfig == 'none')
-                   && choicesLists.managedPolicies && choicesLists.managedPolicies.length > 0;
-          }
-        }
-      }]
-    };
+  const choicesLists = getChoices();
 
-    /**
-     * Create the command and the promp
-     */
-    return icli.createSubCommand(config, executeCommand);
-  });
+  const config = {
+    section: 'IAM plugin',
+    cmd: 'create-role',
+    description: 'create a new role',
+    parameters: [{
+      cmdSpec: '[identifier]',
+      type: 'input',
+      validate:  input => { return /^[a-z0-9_-]+$/i.test(input); },
+      question: {
+        message: 'Choose a unique identifier for the role (alphanumeric caracters, "_" and "-" accepted)'
+      }
+    }, {
+      cmdSpec: '-p, --preset-config <identifier>',
+      description: 'select a role configuration already defined by @lager/iam',
+      type: 'list',
+      choices: choicesLists.presetConfigs,
+      question: {
+        message: 'Choose a configuration already defined by @lager/iam',
+      }
+    }, {
+      cmdSpec: '--managed-policies <managed-policies>',
+      description: 'select the managed policies to apply to the role',
+      type: 'checkbox',
+      choices: choicesLists.managedPolicies,
+      question: {
+        message: 'Choose the managed policies to apply to the role',
+        when(answers, cmdParameterValues) {
+          if (answers.presetConfig === 'none' || cmdParameterValues.presetConfig === 'none') {
+            return choicesLists.managedPolicies()
+            .then(managedPolicies => {
+              return managedPolicies.length > 0;
+            });
+          }
+          return false;
+        }
+      }
+    }]
+  };
+
+  /**
+   * Create the command and the promp
+   */
+  return icli.createSubCommand(config, executeCommand);
 
   /**
    * Build the choices for "list" and "checkbox" parameters
@@ -74,20 +78,22 @@ module.exports = (icli) => {
       }, {
         value: 'none',
         name: icli.format.info('none') + ' - Do not use a predefined template, you will configure it yourself'
-      }]
+      }],
+      managedPolicies: () => {
+        return plugin.loadPolicies()
+        .then(policies => {
+          // @TODO check if it would be interesting to try to load policies that exist in AWS but not in the lager project
+          // and add them in choicesLists.managedPolicies
+          return _.map(policies, p => {
+            return {
+              value: p.getName(),
+              name: icli.format.info(p.getName()) + ' - defined in this project'
+            };
+          });
+        });
+      }
     };
-    return plugin.loadPolicies()
-    .then(policies => {
-      // @TODO check if it would be interesting to try to load policies that exist in AWS but not in the lager project
-      // and add them in choicesLists.managedPolicies
-      choicesLists.managedPolicies = _.map(policies, p => {
-        return {
-          value: p.getName(),
-          name: icli.format.info(p.getName()) + ' - defined in this project'
-        };
-      });
-      return choicesLists;
-    });
+    return choicesLists;
   }
 
   /**

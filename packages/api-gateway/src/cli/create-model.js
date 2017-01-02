@@ -6,15 +6,13 @@ const path = require('path');
 const fs = Promise.promisifyAll(require('fs'));
 const mkdirpAsync = Promise.promisify(require('mkdirp'));
 
+const plugin = require('../index');
 
 /**
  * This module exports a function that enrich the interactive command line and return a promise
  * @returns {Promise} - a promise that resolve when the operation is done
  */
 module.exports = (icli) => {
-
-  const plugin = require('..');
-  const choicesLists = getChoices();
 
   const config = {
     section: 'Api Gateway plugin',
@@ -35,17 +33,6 @@ module.exports = (icli) => {
    */
   return icli.createSubCommand(config, executeCommand);
 
-
-  /**
-   * Build the choices for "list" and "checkbox" parameters
-   * @returns {Object} - collection of lists of choices for "list" and "checkbox" parameters
-   */
-  function getChoices() {
-    const choicesLists = {
-      types: ['integer', 'long', 'float', 'double', 'string', 'byte', 'binary', 'boolean', 'date', 'dateTime', 'password']
-    };
-    return choicesLists;
-  }
 
   /**
    * Create the new model

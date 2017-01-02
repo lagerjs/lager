@@ -10,7 +10,6 @@ const fs = require('fs');
 
 module.exports = function loadLagerProject(icli) {
   const projectRoot = getProjectRootDirectory();
-  console.log(projectRoot);
   if (projectRoot) {
     process.chdir(projectRoot);
     let lager;

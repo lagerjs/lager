@@ -7,6 +7,8 @@ const path = require('path');
 const fs = Promise.promisifyAll(require('fs'));
 const mkdirpAsync = Promise.promisify(require('mkdirp'));
 
+const plugin = require('../index');
+
 // @TODO propose to select endpoints
 // @TODO reactivate the possibility to select values not proposed in a list
 
@@ -16,76 +18,76 @@ const mkdirpAsync = Promise.promisify(require('mkdirp'));
  */
 module.exports = (icli) => {
 
-  const plugin = require('..');
+  // Build the list of available endpoints for interactive selection
+  const choicesLists = getChoices();
 
-  // First, retrieve possible values for the endpoint-identifiers parameter
-  return plugin.loadEndpoints()
-  .then(endpoints => {
-    // Build the list of available endpoints for interactive selection
-    const choicesLists = getChoices(endpoints);
+  const config = {
+    section: 'Api Gateway plugin',
+    cmd: 'create-api',
+    description: 'create a new API',
+    parameters: [{
+      cmdSpec: '[api-identifier]',
+      type: 'input',
+      validate: input => { return /^[a-z0-9_-]+$/i.test(input); },
+      question: {
+        message: 'Choose a unique identifier for the new API (alphanumeric caracters, "_" and "-" accepted)'
+      }
+    }, {
+      cmdSpec: '-t, --title <title>',
+      description: 'The title of the API',
+      type: 'input',
+      question: {
+        message: 'Choose a short title for the API'
+      }
+    }, {
+      cmdSpec: '-d, --desc <description>',
+      description: 'A description of the API',
+      type: 'input',
+      question: {
+        message: 'You can write a more complete description of the API here'
+      }
+    }, {
+      cmdSpec: '-e, --endpoints <endpoints>',
+      description: 'The endpoints exposed by the API separated by ","',
+      type: 'checkbox',
+      choices: choicesLists.endpoints,
+      question: {
+        message: 'Which endpoints does this API expose?',
+        when: (answers, cmdParameterValues) => {
+          return choicesLists.endpoints()
+          .then(endpoints => {
+            return endpoints.length > 0 && !cmdParameterValues['endpoints'];
+          });
+        }
+      }
+    }]
+  };
 
-    const config = {
-      section: 'Api Gateway plugin',
-      cmd: 'create-api',
-      description: 'create a new API',
-      parameters: [{
-        cmdSpec: '[api-identifier]',
-        type: 'input',
-        validate: input => { return /^[a-z0-9_-]+$/i.test(input); },
-        question: {
-          message: 'Choose a unique identifier for the new API (alphanumeric caracters, "_" and "-" accepted)'
-        }
-      }, {
-        cmdSpec: '-t, --title <title>',
-        description: 'The title of the API',
-        type: 'input',
-        question: {
-          message: 'Choose a short title for the API'
-        }
-      }, {
-        cmdSpec: '-d, --desc <description>',
-        description: 'A description of the API',
-        type: 'input',
-        question: {
-          message: 'You can write a more complete description of the API here'
-        }
-      }, {
-        cmdSpec: '-e, --endpoints <endpoints>',
-        description: 'The endpoints exposed by the API separated by ","',
-        type: 'checkbox',
-        choices: choicesLists.endpointsIdentifiers,
-        question: {
-          message: 'Which endpoints does this API expose?',
-          when: (answers, cmdParameterValues) => {
-            return choicesLists.endpointsIdentifiers.length > 0 && !cmdParameterValues['endpoints'];
-          }
-        }
-      }]
-    };
-
-    /**
-     * Create the command and the promp
-     */
-    return icli.createSubCommand(config, executeCommand);
-  });
+  /**
+   * Create the command and the promp
+   */
+  return icli.createSubCommand(config, executeCommand);
 
 
   /**
    * Build the choices for "list" and "checkbox" parameters
-   * @param {Array} endpoints - the list o available endpoint specifications
    * @returns {Object} - collection of lists of choices for "list" and "checkbox" parameters
    */
-  function getChoices(endpoints) {
-    const choicesLists = {
-      endpointsIdentifiers: _.map(endpoints, endpoint => {
-        const spec = endpoint.getSpec();
-        return {
-          value: endpoint.getMethod() + ' ' + endpoint.getResourcePath(),
-          name: endpoint.getMethod() + ' ' + endpoint.getResourcePath() + (spec.summary ? ' - ' + spec.summary : '')
-        };
-      })
+  function getChoices() {
+    return {
+      endpoints: () => {
+        return plugin.loadEndpoints()
+        .then(endpoints => {
+          return _.map(endpoints, endpoint => {
+            const spec = endpoint.getSpec();
+            return {
+              value: endpoint.getMethod() + ' ' + endpoint.getResourcePath(),
+              name: endpoint.getMethod() + ' ' + endpoint.getResourcePath() + (spec.summary ? ' - ' + spec.summary : '')
+            };
+          });
+        });
+      }
     };
-    return choicesLists;
   }
 
   /**

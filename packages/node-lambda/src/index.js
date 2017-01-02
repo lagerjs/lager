@@ -59,7 +59,7 @@ function loadLambda(lambdaConfigPath, identifier) {
     // Because we use require() to get the config, it could either be a JSON file
     // or the content exported by a node module
     // But because require() caches the content it loads, we clone the result to avoid bugs
-    // if the function is called twice
+    // if the function is called twice.
     const lambdaConfig = _.cloneDeep(require(lambdaConfigPath));
 
     // If the handler path is not specified, we consider it is the same that the config path
@@ -135,44 +135,6 @@ function loadNodeModule(packageJsonPath, name) {
   })
   .spread(nodePackage => {
     return Promise.resolve(nodePackage);
-  });
-}
-
-/**
- * Deploy a list of Lambdas
- * @param {Array} lambdaIdentifiers - List of Lambdas identifiers
- * @param {string} region - AWS region where we want to deploy the Lambdas
- * @param {Object} context - an object containing the environment and the alias/stage to apply to the Lambdas
- * @return {Promise<[Api]>} - a promise of a list of published Lambdas IndegrationDataInjectors
- */
-function deploy(lambdaIdentifiers, region, context) {
-  return loadLambdas()
-  .then(lambdas => {
-    // If lambdaIdentifier is empty, we deploy all lambdas
-    if (lambdaIdentifiers) {
-      lambdas = _.filter(lambdas, lambda => { return lambdaIdentifiers.indexOf(lambda.getIdentifier()) !== -1; });
-    }
-    return Promise.map(lambdas, (lambda) => {
-      return lambda.deploy(region, context);
-    });
-  })
-  .then(results => {
-    const t = new Table();
-    _.forEach(results, result => {
-      t.cell('Name', result.report.name);
-      t.cell('Operation', result.report.operation);
-      t.cell('Version', result.report.publishedVersion);
-      t.cell('Alias', result.report.aliasExisted ? 'Updated' : 'Created');
-      t.cell('ARN', result.report.aliasArn);
-      t.cell('Zip build time', formatHrTime(result.report.packageBuildTime));
-      t.cell('Deploy time', formatHrTime(result.report.deployTime));
-      t.newRow();
-    });
-    console.log();
-    console.log('Lambda functions deployed');
-    console.log();
-    console.log(t.toString());
-    return results;
   });
 }
 

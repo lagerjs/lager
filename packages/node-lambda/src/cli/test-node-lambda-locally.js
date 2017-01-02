@@ -9,46 +9,46 @@ const plugin = require('../index');
  */
 module.exports = (icli) => {
 
-  // Build the list of available APIs andAWS regions for input verification and interactive selection
-  return getChoices()
-  .then(choicesLists => {
-    const config = {
-      section: 'Node Lambda plugin',
-      cmd: 'test-node-lambda',
-      description: 'execute a lambda locally',
-      parameters: [{
-        cmdSpec: '[lambda-identifier]',
-        type: 'list',
-        choices: choicesLists.lambdaIdentifiers,
-        question: {
-          message: 'Which Lambda do you want to execute locally?'
-        }
-      }]
-    };
+  // Build the lists of choices
+  const choicesLists = getChoices();
 
-    /**
-     * Create the command and the prompt
-     */
-    return icli.createSubCommand(config, executeCommand);
-  });
+  const config = {
+    section: 'Node Lambda plugin',
+    cmd: 'test-node-lambda',
+    description: 'execute a lambda locally',
+    parameters: [{
+      cmdSpec: '[lambda-identifier]',
+      type: 'list',
+      choices: choicesLists.lambdaIdentifiers,
+      question: {
+        message: 'Which Lambda do you want to execute locally?'
+      }
+    }]
+  };
+
+  /**
+   * Create the command and the prompt
+   */
+  return icli.createSubCommand(config, executeCommand);
 
   /**
    * Build the choices for "list" and "checkbox" parameters
    * @returns {Object} - collection of lists of choices for "list" and "checkbox" parameters
    */
   function getChoices() {
-    // First, retrieve possible values for the api-identifiers parameter
-    return plugin.loadLambdas()
-    .then(lambdas => {
-      return {
-        lambdaIdentifiers: _.map(lambdas, lambda => {
-          return {
-            value: lambda.getIdentifier(),
-            name: icli.format.info(lambda.getIdentifier())
-          };
-        })
-      };
-    });
+    return {
+      lambdaIdentifiers: () => {
+        return plugin.loadLambdas()
+        .then(lambdas => {
+          return _.map(lambdas, lambda => {
+            return {
+              value: lambda.getIdentifier(),
+              name: icli.format.info(lambda.getIdentifier())
+            };
+          });
+        });
+      }
+    };
   }
 
   /**

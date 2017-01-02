@@ -16,38 +16,42 @@ const plugin = require('../index');
 module.exports = (icli) => {
 
   // Build the lists of choices
-  return getChoices()
-  .then(choicesLists => {
-    const config = {
-      section: 'Node Lambda plugin',
-      cmd: 'create-node-module',
-      description: 'create a node module that can be embed in Lambda',
-      parameters: [{
-        cmdSpec: '[name]',
-        type: 'input',
-        validate: input => { return /^[a-z0-9_-]+$/i.test(input); },
-        question: {
-          message: 'Choose a unique name for the module (alphanumeric caracters, "_" and "-" accepted)'
-        }
-      }, {
-        cmdSpec: '-d, --dependencies <dependent-modules>',
-        description: 'select the node modules that are dependencies of this new one',
-        type: 'checkbox',
-        choices: choicesLists.dependencies,
-        question: {
-          message: 'Choose the node modules that are dependencies of this new one',
-          when(answers, cmdParameterValues) {
-            return !cmdParameterValues.dependencies && choicesLists.dependencies && choicesLists.dependencies.length > 0;
-          }
-        }
-      }]
-    };
+  const choicesLists = getChoices();
 
-    /**
-     * Create the command and the promp
-     */
-    return icli.createSubCommand(config, executeCommand);
-  });
+  const config = {
+    section: 'Node Lambda plugin',
+    cmd: 'create-node-module',
+    description: 'create a node module that can be embed in Lambda',
+    parameters: [{
+      cmdSpec: '[name]',
+      type: 'input',
+      validate: input => { return /^[a-z0-9_-]+$/i.test(input); },
+      question: {
+        message: 'Choose a unique name for the module (alphanumeric caracters, "_" and "-" accepted)'
+      }
+    }, {
+      cmdSpec: '-d, --dependencies <dependent-modules>',
+      description: 'select the node modules that are dependencies of this new one',
+      type: 'checkbox',
+      choices: choicesLists.dependencies,
+      question: {
+        message: 'Choose the node modules that are dependencies of this new one',
+        when(answers, cmdParameterValues) {
+          if (cmdParameterValues.dependencies) {
+            return false;
+          }
+          return choicesLists.dependencies().then(modules => {
+            return modules.length > 0;
+          });
+        }
+      }
+    }]
+  };
+
+  /**
+   * Create the command and the promp
+   */
+  return icli.createSubCommand(config, executeCommand);
 
   /**
    * Build the choices for "list" and "checkbox" parameters
@@ -55,17 +59,19 @@ module.exports = (icli) => {
    * @returns {Object} - collection of lists of choices for "list" and "checkbox" parameters
    */
   function getChoices() {
-    const choicesLists = {};
-    return Promise.all([plugin.loadLambdas(), plugin.loadModules()])
-    .spread((lambdas, modules) => {
-      choicesLists.dependencies = _.map(modules, p => {
-        return {
-          value: p.getName(),
-          name: icli.format.info(p.getName())
-        };
-      });
-      return choicesLists;
-    });
+    return {
+      dependencies: () => {
+        return plugin.loadModules()
+        .then(modules => {
+          return _.map(modules, m => {
+            return {
+              value: m.getName(),
+              name: icli.format.info(m.getName())
+            };
+          });
+        });
+      }
+    };
   }
 
   /**

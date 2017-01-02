@@ -17,80 +17,83 @@ const plugin = require('../index');
 module.exports = (icli) => {
 
   // Build the lists of choices
-  return getChoices()
-  .then(choicesLists => {
+  const choicesLists = getChoices();
 
-    const config = {
-      section: 'Node Lambda plugin',
-      cmd: 'create-node-lambda',
-      description: 'create a new lambda',
-      parameters: [{
-        cmdSpec: '[identifier]',
-        type: 'input',
-        validate: input => { return /^[a-z0-9_-]+$/i.test(input); },
-        question: {
-          message: 'Choose a unique identifier for the Lambda (alphanumeric caracters, "_" and "-" accepted)'
-        }
-      }, {
-        cmdSpec: '-t, --timeout <timeout>',
-        description: 'select the timeout (in seconds)',
-        type: 'integer',
-        question: {
-          message: 'Choose the timeout (in seconds)'
-        }
-      }, {
-        cmdSpec: '-m, --memory <memory>',
-        description: 'select the memory (in MB)',
-        type: 'list',
-        choices: choicesLists.memory,
-        question: {
-          message: 'Choose the memory'
-        }
-      }, {
-        cmdSpec: '--modules <modules>',
-        description: 'select the modules that must be included in the Lambda',
-        type: 'checkbox',
-        choices: choicesLists.modules,
-        question: {
-          message: 'Choose the node packages that must be included in the Lambda',
-          when(answers, cmdParameterValues) {
-            return !cmdParameterValues.modules && choicesLists.modules && choicesLists.modules.length > 0;
+  const config = {
+    section: 'Node Lambda plugin',
+    cmd: 'create-node-lambda',
+    description: 'create a new lambda',
+    parameters: [{
+      cmdSpec: '[identifier]',
+      type: 'input',
+      validate: input => { return /^[a-z0-9_-]+$/i.test(input); },
+      question: {
+        message: 'Choose a unique identifier for the Lambda (alphanumeric caracters, "_" and "-" accepted)'
+      }
+    }, {
+      cmdSpec: '-t, --timeout <timeout>',
+      description: 'select the timeout (in seconds)',
+      type: 'integer',
+      question: {
+        message: 'Choose the timeout (in seconds)'
+      }
+    }, {
+      cmdSpec: '-m, --memory <memory>',
+      description: 'select the memory (in MB)',
+      type: 'list',
+      choices: choicesLists.memory,
+      question: {
+        message: 'Choose the memory'
+      }
+    }, {
+      cmdSpec: '--modules <modules>',
+      description: 'select the modules that must be included in the Lambda',
+      type: 'checkbox',
+      choices: choicesLists.modules,
+      question: {
+        message: 'Choose the node packages that must be included in the Lambda',
+        when(answers, cmdParameterValues) {
+          if (cmdParameterValues.modules) {
+            return false;
           }
+          return choicesLists.modules.then(modules => {
+            return modules.length > 0;
+          });
         }
-      }, {
-        cmdSpec: '-r, --role <role>',
-        description: 'select the execution role',
-        type: 'list',
-        choices: choicesLists.roles,
-        question: {
-          message: 'Choose the execution role'
+      }
+    }, {
+      cmdSpec: '-r, --role <role>',
+      description: 'select the execution role',
+      type: 'list',
+      choices: choicesLists.roles,
+      question: {
+        message: 'Choose the execution role'
+      }
+    }, {
+      type: 'input',
+      question: {
+        name: 'roleManually',
+        message: 'Enter a valid IAM role that will be used to execute the Lambda function',
+        when(answers, cmdParameterValues) {
+          return !answers.role && !cmdParameterValues.role;
         }
-      }, {
-        type: 'input',
-        question: {
-          name: 'roleManually',
-          message: 'Enter a valid IAM role that will be used to execute the Lambda function',
-          when(answers, cmdParameterValues) {
-            return !answers.role && !cmdParameterValues.role;
-          }
-        }
-      }, {
-        cmdSpec: '--template <template>',
-        description: 'select an template to initialise the Lambda function (aka handler)',
-        type: 'list',
-        choices: choicesLists.template,
-        default: choicesLists.template[0],
-        question: {
-          message: 'Select an template to initialise the Lambda function (aka handler)'
-        }
-      }]
-    };
+      }
+    }, {
+      cmdSpec: '--template <template>',
+      description: 'select an template to initialise the Lambda function (aka handler)',
+      type: 'list',
+      choices: choicesLists.template,
+      default: choicesLists.template[0],
+      question: {
+        message: 'Select an template to initialise the Lambda function (aka handler)'
+      }
+    }]
+  };
 
-    /**
-     * Create the command and the promp
-     */
-    return icli.createSubCommand(config, executeCommand);
-  });
+  /**
+   * Create the command and the promp
+   */
+  return icli.createSubCommand(config, executeCommand);
 
   /**
    * Build the choices for "list" and "checkbox" parameters
@@ -102,7 +105,7 @@ module.exports = (icli) => {
     for (let i = 128; i <= 1536; i += 64) {
       memoryValues.push({ value: i.toString(), name: _.padStart(i, 4) + ' MB' });
     }
-    const choicesLists = {
+    return {
       memory: memoryValues,
       template: [{
         value: 'none',
@@ -110,34 +113,35 @@ module.exports = (icli) => {
       }, {
         value: 'api-endpoints',
         name: icli.format.info('api-endpoints') + ' - With this template, the Lambda will execute endpoints defined by the api-gateway plugin'
-      }]
+      }],
+      modules: () => {
+        return plugin.loadModules()
+        .then(modules => {
+          return _.map(modules, m => {
+            return {
+              value: m.getName(),
+              name: icli.format.info(m.getName())
+            };
+          });
+        });
+      },
+      roles: () => {
+        return plugin.lager.call('iam:getRoles', [])
+        .then(roles => {
+          roles = _.map(roles, r => {
+            return {
+              value: r.getName(),
+              name: icli.format.info(r.getName()) + ' - ' + (r.getDescription() || 'No description')
+            };
+          });
+          roles.push({
+            value: '',
+            name: 'Enter value manually'
+          });
+          return roles;
+        });
+      }
     };
-    return plugin.loadModules()
-    .then(modules => {
-      choicesLists.modules = _.map(modules, m => {
-        return {
-          value: m.getName(),
-          name: icli.format.info(m.getName())
-        };
-      });
-      return choicesLists;
-    })
-    .then(() => {
-      return plugin.lager.call('iam:getRoles', []);
-    })
-    .then(roles => {
-      choicesLists.roles = _.map(roles, r => {
-        return {
-          value: r.getName(),
-          name: icli.format.info(r.getName()) + ' - ' + (r.getDescription() || 'No description')
-        };
-      });
-      choicesLists.roles.push({
-        value: '',
-        name: 'Enter value manually'
-      });
-      return choicesLists;
-    });
   }
 
   /**

@@ -9,59 +9,59 @@ const plugin = require('../index');
  */
 module.exports = (icli) => {
 
-  // Build the list of available APIs andAWS regions for input verification and interactive selection
-  return getChoices()
-  .then(choicesLists => {
-    const config = {
-      section: 'Node Lambda plugin',
-      cmd: 'deploy-node-lambdas',
-      description: 'deploy lambdas',
-      parameters: [{
-        cmdSpec: '[lambda-identifiers...]',
-        type: 'checkbox',
-        choices: choicesLists.lambdaIdentifiers,
-        question: {
-          message: 'Which Lambdas do you want to deploy?'
-        }
-      }, {
-        cmdSpec: '-r, --region [region]',
-        description: 'select the AWS region',
-        type: 'list',
-        choices: choicesLists.region,
-        validationMsgLabel: 'AWS region',
-        question: {
-          message: 'On which AWS region do you want to deploy?'
-        }
-      }, {
-        cmdSpec: '-e, --environment [environment]',
-        description: 'select the environment',
-        type: 'input',
-        default: 'DEV',
-        question: {
-          message: 'On which environment do you want to deploy?',
-          when: (answers, cmdParameterValues) => {
-            return cmdParameterValues['environment'] === undefined && plugin.lager.getConfig('environment') === undefined;
-          }
-        }
-      }, {
-        cmdSpec: '-s, --stage [stage]',
-        description: 'select the stage (aka Lambda alias) to apply',
-        type: 'input',
-        default: 'v0',
-        question: {
-          message: 'Which stage (aka Lambda alias) do you want to apply?',
-          when: (answers, cmdParameterValues) => {
-            return cmdParameterValues['stage'] === undefined && plugin.lager.getConfig('stage') === undefined;
-          }
-        }
-      }]
-    };
+  // Build the lists of choices
+  const choicesLists = getChoices();
 
-    /**
-     * Create the command and the promp
-     */
-    return icli.createSubCommand(config, executeCommand);
-  });
+  const config = {
+    section: 'Node Lambda plugin',
+    cmd: 'deploy-node-lambdas',
+    description: 'deploy lambdas',
+    parameters: [{
+      cmdSpec: '[lambda-identifiers...]',
+      type: 'checkbox',
+      choices: choicesLists.lambdaIdentifiers,
+      question: {
+        message: 'Which Lambdas do you want to deploy?'
+      }
+    }, {
+      cmdSpec: '-r, --region [region]',
+      description: 'select the AWS region',
+      type: 'list',
+      choices: choicesLists.region,
+      validationMsgLabel: 'AWS region',
+      question: {
+        message: 'On which AWS region do you want to deploy?'
+      }
+    }, {
+      cmdSpec: '-e, --environment [environment]',
+      description: 'select the environment',
+      type: 'input',
+      default: 'DEV',
+      question: {
+        message: 'On which environment do you want to deploy?',
+        when: (answers, cmdParameterValues) => {
+          return cmdParameterValues['environment'] === undefined && plugin.lager.getConfig('environment') === undefined;
+        }
+      }
+    }, {
+      cmdSpec: '-s, --stage [stage]',
+      description: 'select the stage (aka Lambda alias) to apply',
+      type: 'input',
+      default: 'v0',
+      question: {
+        message: 'Which stage (aka Lambda alias) do you want to apply?',
+        when: (answers, cmdParameterValues) => {
+          return cmdParameterValues['stage'] === undefined && plugin.lager.getConfig('stage') === undefined;
+        }
+      }
+    }]
+  };
+
+  /**
+   * Create the command and the promp
+   */
+  return icli.createSubCommand(config, executeCommand);
+
 
   /**
    * Build the choices for "list" and "checkbox" parameters
@@ -69,16 +69,20 @@ module.exports = (icli) => {
    */
   function getChoices() {
     // First, retrieve possible values for the api-identifiers parameter
-    return plugin.loadLambdas()
-    .then(lambdas => {
-      return {
-        lambdaIdentifiers: _.map(lambdas, lambda => {
-          return {
-            value: lambda.getIdentifier(),
-            name: icli.format.info(lambda.getIdentifier())
-          };
-        }),
-        region: [{
+    return {
+      lambdaIdentifiers: () => {
+        return plugin.loadLambdas()
+        .then(lambdas => {
+          return _.map(lambdas, lambda => {
+            return {
+              value: lambda.getIdentifier(),
+              name: icli.format.info(lambda.getIdentifier())
+            };
+          });
+        });
+      },
+      region: [
+        {
           value: 'us-east-1',
           name: icli.format.info('us-east-1') + '      US East (N. Virginia)',
           short: 'us-east-1 - US East (N. Virginia)'
@@ -102,9 +106,9 @@ module.exports = (icli) => {
           value: 'ap-southeast-1',
           name: icli.format.info('ap-southeast-2') + ' Asia Pacific (Sydney)',
           short: 'ap-southeast-2 - Asia Pacific (Sydney)'
-        }]
-      };
-    });
+        }
+      ]
+    };
   }
 
   /**
