@@ -51,7 +51,6 @@ class Lager extends Pebo {
     this.config = [];
     this.plugins = [];
     this.extensions = [];
-    this.registerPlugin(require('./core-plugin'));
     const originalFire = this.fire;
 
     // Overide Pebo.fire() to log calls

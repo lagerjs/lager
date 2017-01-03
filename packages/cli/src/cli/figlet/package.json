@@ -1,0 +1,6 @@
+{
+    "name": "figlet",
+    "license": "MIT",
+    "main": "./lib/node-figlet.js",
+    "dependencies": {}
+}

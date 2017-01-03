@@ -3,7 +3,7 @@
 
 const _ = require('lodash');
 const Promise = require('bluebird');
-const figlet = Promise.promisify(require('figlet'));
+const figlet = Promise.promisify(require('./figlet'));
 figlet.fonts = Promise.promisify(figlet.fonts);
 
 const cheers = {
@@ -52,7 +52,7 @@ const cheers = {
   'romanian2': 'Sanatate',
   'russian': 'Budem zdorovi',
   'russian2': 'Na zdorovie',
-  'serbian': 'živeli',
+  'serbian': 'ziveli',
   'slovak': 'Na zdravie',
   'slovenian': 'Na zdravje',
   'spanish': 'Salud',
@@ -74,29 +74,28 @@ const latinFonts = ['Big', 'Slant', 'Small', 'Small Slant', 'Standard', 'Block',
  */
 module.exports = (icli) => {
   // Build the lists of choices
-  return getChoices()
-  .then(choicesLists => {
-    const config = {
-      section: 'Core plugin',
-      cmd: 'please',
-      description: 'Have a beer! You deserve it',
-      options: { noHelp: true },
-      parameters: [{
-        cmdSpec: '-l, --language <language>',
-        type: 'list',
-        choices: choicesLists.language
-      }, {
-        cmdSpec: '-f, --font <font name>',
-        type: 'list',
-        choices: choicesLists.font
-      }]
-    };
+  const choicesLists = getChoices();
 
-    /**
-     * Create the command and the prompt
-     */
-    return icli.createSubCommand(config, executeCommand);
-  });
+  const config = {
+    section: 'Core plugin',
+    cmd: 'please',
+    description: 'Have a beer! You deserve it',
+    options: { noHelp: true },
+    parameters: [{
+      cmdSpec: '-l, --language <language>',
+      type: 'list',
+      choices: choicesLists.language
+    }, {
+      cmdSpec: '-f, --font <font name>',
+      type: 'list',
+      choices: choicesLists.font
+    }]
+  };
+
+  /**
+   * Create the command and the prompt
+   */
+  return icli.createSubCommand(config, executeCommand);
 
   /**
    * Build the choices for "list" and "checkbox" parameters
@@ -104,13 +103,12 @@ module.exports = (icli) => {
    * @returns {Object} - collection of lists of choices for "list" and "checkbox" parameters
    */
   function getChoices() {
-    return figlet.fonts()
-    .then(font => {
-      return {
-        font,
-        language: _.keys(cheers)
-      };
-    });
+    return {
+      language: _.keys(cheers),
+      font: () => {
+        return figlet.fonts();
+      }
+    };
   }
 
   /**
@@ -124,17 +122,20 @@ module.exports = (icli) => {
    * @returns {Promise<null>} - The execution stops here
    */
   function executeCommand(parameters) {
-    let word = parameters.language ? cheers[parameters.language] : _.sample(cheers);
+    const language = parameters.language || _.sample(_.keys(cheers));
+    let word = cheers[language];
     figlet.fonts()
     .then(fonts => {
       const font = parameters.font ? parameters.font : _.sample(fonts);
       if (latinFonts.indexOf(font) === -1) { word = _.deburr(word); }
+      console.log('language: ' + language);
+      console.log('font: ' + font);
       return figlet(word, { font });
     })
     .then(cheers => {
       const b = txt => { return icli.format.custom(txt, '\x1b[93m'); };
       const m = txt => { return icli.format.custom(txt, '\x1b[1m'); };
-      const beer = ['',
+      let beer = ['',
         m('    ,~~~,,`´´°°,,,~~~°°~`´´~°°o,         '),
         m('   ( °      °        °      °°  )        '),
         m('  (    °    °)          (     °  )       '),
@@ -165,9 +166,16 @@ module.exports = (icli) => {
         ''
       ];
       cheers = cheers.split('\n');
-      const top = Math.round((beer.length - cheers.length) / 2);
-      for (let i = 0; i < cheers.length; i++) {
-        beer[top + i + 1] += '   ' + cheers[i];
+      const termWidth = process.stdout.columns;
+      const cheersWidth = _.max(_.map(cheers, (o) => { return o.length; }));
+      const beerWidth = _.max(_.map(beer, (o) => { return o.length; }));
+      if (beerWidth + cheersWidth < termWidth) {
+        const top = Math.round((beer.length - cheers.length) / 2);
+        for (let i = 0; i < cheers.length; i++) {
+          beer[top + i + 1] += '   ' + cheers[i];
+        }
+      } else if (cheersWidth < termWidth) {
+        beer = _.concat(beer, cheers);
       }
       console.log(beer.join('\n'));
     });

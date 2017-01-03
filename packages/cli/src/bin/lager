@@ -6,6 +6,7 @@ const icli = require('comquirer');
 // Add base commands
 require('../cli/new')(icli);
 require('../cli/disable-default')(icli);
+require('../cli/please')(icli);
 
 icli.getProgram().commandHelp = require('../commander-help-override');
 
