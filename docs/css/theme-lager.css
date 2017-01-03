@@ -1,0 +1,124 @@
+#fork-me img {
+  position: fixed;
+  top: 0;
+  right: 0;
+  border: 0;
+  z-index: 1050;
+}
+
+
+.summary {
+    color: #808080;
+    border-left: 5px solid #ED1951;
+    font-size:16px;
+}
+
+
+h3 {color: #ED1951; }
+h4 {color: #808080; }
+
+.fa-home::before {
+  content: "";
+}
+.navbar-brand {
+  padding: 2px 15px;
+  font-size: 22px;
+  letter-spacing: 0.05em;
+}
+.title-logo {
+  height: 45px;
+}
+
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
+    background-color: #FBB80A;
+    color: white;
+}
+
+.nav > li.active > a {
+    background-color: #F49800;
+}
+
+.nav > li > a:hover {
+    background-color: #FBB80A;
+}
+
+div.navbar-collapse .dropdown-menu > li > a:hover {
+    background-color: #F39300;
+}
+
+.nav li.thirdlevel > a {
+    background-color: #FAFAFA !important;
+    color: #FBB80A;
+    font-weight: bold;
+}
+
+a[data-toggle="tooltip"] {
+    color: #649345;
+    font-style: italic;
+    cursor: default;
+}
+
+.navbar-inverse {
+    background-color: #F49800;
+    border-color: #C37A08;
+}
+
+.navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus {
+    color: #C37A08;
+}
+
+.navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus {
+    background-color: #C37A08;
+    color: #ffffff;
+}
+
+/* not sure if using this ...*/
+.navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form {
+    border-color: #FBB80A !important;
+}
+
+.btn-primary {
+    color: #ffffff;
+    background-color: #F49800;
+    border-color: #F49800;
+}
+
+.navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > .active > a:focus {
+    background-color: #F49800;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary.active,
+.open .dropdown-toggle.btn-primary {
+    background-color: #FBB80A;
+    border-color: #F49800;
+}
+
+.printTitle {
+    color: #C37A08 !important;
+}
+
+body.print h1 {color: #C37A08 !important; font-size:28px !important;}
+body.print h2 {color: #595959 !important; font-size:20px !important;}
+body.print h3 {color: #E50E51 !important; font-size:14px !important;}
+body.print h4 {color: #679DCE !important; font-size:14px; font-style: italic !important;}
+
+.anchorjs-link:hover {
+    color: #216f9b;
+}
+
+div.sidebarTitle {
+    color: #C37A08;
+}
+
+li.sidebarTitle {
+    margin-top:40px;
+    font-weight:normal;
+    font-size:130%;
+    color: #ED1951;
+    margin-bottom:10px;
+    margin-left: 5px;
+
+}

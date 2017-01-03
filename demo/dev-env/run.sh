@@ -1,3 +1,4 @@
+#!/bin/bash
 docker run \
        -u root \
        --env HOST_UID=`id -u` \
