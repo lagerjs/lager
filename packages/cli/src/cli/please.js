@@ -26,7 +26,7 @@ const cheers = {
   'estonian': 'Terviseks',
   'filipino': 'Mabuhay',
   'finnish': 'Kippis',
-  'french': 'Santé ',
+  'french': 'Santé',
   'french2': 'À la vôtre',
   'galician': 'Salud',
   'german': 'Prost',

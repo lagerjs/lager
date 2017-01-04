@@ -28,7 +28,7 @@ const Lambda = function Lambda(config) {
   this.config.params = this.config.params || {};
   this.config.params = _.assign({
     FunctionName: this.identifier,
-    Handler: 'lambda.handler',
+    Handler: 'index.handler',
     Role: 'PLEASE-CONFIGURE-AN-EXECUTION-ROLE-FOR-' + this.identifier,
     Runtime: 'nodejs4.3',
     Timeout: 15,
@@ -70,16 +70,24 @@ Lambda.prototype.getEventExamples = function getEventExamples() {
   const basePath = this.getFsPath();
   return fs.readdirAsync(path.join(this.getFsPath(), 'events'))
   .then(eventFiles => {
-    const events = {};
+    const events = [];
     eventFiles.forEach(eventFile => {
-      const filePath = path.parse(basePath + path.sep + eventFile);
+      const filePath = path.join(basePath, eventFile);
       const parse = path.parse(filePath);
       if (['.js', '.json'].indexOf(parse.ext) !== -1) {
-        events[parse.name] = require(filePath);
+        events.push(parse.name);
       }
     });
     return Promise.resolve(events);
   });
+};
+
+/**
+ * Returns an event examples
+ * @returns {Object}
+ */
+Lambda.prototype.loadEventExample = function loadEventExample(name) {
+  return require(path.join(this.getFsPath(), 'events', name));
 };
 
 /**
@@ -102,6 +110,15 @@ Lambda.prototype.getNodeModules = function getNodeModules() {
   .then(moduleLists => {
     // Merge the module lists
     return Promise.resolve(_.assign.apply(null, moduleLists));
+  });
+};
+
+Lambda.prototype.executeLocally = function executeLocally(event) {
+  return this.installLocally()
+  .then(() => {
+    const handlerParts = this.config.params.Handler.split('.');
+    const m = require(path.join(this.getFsPath(), handlerParts[0]));
+    return Promise.promisify(m[handlerParts[1]])(event, {});
   });
 };
 
@@ -187,7 +204,7 @@ Lambda.prototype.installLocally = function install() {
     }
 
     // Add the node modules to the node_modules folder of the lambda
-    Promise.map(modules, nodeModule => {
+    return Promise.map(modules, nodeModule => {
       const nodeModulePath = path.join(this.config.handlerPath, 'node_modules');
       const modulePath = path.join(nodeModulePath, nodeModule.name);
       return mkdirp(nodeModulePath)
@@ -196,13 +213,16 @@ Lambda.prototype.installLocally = function install() {
       })
       .then(() => {
         // Install dependencies of the module
-        return exec('npm install --only=production', { cwd: modulePath });
+        return exec('npm install --only=production --loglevel=error', { cwd: modulePath });
       })
       .spread((stdOut, stdErr) => {
         console.log(stdOut);
         console.log(stdErr);
       });
     });
+  })
+  .then(() => {
+    return this;
   });
 };
 

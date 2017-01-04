@@ -56,7 +56,7 @@ module.exports = (icli) => {
           if (cmdParameterValues.modules) {
             return false;
           }
-          return choicesLists.modules.then(modules => {
+          return choicesLists.modules().then(modules => {
             return modules.length > 0;
           });
         }
@@ -80,7 +80,7 @@ module.exports = (icli) => {
       }
     }, {
       cmdSpec: '--template <template>',
-      description: 'select an template to initialise the Lambda function (aka handler)',
+      description: 'select a template to initialise the Lambda function (aka handler)',
       type: 'list',
       choices: choicesLists.template,
       default: choicesLists.template[0],
@@ -172,14 +172,20 @@ module.exports = (icli) => {
     })
     .then(() => {
       // We create the lambda handler
-      const src = path.join(__dirname, 'templates', 'lambda.js');
-      const dest = path.join(configFilePath, 'lambda.js');
+      const src = path.join(__dirname, 'templates', 'index.js');
+      const dest = path.join(configFilePath, 'index.js');
       return ncpAsync(src, dest);
     })
     .then(() => {
       // We create the file executed by the handler
       const src = path.join(__dirname, 'templates', 'exec-files', parameters.template + '.js');
       const dest = path.join(configFilePath, 'exec.js');
+      return ncpAsync(src, dest);
+    })
+    .then(() => {
+      // We create a test event file
+      const src = path.join(__dirname, 'templates', 'events');
+      const dest = path.join(configFilePath, 'events');
       return ncpAsync(src, dest);
     })
     .then(() => {

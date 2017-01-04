@@ -6,5 +6,8 @@
  */
 
 module.exports = function(input, cb) {
-  cb(new Error('This Lambda is not implemented'));
+  cb(null, {
+    msg: 'This Lambda is not implemented!',
+    input: input
+  });
 };

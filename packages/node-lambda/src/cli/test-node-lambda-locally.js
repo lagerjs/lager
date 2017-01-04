@@ -23,6 +23,14 @@ module.exports = (icli) => {
       question: {
         message: 'Which Lambda do you want to execute locally?'
       }
+    }, {
+      cmdSpec: '-e, --event',
+      description: 'Event example to use',
+      type: 'list',
+      choices: choicesLists.events,
+      question: {
+        message: 'Which event example do you want to use?'
+      }
     }]
   };
 
@@ -47,6 +55,13 @@ module.exports = (icli) => {
             };
           });
         });
+      },
+      events: (answers, cmdParameterValues) => {
+        const lambdaIdentifier = answers.lambdaIdentifier || cmdParameterValues.lambdaIdentifier;
+        return plugin.findLambda(lambdaIdentifier)
+        .then(lambda => {
+          return lambda.getEventExamples();
+        });
       }
     };
   }
@@ -59,21 +74,18 @@ module.exports = (icli) => {
   function executeCommand(parameters) {
     console.log();
     console.log('Executing ' + icli.format.info(parameters.lambdaIdentifier));
-    console.log();
+    console.log('This will install the Lambda locally');
 
     return plugin.findLambda(parameters.lambdaIdentifier)
     .then(lambda => {
-      const lambdaModule = require(lambda.getFsPath());
-      return Promise.promisify(lambdaModule.handler)({}, {});
+      return lambda.executeLocally(lambda.loadEventExample(parameters.event));
     })
     .then(result => {
-      console.log();
       console.log('Success result:');
       console.log(JSON.stringify(result, null, 2));
       console.log();
     })
     .catch(e => {
-      console.log();
       console.log('Error result:');
       console.log(e);
       console.log(e.stack);
