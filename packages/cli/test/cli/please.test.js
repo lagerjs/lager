@@ -14,12 +14,11 @@ describe('The please sub-command', function() {
   });
 
   it('creates a comquirer sub-command', () => {
-    return cmd(icli).then(() => {
-      assert.ok(
-        _.find(icli.getProgram().commands, command => { return command._name === 'please'; }),
-        'a "create-api sub command has been created"'
-      );
-    });
+    cmd(icli);
+    assert.ok(
+      _.find(icli.getProgram().commands, command => { return command._name === 'please'; }),
+      'a "create-api sub command has been created"'
+    );
   });
 
   // To make this test work, icli.getProgram().parse() should return a Promise that resolve when the command finished its execution

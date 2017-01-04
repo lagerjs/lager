@@ -7,10 +7,6 @@ const lager = testRequire('src/lib/lager');
 
 describe('The lager instance', function() {
 
-  it('should have registered the core plugin', () => {
-    assert.ok(lager.getPlugin('core'));
-  });
-
   it('should throw an error if we try to access a plugin that is not registered', () => {
     try {
       lager.getPlugin('test');
