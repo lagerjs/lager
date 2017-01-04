@@ -14,7 +14,7 @@ module.exports = (icli) => {
 
   const config = {
     section: 'Node Lambda plugin',
-    cmd: 'test-node-lambda',
+    cmd: 'test-node-lambda-locally',
     description: 'execute a lambda locally',
     parameters: [{
       cmdSpec: '[lambda-identifier]',

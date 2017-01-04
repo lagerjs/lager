@@ -189,6 +189,10 @@ function retrieveRoleArn(identifier, context) {
       return Promise.promisify(iam.getRole.bind(iam))({ RoleName: identifier })
       .then((data) => {
         return Promise.resolve(data.Role.Arn);
+      })
+      .catch(e => {
+        // @TODO improve error handling
+        return Promise.reject(new Error('Could not find role ' + identifier));
       });
     });
   });

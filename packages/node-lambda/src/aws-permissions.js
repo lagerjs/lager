@@ -14,7 +14,8 @@ module.exports = {
         'lambda:PublishVersion',
         'lambda:UpdateAlias',
         'lambda:UpdateFunctionCode',
-        'lambda:UpdateFunctionConfiguration'
+        'lambda:UpdateFunctionConfiguration',
+        'lambda:InvokeFunction',
       ],
       Resource: [
         'arn:aws:lambda:us-east-1:012345678912:*'

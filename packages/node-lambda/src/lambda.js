@@ -113,6 +113,27 @@ Lambda.prototype.getNodeModules = function getNodeModules() {
   });
 };
 
+/**
+ * Returns the result of am execution in AWS
+ * @returns {Object}
+ */
+Lambda.prototype.execute = function execute(region, context, event) {
+  const awsLambda = new AWS.Lambda({ region });
+
+  const functionName = (context.environment ? context.environment + '-' : '') + this.identifier;
+  const params = {
+    FunctionName: functionName,
+    Payload: JSON.stringify(event)
+  };
+  if (context.stage) { params.Qualifier = context.stage; }
+
+  return Promise.promisify(awsLambda.invoke.bind(awsLambda))(params);
+};
+
+/**
+ * Returns the result of a local execution
+ * @returns {Object}
+ */
 Lambda.prototype.executeLocally = function executeLocally(event) {
   return this.installLocally()
   .then(() => {

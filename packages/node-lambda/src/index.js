@@ -246,7 +246,8 @@ const plugin = {
         require('./cli/create-node-module')(icli),
         require('./cli/deploy-node-lambdas')(icli),
         require('./cli/install-node-lambdas-locally')(icli),
-        require('./cli/test-node-lambda-locally')(icli)
+        require('./cli/test-node-lambda-locally')(icli),
+        require('./cli/test-node-lambda')(icli)
       ]);
     },
 

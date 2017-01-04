@@ -6,6 +6,16 @@
   z-index: 1050;
 }
 
+.navbar-brand {
+  padding: 2px 15px;
+  font-size: 22px;
+  letter-spacing: 0.05em;
+}
+
+.title-logo {
+  height: 45px;
+}
+
 
 .summary {
     color: #808080;
@@ -13,21 +23,8 @@
     font-size:16px;
 }
 
-
 h3 {color: #ED1951; }
 h4 {color: #808080; }
-
-.fa-home::before {
-  content: "";
-}
-.navbar-brand {
-  padding: 2px 15px;
-  font-size: 22px;
-  letter-spacing: 0.05em;
-}
-.title-logo {
-  height: 45px;
-}
 
 .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
     background-color: #FBB80A;
