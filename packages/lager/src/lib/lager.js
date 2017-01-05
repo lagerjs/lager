@@ -7,7 +7,7 @@ const Pebo = require('pebo');
 Pebo.setPromise(Promise);
 const log = require('./log');
 
-// if (['test', 'dev', 'development', 'debug'].indexOf(process.env.NODE_ENV) > -1) {
+if (['test', 'dev', 'development', 'debug'].indexOf(process.env.NODE_ENV) > -1) {
   Promise.config({
     longStackTraces: true
   });
@@ -21,7 +21,7 @@ const log = require('./log');
     log.fatal({promise: promise, reason: reason}, 'Unhandled Rejection');
     console.log(promise, reason);
   });
-// }
+}
 
 
 /**
@@ -87,6 +87,15 @@ class Lager extends Pebo {
     });
 
     return this;
+  }
+
+  /**
+   * Check if a plugin is registered
+   * @param {string} name
+   * @returns {boolean}
+   */
+  isPluginRegistered(name) {
+    return _.findIndex(this.plugins, plugin => { return plugin.name === name;}) !== -1;
   }
 
   /**

@@ -53,12 +53,21 @@ module.exports = (icli) => {
       question: {
         message: 'Choose the node packages that must be included in the Lambda',
         when(answers, cmdParameterValues) {
-          if (cmdParameterValues.modules) {
-            return false;
-          }
+          if (cmdParameterValues.modules) { return false; }
           return choicesLists.modules().then(modules => {
             return modules.length > 0;
           });
+        }
+      }
+    }, {
+      type: 'list',
+      choices: choicesLists.roleOrigins,
+      question: {
+        name: 'roleOrigin',
+        message: 'Where can we find the execution role of the Lambda?',
+        when: (answers, cmdParameterValues) => {
+          if (cmdParameterValues.role) { return false; }
+          return choicesLists.roleOrigins().length > 0;
         }
       }
     }, {
@@ -67,7 +76,11 @@ module.exports = (icli) => {
       type: 'list',
       choices: choicesLists.roles,
       question: {
-        message: 'Choose the execution role'
+        message: 'Choose the execution role',
+        when(answers, cmdParameterValues) {
+          if (cmdParameterValues.role) { return false; }
+          return answers.roleOrigin === 'lager' || answers.roleOrigin === 'aws';
+        }
       }
     }, {
       type: 'input',
@@ -125,21 +138,38 @@ module.exports = (icli) => {
           });
         });
       },
-      roles: () => {
-        return plugin.lager.call('iam:getRoles', [])
-        .then(roles => {
-          roles = _.map(roles, r => {
-            return {
-              value: r.getName(),
-              name: icli.format.info(r.getName()) + ' - ' + (r.getDescription() || 'No description')
-            };
-          });
-          roles.push({
+      roleOrigins: () => {
+        if (plugin.lager.isPluginRegistered('iam')) {
+          return [{
+            value: 'lager',
+            name: 'Select a role managed by the plugin @lager/iam'
+          }, {
+            value: 'aws',
+            name: 'Select a role in your AWS account'
+          }, {
             value: '',
-            name: 'Enter value manually'
+            name: 'Enter the value manually'
+          }];
+        }
+        return [];
+      },
+      roles: (answers) => {
+        if (answers.roleOrigin === 'aws') {
+          return plugin.lager.call('iam:getAWSRoles', [])
+          .then(roles => {
+            return _.map(roles, 'RoleName');
           });
-          return roles;
-        });
+        } else {
+          return plugin.lager.call('iam:getRoles', [])
+          .then(roles => {
+            return _.map(roles, r => {
+              return {
+                value: r.getName(),
+                name: icli.format.info(r.getName()) + ' - ' + (r.getDescription() || 'No description')
+              };
+            });
+          });
+        }
       }
     };
   }

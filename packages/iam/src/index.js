@@ -198,6 +198,12 @@ function retrieveRoleArn(identifier, context) {
   });
 }
 
+function retrieveAWSRoles() {
+  return Promise.promisify(iam.listRoles.bind(iam))({})
+  .then((data) => {
+    return data.Roles;
+  });
+}
 
 const plugin = {
   name: 'iam',
@@ -227,6 +233,7 @@ const plugin = {
 
   extensions: {
     getRoles: loadRoles,
+    getAWSRoles: retrieveAWSRoles,
     retrieveRoleArn: retrieveRoleArn
   },
 

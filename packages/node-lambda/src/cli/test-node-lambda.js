@@ -38,7 +38,7 @@ module.exports = (icli) => {
       choices: choicesLists.region,
       validationMsgLabel: 'AWS region',
       question: {
-        message: 'On which AWS region do you want to deploy?'
+        message: 'On which AWS region do you want to test?'
       }
     }, {
       cmdSpec: '-e, --environment [environment]',
@@ -46,14 +46,14 @@ module.exports = (icli) => {
       type: 'input',
       default: plugin.lager.getConfig('environment') || 'DEV',
       question: {
-        message: 'On which environment do you want to deploy?',
+        message: 'On which environment do you want to test?',
         when: (answers, cmdParameterValues) => {
           return cmdParameterValues['environment'] === undefined && plugin.lager.getConfig('environment') === undefined;
         }
       }
     }, {
       cmdSpec: '-s, --stage [stage]',
-      description: 'select the stage (aka Lambda alias) to apply',
+      description: 'select the stage (aka Lambda alias) to test',
       type: 'input',
       default: plugin.lager.getConfig('stage') || 'v0',
       question: {
