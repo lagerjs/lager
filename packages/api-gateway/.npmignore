@@ -1,8 +1,5 @@
 test
 test-assets
-.bithoundrc
-.eslintrc
-.remarkrc
-.travis.yml
-codecov.yml
-doc
+coverage
+.istanbul.yml
+lager.log
