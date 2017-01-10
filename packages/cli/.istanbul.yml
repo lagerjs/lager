@@ -1,2 +1,2 @@
 instrumentation:
-  excludes: ["test-assets/**"]
+  excludes: ["test-assets/**", "src/cli/figlet/**"]

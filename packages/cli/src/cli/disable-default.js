@@ -12,6 +12,7 @@ module.exports = (icli) => {
     parameters: []
   };
 
+  /* istanbul ignore next */
   /**
    * Show an error if a unknown command was called
    * @param {Object} parameters - the parameters provided in the command and in the prompt

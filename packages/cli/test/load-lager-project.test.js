@@ -3,6 +3,8 @@
 'use strict';
 
 const path = require('path');
+const Promise = require('bluebird');
+const exec = Promise.promisify(require('child_process').exec, { multiArgs: true });
 const assert = require('assert');
 const icli = require('comquirer');
 const loadLagerProject = testRequire('src/load-lager-project');
@@ -30,24 +32,49 @@ describe('The load-lager-project module', function() {
     });
   });
 
-  it.skip('should load a lager instance when the command is launched from a Lager project', () => {
+  it('should load a lager instance when the command is launched from a Lager project', function() {
+    this.timeout(20000);
     const oldCwd = process.cwd();
-    process.chdir(path.join(__dirname, '..', 'test-assets'));
-    return loadLagerProject(icli)
+    const projectPath = path.join(__dirname, '..', 'test-assets');
+    process.chdir(projectPath);
+    return exec('npm install', { cwd: projectPath })
+    .then(() => {
+      return loadLagerProject(icli);
+    })
     .then(result => {
+      return Promise.all([
+        result,
+        exec('rm -r ' + path.join(projectPath, 'node_modules'))
+      ]);
+    })
+    .spread(result => {
       process.chdir(oldCwd);
-      try {
-        assert.equal(typeof result, 'Lager');
-      } catch (e) {
-        throw e;
-      }
+      assert.ok(result.log);
+      assert.ok(result.config);
+      assert.ok(result.plugins);
     });
   });
 
-  it.skip('should load a lager instance when the command is launched from a subdirectory of a Lager project', () => {
-    return loadLagerProject(icli)
+  it('should load a lager instance when the command is launched from a subdirectory of a Lager project', function() {
+    this.timeout(20000);
+    const oldCwd = process.cwd();
+    const projectPath = path.join(__dirname, '..', 'test-assets');
+    process.chdir(path.join(projectPath, 'plugins'));
+    return exec('npm install', { cwd: projectPath })
+    .then(() => {
+      return loadLagerProject(icli);
+    })
     .then(result => {
-      assert.equal(result, true);
+      return Promise.all([
+        result,
+        exec('rm -r ' + path.join(projectPath, 'node_modules'))
+      ]);
+    })
+    .spread(result => {
+      process.chdir(oldCwd);
+      assert.ok(result.log);
+      assert.ok(result.config);
+      assert.ok(result.plugins);
     });
   });
 
