@@ -35,6 +35,7 @@ Role.prototype.getDescription = function getDescription() {
   return this.config.description;
 };
 
+
 /**
  * Deploy the role in AWS
  * @param {Object} context - an object containing the stage and the environment of the role
@@ -43,26 +44,26 @@ Role.prototype.getDescription = function getDescription() {
 Role.prototype.deploy = function deploy(context) {
   const awsIAM = new AWS.IAM();
   let name = this.name;
-  if (context.environment) {
-    name = context.environment + '_' + name;
-  }
-  if (context.stage) {
-    name = name + '_' + context.stage;
-  }
+  if (context.environment) { name = context.environment + '_' + name; }
+  if (context.stage) { name = name + '_' + context.stage; }
+  const report = { name: name };
 
   return plugin.lager.fire('beforeDeployRole', this)
   .spread(() => {
-    return iamHelper.getAwsRole(awsIAM, name);
+    return Promise.promisify(awsIAM.getRole.bind(awsIAM))({ RoleName: name })
+    .catch(e => {
+      // We silently ignore the error if the role is not found : we will have to create it
+      if (e.code === 'NoSuchEntity') { return Promise.resolve(null); }
+      return Promise.reject(e);
+    });
   })
   .then(data => {
     if (data) {
-      // If the function already exists
-      console.log('   * The role ' + name + ' already exists');
-      return this.update(awsIAM, data.Role);
+      // If the role already exists, we update it
+      return this.update(awsIAM, data.Role, report);
     } else {
-      // If error occured because the function does not exists, we create it
-      console.log('   * The role ' + name + ' does not exists');
-      return this.create(awsIAM, name);
+      // If the does not exists, we create it
+      return this.create(awsIAM, name, report);
     }
   })
   .then(data => {
@@ -70,23 +71,24 @@ Role.prototype.deploy = function deploy(context) {
     return this.attachPolicies(awsIAM, name, context);
   })
   .then(data => {
-    console.log('   * Role ' + name + ' deployed');
     return plugin.lager.fire('afterDeployPolicy', this);
   })
   .spread(() => {
-    return Promise.resolve(this);
+    return Promise.resolve(report);
   });
 
 };
 
 /**
- * [create description]
- * @param {[type]} awsIAM [description]
- * @param {[type]} name   [description]
- * @returns {[type]}        [description]
+ * Create a new role in AWS
+ * @param {AWS.IAM} awsIAM
+ * @param {string} name
+ * @param {Object} report
+ * @returns {Promise<Object>}
  */
-Role.prototype.create = function create(awsIAM, name) {
-  console.log(' * Create role ' + name);
+Role.prototype.create = function create(awsIAM, name, report) {
+  report = report || {};
+  report.operation = 'Creation';
   var params = {
     AssumeRolePolicyDocument: JSON.stringify(this.config['trust-relationship']),
     RoleName: name,
@@ -96,13 +98,14 @@ Role.prototype.create = function create(awsIAM, name) {
 };
 
 /**
- * [update description]
- * @param {[type]} awsIAM      [description]
- * @param {[type]} currentRole [description]
- * @returns {[type]}             [description]
- */
-Role.prototype.update = function update(awsIAM, currentRole) {
-  console.log(' * Update role ' + currentRole.RoleName);
+* @param {AWS.IAM} awsIAM
+* @param {string} policyArn
+* @param {Object} report
+* @returns {Promise<Object>}
+*/
+Role.prototype.update = function update(awsIAM, currentRole, report) {
+  report = report || {};
+  report.operation = 'Update';
   var params = {
     PolicyDocument: JSON.stringify(this.config['trust-relationship']),
     RoleName: currentRole.RoleName

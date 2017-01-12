@@ -72,24 +72,8 @@ function retrievePolicyArn(awsIAM, identifier, context, searchParams) {
   });
 }
 
-/**
- * Search for an AWS role by name and return null if not found
- * @param {[type]} awsIAM [description]
- * @param {[type]} name   [description]
- * @returns {[type]}        [description]
- */
-function getAwsRole(awsIAM, name) {
-  return Promise.promisify(awsIAM.getRole.bind(awsIAM))({ RoleName: name })
-  .catch((e) => {
-    if (e.code === 'NoSuchEntity') {
-      return Promise.resolve();
-    }
-    throw e;
-  });
-}
 
 module.exports = {
   getPolicyByName,
-  retrievePolicyArn,
-  getAwsRole
+  retrievePolicyArn
 };

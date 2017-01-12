@@ -4,11 +4,13 @@
 
 const assert = require('assert');
 const Policy = testRequire('src/policy');
+const AWS = require('aws-sdk-mock');
 
 describe('An IAM policy', () => {
 
-  let context = { environment: 'TEST', stage: 'v0' };
-  let listPoliciesResponse = {
+  let policy;
+  const context = { environment: 'TEST', stage: 'v0' };
+  const listPolicies = {
     ResponseMetadata: { RequestId: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa' },
     Policies: [{
       PolicyName: 'ExistingPolicy',
@@ -23,7 +25,7 @@ describe('An IAM policy', () => {
     }],
     IsTruncated: false
   };
-  let createPolicyResponse = {
+  const createPolicy = {
     ResponseMetadata: { RequestId: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa' },
     Policy: {
       PolicyName: 'TEST_MyPolicy_v0',
@@ -37,7 +39,7 @@ describe('An IAM policy', () => {
       UpdateDate: new Date()
     }
   };
-  let getPolicyVersion = {
+  const getPolicyVersion = {
     ResponseMetadata: { RequestId: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa' },
     PolicyVersion: {
       Document: '%7B%22Version%22%3A%222012-10-17%22%2C%22Statement%22%3A%5B%7B%22Effect'
@@ -48,7 +50,7 @@ describe('An IAM policy', () => {
       CreateDate: new Date()
     }
   };
-  let createPolicyVersion = {
+  const createPolicyVersion = {
     PolicyName: 'TEST_MyPolicy_v0',
     PolicyId: 'AAAAAAAAAAAAAAAAAAAAA',
     Arn: 'arn:aws:iam::000000000000:policy/TEST_MyPolicy_v0',
@@ -68,7 +70,7 @@ describe('An IAM policy', () => {
     }],
     IsTruncated: false
   };
-  let listPolicyVersions5 = {
+  const listPolicyVersions5 = {
     ResponseMetadata: { RequestId: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa' },
     Versions: [{
       VersionId: 'v5',
@@ -93,15 +95,14 @@ describe('An IAM policy', () => {
     }],
     IsTruncated: false
   };
-  let deletePolicyVersion = { ResponseMetadata: { RequestId: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa' } };
+  const deletePolicyVersion = { ResponseMetadata: { RequestId: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa' } };
 
   before(() => {
-    const AWS = require('aws-sdk-mock');
     AWS.mock('IAM', 'listPolicies', (params, callback) => {
-      callback(null, listPoliciesResponse);
+      callback(null, listPolicies);
     });
     AWS.mock('IAM', 'createPolicy', (params, callback) => {
-      callback(null, createPolicyResponse);
+      callback(null, createPolicy);
     });
     AWS.mock('IAM', 'getPolicyVersion', (params, callback) => {
       callback(null, getPolicyVersion);
@@ -117,8 +118,9 @@ describe('An IAM policy', () => {
     });
   });
 
-  let policy;
-
+  after(() => {
+    AWS.restore();
+  });
 
   it('should be instantiated', () => {
     const document = {
@@ -160,7 +162,7 @@ describe('An IAM policy', () => {
 
 
   it('should not be updated for the second deployment if the document is the same', function() {
-    listPoliciesResponse.Policies[0].PolicyName = 'TEST_MyPolicy_v0';
+    listPolicies.Policies[0].PolicyName = 'TEST_MyPolicy_v0';
     return policy.deploy(context)
     .then(report => {
       assert.equal(report.name, 'TEST_MyPolicy_v0');

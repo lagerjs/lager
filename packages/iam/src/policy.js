@@ -30,7 +30,7 @@ Policy.prototype.getName = function getName() {
 /**
  * Deploy a policy
  * @param {Object} context
- * @returns {Promice<Object>}
+ * @returns {Promise<Object>}
  */
 Policy.prototype.deploy = function deploy(context) {
   const awsIAM = new AWS.IAM();
@@ -70,7 +70,7 @@ Policy.prototype.deploy = function deploy(context) {
  * @param {AWS.IAM} awsIAM
  * @param {string} name
  * @param {Object} report
- * @returns {Promice<Object>}
+ * @returns {Promise<Object>}
  */
 Policy.prototype.create = function create(awsIAM, name, report) {
   report = report || {};
@@ -95,7 +95,7 @@ Policy.prototype.create = function create(awsIAM, name, report) {
  * @param {AWS.IAM} awsIAM
  * @param {Object} currentPolicy
  * @param {Object} report
- * @returns {Promice<Object>}
+ * @returns {Promise<Object>}
  */
 Policy.prototype.updateIfNeeded = function updateIfNeeded(awsIAM, currentPolicy, report) {
   report = report || {};
@@ -120,7 +120,7 @@ Policy.prototype.updateIfNeeded = function updateIfNeeded(awsIAM, currentPolicy,
  * @param {AWS.IAM} awsIAM
  * @param {string} policyArn
  * @param {Object} report
- * @returns {Promice<Object>}
+ * @returns {Promise<Object>}
  */
 Policy.prototype.update = function update(awsIAM, policyArn, report) {
   report = report || {};
@@ -163,7 +163,7 @@ Policy.prototype.update = function update(awsIAM, policyArn, report) {
  * Create a new policy version in AWS
  * @param {AWS.IAM} awsIAM
  * @param {string} policyArn
- * @returns {Promice<Object>}
+ * @returns {Promise<Object>}
  */
 Policy.prototype.createPolicyVersion = function(awsIAM, policyArn) {
   var params = {
