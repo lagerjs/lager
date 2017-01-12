@@ -76,6 +76,7 @@ module.exports = (icli) => {
     };
   }
 
+  /* istanbul ignore next */
   /**
    * Deploy policies
    * @param {Object} parameters - the parameters provided in the command and in the prompt

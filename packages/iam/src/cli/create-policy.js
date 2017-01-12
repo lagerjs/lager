@@ -34,6 +34,7 @@ module.exports = (icli) => {
    */
   return icli.createSubCommand(config, executeCommand);
 
+  /* istanbul ignore next */
   /**
    * Create the new policy
    * @param {Object} parameters - the parameters provided in the command and in the prompt

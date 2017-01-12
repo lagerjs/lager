@@ -16,7 +16,6 @@ function getPolicyByName(awsIAM, name, listParams, marker) {
   }, listParams);
   return Promise.promisify(awsIAM.listPolicies.bind(awsIAM))(params)
   .then(policyList => {
-    //console.log(policyList);
     const policyFound = _.find(policyList.Policies, function(policy) { return policy.PolicyName === name; });
     if (policyFound) {
       return Promise.resolve(policyFound);
