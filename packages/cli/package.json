@@ -1,6 +1,6 @@
 {
   "name": "@lager/cli",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "The lager CLI",
   "main": "index.js",
   "scripts": {
