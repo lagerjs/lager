@@ -12,21 +12,21 @@ const _ = require('lodash');
  * @return {Promise<[Lambda]>} - promise of an array of lambdas
  */
 function loadLambdas() {
-  const lambdaConfigsPath = path.join(process.cwd(), plugin.config.lambdasPath);
+  const lambdasPath = path.join(process.cwd(), plugin.config.lambdasPath);
 
   // This event allows to inject code before loading all APIs
   return plugin.lager.fire('beforeLambdasLoad')
   .then(() => {
     // Retrieve configuration path of all Lambdas
-    return Promise.promisify(fs.readdir)(lambdaConfigsPath);
+    return Promise.promisify(fs.readdir)(lambdasPath);
   })
   .then((subdirs) => {
     // Load all Lambdas configurations
     const lambdaPromises = [];
     _.forEach(subdirs, (subdir) => {
-      const lambdaConfigPath = path.join(lambdaConfigsPath, subdir, 'config');
+      const lambdaPath = path.join(lambdasPath, subdir);
       // subdir is the identifier of the Lambda, so we pass it as the second argument
-      lambdaPromises.push(loadLambda(lambdaConfigPath, subdir));
+      lambdaPromises.push(loadLambda(lambdaPath, subdir));
     });
     return Promise.all(lambdaPromises);
   })
@@ -49,28 +49,36 @@ function loadLambdas() {
 
 /**
  * Load a lambda
- * @param {string} lambdaConfigPath - path to the configuration file
+ * @param {string} lambdaPath - path to the Lambda module
  * @param {string} identifier - the lambda identifier
  * @returns {Promise<Lambda>} - the promise of a lambda
  */
-function loadLambda(lambdaConfigPath, identifier) {
-  return plugin.lager.fire('beforeLambdaLoad', lambdaConfigPath, identifier)
-  .spread((lambdaConfigPath, identifier) => {
+function loadLambda(lambdaPath, identifier) {
+  return plugin.lager.fire('beforeLambdaLoad', lambdaPath, identifier)
+  .spread((lambdaPath, identifier) => {
     // Because we use require() to get the config, it could either be a JSON file
     // or the content exported by a node module
     // But because require() caches the content it loads, we clone the result to avoid bugs
     // if the function is called twice.
-    const lambdaConfig = _.cloneDeep(require(lambdaConfigPath));
+    const lambdaConfig = _.cloneDeep(require(path.join(lambdaPath, 'config')));
+    let packageJson = {};
+    try {
+      packageJson = _.cloneDeep(require(path.join(lambdaPath, 'package.json')));
+    } catch (e) {
+      if (e.code !== 'MODULE_NOT_FOUND') {
+        throw e;
+      }
+    }
 
-    // If the handler path is not specified, we consider it is the same that the config path
-    lambdaConfig.handlerPath = lambdaConfig.handlerPath || path.dirname(lambdaConfigPath);
+    // If the handler path is not specified, we consider it is the path to the Lambda
+    lambdaConfig.handlerPath = lambdaConfig.handlerPath || lambdaPath;
 
     // If the identifier is not specified, it will be the name of the directory that contains the config
     lambdaConfig.identifier = lambdaConfig.identifier || identifier;
 
     // Lasy loading because the plugin has to be registered in a Lager instance before requiring ./lambda
     const Lambda = require('./lambda');
-    const lambda = new Lambda(lambdaConfig);
+    const lambda = new Lambda(lambdaConfig, packageJson);
 
     // This event allows to inject code to alter the Lambda configuration
     return plugin.lager.fire('afterLambdaLoad', lambda);
@@ -85,25 +93,29 @@ function loadLambda(lambdaConfigPath, identifier) {
  * @return {Promise<[NodeModule]>} - promise of an array of node packages
  */
 function loadModules() {
-  const nodePackagesPath = path.join(process.cwd(), plugin.config.modulesPath);
+  const nodeModulesPath = path.join(process.cwd(), plugin.config.modulesPath);
 
   return plugin.lager.fire('beforeNodeModulesLoad')
   .then(() => {
     // Retrieve paths of all node packages
-    return Promise.promisify(fs.readdir)(nodePackagesPath);
+    return Promise.promisify(fs.readdir)(nodeModulesPath);
   })
   .then(subdirs => {
     // Load all packages configurations
-    const nodePackagePromises = [];
+    const nodeModulePromises = [];
     _.forEach(subdirs, (subdir) => {
-      const nodePackageJsonPath = path.join(nodePackagesPath, subdir, 'package.json');
+      const nodeModulePath = path.join(nodeModulesPath, subdir);
       // subdir is the name of the package, so we pass it as the second argument
-      nodePackagePromises.push(loadNodeModule(nodePackageJsonPath, subdir));
+      nodeModulePromises.push(loadNodeModule(nodeModulePath, subdir));
     });
-    return Promise.all(nodePackagePromises);
+    return Promise.all(nodeModulePromises);
   })
-  .then(nodePackages => {
-    return Promise.resolve(nodePackages);
+  .then(nodeModules => {
+    // This event allows to inject code to add or delete or alter node modules configurations
+    return plugin.lager.fire('afterNodeModulesLoad', nodeModules);
+  })
+  .spread(nodeModules => {
+    return Promise.resolve(nodeModules);
   })
   .catch(e => {
     // In case the project does not have any node package yet, an exception will be thrown
@@ -121,14 +133,21 @@ function loadModules() {
  * @param  {string} name - name of the package
  * @return {Promise<NodeModule>} - promise of a node packages
  */
-function loadNodeModule(packageJsonPath, name) {
-  return plugin.lager.fire('beforeNodeModuleLoad', packageJsonPath, name)
-  .spread((packageJsonPath, name) => {
-    const packageJson = require(packageJsonPath);
+function loadNodeModule(nodeModulePath, name) {
+  return plugin.lager.fire('beforeNodeModuleLoad', nodeModulePath, name)
+  .spread((nodeModulePath, name) => {
+    let packageJson = {};
+    try {
+      packageJson = _.cloneDeep(require(path.join(nodeModulePath, 'package.json')));
+    } catch (e) {
+      if (e.code !== 'MODULE_NOT_FOUND') {
+        throw e;
+      }
+    }
 
     // Lasy loading because the plugin has to be registered in a Lager instance before requiring ./node-module
     const NodeModule = require('./node-module');
-    const nodePackage = new NodeModule(packageJson, name, path.dirname(packageJsonPath));
+    const nodePackage = new NodeModule(packageJson, name, nodeModulePath);
 
     // This event allows to inject code to alter the Lambda configuration
     return plugin.lager.fire('afterNodeModuleLoad', nodePackage);

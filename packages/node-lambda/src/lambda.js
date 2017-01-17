@@ -20,10 +20,11 @@ const plugin = require('./index');
  * @param {Object} config - lambda configuration
  * @constructor
  */
-const Lambda = function Lambda(config) {
+const Lambda = function Lambda(config, packageJson) {
   this.identifier = config.identifier;
   this.nodeModules = [];
   this.config = config;
+  this.packageJson = packageJson || {};
 
   this.config.params = this.config.params || {};
   this.config.params = _.assign({
@@ -95,7 +96,8 @@ Lambda.prototype.loadEventExample = function loadEventExample(name) {
  * @return {Object}
  */
 Lambda.prototype.getNodeModules = function getNodeModules() {
-  return Promise.map(this.config.modules, moduleName => {
+  const modules = (this.packageJson['x-lager'] && this.packageJson['x-lager'].dependencies) || [];
+  return Promise.map(modules, moduleName => {
     return plugin.findNodeModule(moduleName)
     .then(nodeModule => {
       // Retrieve dependencies of the module

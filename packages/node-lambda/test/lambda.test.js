@@ -17,13 +17,17 @@ describe('A Lambda', () => {
         MemorySize: 256,
         Role: 'PlanetExpressLambdaExecution'
       },
-      includeEndpoints: true,
-      modules: [
-        'data-access',
-        'log'
-      ]
+      includeEndpoints: true
     };
-    lambda = new Lambda(config);
+    const packageJson = {
+      'x-lager': {
+        dependencies: [
+          'data-access',
+          'log'
+        ]
+      }
+    };
+    lambda = new Lambda(config, packageJson);
     assert.ok(lambda instanceof Lambda);
   });
 

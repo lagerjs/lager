@@ -122,10 +122,10 @@ module.exports = (icli) => {
       memory: memoryValues,
       template: [{
         value: 'none',
-        name: icli.format.info('none') + ' - Do not add an specific template to the Lambda, you will write a custom one'
+        name: icli.format.info('none') + ' - Do not add an specific template to the Lambda, you will write a custom one (recommended)'
       }, {
         value: 'api-endpoints',
-        name: icli.format.info('api-endpoints') + ' - With this template, the Lambda will execute endpoints defined by the api-gateway plugin'
+        name: icli.format.info('api-endpoints') + ' - Opinionated definition of "action" modules in endpoints managed by the api-gateway plugin'
       }],
       modules: () => {
         return plugin.loadModules()
@@ -194,11 +194,19 @@ module.exports = (icli) => {
           Role: parameters.role
         },
         includeEndpoints: parameters.template === 'api-endpoints',
-        modules: parameters.modules || []
       };
-
       // We save the configuration in a json file
       return fs.writeFileAsync(configFilePath + path.sep + 'config.json', JSON.stringify(config, null, 2));
+    })
+    .then(() => {
+      // We create the package.json file
+      const packageJson = {
+        'x-lager': {
+          dependencies: parameters.modules || []
+        }
+      };
+      // We save the specification in a json file
+      return fs.writeFileAsync(configFilePath + path.sep + 'package.json', JSON.stringify(packageJson, null, 2));
     })
     .then(() => {
       // We create the lambda handler

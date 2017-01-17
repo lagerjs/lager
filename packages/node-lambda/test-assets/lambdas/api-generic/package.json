@@ -1,0 +1,8 @@
+{
+  "x-lager": {
+    "dependencies": [
+      "data-access",
+      "log"
+    ]
+  }
+}

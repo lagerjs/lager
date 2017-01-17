@@ -89,7 +89,6 @@ module.exports = (icli) => {
           dependencies: parameters.dependencies
         }
       };
-
       // We save the specification in a json file
       return fs.writeFileAsync(configFilePath + path.sep + 'package.json', JSON.stringify(packageJson, null, 2));
     })

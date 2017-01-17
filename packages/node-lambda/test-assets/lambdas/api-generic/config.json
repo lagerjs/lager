@@ -4,9 +4,5 @@
     "MemorySize": "256",
     "Role": "PlanetExpressLambdaExecution"
   },
-  "includeEndpoints": true,
-  "modules": [
-    "data-access",
-    "log"
-  ]
+  "includeEndpoints": true
 }
