@@ -56,7 +56,7 @@ class Lager extends Pebo {
     // Overide Pebo.fire() to log calls
     this.fire = function() {
       const nbListeners = this.events[arguments[0]] ? this.eventslength : 0;
-      this.log.debug('Event ' + arguments[0] + ' has been fired for ' + nbListeners + ' listeners');
+      this.log.trace('Event ' + arguments[0] + ' has been fired for ' + nbListeners + ' listeners');
       return originalFire.apply(this, arguments);
     }.bind(this);
   }
