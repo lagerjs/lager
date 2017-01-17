@@ -3,11 +3,23 @@
 'use strict';
 
 const assert = require('assert');
+const AWS = require('aws-sdk-mock');
 const Lambda = testRequire('src/lambda');
 
 describe('A Lambda', () => {
 
   let lambda;
+  const context = { environment: 'TEST', stage: 'v0' };
+
+  // before(() => {
+  //   AWS.mock('Lambda', 'createFunction', (params, callback) => {
+  //     callback(null, createFunction);
+  //   });
+  // });
+  //
+  // after(() => {
+  //   AWS.restore();
+  // });
 
   it('should be instantiated', () => {
     const config = {
@@ -39,12 +51,40 @@ describe('A Lambda', () => {
     assert.equal(lambda.toString(), 'Node Lambda MyLambda');
   });
 
-  it('should provide the  list of its node modules', () => {
+  it.skip('should provide its location on the file system', () => {
+    return lambda.getFsPath();
+  });
+
+  it.skip('should give the list of available event examples', () => {
+    return lambda.getEventExamples();
+  });
+
+  it('should provide the list of its node modules', () => {
     return lambda.getNodeModules()
     .then(nodeModules => {
       assert.equal(nodeModules.log.name, 'log');
       assert.equal(nodeModules['data-access'].name, 'data-access');
     });
+  });
+
+  it.skip('should be executed in AWS', () => {
+    return lambda.execute();
+  });
+
+  it.skip('should be executed locally', () => {
+    return lambda.executeLocally();
+  });
+
+  describe.skip('deployment', () => {
+
+    it('should create the Lambda we executed for the first time', () => {
+      return lambda.deploy();
+    });
+
+    it('should update the Lambda we executed for the second time', () => {
+      return lambda.deploy();
+    });
+
   });
 
 });
