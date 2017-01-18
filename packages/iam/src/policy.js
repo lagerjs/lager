@@ -38,6 +38,7 @@ Policy.prototype.deploy = function deploy(context) {
   if (context.environment) { name = context.environment + '_' + name; }
   if (context.stage) { name = name + '_' + context.stage; }
   const report = { name: name };
+  const initTime = process.hrtime();
 
   return plugin.lager.fire('beforeDeployPolicy', this)
   .spread(() => {
@@ -51,6 +52,7 @@ Policy.prototype.deploy = function deploy(context) {
   .then(currentPolicy => {
     if (currentPolicy) {
       // If the function already exists
+      report.arn = currentPolicy.Arn;
       return this.updateIfNeeded(awsIAM, currentPolicy, report);
     } else {
       // If error occured because the function does not exists, we create it
@@ -58,10 +60,14 @@ Policy.prototype.deploy = function deploy(context) {
     }
   })
   .then(data => {
+    if (data.Policy && data.Policy.Arn) {
+      report.arn = data.Policy.Arn;
+    }
+    report.deployTime = process.hrtime(initTime);
     return plugin.lager.fire('afterDeployPolicy', this);
   })
   .spread(() => {
-    return Promise.resolve(report);
+    return Promise.resolve({ report });
   });
 };
 

@@ -47,6 +47,7 @@ Role.prototype.deploy = function deploy(context) {
   if (context.environment) { name = context.environment + '_' + name; }
   if (context.stage) { name = name + '_' + context.stage; }
   const report = { name: name };
+  const initTime = process.hrtime();
 
   return plugin.lager.fire('beforeDeployRole', this)
   .spread(() => {
@@ -60,6 +61,7 @@ Role.prototype.deploy = function deploy(context) {
   .then(data => {
     if (data) {
       // If the role already exists, we update it
+      report.arn = data.Role.Arn;
       return this.update(awsIAM, data.Role, report);
     } else {
       // If the does not exists, we create it
@@ -68,13 +70,17 @@ Role.prototype.deploy = function deploy(context) {
   })
   .then(data => {
     // @TODO allow to detach policies
+    if (data.Role && data.Role.Arn) {
+      report.arn = data.Role.Arn;
+    }
     return this.attachPolicies(awsIAM, name, context);
   })
   .then(data => {
+    report.deployTime = process.hrtime(initTime);
     return plugin.lager.fire('afterDeployPolicy', this);
   })
   .spread(() => {
-    return Promise.resolve(report);
+    return Promise.resolve({ report });
   });
 
 };

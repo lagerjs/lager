@@ -114,18 +114,18 @@ describe('An IAM role', () => {
     getRoleError = new Error('NoSuchEntity');
     getRoleError.code = 'NoSuchEntity';
     return role.deploy(context)
-    .then(report => {
-      assert.equal(report.name, 'TEST_MyRole_v0');
-      assert.equal(report.operation, 'Creation');
+    .then(result => {
+      assert.equal(result.report.name, 'TEST_MyRole_v0');
+      assert.equal(result.report.operation, 'Creation');
     });
   });
 
 
   it('should not add "_" to the role name when the Lager "context" does not provide environment or stage', function() {
     return role.deploy({ environment: '', stage: '' })
-    .then(report => {
-      assert.equal(report.name, 'MyRole');
-      assert.equal(report.operation, 'Creation');
+    .then(result => {
+      assert.equal(result.report.name, 'MyRole');
+      assert.equal(result.report.operation, 'Creation');
     });
   });
 
@@ -133,9 +133,9 @@ describe('An IAM role', () => {
   it('should be updated for the second deployment', function() {
     getRoleError = null;
     return role.deploy(context)
-    .then(report => {
-      assert.equal(report.name, 'TEST_MyRole_v0');
-      assert.equal(report.operation, 'Update');
+    .then(result => {
+      assert.equal(result.report.name, 'TEST_MyRole_v0');
+      assert.equal(result.report.operation, 'Update');
     });
   });
 

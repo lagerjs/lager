@@ -2,6 +2,7 @@
 
 const Promise = require('bluebird');
 const _ = require('lodash');
+const Table = require('easy-table');
 
 const plugin = require('../index');
 
@@ -90,12 +91,22 @@ module.exports = (icli) => {
       environment: parameters.environment
     };
     return plugin.findRoles(parameters.roleIdentifiers)
-    .then((roles) => {
+    .then(roles => {
       return Promise.map(roles, role => { return role.deploy(context); });
     })
-    .then((roles) => {
-      console.log('\n    ' + icli.format.success('The following roles have been sucessfully deployed:'));
-      console.log(_.map(roles, role => { return '      - ' + role.name + '\n'; }).join(''));
+    .then(results => {
+      const t = new Table();
+      _.forEach(results, result => {
+        t.cell('Name', result.report.name);
+        t.cell('Operation', result.report.operation);
+        t.cell('ARN', result.report.arn);
+        t.cell('Deploy time', formatHrTime(result.report.deployTime));
+        t.newRow();
+      });
+      console.log();
+      console.log('Roles deployed');
+      console.log();
+      console.log(t.toString());
     })
     .catch(e => {
       if (e.code === 'AccessDeniedException' && e.cause && e.cause.message) {
@@ -110,3 +121,12 @@ module.exports = (icli) => {
   }
 
 };
+
+/**
+ * Format the result of process.hrtime() into numeric with 3 decimals
+ * @param  {Array} hrTime
+ * @return {numeric}
+ */
+function formatHrTime(hrTime) {
+  return (hrTime[0] + hrTime[1] / 1000000000).toFixed(3);
+}

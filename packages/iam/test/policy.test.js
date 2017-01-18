@@ -143,20 +143,20 @@ describe('An IAM policy', () => {
 
   it('should be created for the first deployment', function() {
     return policy.deploy(context)
-    .then(report => {
-      assert.equal(report.name, 'TEST_MyPolicy_v0');
-      assert.equal(report.operation, 'Creation');
-      assert.equal(report.policyVersions, 1);
+    .then(result => {
+      assert.equal(result.report.name, 'TEST_MyPolicy_v0');
+      assert.equal(result.report.operation, 'Creation');
+      assert.equal(result.report.policyVersions, 1);
     });
   });
 
 
   it('should not add "_" to the policy name when the Lager "context" does not provide environment or stage', function() {
     return policy.deploy({ environment: '', stage: '' })
-    .then(report => {
-      assert.equal(report.name, 'MyPolicy');
-      assert.equal(report.operation, 'Creation');
-      assert.equal(report.policyVersions, 1);
+    .then(result => {
+      assert.equal(result.report.name, 'MyPolicy');
+      assert.equal(result.report.operation, 'Creation');
+      assert.equal(result.report.policyVersions, 1);
     });
   });
 
@@ -164,9 +164,9 @@ describe('An IAM policy', () => {
   it('should not be updated for the second deployment if the document is the same', function() {
     listPolicies.Policies[0].PolicyName = 'TEST_MyPolicy_v0';
     return policy.deploy(context)
-    .then(report => {
-      assert.equal(report.name, 'TEST_MyPolicy_v0');
-      assert.equal(report.operation, 'Already up-to-date');
+    .then(result => {
+      assert.equal(result.report.name, 'TEST_MyPolicy_v0');
+      assert.equal(result.report.operation, 'Already up-to-date');
     });
   });
 
@@ -174,10 +174,10 @@ describe('An IAM policy', () => {
   it('should be updated for the second deployment if the document is different', function() {
     policy.document.Statement[0].Action = ['xxx'];
     return policy.deploy(context)
-    .then(report => {
-      assert.equal(report.name, 'TEST_MyPolicy_v0');
-      assert.equal(report.operation, 'Update');
-      assert.equal(report.policyVersions, 1);
+    .then(result => {
+      assert.equal(result.report.name, 'TEST_MyPolicy_v0');
+      assert.equal(result.report.operation, 'Update');
+      assert.equal(result.report.policyVersions, 1);
     });
   });
 
@@ -185,11 +185,11 @@ describe('An IAM policy', () => {
   it('should delete the most ancient version if there are already 5', function() {
     listPolicyVersions = listPolicyVersions5;
     return policy.deploy(context)
-    .then(report => {
-      assert.equal(report.name, 'TEST_MyPolicy_v0');
-      assert.equal(report.operation, 'Update');
-      assert.equal(report.deletedVersion, 'v1');
-      assert.equal(report.policyVersions, 5);
+    .then(result => {
+      assert.equal(result.report.name, 'TEST_MyPolicy_v0');
+      assert.equal(result.report.operation, 'Update');
+      assert.equal(result.report.deletedVersion, 'v1');
+      assert.equal(result.report.policyVersions, 5);
     });
   });
 

@@ -2,6 +2,7 @@
 
 const Promise = require('bluebird');
 const _ = require('lodash');
+const Table = require('easy-table');
 
 const plugin = require('../index');
 
@@ -93,9 +94,19 @@ module.exports = (icli) => {
     .then(policies => {
       return Promise.map(policies, policy => { return policy.deploy(context); });
     })
-    .then(policies => {
-      console.log('\n    ' + icli.format.success('The following policies have been sucessfully deployed:'));
-      console.log(_.map(policies, policy => { return '      - ' + policy.name + '\n'; }).join(''));
+    .then(results => {
+      const t = new Table();
+      _.forEach(results, result => {
+        t.cell('Name', result.report.name);
+        t.cell('Operation', result.report.operation);
+        t.cell('ARN', result.report.arn);
+        t.cell('Deploy time', formatHrTime(result.report.deployTime));
+        t.newRow();
+      });
+      console.log();
+      console.log('Policies deployed');
+      console.log();
+      console.log(t.toString());
     })
     .catch(e => {
       if (e.code === 'AccessDenied' && e.cause && e.cause.message) {
@@ -110,3 +121,12 @@ module.exports = (icli) => {
   }
 
 };
+
+/**
+ * Format the result of process.hrtime() into numeric with 3 decimals
+ * @param  {Array} hrTime
+ * @return {numeric}
+ */
+function formatHrTime(hrTime) {
+  return (hrTime[0] + hrTime[1] / 1000000000).toFixed(3);
+}
