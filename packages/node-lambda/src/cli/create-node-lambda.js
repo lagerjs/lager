@@ -72,7 +72,7 @@ module.exports = (icli) => {
       }
     }, {
       cmdSpec: '-r, --role <role>',
-      description: 'select the execution role',
+      description: 'select the execution role' + (plugin.lager.isPluginRegistered('iam') ? '' : ' (enter the ARN)'),
       type: 'list',
       choices: choicesLists.roles,
       question: {
@@ -86,7 +86,7 @@ module.exports = (icli) => {
       type: 'input',
       question: {
         name: 'roleManually',
-        message: 'Enter a valid IAM role that will be used to execute the Lambda function',
+        message: 'Enter the IAM role that will be used to execute the Lambda function' + (plugin.lager.isPluginRegistered('iam') ? '' : ' (enter the ARN)'),
         when(answers, cmdParameterValues) {
           return !answers.role && !cmdParameterValues.role;
         }
