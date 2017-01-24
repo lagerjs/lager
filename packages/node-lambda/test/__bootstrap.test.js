@@ -18,7 +18,7 @@ const assert = require('assert');
 const path = require('path');
 const Promise = require('bluebird');
 const _ = require('lodash');
-const lager = require('@lager/lager');
+const lager = require('../../lager');
 const nodeLambdaPlugin = testRequire('src/index');
 
 Promise.config({

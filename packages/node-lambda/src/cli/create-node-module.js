@@ -86,10 +86,13 @@ module.exports = (icli) => {
     .then(() => {
       // We create the package.json file
       const packageJson = {
-        'x-lager': {
-          dependencies: parameters.dependencies
-        }
+        'name': parameters.name,
+        'version': '0.0.0',
+        dependencies: {}
       };
+      _.forEach(parameters.dependencies, moduleName => {
+        packageJson.dependencies[moduleName] = '../' + moduleName;
+      });
       // We save the specification in a json file
       return fs.writeFileAsync(configFilePath + path.sep + 'package.json', JSON.stringify(packageJson, null, 2));
     })
@@ -97,8 +100,9 @@ module.exports = (icli) => {
       const msg = '\n  The node module ' + icli.format.info(parameters.name) + ' has been created\n\n'
                 + '  It is located in ' + icli.format.info(configFilePath) + ' you can start to implement it there.\n\n'
                 + '  To import it in an existing Lambda, edit the file '
-                + icli.format.info(path.join(process.cwd(), plugin.config.modulesPath, '<lambda-identifier>', 'config.json'))
-                + ' and add ' + icli.format.info(parameters.name) + ' in the section ' + icli.format.info('modules') + '\n';
+                + icli.format.info(path.join(process.cwd(), plugin.config.modulesPath, '<lambda-identifier>', 'package.json'))
+                + ' and add "' + icli.format.info(parameters.name) + '": "../' + icli.format.info(parameters.name) + '"'
+                + 'in the section ' + icli.format.info('dpendencies') + '\n';
       console.log(msg);
     });
   }

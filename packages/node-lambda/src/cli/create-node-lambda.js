@@ -46,16 +46,16 @@ module.exports = (icli) => {
         message: 'Choose the memory'
       }
     }, {
-      cmdSpec: '--modules <modules>',
-      description: 'select the modules that must be included in the Lambda',
+      cmdSpec: '-d --dependencies <modules-names>',
+      description: 'select the project modules that must be included in the Lambda',
       type: 'checkbox',
-      choices: choicesLists.modules,
+      choices: choicesLists.dependencies,
       question: {
         message: 'Choose the node packages that must be included in the Lambda',
         when(answers, cmdParameterValues) {
-          if (cmdParameterValues.modules) { return false; }
-          return choicesLists.modules().then(modules => {
-            return modules.length > 0;
+          if (cmdParameterValues.dependencies) { return false; }
+          return choicesLists.dependencies().then(dependencies => {
+            return dependencies.length > 0;
           });
         }
       }
@@ -127,7 +127,7 @@ module.exports = (icli) => {
         value: 'api-endpoints',
         name: icli.format.info('api-endpoints') + ' - Opinionated definition of "action" modules in endpoints managed by the api-gateway plugin'
       }],
-      modules: () => {
+      dependencies: () => {
         return plugin.loadModules()
         .then(modules => {
           return _.map(modules, m => {
@@ -202,11 +202,14 @@ module.exports = (icli) => {
     .then(() => {
       // We create the package.json file
       const packageJson = {
-        'x-lager': {
-          dependencies: parameters.modules || []
-        }
+        'name': parameters.identifier,
+        'version': '0.0.0',
+        dependencies: {}
       };
-      // We save the specification in a json file
+      _.forEach(parameters.dependencies, moduleName => {
+        packageJson.dependencies[moduleName] = path.relative(configFilePath, path.join(process.cwd(), plugin.config.modulesPath, moduleName));
+      });
+      // We save the package.json file
       return fs.writeFileAsync(configFilePath + path.sep + 'package.json', JSON.stringify(packageJson, null, 2));
     })
     .then(() => {

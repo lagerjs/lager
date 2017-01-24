@@ -37,9 +37,7 @@
     "ncp": "^2.0.0"
   },
   "devDependencies": {
-    "@lager/lager": "^0.0.30",
     "bithound": "^1.3.0",
-    "codacy-coverage": "^1.1.3",
     "codecov": "^1.0.1",
     "comquirer": "0.0.1",
     "eslint": "^2.13.1",

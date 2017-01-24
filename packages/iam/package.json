@@ -36,7 +36,6 @@
     "ncp": "^2.0.0"
   },
   "devDependencies": {
-    "@lager/lager": "^0.0.30",
     "aws-sdk-mock": "^1.6.1",
     "bithound": "^1.3.0",
     "codecov": "^1.0.1",

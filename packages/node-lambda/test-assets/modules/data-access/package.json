@@ -1,9 +1,5 @@
 {
-  "x-lager": {
-    "dependencies": [
-      "log"
-    ]
-  },
-  "dependencies": {},
-  "devDependencies": {}
+  "dependencies": {
+    "log": "../log"
+  }
 }

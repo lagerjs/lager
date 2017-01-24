@@ -327,5 +327,5 @@ module.exports = plugin;
  * @return {numeric}
  */
 function formatHrTime(hrTime) {
-  return hrTime[0] + Math.round(hrTime[1] / 1000000) / 1000;
+  return (hrTime[0] + hrTime[1] / 1000000000).toFixed(3);
 }

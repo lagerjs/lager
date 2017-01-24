@@ -8,9 +8,8 @@ const AWS = require('aws-sdk');
 const archiver = require('archiver');
 const Promise = require('bluebird');
 const _ = require('lodash');
-const ncp = Promise.promisify(require('ncp'));
-const mkdirp = Promise.promisify(require('mkdirp'));
 const exec = Promise.promisify(require('child_process').exec, { multiArgs: true });
+const rimraf = Promise.promisify(require('rimraf'));
 
 const IntegrationDataInjector = require('./integration-data-injector');
 const plugin = require('./index');
@@ -20,11 +19,11 @@ const plugin = require('./index');
  * @param {Object} config - lambda configuration
  * @constructor
  */
-const Lambda = function Lambda(config, packageJson) {
+const Lambda = function Lambda(config, packageJson, fsPath) {
   this.identifier = config.identifier;
-  this.nodeModules = [];
   this.config = config;
   this.packageJson = packageJson || {};
+  this.fsPath = fsPath;
 
   this.config.params = this.config.params || {};
   this.config.params = _.assign({
@@ -89,30 +88,6 @@ Lambda.prototype.getEventExamples = function getEventExamples() {
  */
 Lambda.prototype.loadEventExample = function loadEventExample(name) {
   return require(path.join(this.getFsPath(), 'events', name));
-};
-
-/**
- * Retrieve the list of node modules to include in the Lambda
- * @return {Object}
- */
-Lambda.prototype.getNodeModules = function getNodeModules() {
-  const modules = (this.packageJson['x-lager'] && this.packageJson['x-lager'].dependencies) || [];
-  return Promise.map(modules, moduleName => {
-    return plugin.findNodeModule(moduleName)
-    .then(nodeModule => {
-      // Retrieve dependencies of the module
-      return Promise.all([nodeModule, nodeModule.getNestedDependenciesList()]);
-    })
-    .spread((nodeModule, dependenciesList) => {
-      // We add the node module itself to the list of its dependencies
-      dependenciesList[nodeModule.getName()] = nodeModule;
-      return dependenciesList;
-    });
-  })
-  .then(moduleLists => {
-    // Merge the module lists
-    return Promise.resolve(_.assign.apply(null, moduleLists));
-  });
 };
 
 /**
@@ -206,43 +181,14 @@ Lambda.prototype.deploy = function deploy(region, context) {
 };
 
 /**
- * Create a zip package for a lambda and provide it's content in a buffer
- * @returns {Promise<Buffer>}
+ * Install the lambda dependencies
+ * @returns {Promise<Lambda>}
  */
 Lambda.prototype.installLocally = function install() {
-  return this.getNodeModules()
-  .then(nodeModules => {
-    // Retrieve the content to put in the "node_module" folder of the Lambda package
-    const modules = _.map(nodeModules, nodeModule => {
-      return {
-        name: nodeModule.getName(),
-        fsPath: nodeModule.getFsPath()
-      };
-    });
-    if (this.config.includeEndpoints) {
-      modules.push({
-        name: 'endpoints',
-        fsPath: path.join(plugin.lager.getPlugin('api-gateway').getPath(), 'endpoints')
-      });
-    }
-
-    // Add the node modules to the node_modules folder of the lambda
-    return Promise.map(modules, nodeModule => {
-      const nodeModulePath = path.join(this.config.handlerPath, 'node_modules');
-      const modulePath = path.join(nodeModulePath, nodeModule.name);
-      return mkdirp(nodeModulePath)
-      .then(() => {
-        return ncp(nodeModule.fsPath, modulePath);
-      })
-      .then(() => {
-        // Install dependencies of the module
-        return exec('npm install --only=production --loglevel=error', { cwd: modulePath });
-      })
-      .spread((stdOut, stdErr) => {
-        console.log(stdOut);
-        console.log(stdErr);
-      });
-    });
+  const fsPath = this.getFsPath();
+  return rimraf(path.join(fsPath, 'node_modules'))
+  .then(() => {
+    return exec('npm install --loglevel=error', { cwd: fsPath });
   })
   .then(() => {
     return this;
@@ -258,22 +204,8 @@ Lambda.prototype.buildPackage = function buildPackage(report) {
   const initTime = process.hrtime();
   const lambdaPath = this.config.handlerPath;
 
-  return this.getNodeModules()
+  return this.installLocally()
   .then(nodeModules => {
-    // Retrieve the content to put in the "node_module" folder of the Lambda package
-    const modules = _.map(nodeModules, nodeModule => {
-      return {
-        name: nodeModule.getName(),
-        fsPath: nodeModule.getFsPath()
-      };
-    });
-    if (this.config.includeEndpoints) {
-      modules.push({
-        name: 'endpoints',
-        fsPath: path.join(plugin.lager.getPlugin('api-gateway').getPath(), 'endpoints')
-      });
-    }
-
     return new Promise((resolve, reject) => {
       const archivePath = path.join(os.tmpdir(), new Buffer(lambdaPath).toString('base64') + '.zip');
       const outputStream = fs.createWriteStream(archivePath);
@@ -295,16 +227,6 @@ Lambda.prototype.buildPackage = function buildPackage(report) {
 
       // Add the Lamba code to the archive
       archive.directory(lambdaPath, '');
-
-      // Add the node modules to the archive
-      modules.forEach(nodeModule => {
-        archive.directory(nodeModule.fsPath, 'node_modules' + path.sep + nodeModule.name);
-      });
-
-      // Add the application configuration of the environment to the archive
-      const envConfig = process.env;
-      envConfig.LAMBDA = true;
-      archive.append(JSON.stringify(envConfig), { name: 'env_config.json' });
 
       archive.finalize();
     });

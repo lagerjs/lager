@@ -1,8 +1,5 @@
 {
-  "x-lager": {
-    "dependencies": [
-      "data-access",
-      "log"
-    ]
+  "dependencies": {
+    "data-access": "../../modules/data-access"
   }
 }

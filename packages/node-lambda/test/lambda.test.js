@@ -59,14 +59,6 @@ describe('A Lambda', () => {
     return lambda.getEventExamples();
   });
 
-  it('should provide the list of its node modules', () => {
-    return lambda.getNodeModules()
-    .then(nodeModules => {
-      assert.equal(nodeModules.log.name, 'log');
-      assert.equal(nodeModules['data-access'].name, 'data-access');
-    });
-  });
-
   it.skip('should be executed in AWS', () => {
     return lambda.execute();
   });
