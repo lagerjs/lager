@@ -12,12 +12,12 @@ describe('An IAM role', () => {
   const context = { environment: 'TEST', stage: 'v0' };
   let getRoleError = null;
   const getRole = {
-    ResponseMetadata: { RequestId: '1097411e-d914-11e6-bbbe-afa094ecc2eb' },
+    ResponseMetadata: { RequestId: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa' },
     Role: {
       Path: '/',
       RoleName: 'TEST_MyRole_v0',
-      RoleId: 'AROAJU6VLJRRNODAMWM7M',
-      Arn: 'arn:aws:iam::086256341561:role/TEST_MyRole_v0',
+      RoleId: 'AAAAAAAAAAAAAAAAAAAAA',
+      Arn: 'arn:aws:iam::000000000000:role/TEST_MyRole_v0',
       CreateDate: new Date(),
       AssumeRolePolicyDocument: '%7B%22Version%22%3A%222012-10-17%22%2C%22Statement%22%3A%5B%7B%22'
                               + 'Effect%22%3A%22Allow%22%2C%22Principal%22%3A%7B%22Service%22%3A%22'

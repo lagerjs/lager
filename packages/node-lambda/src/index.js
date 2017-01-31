@@ -3,7 +3,6 @@
 const path = require('path');
 const fs = require('fs');
 
-const Table = require('easy-table');
 const Promise = require('bluebird');
 const _ = require('lodash');
 
@@ -61,24 +60,13 @@ function loadLambda(lambdaPath, identifier) {
     // But because require() caches the content it loads, we clone the result to avoid bugs
     // if the function is called twice.
     const lambdaConfig = _.cloneDeep(require(path.join(lambdaPath, 'config')));
-    let packageJson = {};
-    try {
-      packageJson = _.cloneDeep(require(path.join(lambdaPath, 'package.json')));
-    } catch (e) {
-      if (e.code !== 'MODULE_NOT_FOUND') {
-        throw e;
-      }
-    }
-
-    // If the handler path is not specified, we consider it is the path to the Lambda
-    lambdaConfig.handlerPath = lambdaConfig.handlerPath || lambdaPath;
 
     // If the identifier is not specified, it will be the name of the directory that contains the config
     lambdaConfig.identifier = lambdaConfig.identifier || identifier;
 
     // Lasy loading because the plugin has to be registered in a Lager instance before requiring ./lambda
     const Lambda = require('./lambda');
-    const lambda = new Lambda(lambdaConfig, packageJson);
+    const lambda = new Lambda(lambdaConfig, lambdaPath);
 
     // This event allows to inject code to alter the Lambda configuration
     return plugin.lager.fire('afterLambdaLoad', lambda);
@@ -158,62 +146,6 @@ function loadNodeModule(nodeModulePath, name) {
 }
 
 /**
- * Deploy a list of Lambdas
- * @param {Array} lambdaIdentifiers - List of Lambdas identifiers
- * @param {string} region - AWS region where we want to deploy the Lambdas
- * @param {Object} context - an object containing the environment and the alias/stage to apply to the Lambdas
- * @return {Promise<[Api]>} - a promise of a list of published Lambdas IndegrationDataInjectors
- */
-function deploy(lambdaIdentifiers, region, context) {
-  return loadLambdas()
-  .then(lambdas => {
-    // If lambdaIdentifier is empty, we deploy all lambdas
-    if (lambdaIdentifiers) {
-      lambdas = _.filter(lambdas, lambda => { return lambdaIdentifiers.indexOf(lambda.getIdentifier()) !== -1; });
-    }
-    return Promise.map(lambdas, (lambda) => {
-      return lambda.deploy(region, context);
-    });
-  })
-  .then(results => {
-    const t = new Table();
-    _.forEach(results, result => {
-      t.cell('Name', result.report.name);
-      t.cell('Operation', result.report.operation);
-      t.cell('Version', result.report.publishedVersion);
-      t.cell('Alias', result.report.aliasExisted ? 'Updated' : 'Created');
-      t.cell('ARN', result.report.aliasArn);
-      t.cell('Zip build time', formatHrTime(result.report.packageBuildTime));
-      t.cell('Deploy time', formatHrTime(result.report.deployTime));
-      t.newRow();
-    });
-    console.log();
-    console.log('Lambda functions deployed');
-    console.log();
-    console.log(t.toString());
-    return results;
-  });
-}
-
-/**
- * Install a list of Lambdas locally
- * @param {Array} lambdaIdentifiers - List of Lambdas identifiers
- * @return {Promise}
- */
-function installLocally(lambdaIdentifiers) {
-  return loadLambdas()
-  .then(lambdas => {
-    // If lambdaIdentifier is empty, we install all lambdas
-    if (lambdaIdentifiers) {
-      lambdas = _.filter(lambdas, lambda => { return lambdaIdentifiers.indexOf(lambda.getIdentifier()) !== -1; });
-    }
-    return Promise.map(lambdas, (lambda) => {
-      return lambda.installLocally();
-    });
-  });
-}
-
-/**
  * Find an Lambda by its identifier
  * @param {string} name - the name of the Lambda
  * @returns {Array}
@@ -245,6 +177,15 @@ function findNodeModule(name) {
   });
 }
 
+/**
+ * Return the list of policies that should be used to used with the plugin
+ * @returns {object}
+ */
+function getPolicies() {
+  // @TODO add event emitters
+  return Promise.resolve(require('./aws-policies'));
+}
+
 const plugin = {
   name: 'node-lambda',
 
@@ -271,14 +212,6 @@ const plugin = {
     },
 
     /**
-     * This hook load all lambda configurations
-     * @returns {Boolean}
-     */
-    beforeApisLoad: function beforeApisLoad() {
-      return loadLambdas();
-    },
-
-    /**
      * This hook perform the deployment of lambdas in AWS and return integration data
      * that will be used to configure the related endpoints
      * @param {string} region - the AWS region where we doing the deployment
@@ -289,22 +222,18 @@ const plugin = {
      * @returns {Promise<Array>}
      */
     loadIntegrations: function loadIntegrations(region, context, integrationResults) {
-      return deploy(null, region, context)
+      return loadLambdas()
+      .then(lambdas => {
+        return Promise.map(lambdas, lambda => {
+          return lambda.deploy(region, context);
+        });
+      })
       .then(results => {
         _.forEach(results, r => {
           integrationResults.push(r.integrationDataInjector);
         });
       });
     },
-
-    /**
-     * @TODO: When the APIs have been deployed, we should cleanup the Lambda environment
-     * and delete the lambdas that are not used anymore
-     * @returns {[type]} [description]
-     */
-    afterDeployAll: function afterDeployAll() {
-      return Promise.resolve();
-    }
   },
 
   extensions: {
@@ -315,17 +244,7 @@ const plugin = {
   loadLambdas,
   findNodeModule,
   findLambda,
-  deploy,
-  installLocally
+  getPolicies
 };
 
 module.exports = plugin;
-
-/**
- * Format the result of process.hrtime() into numeric with 3 decimals
- * @param  {Array} hrTime
- * @return {numeric}
- */
-function formatHrTime(hrTime) {
-  return (hrTime[0] + hrTime[1] / 1000000000).toFixed(3);
-}

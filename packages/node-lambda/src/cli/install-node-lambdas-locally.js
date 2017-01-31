@@ -63,7 +63,16 @@ module.exports = (icli) => {
     console.log();
     console.log('This operation may last a little');
 
-    return plugin.installLocally(parameters.lambdaIdentifiers)
+    return plugin.loadLambdas()
+    .then(lambdas => {
+      // If lambdaIdentifier is empty, we install all lambdas
+      if (parameters.lambdaIdentifiers) {
+        lambdas = _.filter(lambdas, lambda => { return parameters.lambdaIdentifiers.indexOf(lambda.getIdentifier()) !== -1; });
+      }
+      return Promise.map(lambdas, (lambda) => {
+        return lambda.installLocally();
+      });
+    })
     .then(() => {
       const lambdaList = parameters.lambdaIdentifiers.map(icli.format.info).join(', ');
       console.log();

@@ -1,6 +1,7 @@
 'use strict';
 
 const _ = require('lodash');
+const Table = require('easy-table');
 const plugin = require('../index');
 
 /**
@@ -129,14 +130,38 @@ module.exports = (icli) => {
     console.log();
     console.log('This operation may last a little');
 
-    return plugin.deploy(
-      parameters.lambdaIdentifiers,
-      parameters.region,
-      {
-        stage: parameters.stage,
-        environment: parameters.environment
+    return plugin.loadLambdas()
+    .then(lambdas => {
+      // If lambdaIdentifier is empty, we deploy all lambdas
+      if (parameters.lambdaIdentifiers) {
+        lambdas = _.filter(lambdas, lambda => { return parameters.lambdaIdentifiers.indexOf(lambda.getIdentifier()) !== -1; });
       }
-    )
+      return Promise.map(lambdas, lambda => {
+        const context = {
+          stage: parameters.stage,
+          environment: parameters.environment
+        };
+        return lambda.deploy(parameters.region, context);
+      });
+    })
+    .then(results => {
+      const t = new Table();
+      _.forEach(results, result => {
+        t.cell('Name', result.report.name);
+        t.cell('Operation', result.report.operation);
+        t.cell('Version', result.report.publishedVersion);
+        t.cell('Alias', result.report.aliasExisted ? 'Updated' : 'Created');
+        t.cell('ARN', result.report.aliasArn);
+        t.cell('Zip build time', formatHrTime(result.report.packageBuildTime));
+        t.cell('Deploy time', formatHrTime(result.report.deployTime));
+        t.newRow();
+      });
+      console.log();
+      console.log('Lambda functions deployed');
+      console.log();
+      console.log(t.toString());
+      return results;
+    })
     .catch(e => {
       if (e.code === 'AccessDeniedException' && e.cause && e.cause.message) {
         console.log('\n    ' + icli.format.error('Insufficient permissions to perform the action\n'));
@@ -150,3 +175,12 @@ module.exports = (icli) => {
   }
 
 };
+
+/**
+ * Format the result of process.hrtime() into numeric with 3 decimals
+ * @param  {Array} hrTime
+ * @return {numeric}
+ */
+function formatHrTime(hrTime) {
+  return (hrTime[0] + hrTime[1] / 1000000000).toFixed(3);
+}

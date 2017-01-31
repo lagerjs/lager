@@ -1,4 +1,6 @@
 {
+  "name": "data-access",
+  "version": "0.0.0",
   "dependencies": {
     "log": "../log"
   }

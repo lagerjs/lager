@@ -19,10 +19,9 @@ const plugin = require('./index');
  * @param {Object} config - lambda configuration
  * @constructor
  */
-const Lambda = function Lambda(config, packageJson, fsPath) {
+const Lambda = function Lambda(config, fsPath) {
   this.identifier = config.identifier;
   this.config = config;
-  this.packageJson = packageJson || {};
   this.fsPath = fsPath;
 
   this.config.params = this.config.params || {};
@@ -59,7 +58,7 @@ Lambda.prototype.toString = function toString() {
  * @returns {string}
  */
 Lambda.prototype.getFsPath = function getFsPath() {
-  return path.join(process.cwd(), plugin.config.lambdasPath, this.identifier);
+  return this.fsPath;
 };
 
 /**
@@ -79,6 +78,13 @@ Lambda.prototype.getEventExamples = function getEventExamples() {
       }
     });
     return Promise.resolve(events);
+  })
+  .catch(e => {
+    if (e.code === 'ENOENT') {
+      plugin.lager.log.info('No events folder for Lamdba ' + this.getIdentifier());
+      return Promise.resolve([]);
+    }
+    return Promise.reject(e);
   });
 };
 
@@ -88,6 +94,19 @@ Lambda.prototype.getEventExamples = function getEventExamples() {
  */
 Lambda.prototype.loadEventExample = function loadEventExample(name) {
   return require(path.join(this.getFsPath(), 'events', name));
+};
+
+/**
+ * Returns the result of a local execution
+ * @returns {Object}
+ */
+Lambda.prototype.executeLocally = function executeLocally(event) {
+  return this.installLocally()
+  .then(() => {
+    const handlerParts = this.config.params.Handler.split('.');
+    const m = require(path.join(this.getFsPath(), handlerParts[0]));
+    return Promise.promisify(m[handlerParts[1]])(event, {});
+  });
 };
 
 /**
@@ -105,19 +124,6 @@ Lambda.prototype.execute = function execute(region, context, event) {
   if (context.stage) { params.Qualifier = context.stage; }
 
   return Promise.promisify(awsLambda.invoke.bind(awsLambda))(params);
-};
-
-/**
- * Returns the result of a local execution
- * @returns {Object}
- */
-Lambda.prototype.executeLocally = function executeLocally(event) {
-  return this.installLocally()
-  .then(() => {
-    const handlerParts = this.config.params.Handler.split('.');
-    const m = require(path.join(this.getFsPath(), handlerParts[0]));
-    return Promise.promisify(m[handlerParts[1]])(event, {});
-  });
 };
 
 /* istanbul ignore next */
@@ -202,7 +208,7 @@ Lambda.prototype.installLocally = function install() {
 Lambda.prototype.buildPackage = function buildPackage(report) {
   report = report || {};
   const initTime = process.hrtime();
-  const lambdaPath = this.config.handlerPath;
+  const lambdaPath = this.getFsPath();
 
   return this.installLocally()
   .then(nodeModules => {
@@ -242,7 +248,7 @@ Lambda.prototype.buildPackage = function buildPackage(report) {
 Lambda.prototype.isDeployed = function isDeployed(awsLambda) {
   const params = { FunctionName: this.config.params.FunctionName };
   return Promise.promisify(awsLambda.getFunction.bind(awsLambda))(params)
-  .then(() => {
+  .then((r) => {
     return Promise.resolve(true);
   })
   .catch(e => {
