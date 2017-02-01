@@ -4,7 +4,7 @@
   "description": "A Lager plugin to manage APIs in AWS API Gateway",
   "main": "src/index.js",
   "scripts": {
-    "test": "NODE_ENV=test istanbul cover --include-all-sources=true ./node_modules/mocha/bin/_mocha -- --recursive && rm -rf ./coverage",
+    "test": "NODE_ENV=test istanbul cover --include-all-sources=true ./node_modules/mocha/bin/_mocha -- --recursive",
     "test-ci": "NODE_ENV=test istanbul cover --include-all-sources=true ./node_modules/mocha/bin/_mocha --report lcovonly -- --recursive && codecov",
     "eslint": "eslint --ignore-path .gitignore **/*.js && echo \"  JS lint passed\n\"; exit 0",
     "mdlint": "remark -qf . && echo \"  Markdown lint passed\n\"; exit 0",

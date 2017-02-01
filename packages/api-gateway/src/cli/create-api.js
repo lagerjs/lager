@@ -18,9 +18,6 @@ const plugin = require('../index');
  */
 module.exports = (icli) => {
 
-  // Build the list of available endpoints for interactive selection
-  const choicesLists = getChoices();
-
   const config = {
     section: 'Api Gateway plugin',
     cmd: 'create-api',
@@ -37,6 +34,9 @@ module.exports = (icli) => {
       description: 'The title of the API',
       type: 'input',
       question: {
+        default: (answers, cmdParameterValues) => {
+          return cmdParameterValues.apiIdentifier || answers.apiIdentifier;
+        },
         message: 'Choose a short title for the API'
       }
     }, {
@@ -44,21 +44,10 @@ module.exports = (icli) => {
       description: 'A description of the API',
       type: 'input',
       question: {
+        default: (answers, cmdParameterValues) => {
+          return (cmdParameterValues.apiIdentifier || answers.apiIdentifier) + ' - an API built with Lager';
+        },
         message: 'You can write a more complete description of the API here'
-      }
-    }, {
-      cmdSpec: '-e, --endpoints <endpoints>',
-      description: 'The endpoints exposed by the API separated by ","',
-      type: 'checkbox',
-      choices: choicesLists.endpoints,
-      question: {
-        message: 'Which endpoints does this API expose?',
-        when: (answers, cmdParameterValues) => {
-          return choicesLists.endpoints()
-          .then(endpoints => {
-            return endpoints.length > 0 && !cmdParameterValues['endpoints'];
-          });
-        }
       }
     }]
   };
@@ -68,28 +57,7 @@ module.exports = (icli) => {
    */
   return icli.createSubCommand(config, executeCommand);
 
-
-  /**
-   * Build the choices for "list" and "checkbox" parameters
-   * @returns {Object} - collection of lists of choices for "list" and "checkbox" parameters
-   */
-  function getChoices() {
-    return {
-      endpoints: () => {
-        return plugin.loadEndpoints()
-        .then(endpoints => {
-          return _.map(endpoints, endpoint => {
-            const spec = endpoint.getSpec();
-            return {
-              value: endpoint.getMethod() + ' ' + endpoint.getResourcePath(),
-              name: endpoint.getMethod() + ' ' + endpoint.getResourcePath() + (spec.summary ? ' - ' + spec.summary : '')
-            };
-          });
-        });
-      }
-    };
-  }
-
+  /* istanbul ignore next */
   /**
    * Create the new api
    * @param {Object} parameters - the parameters provided in the command and in the prompt

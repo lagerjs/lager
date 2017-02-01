@@ -165,11 +165,14 @@ module.exports = (icli) => {
     choicesLists.credentials = () => {
       return plugin.lager.call('iam:getRoles', [])
       .then(roles => {
-        const credentials = _.map(roles, role => {
-          return {
-            value: role.getName(),
-            name: icli.format.info(role.getName())
-          };
+        const credentials = [];
+        _.forEach(roles, role => {
+          if (_.find(role.config['trust-relationship'].Statement, (o) => { return o.Principal.Service === 'apigateway.amazonaws.com'; })) {
+            credentials.push({
+              value: role.getName(),
+              name: icli.format.info(role.getName())
+            });
+          }
         });
         if (credentials.length > 0) {
           credentials.push({
@@ -197,6 +200,7 @@ module.exports = (icli) => {
     return choicesLists;
   }
 
+  /* istanbul ignore next */
   /**
    * Create the new endpoint
    * @param {Object} parameters - the parameters provided in the command and in the prompt
