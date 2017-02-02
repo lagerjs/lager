@@ -8,13 +8,6 @@ const Table = require('easy-table');
 const Promise = require('bluebird');
 const _ = require('lodash');
 
-/**
- * Returns the path to the directory of configuration
- * @return {[type]}
- */
-function getPath() {
-  return path.join(process.cwd(), plugin.name);
-}
 
 /**
  * Load all API specifications
@@ -429,9 +422,7 @@ function findEndpoint(resourcePath, method) {
 function findModel(name) {
   return loadModels()
   .then(models => {
-    return _.find(models, model => {
-      return model.getName('spec') === name;
-    });
+    return _.find(models, model => { return model.getName('spec') === name; });
   });
 }
 
@@ -466,18 +457,13 @@ const plugin = {
     registerCommands
   },
 
-  helpers: {},
-  getPath,
   loadApis,
   loadEndpoints,
   loadModels,
   deploy,
   findApi,
   findEndpoint,
-  findModel,
-  getAwsPermissions() {
-    return require('./aws-permissions');
-  }
+  findModel
 };
 
 module.exports = plugin;

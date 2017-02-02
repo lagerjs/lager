@@ -91,26 +91,5 @@ Model.prototype.getNestedModelsList = function getNestedModelsList() {
     return Promise.resolve(_.concat.apply(null, nestedModelsLists));
   });
 };
-/**
- * Returns the names of the models referenced in the model
- * @returns {Array[string]}
- */
-Model.prototype.getRelatedModels = function getRelatedModels() {
-  const modelRefs = [];
-  if (this.spec.properties) {
-    _.forEach(this.spec.properties, property => {
-      if (property.$ref) {
-        modelRefs.push(property.$ref);
-      }
-    });
-  }
-  const modelNames = _.map(_.uniq(modelRefs), modelRef => {
-    return modelRef.replace('#/definitions/', '');
-  });
-
-  return Promise.map(modelNames, modelName => {
-    return plugin.findModel(modelName);
-  });
-};
 
 module.exports = Model;

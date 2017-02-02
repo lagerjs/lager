@@ -40,7 +40,8 @@ process.on('unhandledRejection', (reason, p) => {
 before(function() {
   _.assign(nodeApiGatewayPlugin.config, {
     apisPath: 'test-assets' + path.sep + 'apis',
-    endpointsPath: 'test-assets' + path.sep + 'endpoints'
+    endpointsPath: 'test-assets' + path.sep + 'endpoints',
+    modelsPath: 'test-assets' + path.sep + 'models'
   });
   assert.equal(nodeApiGatewayPlugin.lager, undefined);
   lager.registerPlugin(nodeApiGatewayPlugin);
