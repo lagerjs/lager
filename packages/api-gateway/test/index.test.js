@@ -57,4 +57,12 @@ describe('The api-gateway plugin', function() {
     });
   });
 
+  it('should give a list of usefull IAM policies', () => {
+    return plugin.getPolicies()
+    .then(policies => {
+      assert.equal(policies.length, 1);
+      assert.equal(policies[0].identifier, 'deploy-api-gateway');
+    });
+  });
+
 });

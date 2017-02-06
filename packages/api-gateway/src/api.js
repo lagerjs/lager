@@ -11,9 +11,9 @@ const plugin = require('./index');
  * @constructor
  * @param {Object} spec - base API specification (OpenAPI specification)
  */
-const Api = function Api(identifier, spec) {
-  this.identifier = identifier;
+const Api = function Api(spec, identifier) {
   this.spec = spec;
+  this.identifier = identifier;
   this.endpoints = [];
   this.models = [];
 };
@@ -294,10 +294,6 @@ function cleanSpecForDoc(spec) {
   delete spec['x-lager'];
   _.forEach(spec.paths, path => {
     delete path.options;
-    _.forEach(path, method => {
-      delete method['x-amazon-apigateway-auth'];
-      delete method['x-amazon-apigateway-integration'];
-    });
   });
   return spec;
 }

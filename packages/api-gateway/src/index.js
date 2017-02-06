@@ -66,7 +66,7 @@ function loadApi(apiSpecPath, identifier) {
 
     // Lasy loading because the plugin has to be registered in a Lager instance before requiring ./endpoint
     const Api = require('./api');
-    const api = new Api(identifier, apiSpec);
+    const api = new Api(apiSpec, identifier);
 
     // This event allows to inject code to alter the API specification
     return plugin.lager.fire('afterApiLoad', api);
@@ -444,6 +444,15 @@ function registerCommands(icli) {
   });
 }
 
+/**
+ * Return the list of policies that should be used to used with the plugin
+ * @returns {object}
+ */
+function getPolicies() {
+  // @TODO add event emitters
+  return Promise.resolve(require('./aws-policies'));
+}
+
 const plugin = {
   name: 'api-gateway',
 
@@ -463,7 +472,8 @@ const plugin = {
   deploy,
   findApi,
   findEndpoint,
-  findModel
+  findModel,
+  getPolicies
 };
 
 module.exports = plugin;
