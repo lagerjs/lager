@@ -5,6 +5,7 @@
 const assert = require('assert');
 const Api = testRequire('src/api');
 const Endpoint = testRequire('src/endpoint');
+const AWS = require('aws-sdk-mock');
 
 describe('An API', () => {
 
@@ -24,10 +25,15 @@ describe('An API', () => {
     definitions: {}
   };
   const endpointSpec = {
-    summary: 'my-resource',
+    consumes: [
+      'application/json'
+    ],
+    produces: [
+      'application/json'
+    ],
     responses: {
       '200': {
-        'description': '200 response'
+        description: '200 response'
       }
     },
     'x-amazon-apigateway-integration': {
@@ -36,12 +42,58 @@ describe('An API', () => {
           statusCode: '200'
         }
       },
+      requestTemplates: {
+        'application/json': '{\'statusCode\': 200}'
+      },
       passthroughBehavior: 'when_no_match',
-      contentHandling: 'CONVERT_TO_TEXT',
-      type: 'aws'
+      type: 'mock'
     }
   };
   const endpoint = new Endpoint(endpointSpec, '/my-resource', 'GET');
+
+  const getRestApis = {
+    items: [{
+      id: 'aaaaaaaaaa',
+      name: 'an-api - an-api',
+      description: 'an-api - an API built with Lager',
+      createdDate: new Date()
+    }, {
+      id: 'bbbbbbbbbb',
+      name: 'another-api - another-api',
+      description: 'another-api - an API built with Lager',
+      createdDate: new Date()
+    }, {
+      id: 'cccccccccc',
+      name: 'an-api-not-created-by-lager',
+      createdDate: new Date()
+    }
+  ]};
+  const importRestApi = {
+    id: 'dddddddddd',
+    name: 'TEST my-api - my-api',
+    description: 'my-api - an API built with Lager',
+    createdDate: new Date()
+  };
+  const putRestApi = importRestApi;
+  const createDeployment = {
+    id: 'xxxxxx',
+    createdDate: new Date()
+  };
+
+  before(() => {
+    AWS.mock('APIGateway', 'getRestApis', (params, callback) => {
+      callback(null, getRestApis);
+    });
+    AWS.mock('APIGateway', 'importRestApi', (params, callback) => {
+      callback(null, importRestApi);
+    });
+    AWS.mock('APIGateway', 'putRestApi', (params, callback) => {
+      callback(null, putRestApi);
+    });
+    AWS.mock('APIGateway', 'createDeployment', (params, callback) => {
+      callback(null, createDeployment);
+    });
+  });
 
   it('should be instantiated', () => {
     api = new Api(spec, 'my-api');
@@ -86,7 +138,7 @@ describe('An API', () => {
     return api.generateSpec('api-gateway', context)
     .then(spec => {
       assert.equal(spec.info.title, 'TEST my-api - my-api');
-      assert.equal(spec.paths['/my-resource'].get['x-amazon-apigateway-integration'].type, 'aws');
+      assert.equal(spec.paths['/my-resource'].get['x-amazon-apigateway-integration'].type, 'mock');
     });
   });
 
@@ -94,7 +146,24 @@ describe('An API', () => {
     return api.generateSpec('complete', context)
     .then(spec => {
       assert.equal(spec.info.title, 'my-api');
-      assert.equal(spec.paths['/my-resource'].get['x-amazon-apigateway-integration'].type, 'aws');
+      assert.equal(spec.paths['/my-resource'].get['x-amazon-apigateway-integration'].type, 'mock');
+    });
+  });
+
+  it('should be created for the first deployment', function() {
+    return api.publish('us-east-1', context)
+    .then(result => {
+      assert.equal(result.report.name, 'TEST my-api - my-api');
+      assert.equal(result.report.operation, 'Creation');
+    });
+  });
+
+  it('should be updated for the second deployment', function() {
+    getRestApis.items.push(importRestApi);
+    return api.publish('us-east-1', context)
+    .then(result => {
+      assert.equal(result.report.name, 'TEST my-api - my-api');
+      assert.equal(result.report.operation, 'Update');
     });
   });
 

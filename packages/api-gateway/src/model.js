@@ -68,22 +68,22 @@ Model.prototype.getChildModels = function getChildModels() {
  * @return {Object}
  */
 Model.prototype.getNestedModelsList = function getNestedModelsList() {
-  const models = this.getChildModels();
-
-  // Shortcut if the model does not have any child, we set the result to an empty list
-  if (models.length === 0) {
-    return Promise.resolve({});
-  }
-
-  // If the model has children
-  return Promise.map(models, childModel => {
-    // Recusivity: whe call the getNestedModelsList() of child models
-    // The recursion will stop when a model does not have any child
-    return Promise.all([childModel, childModel.getNestedModelsList()])
-    .spread((childModel, nestedModelsList) => {
-      // We add the child model itself to the list of its dependencies
-      nestedModelsList.push(childModel);
-      return nestedModelsList;
+  return this.getChildModels()
+  .then(models => {
+    // Shortcut if the model does not have any child, we set the result to an empty list
+    if (models.length === 0) {
+      return Promise.resolve({});
+    }
+    // If the model has children
+    return Promise.map(models, childModel => {
+      // Recusivity: whe call the getNestedModelsList() of child models
+      // The recursion will stop when a model does not have any child
+      return Promise.all([childModel, childModel.getNestedModelsList()])
+      .spread((childModel, nestedModelsList) => {
+        // We add the child model itself to the list of its dependencies
+        nestedModelsList.push(childModel);
+        return nestedModelsList;
+      });
     });
   })
   .then(nestedModelsLists => {

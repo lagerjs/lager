@@ -48,11 +48,40 @@ Api.prototype.doesExposeEndpoint = function doesExposeEndpoint(endpoint) {
 };
 
 /**
- * Add an endpoint to the API
+ * Add a list of endpoints to the API
  * @param {Endpoint} endpoint
+ * @param {boolean} force
  * @returns {Promise<Api>}
  */
-Api.prototype.addEndpoint = function addEndpoint(endpoint) {
+Api.prototype.addEndpoints = function addEndpoints(endpoints, force) {
+  return plugin.lager.fire('beforeAddEndpointsToApi', this, endpoints)
+  .spread((api, endpoints) => {
+    return Promise.map(endpoints, (endpoint) => {
+      if (this.doesExposeEndpoint(endpoint)) {
+        return this.addEndpoint(endpoint, force);
+      }
+    });
+  })
+  .then(() => {
+    return plugin.lager.fire('afterAddEndpointsToApi', this, endpoints);
+  })
+  .spread((api, endpoints) => {
+    return Promise.resolve(this);
+  });
+};
+
+/**
+ * Add an endpoint to the API
+ * @param {Endpoint} endpoint
+ * @param {boolean} force
+ * @returns {Promise<Api>}
+ */
+Api.prototype.addEndpoint = function addEndpoint(endpoint, force) {
+  // If the endpoint is not supposed to be exposed by the API, we skip it
+  if (force !== true && !this.doesExposeEndpoint(endpoint)) {
+    return Promise.resolve(this);
+  }
+
   return plugin.lager.fire('beforeAddEndpointToApi', this, endpoint)
   .spread((api, endpoint) => {
     this.endpoints.push(endpoint);
@@ -157,7 +186,7 @@ Api.prototype.publish = function publish(region, context) {
     report.stage = context.stage;
     return this._publish(awsApiGateway, context, awsApi);
   })
-  .then(() => {
+  .then((res) => {
     return plugin.lager.fire('afterPublishApi', this);
   })
   .spread(() => {

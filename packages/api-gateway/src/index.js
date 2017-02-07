@@ -220,31 +220,6 @@ function loadModel(modelSpecPath, name) {
 }
 
 /**
- * [function description]
- * @param {[Api]} apis - a list of APIs
- * @param {[Endpoint]} endpoints - a list of Edpoints
- * @returns {Promise<[Api]>} - the list of APIs enriched with endpoints
- */
-function addEndpointsToApis(apis, endpoints) {
-  return plugin.lager.fire('beforeAddEndpointsToApis', apis, endpoints)
-  .spread((apis, endpoints) => {
-    return Promise.map(apis, (api) => {
-      return Promise.map(endpoints, (endpoint) => {
-        if (api.doesExposeEndpoint(endpoint)) {
-          return api.addEndpoint(endpoint);
-        }
-      });
-    });
-  })
-  .then(() => {
-    return plugin.lager.fire('afterAddEndpointsToApis', apis, endpoints);
-  })
-  .spread((apis, endpoints) => {
-    return Promise.resolve(apis);
-  });
-}
-
-/**
  * Integration load and deployment is performed other plugins
  * @param  {string} region - AWS region
  * @param  {string} stage - API stage
@@ -333,7 +308,10 @@ function deploy(apiIdentifiers, region, context) {
   return Promise.all([loadApis(), loadEndpoints()])
   .spread((apis, endpoints) => {
     apis = _.filter(apis, api => { return apiIdentifiers.indexOf(api.getIdentifier()) !== -1; });
-    return Promise.all([addEndpointsToApis(apis, endpoints), endpoints]);
+    return Promise.all([
+      Promise.map(apis, api => { return api.addEndpoints(endpoints); }),
+      endpoints
+    ]);
   })
   .spread((apis, endpoints) => {
     const t = new Table();
@@ -394,10 +372,10 @@ function findApi(identifier) {
   return Promise.all([loadApis(), loadEndpoints()])
   .spread((apis, endpoints) => {
     const api = _.find(apis, (api) => { return api.getIdentifier() === identifier; });
-    return addEndpointsToApis([api], endpoints);
-  })
-  .then(apis => {
-    return apis[0];
+    if (!api) {
+      return Promise.reject(new Error('Could not find the API "' + identifier + '" in the current project'));
+    }
+    return api.addEndpoints(endpoints);
   });
 }
 
@@ -410,7 +388,11 @@ function findApi(identifier) {
 function findEndpoint(resourcePath, method) {
   return loadEndpoints()
   .then(endpoints => {
-    return _.find(endpoints, endpoint => { return endpoint.getResourcePath() === resourcePath && endpoint.getMethod() === method; });
+    const endpoint = _.find(endpoints, endpoint => { return endpoint.getResourcePath() === resourcePath && endpoint.getMethod() === method; });
+    if (!endpoint) {
+      return Promise.reject(new Error('Could not find the endpoint "' + method + ' ' + resourcePath + '" in the current project'));
+    }
+    return endpoint;
   });
 }
 
@@ -422,7 +404,11 @@ function findEndpoint(resourcePath, method) {
 function findModel(name) {
   return loadModels()
   .then(models => {
-    return _.find(models, model => { return model.getName('spec') === name; });
+    const model = _.find(models, model => { return model.getName('spec') === name; });
+    if (!model) {
+      return Promise.reject(new Error('Could not find the model "' + name + '" in the current project'));
+    }
+    return model;
   });
 }
 
