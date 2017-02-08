@@ -131,7 +131,7 @@ describe('A Lambda', () => {
     assert.equal(example.key3, 'value3');
   });
 
-  it.skip('should be executed locally', () => {
+  it('should be executed locally', () => {
     return lambda.executeLocally({ a: 'b' })
     .then(res => {
       assert.equal(res.msg, 'This Lambda is not implemented!');
@@ -147,7 +147,7 @@ describe('A Lambda', () => {
     });
   });
 
-  describe.skip('deployment', () => {
+  describe('deployment', () => {
 
     it('should create the Lambda for the first deployment', function() {
       this.timeout(10000);
