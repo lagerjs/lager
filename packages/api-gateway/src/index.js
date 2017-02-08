@@ -4,10 +4,10 @@ const file = require('file');
 const path = require('path');
 const fs = require('fs');
 
-const Table = require('easy-table');
 const Promise = require('bluebird');
 const _ = require('lodash');
 
+let endpoints;
 
 /**
  * Load all API specifications
@@ -72,7 +72,7 @@ function loadApi(apiSpecPath, identifier) {
     return plugin.lager.fire('afterApiLoad', api);
   })
   .spread(api => {
-    return Promise.resolve(api);
+    return api.init();
   });
 }
 
@@ -81,6 +81,11 @@ function loadApi(apiSpecPath, identifier) {
  * @returns {Promise<[Endpoints]>} - the promise of an array containing all endpoints
  */
 function loadEndpoints() {
+  // Shortcut if endpoints already have been loaded
+  if (endpoints !== undefined) {
+    return Promise.resolve(endpoints);
+  }
+
   const endpointSpecsPath = path.join(process.cwd(), plugin.config.endpointsPath);
 
   return plugin.lager.fire('beforeEndpointsLoad')
@@ -103,7 +108,8 @@ function loadEndpoints() {
   .then(endpoints => {
     return plugin.lager.fire('afterEndpointsLoad', endpoints);
   })
-  .spread(endpoints => {
+  .spread(loadedEndpoints => {
+    endpoints = loadedEndpoints;
     return Promise.resolve(endpoints);
   })
   .catch(e => {
@@ -220,7 +226,9 @@ function loadModel(modelSpecPath, name) {
 }
 
 /**
- * Integration load and deployment is performed other plugins
+ * Update the configuration of endpoints with data returned by integration
+ * This data can come from the deployment of a lambda function, the configuration
+ * of an HTTP proxy, the generation of a mock etc ...
  * @param  {string} region - AWS region
  * @param  {string} stage - API stage
  * @param  {string} environment - environment identifier
@@ -233,133 +241,26 @@ function loadIntegrations(region, context) {
   const integrationDataInjectors = [];
   return plugin.lager.fire('loadIntegrations', region, context, integrationDataInjectors)
   .spread((region, context, integrationDataInjectors) => {
-    return Promise.resolve(integrationDataInjectors);
-  });
-}
-
-/**
- * Update the configuration of endpoints with data returned by integration
- * This data can come from the deployment of a lambda function, the configuration
- * of an HTTP proxy, the generation of a mock etc ...
- * @param {[Endpoint]} - a list of Endpoints
- * @param {[IntegrationDataInjector]} - a list of integration data injectors
- *                                       an integration data injector is able to recognize
- *                                       if it applies to an endpoint and update its specification
- * @returns {[Endpoint]} - the list of endpoints of the application
- */
-function addIntegrationDataToEndpoints(endpoints, integrationDataInjectors) {
-  return plugin.lager.fire('beforeAddIntegrationDataToEndpoints', endpoints, integrationDataInjectors)
+    return Promise.all([
+      loadEndpoints(),
+      Promise.resolve(integrationDataInjectors)
+    ]);
+  })
+  .spread((endpoints, integrationDataInjectors) => {
+    return plugin.lager.fire('beforeAddIntegrationDataToEndpoints', endpoints, integrationDataInjectors);
+  })
   .spread((endpoints, integrationDataInjectors) => {
     return Promise.map(integrationDataInjectors, (integrationDataInjector) => {
       return Promise.map(endpoints, (endpoint) => {
         return integrationDataInjector.applyToEndpoint(endpoint);
       });
+    })
+    .then(() => {
+      return plugin.lager.fire('afterAddIntegrationDataToEndpoints', endpoints, integrationDataInjectors);
     });
-  })
-  .then(() => {
-    return plugin.lager.fire('afterAddIntegrationDataToEndpoints', endpoints, integrationDataInjectors);
   })
   .spread((endpoints, integrationDataInjectors) => {
     return Promise.resolve(endpoints);
-  });
-}
-
-/**
- * Plublish OpenAPI specfications in API Gateway
- * @param {Array} apis - List of APIs enriched with endpoints
- * @param {string} region - AWS region where we want to deploy APIs
- * @param {Object} context - an object containing the environment and the stage to apply to the deployment
- * @return {Promise<[Api]>} - a promise of a list of published APIs
- */
-function publishApis(apis, region, context) {
-  return plugin.lager.fire('beforePublishApis', apis)
-  .spread(apis => {
-    const promises = [];
-    let delay = 0;
-    // To avoid TooManyRequestsException, we delay the publication of each api
-    _.forEach(apis, api => {
-      promises.push(new Promise((resolve, reject) => {
-        // 5 seconds delay
-        setTimeout(() => {
-          resolve(api.publish(region, context));
-        }, delay * 30000);
-      }));
-      delay++;
-    });
-    return Promise.all(promises);
-  })
-  .then(publishResults => {
-    return plugin.lager.fire('afterPublishApis', publishResults);
-  })
-  .spread(publishResults => {
-    return Promise.resolve(publishResults);
-  });
-}
-
-/**
- * Deploy a list of APIs
- * @param {Array} apiIdentifiers - List of APIs identifiers
- * @param {string} region - AWS region where we want to deploy APIs
- * @param {Object} context - an object containing the environment and the stage to apply to the deployment
- * @return {Promise<[Api]>} - a promise of a list of published APIs
- */
-function deploy(apiIdentifiers, region, context) {
-  // First load API and endpoint specifications
-  return Promise.all([loadApis(), loadEndpoints()])
-  .spread((apis, endpoints) => {
-    apis = _.filter(apis, api => { return apiIdentifiers.indexOf(api.getIdentifier()) !== -1; });
-    return Promise.all([
-      Promise.map(apis, api => { return api.addEndpoints(endpoints); }),
-      endpoints
-    ]);
-  })
-  .spread((apis, endpoints) => {
-    const t = new Table();
-    _.forEach(endpoints, endpoint => {
-      t.cell('Path', endpoint.getResourcePath());
-      t.cell('Method', endpoint.getMethod());
-      _.forEach(endpoint.getSpec()['x-lager'].apis, apiIdentifier => {
-        if (apiIdentifiers.indexOf(apiIdentifier) > -1) {
-          t.cell(apiIdentifier, 'X');
-        }
-      });
-      t.newRow();
-    });
-    console.log();
-    console.log('Endpoints to deploy');
-    console.log();
-    console.log(t.toString());
-    // The load of API and endpoint specifications succeeded, we can deploy the integrations
-    // Typically, il is lambda functions, but it could be anything published by a plugin
-    return Promise.all([loadIntegrations(region, context), apis, endpoints]);
-  })
-  .spread((integrationsDataInjectors, apis, endpoints) => {
-    // Once the integrations have been deployed we can update the endpoints with integration data
-    return Promise.all([apis, addIntegrationDataToEndpoints(endpoints, integrationsDataInjectors)]);
-  })
-  .spread((apis, endpoints) => {
-    // Now that we have complete API specifications, we can publish them in API Gateway
-    return publishApis(apis, region, context);
-  })
-  .then(results => {
-    const t = new Table();
-    _.forEach(results, result => {
-      t.cell('Identifier', result.api.getIdentifier());
-      t.cell('Name', result.report.name);
-      t.cell('Operation', result.report.operation);
-      t.cell('Stage', result.report.stage);
-      t.cell('AWS identifier', result.report.awsId);
-      if (result.report.failed) {
-        t.cell('Url', result.report.failed);
-      } else {
-        t.cell('Url', 'https://' + result.report.awsId + '.execute-api.us-east-1.amazonaws.com/' + result.report.stage);
-      }
-      t.newRow();
-    });
-    console.log();
-    console.log('APIs deployed');
-    console.log();
-    console.log(t.toString());
   });
 }
 
@@ -455,7 +356,7 @@ const plugin = {
   loadApis,
   loadEndpoints,
   loadModels,
-  deploy,
+  loadIntegrations,
   findApi,
   findEndpoint,
   findModel,

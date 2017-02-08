@@ -1,6 +1,7 @@
 'use strict';
 
 const _ = require('lodash');
+const Table = require('easy-table');
 
 const plugin = require('../index');
 
@@ -119,14 +120,85 @@ module.exports = (icli) => {
   function executeCommand(parameters) {
     if (parameters.environment === undefined) { parameters.environment = plugin.lager.getConfig('environment'); }
     if (parameters.stage === undefined) { parameters.stage = plugin.lager.getConfig('stage'); }
-    return plugin.deploy(
-      parameters.apiIdentifiers,
-      parameters.region,
-      {
-        environment: parameters.environment,
-        stage: parameters.stage
-      }
-    );
+    const context = {
+      environment: parameters.environment,
+      stage: parameters.stage
+    };
+
+    return plugin.loadApis()
+    .then(apis => {
+      // Give an overview of what will be deployed
+      apis = _.filter(apis, api => { return parameters.apiIdentifiers.indexOf(api.getIdentifier()) !== -1; });
+      const endpoints = _.union.apply(null, _.map(apis, api => { return api.getEndpoints(); }));
+      const t = new Table();
+      _.forEach(endpoints, endpoint => {
+        t.cell('Path', endpoint.getResourcePath());
+        t.cell('Method', endpoint.getMethod());
+        _.forEach(endpoint.getSpec()['x-lager'].apis, apiIdentifier => {
+          if (parameters.apiIdentifiers.indexOf(apiIdentifier) > -1) {
+            t.cell(apiIdentifier, 'X');
+          }
+        });
+        t.newRow();
+      });
+      console.log();
+      console.log('Endpoints to deploy');
+      console.log();
+      console.log(t.toString());
+
+      // Load endpoints integrations
+      return Promise.all([
+        apis,
+        plugin.loadIntegrations(parameters.region, context)
+      ]);
+    })
+    .spread(apis => {
+      // Deploy in API Gateway
+      // To avoid TooManyRequestsException, we delay the deployment of each api
+      const promises = [];
+      let delay = 0;
+      _.forEach(apis, api => {
+        promises.push(new Promise((resolve, reject) => {
+          // 30 seconds delay
+          setTimeout(() => {
+            console.log('Deploying ' + api.getIdentifier() + ' ...');
+            resolve(api.deploy(parameters.region, context));
+          }, delay * 30000);
+        }));
+        delay++;
+      });
+      return Promise.all([
+        apis,
+        Promise.all(promises)
+      ]);
+    })
+    .spread((apis, results) => {
+      // Display deployment result
+      const t = new Table();
+      _.forEach(results, result => {
+        t.cell('Identifier', result.api.getIdentifier());
+        t.cell('Name', result.report.name);
+        t.cell('Operation', result.report.operation);
+        t.cell('Stage', result.report.stage);
+        t.cell('AWS identifier', result.report.awsId);
+        if (result.report.failed) {
+          t.cell('Url', result.report.failed);
+        } else {
+          t.cell('Url', 'https://' + result.report.awsId + '.execute-api.us-east-1.amazonaws.com/' + result.report.stage);
+        }
+        t.newRow();
+      });
+      console.log();
+      console.log('APIs deployed');
+      console.log();
+      console.log(t.toString());
+
+      // Publish the APIs
+      return Promise.map(apis, api => { return api.publish(parameters.region, context); });
+    })
+    .then(() => {
+      console.log('APIs published');
+    });
   }
 
 };

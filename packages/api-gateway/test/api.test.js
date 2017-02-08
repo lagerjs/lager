@@ -151,7 +151,7 @@ describe('An API', () => {
   });
 
   it('should be created for the first deployment', function() {
-    return api.publish('us-east-1', context)
+    return api.deploy('us-east-1', context)
     .then(result => {
       assert.equal(result.report.name, 'TEST my-api - my-api');
       assert.equal(result.report.operation, 'Creation');
@@ -160,10 +160,17 @@ describe('An API', () => {
 
   it('should be updated for the second deployment', function() {
     getRestApis.items.push(importRestApi);
-    return api.publish('us-east-1', context)
+    return api.deploy('us-east-1', context)
     .then(result => {
       assert.equal(result.report.name, 'TEST my-api - my-api');
       assert.equal(result.report.operation, 'Update');
+    });
+  });
+
+  it('should publish an API', function() {
+    return api.publish('us-east-1', context)
+    .then(api => {
+      assert.ok(api instanceof Api);
     });
   });
 

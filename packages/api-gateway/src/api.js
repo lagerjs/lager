@@ -19,6 +19,17 @@ const Api = function Api(spec, identifier) {
 };
 
 /**
+ * Perform async operations to init the API instance
+ * @returns {string}
+ */
+Api.prototype.init = function init() {
+  return plugin.loadEndpoints()
+  .then(endpoints => {
+    return this.addEndpoints(endpoints);
+  });
+};
+
+/**
  * Returns the API identifier in the Lager project
  * @returns {string}
  */
@@ -105,6 +116,14 @@ Api.prototype.addEndpoint = function addEndpoint(endpoint, force) {
 };
 
 /**
+ * Return the list of endpoints of the API
+ * @returns {Promise<[Endpoint]>}
+ */
+Api.prototype.getEndpoints = function getEndpoints() {
+  return this.endpoints;
+};
+
+/**
  * Generate an OpenAPI specification
  * It can be the "api-gateway" version (for publication in API Gateway)
  * or the "doc" version (for Swagger UI, Postman, etc...)
@@ -158,15 +177,39 @@ Api.prototype.generateSpec = function generateSpec(type, context) {
 
 /**
  * Publish the API specification in API Gateway
- *
  * @returns {Promise<Api>}
  */
 Api.prototype.publish = function publish(region, context) {
   const awsApiGateway = new AWS.APIGateway({ region });
+  return plugin.lager.fire('beforePublishApi', this)
+  .spread(() => {
+    // Retrieve the API in AWS API Gateway
+    return this.findInApiGateway(awsApiGateway, context);
+  })
+  .then(awsApi => {
+    const params = {
+      restApiId: awsApi.id,
+      stageName: context.stage
+    };
+    return Promise.promisify(awsApiGateway.createDeployment.bind(awsApiGateway))(params);
+  })
+  .then(() => {
+    return plugin.lager.fire('afterDeployApi', this);
+  })
+  .spread(() => {
+    return this;
+  });
+};
 
+/**
+ * Publish the API specification in API Gateway
+ * @returns {Promise<Api>}
+ */
+Api.prototype.deploy = function deploy(region, context) {
+  const awsApiGateway = new AWS.APIGateway({ region });
   const report = {};
 
-  return plugin.lager.fire('beforePublishApi', this)
+  return plugin.lager.fire('beforeDeployApi', this)
   .spread(() => {
     // Retrieve the API in AWS API Gateway
     return this.findInApiGateway(awsApiGateway, context);
@@ -184,10 +227,7 @@ Api.prototype.publish = function publish(region, context) {
     report.name = awsApi.name;
     report.description = awsApi.description;
     report.stage = context.stage;
-    return this._publish(awsApiGateway, context, awsApi);
-  })
-  .then((res) => {
-    return plugin.lager.fire('afterPublishApi', this);
+    return plugin.lager.fire('afterDeployApi', this);
   })
   .spread(() => {
     return Promise.resolve({
@@ -281,14 +321,6 @@ Api.prototype._updateInApiGateway = function _updateInApiGateway(awsApiGateway, 
     };
     return Promise.promisify(awsApiGateway.putRestApi.bind(awsApiGateway))(params);
   });
-};
-
-Api.prototype._publish = function _publish(awsApiGateway, context, awsApi) {
-  const params = {
-    restApiId: awsApi.id,
-    stageName: context.stage
-  };
-  return Promise.promisify(awsApiGateway.createDeployment.bind(awsApiGateway))(params);
 };
 
 module.exports = Api;
