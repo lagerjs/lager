@@ -150,28 +150,26 @@ describe('A Lambda', () => {
   describe('deployment', () => {
 
     it('should create the Lambda for the first deployment', function() {
-      this.timeout(10000);
       return lambda.deploy('us-east-1', context)
-      .then(res => {
-        assert.equal(res.report.name, 'TEST-my-lambda');
-        assert.equal(res.report.operation, 'Creation');
-        assert.equal(res.report.aliasExisted, false);
-        assert.ok(res.report.packageBuildTime[1]);
-        assert.ok(res.report.deployTime[1]);
+      .then(report => {
+        assert.equal(report.name, 'TEST-my-lambda');
+        assert.equal(report.operation, 'Creation');
+        assert.equal(report.aliasExisted, false);
+        assert.ok(report.packageBuildTime[1]);
+        assert.ok(report.deployTime[1]);
       });
     });
 
     it('should update the Lambda for the second deployment', function() {
       getFunctionError = null;
       getAliasError = null;
-      this.timeout(10000);
       return lambda.deploy('us-east-1', context)
-      .then(res => {
-        assert.equal(res.report.name, 'TEST-my-lambda');
-        assert.equal(res.report.operation, 'Update');
-        assert.equal(res.report.aliasExisted, true);
-        assert.ok(res.report.packageBuildTime[1]);
-        assert.ok(res.report.deployTime[1]);
+      .then(report => {
+        assert.equal(report.name, 'TEST-my-lambda');
+        assert.equal(report.operation, 'Update');
+        assert.equal(report.aliasExisted, true);
+        assert.ok(report.packageBuildTime[1]);
+        assert.ok(report.deployTime[1]);
       });
     });
 

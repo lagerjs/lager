@@ -200,7 +200,7 @@ const plugin = {
      * Register plugin commands
      * @returns {Promise} - a promise that resolves when all commands are registered
      */
-    registerCommands: function registerCommands(icli) {
+    registerCommands: function registerCommandsHook(icli) {
       return Promise.all([
         require('./cli/create-node-lambda')(icli),
         require('./cli/create-node-module')(icli),
@@ -212,27 +212,27 @@ const plugin = {
     },
 
     /**
+     * This hook allows to complete commands
+     * @param {Object} commandConfig - a command being added to the Lager CLI
+     * @returns {Promise}
+     */
+    createCommand: function createCommandHook(commandConfig) {
+      return require('./hooks/create-command').hook(commandConfig);
+    },
+
+    /**
      * This hook perform the deployment of lambdas in AWS and return integration data
      * that will be used to configure the related endpoints
      * @param {string} region - the AWS region where we doing the deployment
-     * @param {Object} context - a object containing the stage and the environment
+     * @param {Object} endpoints - the list of endpoints that will be deployed
+     * @param {Array} context - a object containing the stage and the environment
      * @param {Array} integrationResults - the collection of integration results
-     *                                      we will add our own integrations results
-     *                                      to this array
+     *                                     we will add our own integrations results
+     *                                     to this array
      * @returns {Promise<Array>}
      */
-    loadIntegrations: function loadIntegrations(region, context, integrationResults) {
-      return loadLambdas()
-      .then(lambdas => {
-        return Promise.map(lambdas, lambda => {
-          return lambda.deploy(region, context);
-        });
-      })
-      .then(results => {
-        _.forEach(results, r => {
-          integrationResults.push(r.integrationDataInjector);
-        });
-      });
+    loadIntegrations: function loadIntegrationsHook(region, context, endpoints, integrationResults) {
+      return require('./hooks/load-integration').hook(region, context, endpoints, integrationResults);
     },
   },
 

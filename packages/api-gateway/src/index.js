@@ -234,19 +234,16 @@ function loadModel(modelSpecPath, name) {
  * @param  {string} environment - environment identifier
  * @returns {[IntegrationObject]} - an array of integrqtion objects
  */
-function loadIntegrations(region, context) {
-  // The `deployIntegrations` hook takes two arguments
-  // A object containing the region, stage and environment of the deployment
-  // and nn array that will receive integration results
+function loadIntegrations(region, context, endpoints) {
+  // The `deployIntegrations` hook takes four arguments
+  // The region of the deployment
+  // The "context" of the deployment
+  // The list of endpoints that must be deployed
+  // An array that will receive integration results
   const integrationDataInjectors = [];
-  return plugin.lager.fire('loadIntegrations', region, context, integrationDataInjectors)
-  .spread((region, context, integrationDataInjectors) => {
-    return Promise.all([
-      loadEndpoints(),
-      Promise.resolve(integrationDataInjectors)
-    ]);
-  })
-  .spread((endpoints, integrationDataInjectors) => {
+  return plugin.lager.fire('loadIntegrations', region, context, endpoints, integrationDataInjectors)
+  .spread((region, context, endpoints, integrationDataInjectors) => {
+    // At this point, integration plugins returned their integrationDataInjectors
     return plugin.lager.fire('beforeAddIntegrationDataToEndpoints', endpoints, integrationDataInjectors);
   })
   .spread((endpoints, integrationDataInjectors) => {

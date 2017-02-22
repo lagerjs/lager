@@ -27,7 +27,9 @@ describe('The integration data injector', () => {
     };
     lambda = new Lambda(config);
     awsLambdaData = {
-      AliasArn: 'arn:aws:lambda:us-east-1:123456789012:function:DEV-my-lambda:v0'
+      Configuration: {
+        FunctionArn: 'arn:aws:lambda:us-east-1:123456789012:function:DEV-my-lambda:v0'
+      }
     };
   });
 

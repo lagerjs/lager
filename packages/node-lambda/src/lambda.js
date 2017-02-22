@@ -126,12 +126,34 @@ Lambda.prototype.execute = function execute(region, context, event) {
   return Promise.promisify(awsLambda.invoke.bind(awsLambda))(params);
 };
 
-/* istanbul ignore next */
+/**
+ * Returns an integration data injector for the API Gateway plugin
+ * @param {string} region - the AWS region where the Lambda must be deployed
+ * @param {Object} context - the context object containing the environment and the stage
+ * @return {Promise<Object>} - an object conatining the IntegrationDataInjector of the lambda
+ *                              and a report of the deployment
+ */
+Lambda.prototype.getIntegrationDataInjector = function getIntegrationDataInjector(region, context) {
+  const awsLambda = new AWS.Lambda({ region });
+
+  const functionName = (context.environment ? context.environment + '-' : '') + this.identifier;
+  this.config.params.FunctionName = functionName;
+
+  const params = {
+    FunctionName: this.config.params.FunctionName,
+    Qualifier: context.stage
+  };
+  return Promise.promisify(awsLambda.getFunction.bind(awsLambda))(params)
+  .then(data => {
+    return Promise.resolve(new IntegrationDataInjector(this, data));
+  });
+};
+
 /**
  * Deploys the lambda in AWS
  * @param {string} region - the AWS region where the Lambda must be deployed
  * @param {Object} context - the context object containing the environment and the stage
- * @returns {Promise<Object>} - an object conatining the IntegrationDataInjector of the lambda
+ * @return {Promise<Object>} - an object conatining the IntegrationDataInjector of the lambda
  *                              and a report of the deployment
  */
 Lambda.prototype.deploy = function deploy(region, context) {
@@ -179,10 +201,7 @@ Lambda.prototype.deploy = function deploy(region, context) {
   .then(data => {
     plugin.lager.log.debug('The Lambda ' + functionName + ' version ' + data.FunctionVersion + ' has been aliased ' + data.AliasArn);
     report.aliasArn = data.AliasArn;
-    return {
-      report: report,
-      integrationDataInjector: new IntegrationDataInjector(this, data)
-    };
+    return report;
   });
 };
 

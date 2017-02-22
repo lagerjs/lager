@@ -56,13 +56,18 @@ module.exports = (icli) => {
           return cmdParameterValues['stage'] === undefined && plugin.lager.getConfig('stage') === undefined;
         }
       }
-    }]
+    }],
+    execute: executeCommand
   };
 
-  /**
-   * Create the command and the promp
-   */
-  return icli.createSubCommand(config, executeCommand);
+  // Allow other plugin to complete the command
+  return plugin.lager.fire('createCommand', config)
+  .then(() => {
+    /**
+     * Create the command and the prompt
+     */
+    return icli.createSubCommand(config);
+  });
 
   /**
    * Build the choices for "list" and "checkbox" parameters
@@ -149,10 +154,12 @@ module.exports = (icli) => {
       // Load endpoints integrations
       return Promise.all([
         apis,
-        plugin.loadIntegrations(parameters.region, context)
+        plugin.loadIntegrations(parameters.region, context, endpoints)
       ]);
     })
-    .spread(apis => {
+    .spread((apis, integrations) => {
+      // @TODO show information about the integration load
+
       // Deploy in API Gateway
       // To avoid TooManyRequestsException, we delay the deployment of each api
       const promises = [];

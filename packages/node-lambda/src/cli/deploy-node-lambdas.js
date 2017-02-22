@@ -146,14 +146,14 @@ module.exports = (icli) => {
     })
     .then(results => {
       const t = new Table();
-      _.forEach(results, result => {
-        t.cell('Name', result.report.name);
-        t.cell('Operation', result.report.operation);
-        t.cell('Version', result.report.publishedVersion);
-        t.cell('Alias', result.report.aliasExisted ? 'Updated' : 'Created');
-        t.cell('ARN', result.report.aliasArn);
-        t.cell('Zip build time', formatHrTime(result.report.packageBuildTime));
-        t.cell('Deploy time', formatHrTime(result.report.deployTime));
+      _.forEach(results, report => {
+        t.cell('Name', report.name);
+        t.cell('Operation', report.operation);
+        t.cell('Version', report.publishedVersion);
+        t.cell('Alias', report.aliasExisted ? 'Updated' : 'Created');
+        t.cell('ARN', report.aliasArn);
+        t.cell('Zip build time', formatHrTime(report.packageBuildTime));
+        t.cell('Deploy time', formatHrTime(report.deployTime));
         t.newRow();
       });
       console.log();
