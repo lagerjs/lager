@@ -1,6 +1,6 @@
 {
   "name": "@lager/api-gateway",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "A Lager plugin to manage APIs in AWS API Gateway",
   "main": "src/index.js",
   "scripts": {
