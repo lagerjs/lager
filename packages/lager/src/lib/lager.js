@@ -14,12 +14,10 @@ if (['test', 'dev', 'development', 'debug'].indexOf(process.env.NODE_ENV) > -1) 
 
   process.on('uncaughtException', (e) => {
     log.fatal(e, 'Unhandled Exception');
-    console.log(e);
   });
 
   process.on('unhandledRejection', (reason, promise) => {
     log.fatal({promise: promise, reason: reason}, 'Unhandled Rejection');
-    console.log(promise, reason);
   });
 }
 

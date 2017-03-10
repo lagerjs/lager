@@ -154,7 +154,7 @@ module.exports = (icli) => {
         return [];
       },
       roles: (answers) => {
-        if (answers.roleOrigin === 'aws') {
+        if (answers && answers.roleOrigin === 'aws') {
           return plugin.lager.call('iam:getAWSRoles', [])
           .then(roles => {
             return _.map(roles, 'RoleName');

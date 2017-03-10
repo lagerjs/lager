@@ -193,7 +193,7 @@ Api.prototype.publish = function publish(region, context) {
     };
     return Promise.promisify(awsApiGateway.createDeployment.bind(awsApiGateway))(params);
   })
-  .then(() => {
+  .then((res) => {
     return plugin.lager.fire('afterDeployApi', this);
   })
   .spread(() => {
@@ -211,16 +211,24 @@ Api.prototype.deploy = function deploy(region, context) {
 
   return plugin.lager.fire('beforeDeployApi', this)
   .spread(() => {
-    // Retrieve the API in AWS API Gateway
-    return this.findInApiGateway(awsApiGateway, context);
+    // Generate the specification to deploy
+    return this.generateSpec('api-gateway', context);
   })
-  .then(awsApi => {
+  .then(spec => {
+    return Promise.all([
+      // Retrieve the API in AWS API Gateway
+      this.findInApiGateway(awsApiGateway, context),
+      // Set IAM roles arns in endpoints specifications
+      applyCredentialsARNs(spec, context)
+    ]);
+  })
+  .spread((awsApi, spec) => {
     if (awsApi) {
       report.operation = 'Update';
-      return this._updateInApiGateway(awsApiGateway, context, awsApi);
+      return this._updateInApiGateway(awsApiGateway, spec, context, awsApi);
     }
     report.operation = 'Creation';
-    return this._createInApiGateway(awsApiGateway, context);
+    return this._createInApiGateway(awsApiGateway, spec, context);
   })
   .then(awsApi => {
     report.awsId = awsApi.id;
@@ -286,18 +294,12 @@ Api.prototype._findIdentificationInName = function _findIdentificationInName(nam
  * @param {Object} apiSpec - an OpenAPI specification
  * @returns {Promise<Object>} - an AWS Object representing the API
  */
-Api.prototype._createInApiGateway = function _createInApiGateway(awsApiGateway, context) {
-  return this.generateSpec('api-gateway', context)
-  .then(spec => {
-    return applyCredentialsARNs(spec, context);
-  })
-  .then(spec => {
-    const params = {
-      body: JSON.stringify(spec),
-      failOnWarnings: false
-    };
-    return Promise.promisify(awsApiGateway.importRestApi.bind(awsApiGateway))(params);
-  });
+Api.prototype._createInApiGateway = function _createInApiGateway(awsApiGateway, spec, context) {
+  const params = {
+    body: JSON.stringify(spec),
+    failOnWarnings: false
+  };
+  return Promise.promisify(awsApiGateway.importRestApi.bind(awsApiGateway))(params);
 };
 
 /**
@@ -307,20 +309,14 @@ Api.prototype._createInApiGateway = function _createInApiGateway(awsApiGateway, 
  * @param {Object} - an AWS Object representing the API
  * @returns {Promise<Object>} - an AWS Object representing the API
  */
-Api.prototype._updateInApiGateway = function _updateInApiGateway(awsApiGateway, context, awsApi) {
-  return this.generateSpec('api-gateway', context)
-  .then(spec => {
-    return applyCredentialsARNs(spec, context);
-  })
-  .then(spec => {
-    const params = {
-      body: JSON.stringify(spec),
-      failOnWarnings: false,
-      restApiId: awsApi.id,
-      mode: 'overwrite'
-    };
-    return Promise.promisify(awsApiGateway.putRestApi.bind(awsApiGateway))(params);
-  });
+Api.prototype._updateInApiGateway = function _updateInApiGateway(awsApiGateway, spec, context, awsApi) {
+  const params = {
+    body: JSON.stringify(spec),
+    failOnWarnings: false,
+    restApiId: awsApi.id,
+    mode: 'overwrite'
+  };
+  return Promise.promisify(awsApiGateway.putRestApi.bind(awsApiGateway))(params);
 };
 
 module.exports = Api;
@@ -381,7 +377,9 @@ function applyCredentialsARNs(spec, context) {
     // The @lager/iam plugin can help to convert an indentifier into an ARN
     // If @lager/iam is not installed, the correct ARN has to be provided
     return plugin.lager.call('iam:retrieveRoleArn', credential, context, credential)
-    .then(arn => { return { identifier: credential, arn }; });
+    .then(arn => {
+      return { identifier: credential, arn };
+    });
   })
   .then(credentialsMap => {
     // Replace names by ARNs in the spec

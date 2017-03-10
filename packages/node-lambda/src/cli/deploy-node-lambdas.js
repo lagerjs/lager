@@ -150,8 +150,8 @@ module.exports = (icli) => {
         t.cell('Name', report.name);
         t.cell('Operation', report.operation);
         t.cell('Version', report.publishedVersion);
-        t.cell('Alias', report.aliasExisted ? 'Updated' : 'Created');
-        t.cell('ARN', report.aliasArn);
+        t.cell('Alias', report.aliasExisted === undefined ? '' : (report.aliasExisted ? 'Updated' : 'Created'));
+        t.cell('ARN', report.arn);
         t.cell('Zip build time', formatHrTime(report.packageBuildTime));
         t.cell('Deploy time', formatHrTime(report.deployTime));
         t.newRow();
