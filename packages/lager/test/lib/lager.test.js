@@ -35,7 +35,8 @@ describe('The lager instance', function() {
     };
     return lager.init(config)
     .catch(e => {
-      assert.equal(e.code, 'MODULE_NOT_FOUND', 'an error has been thrown because o an invalid pligin/module name');
+      console.log(e);
+      assert.equal(e.code, 'MODULE_NOT_FOUND', 'an error has been thrown because o an invalid plugin/module name');
     });
   });
 

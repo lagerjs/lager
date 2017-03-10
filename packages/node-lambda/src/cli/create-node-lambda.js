@@ -91,15 +91,6 @@ module.exports = (icli) => {
           return !answers.role && !cmdParameterValues.role;
         }
       }
-    }, {
-      cmdSpec: '--template <template>',
-      description: 'select a template to initialise the Lambda function (aka handler)',
-      type: 'list',
-      choices: choicesLists.template,
-      default: choicesLists.template[0],
-      question: {
-        message: 'Select an template to initialise the Lambda function (aka handler)'
-      }
     }]
   };
 
@@ -120,13 +111,6 @@ module.exports = (icli) => {
     }
     return {
       memory: memoryValues,
-      template: [{
-        value: 'none',
-        name: icli.format.info('none') + ' - Do not add an specific template to the Lambda, you will write a custom one (recommended)'
-      }, {
-        value: 'api-endpoints',
-        name: icli.format.info('api-endpoints') + ' - Opinionated definition of "action" modules in endpoints managed by the api-gateway plugin'
-      }],
       dependencies: () => {
         return plugin.loadModules()
         .then(modules => {
@@ -216,12 +200,6 @@ module.exports = (icli) => {
       // We create the lambda handler
       const src = path.join(__dirname, 'templates', 'index.js');
       const dest = path.join(configFilePath, 'index.js');
-      return ncpAsync(src, dest);
-    })
-    .then(() => {
-      // We create the file executed by the handler
-      const src = path.join(__dirname, 'templates', 'exec-files', parameters.template + '.js');
-      const dest = path.join(configFilePath, 'exec.js');
       return ncpAsync(src, dest);
     })
     .then(() => {

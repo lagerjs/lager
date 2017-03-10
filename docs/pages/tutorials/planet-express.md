@@ -103,11 +103,10 @@ The implementation of the modules will not be detailed here, but they are "commo
 
 #### Creation of a Lambda
 
-We create a Lambda using a basic handler provided by `Lager` as a commodity. But the development team is free to implement the handler to its convenience.
-This handler provided by `@lager/node-lambda` integrates with the configuration of `@lager/api-gateway`.
+We create a Lambda, specifying its configuration and its dependencies.
 
 ```bash
-lager create-node-lambda api-generic -t 20 -m 256 -r PlanetExpressLambdaExecution --template api-endpoints --dependencies data-access,log
+lager create-node-lambda api-generic -t 20 -m 256 -r PlanetExpressLambdaExecution --dependencies data-access,log
 ```
 
 ### Creation of the endpoints and APIs
@@ -165,7 +164,7 @@ lager create-role PlanetExpressLambdaExecution -p LambdaBasicExecutionRole
 lager create-node-module log
 lager create-node-module data-access -d log
 
-lager create-node-lambda api-generic -t 20 -m 256 -r PlanetExpressLambdaExecution --template api-endpoints --dependencies data-access,log
+lager create-node-lambda api-generic -t 20 -m 256 -r PlanetExpressLambdaExecution --dependencies data-access,log
 
 lager create-api back-office -t "Back Office" -d "Planet Express API for Back Office"
 lager create-api sender      -t "Sender"      -d "Planet Express API for sender application"

@@ -9,7 +9,7 @@ const stderrStream = {
   type: 'raw',
   stream: {
     write: (obj) => {
-      if (obj.err.code && obj.err.message) {
+      if (obj.er && obj.err.code && obj.err.message) {
         process.stderr.write(eol + obj.err.code + eol + obj.err.message + eol);
         process.stderr.write(eol + 'More information in lager.log' + eol);
       }
