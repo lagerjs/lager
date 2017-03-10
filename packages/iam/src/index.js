@@ -191,8 +191,17 @@ function retrieveRoleArn(identifier, context) {
         return Promise.resolve(data.Role.Arn);
       })
       .catch(e => {
-        // @TODO improve error handling
-        return Promise.reject(new Error('Could not find role ' + identifier));
+        return findRoles([identifier])
+        .then(roles => {
+          if (roles.length === 1) {
+            return roles[0].deploy(context)
+            .then(report => {
+              return report.arn;
+            });
+          }
+          // @TODO improve error handling
+          return Promise.reject(new Error('Could not find role ' + identifier));
+        });
       });
     });
   });
@@ -228,7 +237,7 @@ const plugin = {
       .then(() => {
         return Promise.resolve([]);
       });
-    },
+    }
   },
 
   extensions: {

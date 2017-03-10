@@ -406,13 +406,14 @@ function mergeSpecsFiles(beginPath, subPath) {
 
 
 function loadIntegrationTemplate(endpointPath, contentType) {
+  // @TODO allow to load different integration templates for different mime types
   // We load the integration template that may be present in a "integration.vm" file (velocity template)
   return Promise.promisify(fs.readFile)(path.join(endpointPath, 'integration.vm'))
   .then(buffer => {
     return buffer.toString();
   })
   .catch(e => {
-    console.log(e);
+    // Ignore error if the file does not exists
     return Promise.resolve(null);
   });
 }

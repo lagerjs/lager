@@ -23,14 +23,14 @@ LambdaIntegrationDataInjector.prototype.applyToEndpoint = function applyToEndpoi
   // The integrationDataInjector applies if the endpoint spec refers to its lambda
   if (spec['x-lager'] && spec['x-lager'].lambda && spec['x-lager'].lambda === this.lambda.getIdentifier()) {
     spec['x-amazon-apigateway-integration'] = spec['x-amazon-apigateway-integration'] || {};
-    spec['x-amazon-apigateway-integration'].type = 'aws';
+    spec['x-amazon-apigateway-integration'].type = spec['x-amazon-apigateway-integration'].type || 'aws';
     spec['x-amazon-apigateway-integration'].uri = 'arn:aws:apigateway:'
                                                 + this.awsLambdaData.Configuration.FunctionArn.split(':')[3]
                                                 + ':lambda:path/2015-03-31/functions/'
                                                 + this.awsLambdaData.Configuration.FunctionArn
                                                 + '/invocations';
     spec['x-amazon-apigateway-integration'].httpMethod = 'POST';
-    spec['x-amazon-apigateway-integration'].responses = {
+    spec['x-amazon-apigateway-integration'].responses = spec['x-amazon-apigateway-integration'].responses || {
       default: {
         statusCode: 200
       }

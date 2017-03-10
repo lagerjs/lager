@@ -6,7 +6,6 @@
     "@lager/api-gateway"
   ],
   "config": {
-    "environment": "DEV",
     "stage": "v0"
   }
 }

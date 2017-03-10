@@ -181,6 +181,7 @@ module.exports = (icli) => {
     })
     .spread((apis, results) => {
       // Display deployment result
+      let success = true;
       const t = new Table();
       _.forEach(results, result => {
         t.cell('Identifier', result.api.getIdentifier());
@@ -190,21 +191,28 @@ module.exports = (icli) => {
         t.cell('AWS identifier', result.report.awsId);
         if (result.report.failed) {
           t.cell('Url', result.report.failed);
+          success = false;
         } else {
           t.cell('Url', 'https://' + result.report.awsId + '.execute-api.us-east-1.amazonaws.com/' + result.report.stage);
         }
         t.newRow();
       });
       console.log();
-      console.log('APIs deployed');
+      console.log('Deployment done');
       console.log();
       console.log(t.toString());
 
       // Publish the APIs
-      return Promise.map(apis, api => { return api.publish(parameters.region, context); });
-    })
-    .then(() => {
-      console.log('APIs published');
+      if (success) {
+        return Promise.map(apis, api => { return api.publish(parameters.region, context); })
+        .then(() => {
+          console.log('APIs have been published');
+          console.log();
+        });
+      } else {
+        console.log('The deployment of one or more APIs failed. The publication step will not be performed.');
+        console.log();
+      }
     });
   }
 

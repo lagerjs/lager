@@ -52,30 +52,20 @@ module.exports = (icli) => {
         message: 'Shortly, what does the operation do?'
       }
     }, {
-      cmdSpec: '-c, --consume <mime-types>',
-      description: 'A list of MIME types the operation can consume separated by ","',
-      type: 'checkbox',
-      choices: choicesLists.mimeType,
-      default: [choicesLists.mimeType[0]],
-      question: {
-        message: 'What are the MIME types that the operation can consume?'
-      }
-    }, {
-      cmdSpec: '-p, --produce <mime-types>',
-      description: 'A list of MIME types the operation can produce separated by ","',
-      type: 'checkbox',
-      choices: choicesLists.mimeType,
-      default: [choicesLists.mimeType[0]],
-      question: {
-        message: 'What are the MIME types that the operation can produce?'
-      }
-    }, {
       cmdSpec: '--auth <authentication-type>',
       description: 'The type of authentication used to call the endpoint (aws_iam|none)',
       type: 'list',
       choices: choicesLists.auth,
       question: {
         message: 'What is the authentication type used to access to this endpoint?'
+      }
+    }, {
+      cmdSpec: '-i --integration <integration-type>',
+      description: 'The type of integration (lambda|http|mock|aws-service)',
+      type: 'list',
+      choices: choicesLists.integration,
+      question: {
+        message: 'What is the type of integration of this endpoint?'
       }
     }, {
       cmdSpec: '-l --lambda <lambda-name|lambda-arn>',
@@ -142,11 +132,17 @@ module.exports = (icli) => {
   function getChoices() {
     // First, retrieve possible values for the api-identifiers parameter
     const choicesLists = {
-      httpMethod: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
-      mimeType: ['application/json', 'text/plain', { value: 'other', name: 'other (you will be prompted to enter a value)'}],
+      httpMethod: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'ANY'],
       auth: [
         { value: 'aws_iam', name: 'AWS authorization' },
         { value: 'none', name: 'None' }
+      ],
+      integration: [
+        { value: 'lambda', name: 'Lambda function' },
+        { value: 'lambda-proxy', name: 'Lambda function with proxy integration' },
+        { value: 'http', name: 'Existing HTTP endpoint' },
+        { value: 'mock', name: 'Mock' },
+        { value: 'aws-service', name: 'AWS service' }
       ]
     };
 
@@ -235,9 +231,6 @@ module.exports = (icli) => {
         },
         'x-amazon-apigateway-integration': {
           credentials: parameters.credentials,
-          requestTemplates: _.transform(parameters.consume, (result, mimeType) => {
-            result[mimeType] = null;
-          }, {}),
           responses: {
             default: {
               statusCode: 200
@@ -245,30 +238,18 @@ module.exports = (icli) => {
           }
         }
       };
+      if (parameters.integration === 'lambda-proxy') {
+        spec['x-amazon-apigateway-integration'].type = 'aws_proxy';
+        spec['x-amazon-apigateway-integration'].contentHandling = 'CONVERT_TO_TEXT';
+        spec['x-amazon-apigateway-integration'].passthroughBehavior = 'when_no_match';
+        spec['x-amazon-apigateway-integration'].httpMethod = 'POST';
+      }
       if (parameters.lambda) {
         spec['x-lager'].lambda = parameters.lambda;
       }
 
       // We save the specification in a json file
-      const fileOperations = [
-        fs.writeFileAsync(path.join(specFilePath, 'spec.json'), JSON.stringify(spec, null, 2))
-      ];
-
-      if (parameters.lambda) {
-        fileOperations.push(
-          ncpAsync(
-            path.join(__dirname, 'templates', 'default-index.js'),
-            path.join(specFilePath, 'index.js')
-          )
-        );
-        fileOperations.push(
-          ncpAsync(
-            path.join(__dirname, 'templates', 'passthrough-template.vm'),
-            path.join(specFilePath, 'integration.vm')
-          )
-        );
-      }
-      return Promise.all(fileOperations);
+      return fs.writeFileAsync(path.join(specFilePath, 'spec.json'), JSON.stringify(spec, null, 2));
     })
     .then(() => {
       const msg = '\n  The endpoint ' + icli.format.info(parameters.httpMethod + ' ' + parameters.resourcePath) + ' has been created\n\n'

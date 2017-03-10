@@ -13,7 +13,7 @@ const plugin = require('./index');
  */
 const Endpoint = function Endpoint(spec, resourcePath, method) {
   this.method = method;
-  this.resourcePath = resourcePath;
+  this.resourcePath = resourcePath || '/';
   this.spec = spec;
 };
 

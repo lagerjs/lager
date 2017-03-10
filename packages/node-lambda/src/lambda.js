@@ -140,9 +140,11 @@ Lambda.prototype.getIntegrationDataInjector = function getIntegrationDataInjecto
   this.config.params.FunctionName = functionName;
 
   const params = {
-    FunctionName: this.config.params.FunctionName,
-    Qualifier: context.stage
+    FunctionName: this.config.params.FunctionName
   };
+  if (context.stage) {
+    params.Qualifier = context.stage;
+  }
   return Promise.promisify(awsLambda.getFunction.bind(awsLambda))(params)
   .then(data => {
     return Promise.resolve(new IntegrationDataInjector(this, data));
@@ -179,28 +181,15 @@ Lambda.prototype.deploy = function deploy(region, context) {
   .then(data => {
     // Publish a new version
     plugin.lager.log.debug('The Lambda ' + functionName + ' has been deployed');
-    return this.publishVersion(awsLambda);
-  })
-  .then(data => {
-    plugin.lager.log.debug('The Lambda ' + functionName + ' has been published: version ' + data.Version);
-    report.publishedVersion = data.Version;
-    return Promise.all([data.Version, this.aliasExists(awsLambda, context)]);
-  })
-  .spread((version, aliasExists) => {
-    if (aliasExists) {
-      // If the alias already exists
-      plugin.lager.log.debug('The lambda ' + functionName + ' already has an alias ' + version);
-      report.aliasExisted = true;
-      return this.updateAlias(awsLambda, version, context);
+    if (context.stage) {
+      // Set the alias if needed
+      return this.setAlias(awsLambda, context.stage, report);
     }
-    // If an error occured because the alias does not exists, we create it
-    plugin.lager.log.debug('The lambda ' + functionName + ' is does not have an alias ' + version);
-    report.aliasExisted = false;
-    return this.createAlias(awsLambda, version, context);
+    // If no alias is specified, we will use $LATEST
+    report.arn = data.FunctionArn;
+    return Promise.resolve(data);
   })
   .then(data => {
-    plugin.lager.log.debug('The Lambda ' + functionName + ' version ' + data.FunctionVersion + ' has been aliased ' + data.AliasArn);
-    report.aliasArn = data.AliasArn;
     return report;
   });
 };
@@ -258,8 +247,6 @@ Lambda.prototype.buildPackage = function buildPackage(report) {
   });
 };
 
-
-/* istanbul ignore next */
 /**
  * Check if the Lambda already exists in AWS
  * @returns {Promise<Boolean>}
@@ -276,8 +263,6 @@ Lambda.prototype.isDeployed = function isDeployed(awsLambda) {
   });
 };
 
-
-/* istanbul ignore next */
 /**
  * Create the lambda in AWS
  * @returns {Promise<Object>} - AWS description of the lambda
@@ -305,8 +290,6 @@ Lambda.prototype.create = function create(awsLambda, context, report) {
   });
 };
 
-
-/* istanbul ignore next */
 /**
  * Update the lambda in AWS
  * @returns {Promise<Object>} - AWS description of the lambda
@@ -342,8 +325,6 @@ Lambda.prototype.update = function update(awsLambda, context, report) {
   });
 };
 
-
-/* istanbul ignore next */
 /**
  * Create a new version of the lambda
  * @returns {Promise<Object>} - AWS description of the lambda
@@ -355,17 +336,48 @@ Lambda.prototype.publishVersion = function publishVersion(awsLambda) {
   return Promise.promisify(awsLambda.publishVersion.bind(awsLambda))(params);
 };
 
-/* istanbul ignore next */
+/**
+ * [setAlias description]
+ * @param {[type]} awsLambda [description]
+ * @param {[type]} context   [description]
+ * @param {[type]} context   [description]
+ */
+Lambda.prototype.setAlias = function setAlias(awsLambda, alias, report) {
+  return this.publishVersion(awsLambda)
+  .then(data => {
+    plugin.lager.log.debug('The Lambda ' + this.config.params.functionName + ' has been published: version ' + data.Version);
+    report.publishedVersion = data.Version;
+    return Promise.all([data.Version, this.aliasExists(awsLambda, alias)]);
+  })
+  .spread((version, aliasExists) => {
+    if (aliasExists) {
+      // If the alias already exists
+      plugin.lager.log.debug('The lambda ' + this.config.params.FunctionName + ' already has an alias ' + version);
+      report.aliasExisted = true;
+      return this.updateAlias(awsLambda, version, alias);
+    }
+    // If an error occured because the alias does not exists, we create it
+    plugin.lager.log.debug('The lambda ' + this.config.params.FunctionName + ' does not have an alias ' + version);
+    report.aliasExisted = false;
+    return this.createAlias(awsLambda, version, alias);
+  })
+  .then(data => {
+    plugin.lager.log.debug('The Lambda ' + this.config.params.FunctionName + ' version ' + data.FunctionVersion + ' has been aliased ' + data.AliasArn);
+    report.arn = data.AliasArn;
+    return Promise.resolve(report);
+  });
+};
+
 /**
  * [aliasExists description]
  * @param  {[type]} awsLambda [description]
- * @param  {[type]} context   [description]
+ * @param  {[type]} alias     [description]
  * @return {[type]}           [description]
  */
-Lambda.prototype.aliasExists = function aliasExists(awsLambda, context) {
+Lambda.prototype.aliasExists = function aliasExists(awsLambda, alias) {
   const params = {
     FunctionName: this.config.params.FunctionName,
-    Name: context.stage
+    Name: alias
   };
   return Promise.promisify(awsLambda.getAlias.bind(awsLambda))(params)
   .then(() => {
@@ -377,7 +389,6 @@ Lambda.prototype.aliasExists = function aliasExists(awsLambda, context) {
   });
 };
 
-/* istanbul ignore next */
 /**
  * [createAlias description]
  * @param  {[type]} awsLambda [description]
@@ -385,11 +396,11 @@ Lambda.prototype.aliasExists = function aliasExists(awsLambda, context) {
  * @param  {[type]} context   [description]
  * @return {[type]}           [description]
  */
-Lambda.prototype.createAlias = function createAlias(awsLambda, version, context) {
+Lambda.prototype.createAlias = function createAlias(awsLambda, version, alias) {
   const params = {
     FunctionName: this.config.params.FunctionName,
     FunctionVersion: version,
-    Name: context.stage
+    Name: alias
   };
   return Promise.promisify(awsLambda.createAlias.bind(awsLambda))(params);
 };
@@ -402,10 +413,10 @@ Lambda.prototype.createAlias = function createAlias(awsLambda, version, context)
  * @param  {[type]} context   [description]
  * @return {[type]}           [description]
  */
-Lambda.prototype.updateAlias = function updateAlias(awsLambda, version, context) {
+Lambda.prototype.updateAlias = function updateAlias(awsLambda, version, alias) {
   const params = {
     FunctionName: this.config.params.FunctionName,
-    Name: context.stage,
+    Name: alias,
     FunctionVersion: version
   };
   return Promise.promisify(awsLambda.updateAlias.bind(awsLambda))(params);

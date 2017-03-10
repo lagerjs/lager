@@ -2,10 +2,19 @@
 
 const path = require('path');
 const bunyan = require('bunyan');
+const eol = require('os').EOL;
 
-const stdoutStream = {
+const stderrStream = {
   level: 'warn',
-  stream: process.stdout
+  type: 'raw',
+  stream: {
+    write: (obj) => {
+      if (obj.er && obj.err.code && obj.err.message) {
+        process.stderr.write(eol + obj.err.code + eol + obj.err.message + eol);
+        process.stderr.write(eol + 'More information in lager.log' + eol);
+      }
+    }
+  }
 };
 
 const fileStream = {
@@ -15,7 +24,7 @@ const fileStream = {
 
 const log = bunyan.createLogger({
   name: 'lager',
-  streams: [stdoutStream, fileStream],
+  streams: [stderrStream, fileStream],
   src: false
 });
 

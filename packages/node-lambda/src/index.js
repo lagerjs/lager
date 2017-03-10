@@ -233,7 +233,7 @@ const plugin = {
      */
     loadIntegrations: function loadIntegrationsHook(region, context, endpoints, integrationResults) {
       return require('./hooks/load-integration').hook(region, context, endpoints, integrationResults);
-    },
+    }
   },
 
   extensions: {

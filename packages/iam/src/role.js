@@ -80,9 +80,8 @@ Role.prototype.deploy = function deploy(context) {
     return plugin.lager.fire('afterDeployPolicy', this);
   })
   .spread(() => {
-    return Promise.resolve({ report });
+    return Promise.resolve(report);
   });
-
 };
 
 /**

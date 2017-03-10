@@ -82,7 +82,6 @@ implementation of the application. For now, we use a role that allows the Lambda
 
 ```bash
 lager create-role PlanetExpressLambdaExecution -p LambdaBasicExecutionRole
-lager deploy-roles PlanetExpressLambdaExecution -e DEV -s v0
 ```
 
 #### Creation of node modules that can be packaged in the Lambda
@@ -104,11 +103,10 @@ The implementation of the modules will not be detailed here, but they are "commo
 
 #### Creation of a Lambda
 
-We create a Lambda using a basic handler provided by `Lager` as a commodity. But the development team is free to implement the handler to its convenience.
-This handler provided by `@lager/node-lambda` integrates with the configuration of `@lager/api-gateway`.
+We create a Lambda, specifying its configuration and its dependencies.
 
 ```bash
-lager create-node-lambda api-generic -t 20 -m 256 -r PlanetExpressLambdaExecution --template api-endpoints --modules data-access,log
+lager create-node-lambda api-generic -t 20 -m 256 -r PlanetExpressLambdaExecution --dependencies data-access,log
 ```
 
 ### Creation of the endpoints and APIs
@@ -132,7 +130,6 @@ The API endpoints need to be associated to an IAM role that allows to invoke the
 
 ```bash
 lager create-role PlanetExpressLambdaInvocation -p APIGatewayLambdaInvocation
-lager deploy-roles PlanetExpressLambdaInvocation -e DEV -s v0
 ```
 
 #### Creation of the endpoints
@@ -140,10 +137,10 @@ lager deploy-roles PlanetExpressLambdaInvocation -e DEV -s v0
 We create the four endpoints and associate them to the APIs that have to expose them.
 
 ```bash
-lager create-endpoint /delivery get -a back-office,recipient,sender -s "View a delivery" -c "application/json" -p "application/json" --auth none --credentials PlanetExpressLambdaInvocation -l api-generic
-lager create-endpoint /delivery patch -a back-office -s "View a delivery" -c "application/json" -p "application/json" --auth none --credentials PlanetExpressLambdaInvocation -l api-generic
-lager create-endpoint /delivery put -a back-office,sender -s "View a delivery" -c "application/json" -p "application/json" --auth none --credentials PlanetExpressLambdaInvocation -l api-generic
-lager create-endpoint /delivery delete -a back-office,recipient -s "View a delivery" -c "application/json" -p "application/json" --auth none --credentials PlanetExpressLambdaInvocation -l api-generic
+lager create-endpoint /delivery get -a back-office,recipient,sender -s "View a delivery" -i lambda-proxy --auth none --credentials PlanetExpressLambdaInvocation -l api-generic
+lager create-endpoint /delivery patch -a back-office -s "View a delivery" -i lambda-proxy --auth none --credentials PlanetExpressLambdaInvocation -l api-generic
+lager create-endpoint /delivery put -a back-office,sender -s "View a delivery" -i lambda-proxy --auth none --credentials PlanetExpressLambdaInvocation -l api-generic
+lager create-endpoint /delivery delete -a back-office,recipient -s "View a delivery" -i lambda-proxy --auth none --credentials PlanetExpressLambdaInvocation -l api-generic
 ```
 
 ### Deployment
@@ -151,7 +148,7 @@ lager create-endpoint /delivery delete -a back-office,recipient -s "View a deliv
 We deploy the stage `v0` of the three APIs on the `DEV` environment.
 
 ```bash
-lager deploy-apis back-office sender recipient -r us-east-1 -s v0 -e DEV
+lager deploy-apis back-office sender recipient -r us-east-1 -s v0 -e DEV --deploy-lambdas all
 ```
 
 Altogether
@@ -163,24 +160,22 @@ lager new planet-express @lager/iam @lager/api-gateway @lager/node-lambda
 cd planet-express
 
 lager create-role PlanetExpressLambdaExecution -p LambdaBasicExecutionRole
-lager deploy-roles PlanetExpressLambdaExecution -e DEV -s v0
 
 lager create-node-module log
 lager create-node-module data-access -d log
 
-lager create-node-lambda api-generic -t 20 -m 256 -r PlanetExpressLambdaExecution --template api-endpoints --modules data-access,log
+lager create-node-lambda api-generic -t 20 -m 256 -r PlanetExpressLambdaExecution --dependencies data-access,log
 
 lager create-api back-office -t "Back Office" -d "Planet Express API for Back Office"
 lager create-api sender      -t "Sender"      -d "Planet Express API for sender application"
 lager create-api recipient   -t "Recipient"   -d "Planet Express API for recipient application"
 
 lager create-role PlanetExpressLambdaInvocation -p APIGatewayLambdaInvocation
-lager deploy-roles PlanetExpressLambdaInvocation -e DEV -s v0
 
-lager create-endpoint /delivery get -a back-office,recipient,sender -s "View a delivery" -c "application/json" -p "application/json" --auth none --credentials PlanetExpressLambdaInvocation -l api-generic
-lager create-endpoint /delivery patch -a back-office -s "View a delivery" -c "application/json" -p "application/json" --auth none --credentials PlanetExpressLambdaInvocation -l api-generic
-lager create-endpoint /delivery put -a back-office,sender -s "View a delivery" -c "application/json" -p "application/json" --auth none --credentials PlanetExpressLambdaInvocation -l api-generic
-lager create-endpoint /delivery delete -a back-office,recipient -s "View a delivery" -c "application/json" -p "application/json" --auth none --credentials PlanetExpressLambdaInvocation -l api-generic
+lager create-endpoint /delivery get -a back-office,recipient,sender -s "View a delivery" -i lambda-proxy --auth none --credentials PlanetExpressLambdaInvocation -l api-generic
+lager create-endpoint /delivery patch -a back-office -s "View a delivery" -i lambda-proxy --auth none --credentials PlanetExpressLambdaInvocation -l api-generic
+lager create-endpoint /delivery put -a back-office,sender -s "View a delivery" -i lambda-proxy --auth none --credentials PlanetExpressLambdaInvocation -l api-generic
+lager create-endpoint /delivery delete -a back-office,recipient -s "View a delivery" -i lambda-proxy --auth none --credentials PlanetExpressLambdaInvocation -l api-generic
 
-lager deploy-apis back-office sender recipient -r us-east-1 -s v0 -e DEV
+lager deploy-apis back-office sender recipient -r us-east-1 -s v0 -e DEV --deploy-lambdas all
 ```
