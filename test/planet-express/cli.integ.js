@@ -29,7 +29,7 @@ describe('Creation and deployment of the Planet Express project', () => {
 
   describe('Creation of an execution role', () => {
     it('should be done via the sub-command "create-role"', () => {
-      return icli.parse('node script.js create-role PlanetExpressLambdaExecution -p LambdaBasicExecutionRole'.split(' '))
+      return icli.parse('node script.js create-role PlanetExpressLambdaExecution -m LambdaBasicExecutionRole'.split(' '))
       .then(res => {
         assert.ok(true);
       });
@@ -66,7 +66,7 @@ describe('Creation and deployment of the Planet Express project', () => {
 
   describe('Creation of an invocation role', () => {
     it('should be done via the sub-command "create-role"', () => {
-      return icli.parse('node script.js create-role PlanetExpressLambdaInvocation -p APIGatewayLambdaInvocation'.split(' '))
+      return icli.parse('node script.js create-role PlanetExpressLambdaInvocation -m APIGatewayLambdaInvocation'.split(' '))
       .then(res => {
         assert.ok(true);
       });

@@ -84,7 +84,7 @@ The Lambda needs to be associated to an IAM role that defines its authorizations
 implementation of the application. For now, we use a role that allows the Lambda to write logs in CloudWatch.
 
 ```bash
-lager create-role PlanetExpressLambdaExecution -p LambdaBasicExecutionRole
+lager create-role PlanetExpressLambdaExecution -m LambdaBasicExecutionRole
 ```
 
 #### Creation of node modules that can be packaged in the Lambda
@@ -132,7 +132,7 @@ lager create-api recipient   -t "Recipient"   -d "Planet Express API for recipie
 The API endpoints need to be associated to an IAM role that allows to invoke the Lambda.
 
 ```bash
-lager create-role PlanetExpressLambdaInvocation -p APIGatewayLambdaInvocation
+lager create-role PlanetExpressLambdaInvocation -m APIGatewayLambdaInvocation
 ```
 
 #### Creation of the endpoints
@@ -162,7 +162,7 @@ npm install -g @lager/cli
 lager new planet-express @lager/iam @lager/api-gateway @lager/node-lambda
 cd planet-express
 
-lager create-role PlanetExpressLambdaExecution -p LambdaBasicExecutionRole
+lager create-role PlanetExpressLambdaExecution -m LambdaBasicExecutionRole
 
 lager create-node-module log
 lager create-node-module data-access -d log
@@ -173,7 +173,7 @@ lager create-api back-office -t "Back Office" -d "Planet Express API for Back Of
 lager create-api sender      -t "Sender"      -d "Planet Express API for sender application"
 lager create-api recipient   -t "Recipient"   -d "Planet Express API for recipient application"
 
-lager create-role PlanetExpressLambdaInvocation -p APIGatewayLambdaInvocation
+lager create-role PlanetExpressLambdaInvocation -m APIGatewayLambdaInvocation
 
 lager create-endpoint /delivery get -a back-office,recipient,sender -s "View a delivery" -i lambda-proxy --auth none --credentials PlanetExpressLambdaInvocation -l api-generic
 lager create-endpoint /delivery patch -a back-office -s "View a delivery" -i lambda-proxy --auth none --credentials PlanetExpressLambdaInvocation -l api-generic

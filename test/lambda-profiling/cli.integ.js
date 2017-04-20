@@ -29,7 +29,7 @@ describe('Creation and deployment of a Lambda project', () => {
 
   describe('Creation of an execution role', () => {
     it('should be done via the sub-command "create-role"', () => {
-      return icli.parse('node script.js create-role LambdaInspection -p LambdaBasicExecutionRole'.split(' '))
+      return icli.parse('node script.js create-role LambdaInspection -m LambdaBasicExecutionRole'.split(' '))
       .then(res => {
         assert.ok(true);
       });

@@ -23,7 +23,7 @@ lager new lambda-profiling @lager/iam @lager/node-lambda
 We create a simple execution role for our Lambdas.
 
 ```bash
-lager create-role LambdaInspection -p LambdaBasicExecutionRole
+lager create-role LambdaInspection -m LambdaBasicExecutionRole
 ```
 
 We create a node module called `inspection`. It will inspect its own execution environment.

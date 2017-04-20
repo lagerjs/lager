@@ -26,8 +26,8 @@ Usage:
 create-role [options] [identifier]
 
   Options:
-    -p, --preset-config <identifier>       select a role configuration already defined by @lager/iam
-    --managed-policies <managed-policies>  select the managed policies to apply to the role
+    -m, --model <model-identifier>       select a model to quickly create the role configuration
+    -p, --policies <policy-identifiers>  select the policies to attach to the role
 ```
 
 Create a new role in `iam/roles/<identifier>.json`.
