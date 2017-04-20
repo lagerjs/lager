@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "test": "NODE_ENV=test istanbul cover --include-all-sources=true ./node_modules/mocha/bin/_mocha -- --recursive",
-    "test-ci": "NODE_ENV=test istanbul cover --include-all-sources=true ./node_modules/mocha/bin/_mocha --report lcovonly -- --recursive && codecov && cat ./coverage/lcov.info | ./node_modules/.bin/codacy-coverage && rm -rf ./coverage",
+    "test-ci": "NODE_ENV=test istanbul cover --include-all-sources=true ./node_modules/mocha/bin/_mocha --report lcovonly -- --recursive && codecov -F unit",
     "eslint": "eslint --ignore-path .gitignore **/*.js && echo \"  JS lint passed\n\"; exit 0",
     "mdlint": "remark -qf . && echo \"  Markdown lint passed\n\"; exit 0",
     "lint": "eslint --ignore-path .gitignore **/*.js && remark -qf . && echo \"  JS lint and markdown lint passed\n\"; exit 0"

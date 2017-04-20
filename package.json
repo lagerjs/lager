@@ -16,7 +16,7 @@
     "lerna": "lerna",
     "test": "snyk test && lerna run test",
     "test-integration": "NODE_ENV=test istanbul cover --include-all-sources=true ./node_modules/mocha/bin/_mocha -- $(find test -name '*.integ.js' ! -ipath '*node_modules*')",
-    "test-integration-ci": "NODE_ENV=test istanbul cover --include-all-sources=true ./node_modules/mocha/bin/_mocha --report lcovonly -- $(find test -name '*.integ.js' ! -ipath '*node_modules*') && codecov && cat ./coverage/lcov.info | ./node_modules/.bin/codacy-coverage && rm -rf ./coverage"
+    "test-integration-ci": "NODE_ENV=test istanbul cover --include-all-sources=true ./node_modules/mocha/bin/_mocha --report lcovonly -- $(find test -name '*.integ.js' ! -ipath '*node_modules*') && codecov -F integration"
   },
   "repository": {
     "type": "git",
