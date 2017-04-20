@@ -13,7 +13,7 @@ if (['dev', 'development', 'debug'].indexOf(process.env.NODE_ENV) > -1) {
   });
 
   process.on('uncaughtException', (e) => {
-    log.fatal(e, 'Unhandled Exception');
+    log.fatal(e, 'Uncaught Exception');
     process.exit(1);
   });
 

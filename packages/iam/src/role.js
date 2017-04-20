@@ -53,7 +53,7 @@ Role.prototype.deploy = function deploy(context) {
   .spread(() => {
     return Promise.promisify(awsIAM.getRole.bind(awsIAM))({ RoleName: name })
     .catch(e => {
-      // We silently ignore the error if the role is not found : we will have to create it
+      // We silently ignore the error if the role is not found: we will have to create it
       if (e.code === 'NoSuchEntity') { return Promise.resolve(null); }
       return Promise.reject(e);
     });

@@ -93,13 +93,13 @@ module.exports = (icli) => {
     .then(policies => {
       return Promise.map(policies, policy => { return policy.deploy(context); });
     })
-    .then(results => {
+    .then(reports => {
       const t = new Table();
-      _.forEach(results, result => {
-        t.cell('Name', result.report.name);
-        t.cell('Operation', result.report.operation);
-        t.cell('ARN', result.report.arn);
-        t.cell('Deploy time', formatHrTime(result.report.deployTime));
+      _.forEach(reports, report => {
+        t.cell('Name', report.name);
+        t.cell('Operation', report.operation);
+        t.cell('ARN', report.arn);
+        t.cell('Deploy time', formatHrTime(report.deployTime));
         t.newRow();
       });
       console.log();

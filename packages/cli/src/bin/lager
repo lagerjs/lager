@@ -1,21 +1,22 @@
 #!/usr/bin/env node
 'use strict';
 
+const icli = require('comquirer');
 
 if (['dev', 'development', 'debug'].indexOf(process.env.NODE_ENV) > -1) {
   process.on('uncaughtException', (e) => {
-    console.log(e, 'Unhandled Exception');
+    process.stderr.write('\n  Uncaught Exception\n\n');
+    process.stderr.write(e.stack + '\n');
     process.exit(1);
   });
 
   process.on('unhandledRejection', (reason, promise) => {
-    console.log({promise: promise, reason: reason}, 'Unhandled Rejection');
+    process.stderr.write('\n  Unhandled Rejection\n\n');
+    process.stderr.write('Promise: ' + JSON.stringify(promise, null, 2) + '\n\n');
+    process.stderr.write('Reason: ' + (reason instanceof Error ? reason.stack : JSON.stringify(reason, null, 2)) + '\n');
     process.exit(1);
   });
 }
-
-
-const icli = require('comquirer');
 
 icli.init = function() {
   // Useful to reinit the cli for integration tests
@@ -52,7 +53,7 @@ if (require.main === module) {
       // If no arguments where provided, we call the help option
       icli.getProgram().outputHelp();
     } else {
-      icli.getProgram().parse(process.argv);
+      icli.parse(process.argv);
     }
   });
 }

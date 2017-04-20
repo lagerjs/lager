@@ -12,6 +12,7 @@ const plugin = require('../index');
 
 /**
  * This module exports a function that enrich the interactive command line and return a promise
+ * @param {Object} icli
  * @returns {Promise} - a promise that resolve when the operation is done
  */
 module.exports = (icli) => {
@@ -30,22 +31,22 @@ module.exports = (icli) => {
         message: 'Choose a unique identifier for the role (alphanumeric caracters, "_" and "-" accepted)'
       }
     }, {
-      cmdSpec: '-p, --preset-config <identifier>',
-      description: 'select a role configuration already defined by @lager/iam',
+      cmdSpec: '-m, --model <model-identifier>',
+      description: 'select a model to quickly create the role configuration',
       type: 'list',
       choices: choicesLists.presetConfigs,
       question: {
-        message: 'Choose a configuration already defined by @lager/iam',
+        message: 'Choose a model to quickly create the role configuration',
       }
     }, {
-      cmdSpec: '--managed-policies <managed-policies>',
-      description: 'select the managed policies to apply to the role',
+      cmdSpec: '-p, --policies <policy-identifiers>',
+      description: 'select the policies to attach to the role',
       type: 'checkbox',
       choices: choicesLists.managedPolicies,
       question: {
-        message: 'Choose the managed policies to apply to the role',
+        message: 'Choose the policies to attach to the role',
         when(answers, cmdParameterValues) {
-          if (answers.presetConfig === 'none' || cmdParameterValues.presetConfig === 'none') {
+          if ((answers.model === 'none' || cmdParameterValues.model === 'none') && cmdParameterValues.policies === undefined) {
             return choicesLists.managedPolicies()
             .then(managedPolicies => {
               return managedPolicies.length > 0;
@@ -64,20 +65,19 @@ module.exports = (icli) => {
 
   /**
    * Build the choices for "list" and "checkbox" parameters
-   * @param {Array} endpoints - the list o available endpoint specifications
    * @returns {Object} - collection of lists of choices for "list" and "checkbox" parameters
    */
   function getChoices() {
     const choicesLists = {
       presetConfigs: [{
         value: 'APIGatewayLambdaInvocation',
-        name: icli.format.info('APIGatewayLambdaInvocation') + ' - A role that allows API Gateway to invoke Lambda functions'
+        name: icli.format.info('APIGatewayLambdaInvocation') + ' - A role that allows API Gateway to invoke AWS Lambda'
       }, {
         value: 'LambdaBasicExecutionRole',
         name: icli.format.info('LambdaBasicExecutionRole') + ' - A role that allows to write in CloudWatch'
       }, {
         value: 'none',
-        name: icli.format.info('none') + ' - Do not use a predefined template, you will configure it yourself'
+        name: icli.format.info('none') + ' - Do not use a predefined model, you will configure the role yourself'
       }],
       managedPolicies: () => {
         return plugin.loadPolicies()
@@ -105,21 +105,21 @@ module.exports = (icli) => {
     const configFilePath = path.join(process.cwd(), plugin.config.rolesPath);
     return mkdirpAsync(configFilePath)
     .then(() => {
-      if (parameters.presetConfig != 'none') {
+      if (parameters.model != 'none') {
         // Case a preset config has been choosen
-        const src = path.join(__dirname, 'templates', 'roles', parameters.presetConfig + '.json');
+        const src = path.join(__dirname, 'templates', 'roles', parameters.model + '.json');
         const dest = path.join(configFilePath, parameters.identifier + '.json');
         return ncpAsync(src, dest);
       } else {
         // Case no preset config has been choosen
         const config = {
-          'managed-policies': parameters.managedPolicies,
+          'managed-policies': parameters.policies,
           'inline-policies': [],
           'trust-relationship': {
             Version: '2012-10-17',
             Statement: [{
               Effect: 'Allow',
-              Principal: {},
+              Principal: { AWS: '*'},
               Action: 'sts:AssumeRole'
             }]
           }
@@ -130,7 +130,7 @@ module.exports = (icli) => {
     })
     .then(() => {
       const msg = '\n  The IAM role ' + icli.format.info(parameters.identifier)
-                + ' has been created in ' + icli.format.info(configFilePath + path.sep + parameters.identifier + '.json') + '\n\n';
+                + ' has been created in ' + icli.format.info(configFilePath + path.sep + parameters.identifier + '.json') + '\n';
       console.log(msg);
     });
   }

@@ -30,11 +30,11 @@ function getPolicyByName(awsIAM, name, listParams, marker) {
 
 /**
  * Retrieve a policy Arn from a identifier that can be either the ARN or the name
- * @param {[type]} awsIAM       [description]
- * @param {String} identifier - The name or the ARN of the role
- * @param {[type]} context      [description]
- * @param {[type]} searchParams [description]
- * @returns {[type]}              [description]
+ * @param {[type]} awsIAM
+ * @param {String} identifier
+ * @param {[type]} context
+ * @param {[type]} searchParams
+ * @returns {[type]}
  */
 function retrievePolicyArn(awsIAM, identifier, context, searchParams) {
   if (/arn:aws:iam::\d{12}:policy\/?[a-zA-Z_0-9+=,.@\-_/]+]/.test(identifier)) {
@@ -56,7 +56,13 @@ function retrievePolicyArn(awsIAM, identifier, context, searchParams) {
           return getPolicyByName(awsIAM, identifier, searchParams)
           .then(policy => {
             if (!policy) {
-              throw new Error('The policy ' + identifier + ' does not exist.');
+              return findAndDeployPolicy(identifier, context, awsIAM)
+              .then(report => {
+                if (!report) {
+                  throw new Error('The policy ' + identifier + ' could not be found.');
+                }
+                return { Arn: report.arn };
+              });
             }
             return policy;
           });
@@ -71,6 +77,16 @@ function retrievePolicyArn(awsIAM, identifier, context, searchParams) {
   });
 }
 
+function findAndDeployPolicy(identifier, context, awsIAM) {
+  const plugin = require('./index');
+  return plugin.findPolicies([identifier])
+  .then(policies => {
+    if (policies.length === 0) {
+      return null;
+    }
+    return policies[0].deploy(context);
+  });
+}
 
 module.exports = {
   getPolicyByName,

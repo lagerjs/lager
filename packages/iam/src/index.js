@@ -161,7 +161,6 @@ function findRoles(identifiers) {
 }
 
 /**
- * @TODO check duplication with iam/helper.retrieveRoleArn()
  * Takes a role ARN, or a role name as parameter, requests AWS,
  * and retruns the ARN of a role matching the ARN or the role name or the role name with context informations
  * @param  {string} identifier - a role ARN, or a role name
