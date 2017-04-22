@@ -9,7 +9,7 @@ const plugin = require('./index');
 /**
  * Represents an API
  * @constructor
- * @param {Object} spec - base API specification (OpenAPI specification)
+ * @param {Object} spec - base API specification (Swagger/OpenAPI specification)
  */
 const Api = function Api(spec, identifier) {
   this.spec = spec;
@@ -124,7 +124,7 @@ Api.prototype.getEndpoints = function getEndpoints() {
 };
 
 /**
- * Generate an OpenAPI specification
+ * Generate a Swagger/OpenAPI specification
  * It can be the "api-gateway" version (for publication in API Gateway)
  * or the "doc" version (for Swagger UI, Postman, etc...)
  * or a complete, unaltered version for debugging
@@ -301,7 +301,7 @@ Api.prototype._findIdentificationInName = function _findIdentificationInName(nam
 /**
  * Creates a new API in ApiGateway
  * @param {AWS.ApiGateway} - an ApiGateway client from the AWS SDK
- * @param {Object} apiSpec - an OpenAPI specification
+ * @param {Object} apiSpec - an Swagger/OpenAPI specification
  * @returns {Promise<Object>} - an AWS Object representing the API
  */
 Api.prototype._createInApiGateway = function _createInApiGateway(awsApiGateway, spec, context) {
@@ -315,7 +315,7 @@ Api.prototype._createInApiGateway = function _createInApiGateway(awsApiGateway, 
 /**
  * Creates a new API in ApiGateway
  * @param {AWS.ApiGateway} - an ApiGateway client from the AWS SDK
- * @param {Object} apiSpec - an OpenAPI specification
+ * @param {Object} apiSpec - an Swagger/OpenAPI specification
  * @param {Object} - an AWS Object representing the API
  * @returns {Promise<Object>} - an AWS Object representing the API
  */
@@ -332,9 +332,9 @@ Api.prototype._updateInApiGateway = function _updateInApiGateway(awsApiGateway, 
 module.exports = Api;
 
 /**
- * Clean an OpenAPI specification to remove parts incompatible with the ApiGateway import
- * @param {Object} spec - an OpenAPI specification
- * @returns {Object} - the cleaned OpenAPI specification
+ * Clean an Swagger/OpenAPI specification to remove parts incompatible with the ApiGateway import
+ * @param {Object} spec - an Swagger/OpenAPI specification
+ * @returns {Object} - the cleaned Swagger/OpenAPI specification
  */
 function cleanSpecForApiGateway(spec) {
   // @TODO: see if it is still useful when importing with the SDK
@@ -351,9 +351,9 @@ function cleanSpecForApiGateway(spec) {
 }
 
 /**
- * Clean an OpenAPI specification to remove parts specific to lager and ApiGateway
- * @param {Object} spec - an OpenAPI specification
- * @returns {Object} - the cleaned OpenAPI specification
+ * Clean an Swagger/OpenAPI specification to remove parts specific to lager and ApiGateway
+ * @param {Object} spec - an Swagger/OpenAPI specification
+ * @returns {Object} - the cleaned Swagger/OpenAPI specification
  */
 function cleanSpecForDoc(spec) {
   // For documentation, we can remove the OPTION methods, the lager extentions
@@ -366,8 +366,8 @@ function cleanSpecForDoc(spec) {
 }
 
 /**
- * Replace role references in an OpenAPI spec by their ARN
- * @param  {Object} spec - an OpenAPI specification that will be imported in AWS
+ * Replace role references in an Swagger/OpenAPI spec by their ARN
+ * @param  {Object} spec - an Swagger/OpenAPI specification that will be imported in AWS
  * @return {Object} - the altered specification
  */
 function applyCredentialsARNs(spec, context) {

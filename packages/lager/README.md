@@ -4,7 +4,7 @@
 
 # Lager core module
 
-AWS Lambda + API Gateway + OpenAPI specification === *Lager*
+AWS Lambda + API Gateway + Swagger specification === *Lager*
 
 The **Lambda API Gateway Endpoints Router**.
 

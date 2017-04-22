@@ -6,7 +6,7 @@ const plugin = require('./index');
 
 /**
  * The specification of an API endpoint
- * @param {Object} spec - OpenAPI specification of the endpoint
+ * @param {Object} spec - Swagger/OpenAPI specification of the endpoint
  * @param {string} resourcePath - path of the endpoint
  * @param {string} method - HTTP method of the endpoint
  * @constructor
@@ -72,20 +72,20 @@ Endpoint.prototype.getReferencedModels = function getReferencedModels() {
 };
 
 /**
- * Returns the endpoint's OpenAPI specification
- * @returns {Object} - a portion of OpenAPI specification describing the endpoint
+ * Returns the endpoint's Swagger/OpenAPI specification
+ * @returns {Object} - a portion of Swagger/OpenAPI specification describing the endpoint
  */
 Endpoint.prototype.getSpec = function getSpec() {
   return this.spec;
 };
 
 /**
- * Generate a portion of OpenAPI specification
+ * Generate a portion of Swagger/OpenAPI specification
  * It can be the "api-gateway" version (for publication in API Gateway)
  * or the "doc" version (for Swagger UI, Postman, etc...)
  * or a complete, unaltered version for debugging
  * @param {string} type - the kind of specification to generate (api-gateway|doc)
- * @returns {Object} - a portion of OpenAPI specification describing the endpoint
+ * @returns {Object} - a portion of Swagger/OpenAPI specification describing the endpoint
  */
 Endpoint.prototype.generateSpec = function generateSpec(type) {
   const spec = _.cloneDeep(this.spec);
@@ -103,8 +103,8 @@ module.exports = Endpoint;
 
 /**
  * Clean a specification to remove parts incompatible with the ApiGateway import
- * @param {Object} spec - an OpenAPI specification
- * @returns {Object} - the cleaned OpenAPI specification
+ * @param {Object} spec - an Swagger/OpenAPI specification
+ * @returns {Object} - the cleaned Swagger/OpenAPI specification
  */
 function cleanSpecForApiGateway(spec) {
   delete spec['x-lager'];
@@ -113,8 +113,8 @@ function cleanSpecForApiGateway(spec) {
 
 /**
  * Clean a specification to remove parts specific to lager and ApiGateway
- * @param {Object} spec - an OpenAPI specification
- * @returns {Object} - the cleaned OpenAPI specification
+ * @param {Object} spec - an Swagger/OpenAPI specification
+ * @returns {Object} - the cleaned Swagger/OpenAPI specification
  */
 function cleanSpecForDoc(spec) {
   // For documentation, we can remove the OPTION methods, the lager extentions

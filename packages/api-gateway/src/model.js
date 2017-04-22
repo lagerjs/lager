@@ -6,7 +6,7 @@ const plugin = require('./index');
 
 /**
  * The specification of an API model
- * @param {Object} spec - OpenAPI specification of the model
+ * @param {Object} spec - Swagger/OpenAPI specification of the model
  * @constructor
  */
 const Model = function Model(name, spec) {
@@ -34,8 +34,8 @@ Model.prototype.getName = function getName(type) {
 };
 
 /**
- * Returns the model's OpenAPI specification
- * @returns {Object} - a portion of OpenAPI specification describing the model
+ * Returns the model's Swagger/OpenAPI specification
+ * @returns {Object} - a portion of Swagger/OpenAPI specification describing the model
  */
 Model.prototype.getSpec = function getSpec() {
   return this.spec;

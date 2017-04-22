@@ -204,7 +204,6 @@ module.exports = (icli) => {
         return plugin.lager.call('node-lambda:getLambdas', [])
         .then(lambdas => {
           return _.map(lambdas, lambda => {
-            // @TODO add possibilty to enter value manually
             return {
               value: lambda.getIdentifier(),
               name: icli.format.info(lambda.getIdentifier())
@@ -234,7 +233,7 @@ module.exports = (icli) => {
 
     return mkdirpAsync(specFilePath)
     .then(() => {
-      // We create the endpoint OpenAPI specification
+      // We create the endpoint Swagger/OpenAPI specification
       const spec = {
         'x-lager': {
           'apis': parameters.apis

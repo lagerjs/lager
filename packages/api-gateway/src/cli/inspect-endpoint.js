@@ -40,8 +40,8 @@ module.exports = (icli) => {
       default: true,
       question: {
         message: 'Do you want to use syntax highlighting?',
-        when: () => {
-          return plugin.lager.getConfig('colors') === undefined;
+        when: (answers, cmdParameterValues) => {
+          return cmdParameterValues.colors === undefined && plugin.lager.getConfig('colors') === undefined;
         }
       }
     }, {
@@ -53,7 +53,12 @@ module.exports = (icli) => {
       question: {
         message: 'Which version of the specification do ou want to see?'
       }
-    }]
+    }],
+    commanderActionHook() {
+      // Uppercase the HTTP method
+      if (arguments[1]) { arguments[1] = arguments[1].toUpperCase(); }
+      return arguments;
+    }
   };
 
   /**
@@ -98,17 +103,22 @@ module.exports = (icli) => {
     };
 
     choicesLists.httpMethod = function(answers, cmdParameterValues) {
-      const resourcePath = answers.resourcePath || cmdParameterValues.resourcePath;
-      return plugin.loadEndpoints()
-      .then(endpoints => {
-        const httpMethods = [];
-        _.forEach(endpoints, endpoint => {
-          if (endpoint.getResourcePath() === resourcePath) {
-            httpMethods.push(endpoint.getMethod());
-          }
+      // @FIXME comquirer is not able to validate a list for a question, using the command parameter values
+      if (answers) {
+        const resourcePath = answers.resourcePath || cmdParameterValues.resourcePath;
+        return plugin.loadEndpoints()
+        .then(endpoints => {
+          const httpMethods = [];
+          _.forEach(endpoints, endpoint => {
+            if (endpoint.getResourcePath() === resourcePath) {
+              httpMethods.push(endpoint.getMethod());
+            }
+          });
+          return httpMethods;
         });
-        return httpMethods;
-      });
+      }
+      // @FIXME so we list all possible methods
+      return ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS', 'ANY', 'get', 'post', 'put', 'patch', 'delete', 'head', 'options', 'any'];
     };
 
     return choicesLists;
@@ -120,16 +130,17 @@ module.exports = (icli) => {
    * @returns {Promise<null>} - The execution stops here
    */
   function executeCommand(parameters) {
-    if (parameters.colors === undefined) {
-      parameters.colors = plugin.lager.getConfig('colors');
-    }
+    if (parameters.colors === undefined) { parameters.colors = plugin.lager.getConfig('colors'); }
+
     return plugin.findEndpoint(parameters.resourcePath, parameters.httpMethod)
     .then(endpoint => {
-      let spec = JSON.stringify(endpoint.generateSpec(parameters.specVersion), null, 2);
+      const jsonSpec = endpoint.generateSpec(parameters.specVersion);
+      let spec = JSON.stringify(jsonSpec, null, 2);
       if (parameters.colors) {
         spec = icli.highlight(spec, { json: true });
       }
       console.log(spec);
+      return Promise.resolve(jsonSpec);
     });
   }
 

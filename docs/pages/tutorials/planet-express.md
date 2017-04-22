@@ -44,7 +44,7 @@ consumers of the `sender` and the `recipient` APIs will only have access to endp
 
 |                          | `sender` | `recipient` | `back-office` |
 | :----------------------- | :------: | :---------: | :-----------: |
-| `PUT /delivery`          | X        |             | X             |
+| `POST /delivery`         | X        |             | X             |
 | `GET /delivery/{id}`     | X        | X           | X             |
 | `PATCH /delivery/{id}`   |          |             | X             |
 | `DELETE /delivery/{id}`  |          | X           | X             |
@@ -140,10 +140,10 @@ lager create-role PlanetExpressLambdaInvocation -m APIGatewayLambdaInvocation
 We create the four endpoints and associate them to the APIs that have to expose them.
 
 ```bash
-lager create-endpoint /delivery get -a back-office,recipient,sender -s "View a delivery" -i lambda-proxy --auth none --role PlanetExpressLambdaInvocation -l api-generic
-lager create-endpoint /delivery patch -a back-office -s "View a delivery" -i lambda-proxy --auth none --role PlanetExpressLambdaInvocation -l api-generic
-lager create-endpoint /delivery put -a back-office,sender -s "View a delivery" -i lambda-proxy --auth none --role PlanetExpressLambdaInvocation -l api-generic
-lager create-endpoint /delivery delete -a back-office,recipient -s "View a delivery" -i lambda-proxy --auth none --role PlanetExpressLambdaInvocation -l api-generic
+lager create-endpoint /delivery/{id} get -a back-office,recipient,sender -s "View a delivery" -i lambda-proxy --auth none --role PlanetExpressLambdaInvocation -l api-generic
+lager create-endpoint /delivery/{id} patch -a back-office -s "Update a delivery" -i lambda-proxy --auth none --role PlanetExpressLambdaInvocation -l api-generic
+lager create-endpoint /delivery post -a back-office,sender -s "Create a delivery" -i lambda-proxy --auth none --role PlanetExpressLambdaInvocation -l api-generic
+lager create-endpoint /delivery/{id} delete -a back-office,recipient -s "Delete a delivery" -i lambda-proxy --auth none --role PlanetExpressLambdaInvocation -l api-generic
 ```
 
 ### Deployment

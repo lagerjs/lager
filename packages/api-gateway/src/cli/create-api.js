@@ -81,8 +81,9 @@ module.exports = (icli) => {
       return fs.writeFileAsync(specFilePath + path.sep + 'spec.json', JSON.stringify(spec, null, 2));
     })
     .then(() => {
-      let msg = '\n  A new API has been created!\n\n';
-      msg += '  Its OpenAPI specification is available in ' + icli.format.info(specFilePath + path.sep + 'spec.json') + '\n';
+      const msg = '\n  The API "' + icli.format.info(parameters.apiIdentifier) + '" has been created\n\n'
+              + '  Its Swagger specification is available in ' + icli.format.info(specFilePath + path.sep + 'spec.json') + '\n'
+              + '  You can inspect it using the command ' + icli.format.cmd('lager inspect-api ' + parameters.apiIdentifier) + '\n';
       console.log(msg);
     });
   }
