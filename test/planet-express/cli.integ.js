@@ -246,7 +246,6 @@ describe('Creation and deployment of the Planet Express project', () => {
 
         // We call the deployed API and test the response
         address = /https:\/\/.+\.execute-api\.us-east-1\.amazonaws\.com\/v0/.exec(stdout);
-        console.log(address);
         return rp({ uri: address + '/delivery/123', json: true });
       })
       .then(res => {
