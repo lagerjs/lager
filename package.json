@@ -3,17 +3,20 @@
   "version": "0.0.0",
   "dependencies": {},
   "devDependencies": {
-    "codacy-coverage": "^2.0.1",
-    "lerna": "2.0.0-rc.1",
     "bluebird": "^3.5.0",
+    "codacy-coverage": "^2.0.1",
     "codecov": "^2.1.0",
     "fs-extra": "^2.1.2",
     "istanbul": "^0.4.5",
+    "lerna": "2.0.0-rc.1",
     "mocha": "^3.2.0",
+    "request": "^2.81.0",
+    "request-promise": "^4.2.0",
     "snyk": "^1.29.0"
   },
   "scripts": {
     "lerna": "lerna",
+    "snyk": "snyk",
     "test": "snyk test && lerna run test",
     "test-integration": "NODE_ENV=test istanbul cover --include-all-sources=true ./node_modules/mocha/bin/_mocha -- $(find test -name '*.integ.js' ! -ipath '*node_modules*')",
     "test-integration-ci": "NODE_ENV=test istanbul cover --include-all-sources=true ./node_modules/mocha/bin/_mocha --report lcovonly -- $(find test -name '*.integ.js' ! -ipath '*node_modules*') && codecov -F integration"

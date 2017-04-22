@@ -1,7 +1,6 @@
 {
   "name": "A Lager project",
   "plugins": [
-    "@lager/iam",
     "@lager/node-lambda",
     "@lager/api-gateway"
   ],

@@ -90,18 +90,18 @@ describe('Creation and deployment of the Planet Express project', () => {
   describe('Creation of API endpoints', () => {
     it('should be done via the sub-command "create-endpoint"', () => {
       // eslint-disable-next-line max-len
-      return icli.parse('node script.js create-endpoint /delivery get -a back-office,recipient,sender -s "View+a+delivery" -i lambda-proxy --auth none --credentials PlanetExpressLambdaInvocation -l api-generic'.split(' '))
+      return icli.parse('node script.js create-endpoint /delivery get -a back-office,recipient,sender -s "View+a+delivery" -i lambda-proxy --auth none --role PlanetExpressLambdaInvocation -l api-generic'.split(' '))
       .then(res => {
         // eslint-disable-next-line max-len
-        return icli.parse('node script.js create-endpoint /delivery patch -a back-office -s "Update+a+delivery" -i lambda-proxy --auth none --credentials PlanetExpressLambdaInvocation -l api-generic'.split(' '));
+        return icli.parse('node script.js create-endpoint /delivery patch -a back-office -s "Update+a+delivery" -i lambda-proxy --auth none --role PlanetExpressLambdaInvocation -l api-generic'.split(' '));
       })
       .then(res => {
         // eslint-disable-next-line max-len
-        return icli.parse('node script.js create-endpoint /delivery put -a back-office,sender -s "Create+a+delivery" -i lambda-proxy --auth none --credentials PlanetExpressLambdaInvocation -l api-generic'.split(' '));
+        return icli.parse('node script.js create-endpoint /delivery put -a back-office,sender -s "Create+a+delivery" -i lambda-proxy --auth none --role PlanetExpressLambdaInvocation -l api-generic'.split(' '));
       })
       .then(res => {
         // eslint-disable-next-line max-len
-        return icli.parse('node script.js create-endpoint /delivery delete -a back-office,recipient -s "Delete+a+delivery" -i lambda-proxy --auth none --credentials PlanetExpressLambdaInvocation -l api-generic'.split(' '));
+        return icli.parse('node script.js create-endpoint /delivery delete -a back-office,recipient -s "Delete+a+delivery" -i lambda-proxy --auth none --role PlanetExpressLambdaInvocation -l api-generic'.split(' '));
       })
       .then(res => {
         assert.ok(true);
@@ -109,8 +109,9 @@ describe('Creation and deployment of the Planet Express project', () => {
     });
   });
 
-  describe('Deployment of APIs in AWS', function() {
-    it('should be done via the sub-command "deploy-apis"', () => {
+  describe('Deployment of APIs in AWS', () => {
+    it('should be done via the sub-command "deploy-apis"', function() {
+      this.timeout(30000);
       return icli.parse('node script.js deploy-apis back-office -r us-east-1 -s v0 -e DEV --deploy-lambdas all'.split(' '))
       .then(res => {
         assert.ok(true);

@@ -1,0 +1,7 @@
+{
+  "params": {
+    "Timeout": 20,
+    "MemorySize": "128",
+    "Role": "xxxxxx"
+  }
+}

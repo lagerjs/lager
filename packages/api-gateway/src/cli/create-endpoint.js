@@ -83,39 +83,44 @@ module.exports = (icli) => {
         }
       }
     }, {
-      cmdSpec: '--credentials <role-name|role-arn>',
-      description: 'The credentials used by API Gateway to call the integration',
       type: 'list',
-      choices: choicesLists.credentials,
+      choices: choicesLists.roleOrigins,
       question: {
-        message: 'What are the credentials (aka the AWS role) used by API Gateway to call the integration?',
+        name: 'roleOrigin',
+        message: 'Where can we find the role that will invoke the integration?',
+        when: (answers, cmdParameterValues) => {
+          if (cmdParameterValues.role) { return false; }
+          return choicesLists.roleOrigins().length > 0;
+        }
+      }
+    }, {
+      cmdSpec: '-r, --role <role>',
+      description: 'select the role to invoke integration' + (plugin.lager.isPluginRegistered('iam') ? '' : ' (enter the ARN)'),
+      type: 'list',
+      choices: choicesLists.roles,
+      // We desactivate validation because the value can be set manually
+      validate: input => { return true; },
+      question: {
+        message: 'Choose the invocation role',
         when(answers, cmdParameterValues) {
-          if (cmdParameterValues.credentials) {
-            return false;
-          }
-          return choicesLists.credentials().then(credentials => {
-            return credentials.length > 0;
-          });
+          if (cmdParameterValues.role) { return false; }
+          return answers.roleOrigin === 'lager' || answers.roleOrigin === 'aws';
         }
       }
     }, {
       type: 'input',
       question: {
-        name: 'credentialsInput',
-        message: 'Enter the credentials (aka the AWS role) used by API Gateway to call the integration',
-        when(answers, cmdParameterValues) { return !answers.credentials && !cmdParameterValues.credentials; }
+        name: 'roleManually',
+        message: 'Enter the IAM role that will be used to invoke the integration' + (plugin.lager.isPluginRegistered('iam') ? '' : ' (enter the ARN)'),
+        when(answers, cmdParameterValues) {
+          return !answers.role && !cmdParameterValues.role;
+        }
       }
     }],
     commanderActionHook() {
       // Uppercase the HTTP method
       if (arguments[1]) { arguments[1] = arguments[1].toUpperCase(); }
       return arguments;
-    },
-    inquirerPromptHook(answers, commandParameterValues) {
-      if (answers.credentialsInput) {
-        answers.credentials = answers.credentialsInput;
-      }
-      return Promise.resolve([answers, commandParameterValues]);
     }
   };
 
@@ -130,7 +135,7 @@ module.exports = (icli) => {
    */
   function getChoices() {
     // First, retrieve possible values for the api-identifiers parameter
-    const choicesLists = {
+    return {
       httpMethod: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS', 'ANY'],
       auth: [
         { value: 'aws_iam', name: 'AWS authorization' },
@@ -142,57 +147,72 @@ module.exports = (icli) => {
         { value: 'http', name: 'Existing HTTP endpoint' },
         { value: 'mock', name: 'Mock' },
         { value: 'aws-service', name: 'AWS service' }
-      ]
-    };
-
-    choicesLists.apis = () => {
-      return plugin.loadApis()
-      .then(apis => {
-        return _.map(apis, api => {
-          return {
-            value: api.getIdentifier(),
-            name: icli.format.info(api.getIdentifier()) + (api.spec.info && api.spec.info.title ? ' - ' + api.spec.info.title : '')
-          };
+      ],
+      apis: () => {
+        return plugin.loadApis()
+        .then(apis => {
+          return _.map(apis, api => {
+            return {
+              value: api.getIdentifier(),
+              name: icli.format.info(api.getIdentifier()) + (api.spec.info && api.spec.info.title ? ' - ' + api.spec.info.title : '')
+            };
+          });
         });
-      });
-    };
-
-    choicesLists.credentials = () => {
-      return plugin.lager.call('iam:getRoles', [])
-      .then(roles => {
-        const credentials = [];
-        _.forEach(roles, role => {
-          if (_.find(role.config['trust-relationship'].Statement, (o) => { return o.Principal.Service === 'apigateway.amazonaws.com'; })) {
-            credentials.push({
-              value: role.getName(),
-              name: icli.format.info(role.getName())
+      },
+      roleOrigins: () => {
+        if (plugin.lager.isPluginRegistered('iam')) {
+          const choices = [];
+          choices.push({
+            value: 'lager',
+            name: 'Select a role managed by the plugin @lager/iam'
+          });
+          choices.push({
+            value: 'aws',
+            name: 'Select a role in your AWS account'
+          });
+          choices.push({
+            value: '',
+            name: 'Enter the value manually'
+          });
+          return choices;
+        }
+        return [];
+      },
+      roles: (answers) => {
+        if (answers && answers.roleOrigin === 'aws') {
+          return plugin.lager.call('iam:getAWSRoles', [])
+          .then(roles => {
+            return _.map(roles, 'RoleName');
+          });
+        } else {
+          return plugin.lager.call('iam:getRoles', [])
+          .then(roles => {
+            const eligibleRoles = [];
+            _.forEach(roles, role => {
+              if (_.find(role.config['trust-relationship'].Statement, (o) => { return o.Principal.Service === 'apigateway.amazonaws.com'; })) {
+                eligibleRoles.push({
+                  value: role.getName(),
+                  name: icli.format.info(role.getName())
+                });
+              }
             });
-          }
-        });
-        if (credentials.length > 0) {
-          credentials.push({
-            value: 'show-input-question',
-            name: 'The AWS role is not managed by Lager, let me write the value'
+            return eligibleRoles;
           });
         }
-        return credentials;
-      });
-    };
-
-    choicesLists.lambdas = () => {
-      return plugin.lager.call('node-lambda:getLambdas', [])
-      .then(lambdas => {
-        return _.map(lambdas, lambda => {
-          // @TODO add possibilty to enter value manually
-          return {
-            value: lambda.getIdentifier(),
-            name: icli.format.info(lambda.getIdentifier())
-          };
+      },
+      lambdas: () => {
+        return plugin.lager.call('node-lambda:getLambdas', [])
+        .then(lambdas => {
+          return _.map(lambdas, lambda => {
+            // @TODO add possibilty to enter value manually
+            return {
+              value: lambda.getIdentifier(),
+              name: icli.format.info(lambda.getIdentifier())
+            };
+          });
         });
-      });
+      }
     };
-
-    return choicesLists;
   }
 
   /**
@@ -201,6 +221,7 @@ module.exports = (icli) => {
    * @returns {Promise<null>} - The execution stops here
    */
   function executeCommand(parameters) {
+    if (!parameters.role && parameters.roleManually) { parameters.role = parameters.roleManually; }
     if (parameters.resourcePath.charAt(0) !== '/') { parameters.resourcePath = '/' + parameters.resourcePath; }
 
     // We calculate the path where we will save the specification and create the directory
@@ -228,7 +249,7 @@ module.exports = (icli) => {
           type: parameters.auth
         },
         'x-amazon-apigateway-integration': {
-          credentials: parameters.credentials,
+          credentials: parameters.role,
           responses: {
             default: {
               statusCode: 200

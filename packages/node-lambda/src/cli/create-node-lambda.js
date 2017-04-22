@@ -152,12 +152,16 @@ module.exports = (icli) => {
         } else {
           return plugin.lager.call('iam:getRoles', [])
           .then(roles => {
-            return _.map(roles, r => {
-              return {
-                value: r.getName(),
-                name: icli.format.info(r.getName()) + ' - ' + (r.getDescription() || 'No description')
-              };
+            const eligibleRoles = [];
+            _.forEach(roles, role => {
+              if (_.find(role.config['trust-relationship'].Statement, (o) => { return o.Principal.Service === 'lambda.amazonaws.com'; })) {
+                eligibleRoles.push({
+                  value: role.getName(),
+                  name: icli.format.info(role.getName())
+                });
+              }
             });
+            return eligibleRoles;
           });
         }
       }
@@ -170,9 +174,8 @@ module.exports = (icli) => {
    * @returns {Promise<null>} - The execution stops here
    */
   function executeCommand(parameters) {
-    if (!parameters.role && parameters.roleManually) {
-      parameters.role = parameters.roleManually;
-    }
+    if (!parameters.role && parameters.roleManually) { parameters.role = parameters.roleManually; }
+
     const configFilePath = path.join(process.cwd(), plugin.config.lambdasPath, parameters.identifier);
     return mkdirpAsync(configFilePath)
     .then(() => {

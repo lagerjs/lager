@@ -1,0 +1,17 @@
+{
+  "name": "any-proxy",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@lager/api-gateway": "0.0.17",
+    "@lager/lager": "0.0.37",
+    "@lager/node-lambda": "0.0.20"
+  }
+}

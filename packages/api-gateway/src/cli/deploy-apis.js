@@ -161,19 +161,17 @@ module.exports = (icli) => {
       ]);
     })
     .spread((apis, integrations) => {
-      // @TODO show information about the integration load
-
       // Deploy in API Gateway
-      // To avoid TooManyRequestsException, we delay the deployment of each api
+      // To avoid TooManyRequestsException, we delay the deployment of each API
       const promises = [];
       let delay = 0;
       _.forEach(apis, api => {
         promises.push(new Promise((resolve, reject) => {
-          // 32 seconds delay
+          // 35 seconds delay
           setTimeout(() => {
             console.log('Deploying ' + api.getIdentifier() + ' ...');
             resolve(api.deploy(parameters.region, context));
-          }, delay * 32000);
+          }, delay * 35000);
         }));
         delay++;
       });
@@ -215,6 +213,7 @@ module.exports = (icli) => {
       } else {
         console.log('The deployment of one or more APIs failed. The publication step will not be performed.');
         console.log();
+        process.exit(1);
       }
     });
   }

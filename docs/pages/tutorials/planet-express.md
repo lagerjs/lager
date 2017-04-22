@@ -140,10 +140,10 @@ lager create-role PlanetExpressLambdaInvocation -m APIGatewayLambdaInvocation
 We create the four endpoints and associate them to the APIs that have to expose them.
 
 ```bash
-lager create-endpoint /delivery get -a back-office,recipient,sender -s "View a delivery" -i lambda-proxy --auth none --credentials PlanetExpressLambdaInvocation -l api-generic
-lager create-endpoint /delivery patch -a back-office -s "View a delivery" -i lambda-proxy --auth none --credentials PlanetExpressLambdaInvocation -l api-generic
-lager create-endpoint /delivery put -a back-office,sender -s "View a delivery" -i lambda-proxy --auth none --credentials PlanetExpressLambdaInvocation -l api-generic
-lager create-endpoint /delivery delete -a back-office,recipient -s "View a delivery" -i lambda-proxy --auth none --credentials PlanetExpressLambdaInvocation -l api-generic
+lager create-endpoint /delivery get -a back-office,recipient,sender -s "View a delivery" -i lambda-proxy --auth none --role PlanetExpressLambdaInvocation -l api-generic
+lager create-endpoint /delivery patch -a back-office -s "View a delivery" -i lambda-proxy --auth none --role PlanetExpressLambdaInvocation -l api-generic
+lager create-endpoint /delivery put -a back-office,sender -s "View a delivery" -i lambda-proxy --auth none --role PlanetExpressLambdaInvocation -l api-generic
+lager create-endpoint /delivery delete -a back-office,recipient -s "View a delivery" -i lambda-proxy --auth none --role PlanetExpressLambdaInvocation -l api-generic
 ```
 
 ### Deployment
@@ -175,10 +175,10 @@ lager create-api recipient   -t "Recipient"   -d "Planet Express API for recipie
 
 lager create-role PlanetExpressLambdaInvocation -m APIGatewayLambdaInvocation
 
-lager create-endpoint /delivery get -a back-office,recipient,sender -s "View a delivery" -i lambda-proxy --auth none --credentials PlanetExpressLambdaInvocation -l api-generic
-lager create-endpoint /delivery patch -a back-office -s "View a delivery" -i lambda-proxy --auth none --credentials PlanetExpressLambdaInvocation -l api-generic
-lager create-endpoint /delivery put -a back-office,sender -s "View a delivery" -i lambda-proxy --auth none --credentials PlanetExpressLambdaInvocation -l api-generic
-lager create-endpoint /delivery delete -a back-office,recipient -s "View a delivery" -i lambda-proxy --auth none --credentials PlanetExpressLambdaInvocation -l api-generic
+lager create-endpoint /delivery get -a back-office,recipient,sender -s "View a delivery" -i lambda-proxy --auth none --role PlanetExpressLambdaInvocation -l api-generic
+lager create-endpoint /delivery patch -a back-office -s "View a delivery" -i lambda-proxy --auth none --role PlanetExpressLambdaInvocation -l api-generic
+lager create-endpoint /delivery put -a back-office,sender -s "View a delivery" -i lambda-proxy --auth none --role PlanetExpressLambdaInvocation -l api-generic
+lager create-endpoint /delivery delete -a back-office,recipient -s "View a delivery" -i lambda-proxy --auth none --role PlanetExpressLambdaInvocation -l api-generic
 
 lager deploy-apis back-office sender recipient -r us-east-1 -s v0 -e DEV --deploy-lambdas all
 ```

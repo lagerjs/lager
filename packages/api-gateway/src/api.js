@@ -139,8 +139,18 @@ Api.prototype.generateSpec = function generateSpec(type, context) {
   _.forEach(this.endpoints, endpoint => {
     // We create the new "path" entry and merge it to specification
     const path = {};
-    path[endpoint.getResourcePath()] = {};
-    path[endpoint.getResourcePath()][endpoint.getMethod().toLowerCase()] = endpoint.generateSpec(type);
+    const resourcePath = endpoint.getResourcePath();
+    const method = endpoint.getMethod().toLowerCase();
+    path[resourcePath] = {};
+    if (method === 'any' && type === 'api-gateway') {
+      path[resourcePath]['x-amazon-apigateway-any-method'] = endpoint.generateSpec(type);
+    } else if (method === 'any' && type === 'doc') {
+      ['get', 'post', 'put', 'patch', 'delete', 'head', 'options'].forEach(m => {
+        path[resourcePath][m] = endpoint.generateSpec(type);
+      });
+    } else {
+      path[resourcePath][method] = endpoint.generateSpec(type);
+    }
     _.merge(spec.paths, path);
   });
 
