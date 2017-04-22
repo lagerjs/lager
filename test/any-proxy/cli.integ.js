@@ -44,7 +44,7 @@ describe('Creation and deployment of a proxy integration with ANY http method', 
   describe('Creation of an API', () => {
     it('should be done via the sub-command "create-api"', () => {
       catchStdout.start(showStdout);
-      return icli.parse('node script.js create-api any-proxy -t "Any+proxy" -d "Lambda+proxy+integration+for+any+http+request"'.split(' '))
+      return icli.parse('node script.js create-api any-proxy -t Any+proxy -d Lambda+proxy+integration+for+any+http+request'.split(' '))
       .then(res => {
         const stdout = catchStdout.stop();
         assert.ok(stdout.indexOf('A new API has been created!') > -1);
@@ -56,15 +56,32 @@ describe('Creation and deployment of a proxy integration with ANY http method', 
     it('should be done via the sub-command "create-endpoint"', () => {
       catchStdout.start(showStdout);
       // eslint-disable-next-line max-len
-      return icli.parse('node script.js create-endpoint /{proxy+} any -a any-proxy -s "View+a+delivery" -i lambda-proxy --auth none --role arn:aws:iam::856019870963:role/APIGatewayInvokeLambdaLagerIntegrationTest -l any-proxy'.split(' '))
+      return icli.parse('node script.js create-endpoint /{proxy+} any -a any-proxy -s Catch+all+non+root+request -i lambda-proxy --auth none --role arn:aws:iam::856019870963:role/APIGatewayInvokeLambdaLagerIntegrationTest -l any-proxy'.split(' '))
       .then(res => {
         // eslint-disable-next-line max-len
-        return icli.parse('node script.js create-endpoint / any -a any-proxy -s "View+a+delivery" -i lambda-proxy --auth none --role arn:aws:iam::856019870963:role/APIGatewayInvokeLambdaLagerIntegrationTest -l any-proxy'.split(' '));
+        return icli.parse('node script.js create-endpoint / any -a any-proxy -s Catch+all+root+request -i lambda-proxy --auth none --role arn:aws:iam::856019870963:role/APIGatewayInvokeLambdaLagerIntegrationTest -l any-proxy'.split(' '));
       })
       .then(res => {
         const stdout = catchStdout.stop();
         assert.ok(stdout.indexOf('The endpoint \x1b[36mANY /{proxy+}\x1b[0m has been created') > -1);
         assert.ok(stdout.indexOf('The endpoint \x1b[36mANY /\x1b[0m has been created') > -1);
+      });
+    });
+  });
+
+  describe('Swagger API specification for documentation purpose', () => {
+    it('should duplicate the ANY endpoint definition for each http method', () => {
+      catchStdout.start(showStdout);
+      return icli.parse('node script.js inspect-api any-proxy -s doc -c'.split(' '))
+      .then(res => {
+        catchStdout.stop();
+        assert.equal(res.paths['/{proxy+}'].get.summary, 'Catch+all+non+root+request');
+        assert.equal(res.paths['/{proxy+}'].post.summary, 'Catch+all+non+root+request');
+        assert.equal(res.paths['/{proxy+}'].put.summary, 'Catch+all+non+root+request');
+        assert.equal(res.paths['/{proxy+}'].patch.summary, 'Catch+all+non+root+request');
+        assert.equal(res.paths['/{proxy+}'].delete.summary, 'Catch+all+non+root+request');
+        assert.equal(res.paths['/{proxy+}'].head.summary, 'Catch+all+non+root+request');
+        assert.equal(res.paths['/{proxy+}'].options.summary, 'Catch+all+non+root+request');
       });
     });
   });
@@ -80,7 +97,7 @@ describe('Creation and deployment of a proxy integration with ANY http method', 
         assert.ok(stdout.indexOf('/{proxy+}  ANY     X') > -1);
         assert.ok(stdout.indexOf('1 Lambda(s) to deploy: any-proxy') > -1);
         assert.ok(stdout.indexOf('Deploying any-proxy ...') > -1);
-        assert.ok(stdout.indexOf('any-proxy   DEV any-proxy - "Any+proxy"') > -1);
+        assert.ok(stdout.indexOf('any-proxy   DEV any-proxy - Any+proxy') > -1);
         assert.ok(stdout.indexOf('APIs have been published') > -1);
 
         // We call the deployed API and test the response

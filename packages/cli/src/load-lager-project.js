@@ -125,6 +125,7 @@ function getConfig() {
       function addParts(config, parts, value) {
         const part = parts.shift();
         if (parts.length === 0) {
+          if (value === 'false') { value = false; }
           config[part] = value;
         } else {
           config[part] = config[part] || {};

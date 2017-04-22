@@ -359,9 +359,9 @@ function cleanSpecForDoc(spec) {
   // For documentation, we can remove the OPTION methods, the lager extentions
   // and the extentions from API Gateway Importer
   delete spec['x-lager'];
-  _.forEach(spec.paths, path => {
-    delete path.options;
-  });
+  // _.forEach(spec.paths, path => {
+  //   delete path.options;
+  // });
   return spec;
 }
 

@@ -32,8 +32,8 @@ module.exports = (icli) => {
       default: true,
       question: {
         message: 'Do you want to use syntax highlighting?',
-        when: () => {
-          return plugin.lager.getConfig('colors') === undefined;
+        when: (answers, cmdParameterValues) => {
+          return cmdParameterValues.colors === undefined && plugin.lager.getConfig('colors') === undefined;
         }
       }
     }, {
@@ -95,12 +95,13 @@ module.exports = (icli) => {
     .then(api => {
       return api.generateSpec(parameters.specVersion);
     })
-    .then(spec => {
-      spec = JSON.stringify(spec, null, 2);
+    .then(jsonSpec => {
+      let spec = JSON.stringify(jsonSpec, null, 2);
       if (parameters.colors) {
         spec = icli.highlight(spec, { json: true });
       }
       console.log(spec);
+      return Promise.resolve(jsonSpec);
     });
   }
 
