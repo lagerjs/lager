@@ -47,7 +47,7 @@ describe('Creation and deployment of a proxy integration with ANY http method', 
       return icli.parse('node script.js create-api any-proxy -t Any+proxy -d Lambda+proxy+integration+for+any+http+request'.split(' '))
       .then(res => {
         const stdout = catchStdout.stop();
-        assert.ok(stdout.indexOf('A new API has been created!') > -1);
+        assert.ok(stdout.indexOf('The API "\x1b[36many-proxy\x1b[0m" has been created') > -1);
       });
     });
   });
