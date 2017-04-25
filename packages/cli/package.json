@@ -5,10 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "NODE_ENV=test istanbul cover --include-all-sources=true ./node_modules/mocha/bin/_mocha -- --recursive && rm -rf ./coverage",
-    "test-ci": "NODE_ENV=test istanbul cover --include-all-sources=true ./node_modules/mocha/bin/_mocha --report lcovonly -- --recursive && codecov -F unit",
-    "eslint": "eslint --ignore-path .gitignore **/*.js && echo \"  JS lint passed\n\"; exit 0",
-    "mdlint": "remark -qf . && echo \"  Markdown lint passed\n\"; exit 0",
-    "lint": "eslint --ignore-path .gitignore **/*.js && remark -qf . && echo \"  JS lint and markdown lint passed\n\"; exit 0"
+    "test-ci": "NODE_ENV=test istanbul cover --include-all-sources=true ./node_modules/mocha/bin/_mocha --report lcovonly -- --recursive && codecov -F unit"
   },
   "bin": {
     "lager": "src/bin/lager"
@@ -33,13 +30,8 @@
     "lodash": "^4.17.4"
   },
   "devDependencies": {
-    "bithound": "^1.7.0",
-    "codacy-coverage": "^2.0.1",
     "codecov": "^2.1.0",
-    "eslint": "^3.19.0",
     "istanbul": "^0.4.5",
-    "mocha": "^3.2.0",
-    "remark-cli": "^3.0.0",
-    "remark-lint": "^6.0.0"
+    "mocha": "^3.2.0"
   }
 }

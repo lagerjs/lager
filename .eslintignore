@@ -1,0 +1,4 @@
+node_modules
+coverage
+docs
+packages/cli/src/cli/figlet

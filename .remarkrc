@@ -1,9 +1,11 @@
 {
-  "plugins": {
-    "remark-lint": {
-        "maximum-line-length": 126,
-        "maximum-heading-length": 80,
-        "list-item-spacing": false
-    }
-  }
+  "plugins": [
+    "remark-lint",
+    ["remark-lint-unordered-list-marker-style", "consistent"],
+    "remark-lint-list-item-bullet-indent",
+    "remark-lint-no-multiple-toplevel-headings",
+    ["remark-lint-maximum-line-length", 126],
+    ["remark-lint-maximum-heading-length", 126],
+    "remark-lint-no-tabs"
+  ]
 }
