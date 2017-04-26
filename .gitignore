@@ -1,8 +1,8 @@
-dev-app/docker-compose.env
-reports
 node_modules
 !test/**/node_modules
+!demo/dev-env/node_modules/@lager
 npm-debug.log
 lerna-debug.log
 lager.log
 coverage
+reports

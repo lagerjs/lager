@@ -7,6 +7,7 @@ const fs = require('fs');
 const Promise = require('bluebird');
 const _ = require('lodash');
 
+let apis;
 let endpoints;
 
 /**
@@ -14,6 +15,11 @@ let endpoints;
  * @returns {Promise<[Api]>} - the promise of an array containing all APIs
  */
 function loadApis() {
+  // Shortcut if apis already have been loaded
+  if (apis !== undefined) {
+    return Promise.resolve(apis);
+  }
+
   const apiSpecsPath = path.join(process.cwd(), plugin.config.apisPath);
 
   // This event allows to inject code before loading all APIs
@@ -36,7 +42,8 @@ function loadApis() {
     // This event allows to inject code to add or delete or alter API specifications
     return plugin.lager.fire('afterApisLoad', apis);
   })
-  .spread(apis => {
+  .spread(loadedApis => {
+    apis = loadedApis;
     return Promise.resolve(apis);
   })
   .catch(e => {
@@ -265,13 +272,13 @@ function loadIntegrations(region, context, endpoints) {
  * @returns {Api} - the API corresponding to the  identifier
  */
 function findApi(identifier) {
-  return Promise.all([loadApis(), loadEndpoints()])
-  .spread((apis, endpoints) => {
+  return loadApis()
+  .then(apis => {
     const api = _.find(apis, (api) => { return api.getIdentifier() === identifier; });
     if (!api) {
       return Promise.reject(new Error('Could not find the API "' + identifier + '" in the current project'));
     }
-    return api.addEndpoints(endpoints);
+    return api;
   });
 }
 
@@ -355,7 +362,10 @@ const plugin = {
   findApi,
   findEndpoint,
   findModel,
-  getPolicies
+  getPolicies,
+  getApiConstructor() { return require('./api'); },
+  getEndpointConstructor() { return require('./endpoint'); },
+  getModelConstructor() { return require('./model'); }
 };
 
 module.exports = plugin;

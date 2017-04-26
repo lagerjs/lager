@@ -1,11 +1,13 @@
 'use strict';
 
-module.exports = {
+const plugin = {
   name: 'cors',
 
   config: {},
 
-  hooks: {
-    afterApiLoad: require('hooks/after-api-load')
-  }
+  hooks: {}
 };
+
+plugin.hooks.afterAddEndpointsToApi = require('./hooks/after-add-endpoints-to-api')(plugin);
+
+module.exports = plugin;

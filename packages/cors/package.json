@@ -1,6 +1,6 @@
 {
-  "name": "@lager/api-gateway",
-  "version": "0.0.18",
+  "name": "@lager/cors",
+  "version": "0.0.1",
   "description": "A Lager plugin to easily add CORS configuration to APIs in AWS API Gateway",
   "main": "src/index.js",
   "scripts": {
@@ -25,7 +25,9 @@
     "url": "https://github.com/lagerjs/lager/issues"
   },
   "homepage": "https://github.com/lagerjs/lager#readme",
-  "dependencies": {},
+  "dependencies": {
+    "lodash": "^4.17.4"
+  },
   "devDependencies": {
     "codecov": "^2.1.0",
     "istanbul": "^0.4.5",

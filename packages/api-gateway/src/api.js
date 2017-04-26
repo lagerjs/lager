@@ -46,6 +46,14 @@ Api.prototype.toString = function toString() {
 };
 
 /**
+ * Returns the API's Swagger/OpenAPI specification
+ * @returns {Object} - a portion of Swagger/OpenAPI specification describing the API
+ */
+Api.prototype.getSpec = function getSpec() {
+  return this.spec;
+};
+
+/**
  * Check if an endpoint applies to an API
  * @param {Endpoint} endpoint
  * @returns {boolean}
