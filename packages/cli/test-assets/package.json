@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "description": "A Lager application to test the CLI",
   "dependencies": {
-    "@lager/lager": "0.0.*"
+    "@lager/lager": "*"
   },
   "devDependencies": {},
   "license": "MIT"
