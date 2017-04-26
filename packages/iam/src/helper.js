@@ -20,7 +20,6 @@ function getPolicyByName(name, listParams, marker) {
   return Promise.promisify(iam.listPolicies.bind(iam))(params)
   .then(policyList => {
     const policyFound = _.find(policyList.Policies, function(policy) { return policy.PolicyName === name; });
-    console.log(name, policyList.Policies);
     if (policyFound) {
       return Promise.resolve(policyFound);
     } else if (policyList.IsTruncated) {
