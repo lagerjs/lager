@@ -182,7 +182,6 @@ function findNodeModule(name) {
  * @returns {object}
  */
 function getPolicies() {
-  // @TODO add event emitters
   return Promise.resolve(require('./aws-policies'));
 }
 

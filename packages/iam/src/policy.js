@@ -47,7 +47,7 @@ Policy.prototype.deploy = function deploy(context) {
       OnlyAttached: false,
       Scope: 'Local'
     };
-    return iamHelper.getPolicyByName(awsIAM, name, params);
+    return iamHelper.getPolicyByName(name, params);
   })
   .then(currentPolicy => {
     if (currentPolicy) {

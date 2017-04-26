@@ -1,14 +1,11 @@
 'use strict';
 
-
 const Promise = require('bluebird');
 const _ = require('lodash');
-const AWS = require('aws-sdk');
-
 const path = require('path');
 const fs = Promise.promisifyAll(require('fs'));
+const helper = require('./helper');
 
-const iam = new AWS.IAM();
 
 /**
  * Load all policy configurations
@@ -160,59 +157,6 @@ function findRoles(identifiers) {
   });
 }
 
-/**
- * Takes a role ARN, or a role name as parameter, requests AWS,
- * and retruns the ARN of a role matching the ARN or the role name or the role name with context informations
- * @param  {string} identifier - a role ARN, or a role name
- * @param  {Object} context - an object containing the stage and the environment
- * @return {string} - an AWS role ARN
- */
-function retrieveRoleArn(identifier, context) {
-  // First check if the parameter already is an ARN
-  if (/arn:aws:iam::\d{12}:role\/?[a-zA-Z_0-9+=,.@\-_\/]+/.test(identifier)) {
-    return Promise.resolve(identifier);
-  }
-  // Then, we check if a role exists with a name "ENVIRONMENT_identifier_stage"
-  return Promise.promisify(iam.getRole.bind(iam))({ RoleName: context.environment + '_' + identifier + '_' + context.stage })
-  .then((data) => {
-    return Promise.resolve(data.Role.Arn);
-  })
-  .catch(e => {
-    // If it failed, we check if a role exists with a name "ENVIRONMENT_identifier"
-    return Promise.promisify(iam.getRole.bind(iam))({ RoleName: context.environment + '_' + identifier })
-    .then((data) => {
-      return Promise.resolve(data.Role.Arn);
-    })
-    .catch(e => {
-      // If it failed again, we check if a role exists with a name "identifier"
-      return Promise.promisify(iam.getRole.bind(iam))({ RoleName: identifier })
-      .then((data) => {
-        return Promise.resolve(data.Role.Arn);
-      })
-      .catch(e => {
-        return findRoles([identifier])
-        .then(roles => {
-          if (roles.length === 1) {
-            return roles[0].deploy(context)
-            .then(report => {
-              return report.arn;
-            });
-          }
-          // @TODO improve error handling
-          return Promise.reject(new Error('Could not find role ' + identifier));
-        });
-      });
-    });
-  });
-}
-
-function retrieveAWSRoles() {
-  return Promise.promisify(iam.listRoles.bind(iam))({})
-  .then((data) => {
-    return data.Roles;
-  });
-}
-
 const plugin = {
   name: 'iam',
 
@@ -241,15 +185,15 @@ const plugin = {
 
   extensions: {
     getRoles: loadRoles,
-    getAWSRoles: retrieveAWSRoles,
-    retrieveRoleArn: retrieveRoleArn
+    getAWSRoles: helper.retrieveAWSRoles,
+    retrieveRoleArn: helper.retrieveRoleArn
   },
 
   loadPolicies,
   findPolicies,
   loadRoles,
   findRoles,
-  retrieveRoleArn
+  retrieveRoleArn: helper.retrieveRoleArn
 };
 
 module.exports = plugin;

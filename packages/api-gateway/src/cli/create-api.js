@@ -7,9 +7,6 @@ const mkdirpAsync = Promise.promisify(require('mkdirp'));
 
 const plugin = require('../index');
 
-// @TODO propose to select endpoints
-// @TODO reactivate the possibility to select values not proposed in a list
-
 /**
  * This module exports a function that enrich the interactive command line and return a promise
  * @returns {Promise} - a promise that resolve when the operation is done

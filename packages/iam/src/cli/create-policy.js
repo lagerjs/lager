@@ -13,8 +13,6 @@ const plugin = require('../index');
  * @returns {Promise} - a promise that resolve when the operation is done
  */
 module.exports = (icli) => {
-  // @TODO ask a question to select a policy already configured or not
-  // @TODO ask *n* questions to choose Effect/Action/resource
   const config = {
     section: 'IAM plugin',
     cmd: 'create-policy',

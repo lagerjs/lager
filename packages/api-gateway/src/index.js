@@ -130,7 +130,6 @@ function loadEndpoints() {
  * @returns {Promise<Endpoint>} - the promise of an endpoint instance
  */
 function loadEndpoint(endpointSpecRootPath, resourcePath, method) {
-  // @TODO throw error if the endpoint does not exists
   method = method.toUpperCase();
   return plugin.lager.fire('beforeEndpointLoad', endpointSpecRootPath, resourcePath, method)
   .spread(() => {
@@ -203,7 +202,6 @@ function loadModels() {
  * @returns {Promise<Model>} - the promise of an model instance
  */
 function loadModel(modelSpecPath, name) {
-  // @TODO throw error if the model does not exists
   return plugin.lager.fire('beforeModelLoad', modelSpecPath, name)
   .spread(() => {
     // Because we use require() to get the spec, it could either be a JSON file
