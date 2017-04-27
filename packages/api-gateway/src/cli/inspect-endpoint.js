@@ -118,7 +118,7 @@ module.exports = (icli) => {
         });
       }
       // @FIXME so we list all possible methods
-      return ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS', 'ANY', 'get', 'post', 'put', 'patch', 'delete', 'head', 'options', 'any'];
+      return _.concat(plugin.httpMethods, _.map(plugin.httpMethods, String.toLowerCase));
     };
 
     return choicesLists;

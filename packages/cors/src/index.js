@@ -3,11 +3,15 @@
 const plugin = {
   name: 'cors',
 
-  config: {},
+  config: {
+    'Access-Control-Allow-Methods': 'DELETE,GET,HEAD,OPTIONS,PATCH,POST,PUT,ANY',
+    'Access-Control-Allow-Headers': '*',
+    'Access-Control-Allow-Origin': '*'
+  },
 
-  hooks: {}
+  hooks: {
+    afterAddEndpointsToApi: require('./hooks/after-add-endpoints-to-api')()
+  }
 };
-
-plugin.hooks.afterAddEndpointsToApi = require('./hooks/after-add-endpoints-to-api')(plugin);
 
 module.exports = plugin;

@@ -103,7 +103,7 @@ function loadEndpoints() {
       const subPath = dirPath.substr(endpointSpecsPath.length);
       const resourcePathParts = subPath.split(path.sep);
       const method = resourcePathParts.pop();
-      if (['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS', 'ANY'].indexOf(method) === -1) { return; }
+      if (plugin.httpMethods.indexOf(method) === -1) { return; }
 
       // We construct the path to the resource
       const resourcePath = resourcePathParts.join('/');
@@ -355,6 +355,7 @@ const plugin = {
     registerCommands
   },
 
+  httpMethods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS', 'ANY'],
   loadApis,
   loadEndpoints,
   loadModels,

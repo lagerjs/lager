@@ -2,7 +2,8 @@
   "name": "A Lager project",
   "plugins": [
     "@lager/node-lambda",
-    "@lager/api-gateway"
+    "@lager/api-gateway",
+    "@lager/cors"
   ],
   "config": {
     "stage": "v0",

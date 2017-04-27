@@ -136,7 +136,7 @@ module.exports = (icli) => {
   function getChoices() {
     // First, retrieve possible values for the api-identifiers parameter
     return {
-      httpMethod: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS', 'ANY'],
+      httpMethod: plugin.httpMethods,
       auth: [
         { value: 'aws_iam', name: 'AWS authorization' },
         { value: 'none', name: 'None' }
