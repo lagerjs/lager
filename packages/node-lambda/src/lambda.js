@@ -101,12 +101,9 @@ Lambda.prototype.loadEventExample = function loadEventExample(name) {
  * @returns {Object}
  */
 Lambda.prototype.executeLocally = function executeLocally(event) {
-  return this.installLocally()
-  .then(() => {
-    const handlerParts = this.config.params.Handler.split('.');
-    const m = require(path.join(this.getFsPath(), handlerParts[0]));
-    return Promise.promisify(m[handlerParts[1]])(event, {});
-  });
+  const handlerParts = this.config.params.Handler.split('.');
+  const m = require(path.join(this.getFsPath(), handlerParts[0]));
+  return Promise.promisify(m[handlerParts[1]])(event, {});
 };
 
 /**

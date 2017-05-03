@@ -103,7 +103,6 @@ module.exports = (icli) => {
   function executeCommand(parameters) {
     console.log();
     console.log('Executing ' + icli.format.info(parameters.lambdaIdentifier));
-    console.log('This will install the Lambda locally');
 
     return plugin.findLambda(parameters.lambdaIdentifier)
     .then(lambda => {
