@@ -113,7 +113,7 @@ module.exports = (icli) => {
         name: 'roleManually',
         message: 'Enter the IAM role that will be used to invoke the integration' + (plugin.lager.isPluginRegistered('iam') ? '' : ' (enter the ARN)'),
         when(answers, cmdParameterValues) {
-          return !answers.role && !cmdParameterValues.role;
+          return (!answers.role && !cmdParameterValues.role) && (answers.integration !== 'mock' && cmdParameterValues.integration !== 'mock');
         }
       }
     }],
@@ -138,8 +138,8 @@ module.exports = (icli) => {
     return {
       httpMethod: plugin.httpMethods,
       auth: [
-        { value: 'aws_iam', name: 'AWS authorization' },
-        { value: 'none', name: 'None' }
+        { value: 'none', name: 'None' },
+        { value: 'aws_iam', name: 'AWS authorization' }
       ],
       integration: [
         { value: 'lambda', name: 'Lambda function' },
@@ -256,11 +256,20 @@ module.exports = (icli) => {
           }
         }
       };
-      if (parameters.integration === 'lambda-proxy') {
-        spec['x-amazon-apigateway-integration'].type = 'aws_proxy';
-        spec['x-amazon-apigateway-integration'].contentHandling = 'CONVERT_TO_TEXT';
-        spec['x-amazon-apigateway-integration'].passthroughBehavior = 'when_no_match';
-        spec['x-amazon-apigateway-integration'].httpMethod = 'POST';
+      switch (parameters.integration) {
+        case 'lambda-proxy':
+          spec['x-amazon-apigateway-integration'].type = 'aws_proxy';
+          spec['x-amazon-apigateway-integration'].contentHandling = 'CONVERT_TO_TEXT';
+          spec['x-amazon-apigateway-integration'].passthroughBehavior = 'when_no_match';
+          spec['x-amazon-apigateway-integration'].httpMethod = 'POST';
+          break;
+        case 'mock':
+          spec['x-amazon-apigateway-integration'].requestTemplates = {
+            'application/json': '{"statusCode": 200}'
+          };
+          spec['x-amazon-apigateway-integration'].type = 'mock';
+          spec['x-amazon-apigateway-integration'].passthroughBehavior = 'when_no_match';
+          break;
       }
       if (parameters.lambda) {
         spec['x-lager'].lambda = parameters.lambda;

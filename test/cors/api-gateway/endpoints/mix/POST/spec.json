@@ -1,0 +1,26 @@
+{
+  "x-lager": {
+    "apis": [
+      "cors-test"
+    ]
+  },
+  "summary": "",
+  "responses": {
+    "200": {}
+  },
+  "x-amazon-apigateway-auth": {
+    "type": "none"
+  },
+  "x-amazon-apigateway-integration": {
+    "responses": {
+      "default": {
+        "statusCode": 200
+      }
+    },
+    "requestTemplates": {
+      "application/json": "{\"statusCode\": 200}"
+    },
+    "type": "mock",
+    "passthroughBehavior": "when_no_match"
+  }
+}

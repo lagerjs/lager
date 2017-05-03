@@ -1,0 +1,12 @@
+{
+  "name": "A Lager project",
+  "plugins": [
+    "@lager/api-gateway",
+    "@lager/cors"
+  ],
+  "config": {
+    "cors": {
+      "Access-Control-Allow-Methods": "DELETE,GET,PATCH,POST"
+    }
+  }
+}

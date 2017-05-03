@@ -1,0 +1,5 @@
+{
+  "default": {
+    "Access-Control-Allow-Origin": "http://www.example.com"
+  }
+}
