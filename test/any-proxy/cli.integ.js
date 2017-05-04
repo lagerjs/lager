@@ -24,7 +24,7 @@ describe('Creation and deployment of a proxy integration with ANY http method', 
   after(() => {
     return Promise.all([
       remove(path.join(__dirname, 'api-gateway')),
-      remove(path.join(__dirname, 'node-lambda')),
+      remove(path.join(__dirname, 'lambda')),
       remove(path.join(__dirname, 'lager.log'))
     ]);
   });
@@ -33,7 +33,7 @@ describe('Creation and deployment of a proxy integration with ANY http method', 
     it('should be done via the sub-command "create-lambda"', () => {
       catchStdout.start(showStdout);
       // eslint-disable-next-line max-len
-      return icli.parse('node script.js create-lambda any-proxy -r nodejs6.10 -t 20 -m 128 -r arn:aws:iam::856019870963:role/LambdaExecutionLagerIntegrationTest'.split(' '))
+      return icli.parse('node script.js create-lambda any-proxy -r nodejs6.10 -t 20 -m 128 --role arn:aws:iam::856019870963:role/LambdaExecutionLagerIntegrationTest'.split(' '))
       .then(res => {
         const stdout = catchStdout.stop();
         assert.ok(stdout.indexOf('The Lambda \x1b[36many-proxy\x1b[0m has been created') > -1);

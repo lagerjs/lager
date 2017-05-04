@@ -2,6 +2,6 @@
   "name": "lambda-profiling",
   "plugins": [
     "@lager/iam",
-    "@lager/node-lambda"
+    "@lager/lambda"
   ]
 }

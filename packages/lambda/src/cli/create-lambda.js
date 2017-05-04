@@ -80,7 +80,7 @@ module.exports = (icli) => {
         }
       }
     }, {
-      cmdSpec: '-r, --role <role>',
+      cmdSpec: '--role <role>',
       description: 'select the execution role' + (plugin.lager.isPluginRegistered('iam') ? '' : ' (enter the ARN)'),
       type: 'list',
       choices: choicesLists.roles,

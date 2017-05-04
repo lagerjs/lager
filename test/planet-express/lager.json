@@ -2,7 +2,7 @@
   "name": "planet-express",
   "plugins": [
     "@lager/iam",
-    "@lager/node-lambda",
+    "@lager/lambda",
     "@lager/api-gateway"
   ]
 }

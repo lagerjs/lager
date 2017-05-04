@@ -1,7 +1,7 @@
 {
   "name": "any-proxy",
   "plugins": [
-    "@lager/node-lambda",
+    "@lager/lambda",
     "@lager/api-gateway"
   ]
 }

@@ -201,7 +201,7 @@ module.exports = (icli) => {
         }
       },
       lambdas: () => {
-        return plugin.lager.call('node-lambda:getLambdas', [])
+        return plugin.lager.call('lambda:getLambdas', [])
         .then(lambdas => {
           return _.map(lambdas, lambda => {
             return {
