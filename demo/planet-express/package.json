@@ -10,9 +10,9 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@lager/api-gateway": "0.0.*",
-    "@lager/iam": "0.0.*",
-    "@lager/lager": "0.0.*",
-    "@lager/node-lambda": "0.0.*"
+    "@lager/api-gateway": "*",
+    "@lager/iam": "*",
+    "@lager/lager": "*",
+    "@lager/lambda": "*"
   }
 }

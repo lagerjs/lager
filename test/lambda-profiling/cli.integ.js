@@ -23,7 +23,7 @@ describe('Creation and deployment of a Lambda project', () => {
 
   after(() => {
     return Promise.all([
-      remove(path.join(__dirname, 'node-lambda')),
+      remove(path.join(__dirname, 'lambda')),
       remove(path.join(__dirname, 'iam')),
       remove(path.join(__dirname, 'lager.log'))
     ]);
@@ -48,29 +48,29 @@ describe('Creation and deployment of a Lambda project', () => {
         catchStdout.stop();
         // Create the main file of the module
         const src = path.join(__dirname, 'assets', 'inspection.js');
-        const dest = path.join(__dirname, 'node-lambda', 'modules', 'inspection', 'index.js');
+        const dest = path.join(__dirname, 'lambda', 'modules', 'inspection', 'index.js');
         return copy(src, dest);
       });
     });
   });
 
-  describe('Creation of node Lambdas', () => {
-    it('should be done via the sub-command "create-node-lambda"', () => {
+  describe('Creation of Lambdas', () => {
+    it('should be done via the sub-command "create-lambda"', () => {
       catchStdout.start(showStdout);
-      return icli.parse('node script.js create-node-lambda config-128 -t 30 -m 128 --dependencies inspection -r LambdaInspection'.split(' '))
+      return icli.parse('node script.js create-lambda config-128 -r nodejs6.10 -t 30 -m 128 --dependencies inspection -r LambdaInspection'.split(' '))
       .then(res => {
-        return icli.parse('node script.js create-node-lambda config-512 -t 30 -m 512 --dependencies inspection -r LambdaInspection'.split(' '));
+        return icli.parse('node script.js create-lambda config-512 -r nodejs6.10 -t 30 -m 512 --dependencies inspection -r LambdaInspection'.split(' '));
       })
       .then(res => {
-        return icli.parse('node script.js create-node-lambda config-1536 -t 30 -m 1536 --dependencies inspection -r LambdaInspection'.split(' '));
+        return icli.parse('node script.js create-lambda config-1536 -r nodejs6.10 -t 30 -m 1536 --dependencies inspection -r LambdaInspection'.split(' '));
       })
       .then(res => {
         catchStdout.stop();
         // Create the main file of the module
         const src = path.join(__dirname, 'assets', 'lambda.js');
-        const dest128 = path.join(__dirname, 'node-lambda', 'lambdas', 'config-128', 'index.js');
-        const dest512 = path.join(__dirname, 'node-lambda', 'lambdas', 'config-512', 'index.js');
-        const dest1536 = path.join(__dirname, 'node-lambda', 'lambdas', 'config-1536', 'index.js');
+        const dest128 = path.join(__dirname, 'lambda', 'lambdas', 'config-128', 'index.js');
+        const dest512 = path.join(__dirname, 'lambda', 'lambdas', 'config-512', 'index.js');
+        const dest1536 = path.join(__dirname, 'lambda', 'lambdas', 'config-1536', 'index.js');
         return Promise.all([
           copy(src, dest128),
           copy(src, dest512),
@@ -80,10 +80,10 @@ describe('Creation and deployment of a Lambda project', () => {
     });
   });
 
-  describe('Local installation of node Lambdas', () => {
-    it('should be done via the sub-command "install-node-lambdas-locally"', () => {
+  describe('Local installation of Lambdas', () => {
+    it('should be done via the sub-command "install-lambdas-locally"', () => {
       catchStdout.start(showStdout);
-      return icli.parse('node script.js install-node-lambdas-locally config-128'.split(' '))
+      return icli.parse('node script.js install-lambdas-locally config-128'.split(' '))
       .then(res => {
         catchStdout.stop();
         assert.ok(true);
@@ -91,10 +91,10 @@ describe('Creation and deployment of a Lambda project', () => {
     });
   });
 
-  describe('Local execution of node Lambdas', () => {
-    it('should be done via the sub-command "test-node-lambda-locally"', () => {
+  describe('Local execution of Lambdas', () => {
+    it('should be done via the sub-command "test-lambda-locally"', () => {
       catchStdout.start(showStdout);
-      return icli.parse('node script.js test-node-lambda-locally config-128 --event test'.split(' '))
+      return icli.parse('node script.js test-lambda-locally config-128 --event test'.split(' '))
       .then(res => {
         catchStdout.stop();
         assert.ok(true);
@@ -103,11 +103,11 @@ describe('Creation and deployment of a Lambda project', () => {
   });
 
 
-  describe('Deployment of node Lambdas', () => {
-    it('should be done via the sub-command "deploy-node-lambdas"', function() {
+  describe('Deployment of Lambdas', () => {
+    it('should be done via the sub-command "deploy-lambdas"', function() {
       catchStdout.start(showStdout);
       this.timeout(30000);
-      return icli.parse('node script.js deploy-node-lambdas config-128 config-512 config-1536 -r us-east-1 -e DEV -s v0'.split(' '))
+      return icli.parse('node script.js deploy-lambdas config-128 config-512 config-1536 -r us-east-1 -e DEV -s v0'.split(' '))
       .then(res => {
         catchStdout.stop();
         assert.ok(true);
@@ -116,15 +116,15 @@ describe('Creation and deployment of a Lambda project', () => {
   });
 
 
-  describe('Execution of node Lambdas in AWS', () => {
-    it('should be done via the sub-command "test-node-lambda"', () => {
+  describe('Execution of Lambdas in AWS', () => {
+    it('should be done via the sub-command "test-lambda"', () => {
       catchStdout.start(showStdout);
-      return icli.parse('node script.js test-node-lambda config-128 -r us-east-1 -e DEV -s v0'.split(' '))
+      return icli.parse('node script.js test-lambda config-128 -r us-east-1 -e DEV -s v0'.split(' '))
       .then(res => {
-        return icli.parse('node script.js test-node-lambda config-512 -r us-east-1 -e DEV -s v0'.split(' '));
+        return icli.parse('node script.js test-lambda config-512 -r us-east-1 -e DEV -s v0'.split(' '));
       })
       .then(res => {
-        return icli.parse('node script.js test-node-lambda config-1536 -r us-east-1 -e DEV -s v0'.split(' '));
+        return icli.parse('node script.js test-lambda config-1536 -r us-east-1 -e DEV -s v0'.split(' '));
       })
       .then(res => {
         catchStdout.stop();

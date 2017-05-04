@@ -1,0 +1,9 @@
+{
+  "params": {
+    "Timeout": 30,
+    "MemorySize": "256",
+    "Role": "MyExpressAppLambdaExecution",
+    "Runtime": "nodejs6.10",
+    "Handler": "index.handler"
+  }
+}

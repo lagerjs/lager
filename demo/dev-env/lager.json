@@ -1,7 +1,7 @@
 {
   "name": "A Lager project",
   "plugins": [
-    "@lager/node-lambda",
+    "@lager/lambda",
     "@lager/api-gateway",
     "@lager/cors"
   ],

@@ -7,9 +7,7 @@ module.exports.start = (execOriginal) => {
   catched = '';
   originalWrite = process.stdout.write;
   process.stdout.write = function(string, encoding, fd) {
-    if (execOriginal) {
-      originalWrite.apply(process.stdout, arguments);
-    }
+    if (execOriginal) { originalWrite.apply(process.stdout, arguments); }
     catched += string;
   };
 };

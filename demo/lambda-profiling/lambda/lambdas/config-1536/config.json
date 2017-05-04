@@ -1,0 +1,9 @@
+{
+  "params": {
+    "Timeout": 30,
+    "MemorySize": "1536",
+    "Role": "LambdaInspection",
+    "Runtime": "nodejs6.10",
+    "Handler": "index.handler"
+  }
+}

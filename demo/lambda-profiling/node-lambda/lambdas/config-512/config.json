@@ -1,7 +1,0 @@
-{
-  "params": {
-    "Timeout": 30,
-    "MemorySize": "512",
-    "Role": "LambdaInspection"
-  }
-}

@@ -13,6 +13,6 @@
     "@lager/api-gateway": "../../packages/api-gateway",
     "@lager/iam": "../../packages/iam",
     "@lager/lager": "../../packages/lager",
-    "@lager/node-lambda": "../../packages/node-lambda"
+    "@lager/lambda": "../../packages/lambda"
   }
 }

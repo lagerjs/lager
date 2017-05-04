@@ -1,7 +1,0 @@
-{
-  "params": {
-    "Timeout": "20",
-    "MemorySize": "256",
-    "Role": "PlanetExpressLambdaExecution"
-  }
-}

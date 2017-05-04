@@ -10,8 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@lager/iam": "0.0.9",
-    "@lager/lager": "0.0.29",
-    "@lager/node-lambda": "0.0.12"
+    "@lager/iam": "*",
+    "@lager/lager": "*",
+    "@lager/lambda": "*"
   }
 }
