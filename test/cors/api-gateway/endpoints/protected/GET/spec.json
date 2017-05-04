@@ -1,7 +1,8 @@
 {
   "x-lager": {
     "apis": [
-      "cors-test"
+      "cors-test",
+      "cors-test-2"
     ]
   },
   "summary": "",

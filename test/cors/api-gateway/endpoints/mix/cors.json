@@ -1,7 +1,8 @@
 {
   "default": {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Headers": "*",
-    "Access-Control-Allow-Methods": "ANY"
+    "Access-Control-Allow-Methods": "GET,ANY"
+  },
+  "cors-test-2": {
+    "Access-Control-Allow-Methods": "POST"
   }
 }

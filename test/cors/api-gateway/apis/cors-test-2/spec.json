@@ -1,0 +1,18 @@
+{
+  "x-lager": {
+    "cors": {
+      "Access-Control-Allow-Origin": "http://cors-test-2.1.example.com"
+    }
+  },
+  "swagger": "2.0",
+  "info": {
+    "title": "cors-test-2",
+    "description": "cors-test-2 - an API built with Lager"
+  },
+  "schemes": [
+    "https"
+  ],
+  "host": "API_ID.execute-api.REGION.amazonaws.com",
+  "paths": {},
+  "definitions": {}
+}

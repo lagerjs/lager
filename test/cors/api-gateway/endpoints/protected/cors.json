@@ -1,5 +1,8 @@
 {
   "default": {
     "Access-Control-Allow-Origin": "http://www.example.com"
+  },
+  "cors-test-2": {
+    "Access-Control-Allow-Origin": "http://cors-test-2.2.example.com"
   }
 }

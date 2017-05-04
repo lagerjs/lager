@@ -8,7 +8,6 @@ module.exports = () => {
 
   return (api) => {
     const plugin = require('..');
-    const Endpoint = plugin.lager.getPlugin('api-gateway').getEndpointConstructor();
     const optionsEndpoints = [];
     const endpoints = api.getEndpoints();
 
@@ -28,7 +27,7 @@ module.exports = () => {
       const rpEndpoints = _.filter(endpoints, e => e.getResourcePath() === resourcePath);
 
       // We check if an OPTION endpoint already exists
-      if (_.find(rpEndpoints, e => e.getMethod === 'OPTIONS')) {
+      if (_.find(rpEndpoints, e => e.getMethod() === 'OPTIONS')) {
         // If an OPTION enpoint already exist, we skip this resource path
         // The user should configure CORS himself because we do not want to alter his endpoint
         // configuration / integration without knowing if it would break something
@@ -60,45 +59,10 @@ module.exports = () => {
 
       // We create the OPTIONS method for the resource path
       // and add it to the API (this operation is asynchronous, we store the promise for later)
-      const spec = JSON.parse(JSON.stringify(baseSpec));
-      // We add the CORS headers to the OPTION endpoint
-      _.forEach(cors, (value, key) => {
-        // We add the configuration to Swagger
-        spec.responses['200'].headers[key] = { type: 'string' };
-        // We add the configuration to the API Gateway Swagger extention for integration
-        if (key === 'Access-Control-Allow-Methods') {
-          // For Access-Control-Allow-Method, we remove "ANY" that is specific to API Gateway
-          const arrayValue = value.split(',');
-          const anyIndex = arrayValue.indexOf('ANY');
-          if (anyIndex !== -1) {
-            arrayValue.splice(anyIndex, 1);
-            value = arrayValue.join(',');
-          }
-        }
-        spec['x-amazon-apigateway-integration'].responses.default.responseParameters['method.response.header.' + key] = "'" + value + "'";
-      });
-      const optionsEndpoint = new Endpoint(spec, resourcePath, 'OPTIONS');
-      optionsEndpoints.push(optionsEndpoint);
+      optionsEndpoints.push(createOptionsEndpoint(cors, resourcePath, rpEndpoints.map(e => e.getMethod())));
 
       // Now that the OPTION endpoint has been created, we also update the configuration of http methods that are specified in "Access-Control-Allow-Methods"
-      const allowedMethod = cors['Access-Control-Allow-Methods'].split(',');
-      allowedMethod.forEach(method => {
-        if (method === 'OPTIONS') { return; }
-        const endpoint = _.find(rpEndpoints, e => e.getMethod() === method);
-        if (endpoint) {
-          // We add the configuration to Swagger
-          _.forEach(endpoint.getSpec().responses, (spec) => {
-            spec.headers = spec.headers || {};
-            spec.headers['Access-Control-Allow-Origin'] = spec.headers['Access-Control-Allow-Origin'] || { type: 'string' };
-          });
-          // We add the configuration to the API Gateway Swagger extention for integration
-          _.forEach(endpoint.getSpec()['x-amazon-apigateway-integration'].responses, (spec, responseCode) => {
-            spec.responseParameters = spec.responseParameters || {};
-            spec.responseParameters['method.response.header.Access-Control-Allow-Origin']
-              = spec.responseParameters['method.response.header.Access-Control-Allow-Origin'] || '\'' + cors['Access-Control-Allow-Origin'] + '\'';
-          });
-        }
-      });
+      updateEndpoints(cors, rpEndpoints);
     });
 
     // We add created endpoints to the API
@@ -109,3 +73,67 @@ module.exports = () => {
   };
 
 };
+
+
+function createOptionsEndpoint(cors, resourcePath, definedMethods) {
+  const plugin = require('..');
+  const Endpoint = plugin.lager.getPlugin('api-gateway').getEndpointConstructor();
+
+  const spec = JSON.parse(JSON.stringify(baseSpec));
+  // We add the CORS headers to the OPTION endpoint
+  _.forEach(cors, (value, key) => {
+    // We add the configuration to Swagger
+    spec.responses['200'].headers[key] = { type: 'string' };
+    // We add the configuration to the API Gateway Swagger extention for integration
+    if (key === 'Access-Control-Allow-Methods') {
+      // The list of HTTP methods that will returned in the header Access-Control-Allow-Methods is the intersection of
+      // * the methods defined for the resource path
+      // * the methods configured for the cors plugin
+      // So we do not give a response that contains unimplemented HTTP methods
+      const configuredMethods = _.intersection(value.split(','), definedMethods);
+      // For Access-Control-Allow-Methods, we remove "ANY" that is specific to API Gateway and add all methods covered by ANY
+      if (configuredMethods.indexOf('ANY') !== -1) {
+        // If ANY is part of the "allow methods" configuration, we init the list with all http methods managed by API Gateway
+        const allowedMethods = JSON.parse(JSON.stringify(plugin.lager.getPlugin('api-gateway').httpMethods));
+        // We exclude methods that have a endpoint explicitely defined (that means method definitions that override the ANY definition)
+        // but are not present in the cors configuration
+        definedMethods.forEach(method => {
+          if (configuredMethods.indexOf(method) === -1) {
+            const methodIndex = allowedMethods.indexOf(method);
+            allowedMethods.splice(methodIndex, 1);
+          }
+        });
+        // We remove ANY from the list of method as it is not an expected value for the header 'Access-Control-Allow-Methods'
+        const anyIndex = allowedMethods.indexOf('ANY');
+        allowedMethods.splice(anyIndex, 1);
+        value = allowedMethods.join(',');
+      } else {
+        value = configuredMethods;
+      }
+    }
+    spec['x-amazon-apigateway-integration'].responses.default.responseParameters['method.response.header.' + key] = "'" + value + "'";
+  });
+  return new Endpoint(spec, resourcePath, 'OPTIONS');
+}
+
+
+function updateEndpoints(cors, rpEndpoints) {
+  const allowedMethod = cors['Access-Control-Allow-Methods'].split(',');
+  allowedMethod.forEach(method => {
+    if (method === 'OPTIONS') { return; }
+    const endpoint = _.find(rpEndpoints, e => e.getMethod() === method);
+    if (endpoint) {
+      // We add the configuration to Swagger
+      _.forEach(endpoint.getSpec().responses, (spec) => {
+        spec.headers = spec.headers || {};
+        spec.headers['Access-Control-Allow-Origin'] = spec.headers['Access-Control-Allow-Origin'] || { type: 'string' };
+      });
+      // We add the configuration to the API Gateway Swagger extention for integration
+      _.forEach(endpoint.getSpec()['x-amazon-apigateway-integration'].responses, (spec, responseCode) => {
+        spec.responseParameters = spec.responseParameters || {};
+        spec.responseParameters['method.response.header.Access-Control-Allow-Origin']
+          = spec.responseParameters['method.response.header.Access-Control-Allow-Origin'] || '\'' + cors['Access-Control-Allow-Origin'] + '\'';
+      });
+    }
+  });
+}

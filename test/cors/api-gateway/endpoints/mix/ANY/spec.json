@@ -2,10 +2,7 @@
   "x-lager": {
     "apis": [
       "cors-test"
-    ],
-    "cors": {
-      "Access-Control-Allow-Origin": "http://www.example.com"
-    }
+    ]
   },
   "summary": "",
   "responses": {
