@@ -129,6 +129,10 @@ describe('A Lambda', () => {
     assert.equal(lambda.loadEventExample('test-b').id, 'ABC');
   });
 
+  it('should be installed locally', () => {
+    return lambda.installLocally();
+  });
+
   it('should be executed locally', () => {
     return lambda.executeLocally({ id: 42 })
     .then(res => {
