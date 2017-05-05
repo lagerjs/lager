@@ -37,7 +37,7 @@ module.exports = (icli, lager) => {
     if (parameters.colors) {
       config = icli.highlight(config, { json: true });
     }
-    console.log(config);
+    icli.print(config);
   }
 
   /**

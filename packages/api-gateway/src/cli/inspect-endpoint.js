@@ -85,7 +85,7 @@ module.exports = (icli) => {
       return plugin.loadEndpoints()
       .then(endpoints => {
         if (!endpoints.length) {
-          console.log(icli.format.error('This project does not contain any endpoint.'));
+          icli.print(icli.format.error('This project does not contain any endpoint.'));
           process.exit(1);
         }
         const resourcePaths = [];
@@ -139,7 +139,7 @@ module.exports = (icli) => {
       if (parameters.colors) {
         spec = icli.highlight(spec, { json: true });
       }
-      console.log(spec);
+      icli.print(spec);
       return Promise.resolve(jsonSpec);
     });
   }

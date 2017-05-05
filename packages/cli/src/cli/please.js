@@ -124,8 +124,8 @@ module.exports = (icli) => {
     .then(fonts => {
       const font = parameters.font ? parameters.font : _.sample(fonts);
       if (latinFonts.indexOf(font) === -1) { word = _.deburr(word); }
-      console.log('language: ' + language);
-      console.log('font: ' + font);
+      icli.print('language: ' + language);
+      icli.print('font: ' + font);
       return figlet(word, { font });
     })
     .then(cheers => {
@@ -174,7 +174,7 @@ module.exports = (icli) => {
       } else if (cheersWidth < termWidth) {
         beer = _.concat(beer, cheers);
       }
-      console.log(beer.join('\n'));
+      icli.print(beer.join('\n'));
       return Promise.resolve(true);
     });
   }

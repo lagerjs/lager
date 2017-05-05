@@ -52,7 +52,7 @@ module.exports = (icli) => {
     .then(() => {
       let msg = '\n  A new model has been created!\n\n';
       msg += '  Its Swagger specification is available in ' + icli.format.info(modelFilePath + path.sep + parameters.name + '.json') + '\n';
-      console.log(msg);
+      icli.print(msg);
     });
   }
 

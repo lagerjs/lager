@@ -283,7 +283,7 @@ module.exports = (icli) => {
                 + '  Its OpenAPI specification is available in ' + icli.format.info(specFilePath + path.sep + 'spec.json') + '\n'
                 + '  You can inspect it using the command '
                 + icli.format.cmd('lager inspect-endpoint ' + parameters.resourcePath + ' ' + parameters.httpMethod) + '\n';
-      console.log(msg);
+      icli.print(msg);
     });
   }
 

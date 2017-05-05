@@ -20,7 +20,7 @@ module.exports = reports => {
     t.cell('Deploy time', formatHrTime(report.deployTime) + ' ms');
     t.newRow();
   });
-  process.stdout.write('Lambda functions deployed' + '\n\n' + t.toString() + '\n');
+  return 'Lambda functions deployed' + '\n\n' + t.toString() + '\n';
 };
 
 /**

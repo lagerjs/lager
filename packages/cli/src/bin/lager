@@ -18,7 +18,11 @@ if (['dev', 'development', 'debug'].indexOf(process.env.NODE_ENV) > -1) {
   });
 }
 
-icli.init = function() {
+/**
+ * Initialisation fush the require cache and try to load a lager project
+ * @return {Promise}
+ */
+icli.init = function init() {
   // Useful to reinit the cli for integration tests
   Object.keys(require.cache).forEach(function(key) { delete require.cache[key]; });
   icli.reset();
@@ -44,8 +48,44 @@ icli.init = function() {
   });
 };
 
+/**
+ * The default print() simply wraps console.log()
+ * @return {void}
+ */
+const print = function print(v) {
+  console.log(v);
+};
+icli.print = print;
+
+let catched = '';
+
+/**
+ * Start to catch the content that is sent to icli.print()
+ * @param  {Boolean} execOriginal - if set to true, the original print() function will be executed too
+ * @return {void}
+ */
+icli.catchPrintStart = function printBufferStart(execOriginal) {
+  catched = '';
+  icli.print = function(v) {
+    if (execOriginal) { print.apply(null, arguments); }
+    catched += v;
+  };
+};
+
+/**
+ * Stop to catch the content that is sent to icli.print() and returns it
+ * @return {String}
+ */
+icli.catchPrintStop = () => {
+  icli.print = print;
+  return catched;
+};
+
 module.exports = icli;
 
+/**
+ * If the current file is the main one, we call icli.init() and parse the command line
+ */
 if (require.main === module) {
   // If the module is called directly, we parse the command line
   icli.init().then(icli => {

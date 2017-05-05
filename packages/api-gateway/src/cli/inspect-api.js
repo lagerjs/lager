@@ -63,7 +63,7 @@ module.exports = (icli) => {
         return plugin.loadApis()
         .then(apis => {
           if (!apis.length) {
-            console.log(icli.format.error('This project does not contain any API.'));
+            icli.print(icli.format.error('This project does not contain any API.'));
             process.exit(1);
           }
           return _.map(apis, api => {
@@ -100,7 +100,7 @@ module.exports = (icli) => {
       if (parameters.colors) {
         spec = icli.highlight(spec, { json: true });
       }
-      console.log(spec);
+      icli.print(spec);
       return Promise.resolve(jsonSpec);
     });
   }

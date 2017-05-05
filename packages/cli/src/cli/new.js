@@ -78,7 +78,7 @@ module.exports = (icli) => {
       });
     }
     return p.then(() => {
-      console.log('\n  Creating Lager config file (' + icli.format.info('lager.json') + ')');
+      icli.print('\n  Creating Lager config file (' + icli.format.info('lager.json') + ')');
       const projectConfig = {
         name: parameters.projectName || 'A Lager project',
         plugins: parameters.plugins
@@ -91,35 +91,35 @@ module.exports = (icli) => {
         // If a package.json file already exist, we don't need to create it
         return Promise.resolve();
       } catch (e) {
-        console.log('\n  Creating a node project');
+        icli.print('\n  Creating a node project');
         const cmdArgs = ['init', '-f'];
-        console.log('  Running ' + icli.format.cmd('npm ' + cmdArgs.join(' ') + '\n'));
-        console.log('  Please wait...');
+        icli.print('  Running ' + icli.format.cmd('npm ' + cmdArgs.join(' ') + '\n'));
+        icli.print('  Please wait...');
         return exec('npm ' + cmdArgs.join(' '), { cwd: parameters.projectName })
         .catch(e => {
-          console.log(e);
+          icli.print(e);
         });
       }
     })
     .then(() => {
-      console.log('\n  Installing Lager and Lager plugins');
+      icli.print('\n  Installing Lager and Lager plugins');
       const cmdArgs = parameters.plugins;
       cmdArgs.unshift('@lager/lager');
       cmdArgs.unshift('--save-dev');
       cmdArgs.unshift('install');
-      console.log('  Running ' + icli.format.cmd('npm ' + cmdArgs.join(' ') + '\n'));
-      console.log('  Please wait...');
+      icli.print('  Running ' + icli.format.cmd('npm ' + cmdArgs.join(' ') + '\n'));
+      icli.print('  Please wait...');
       return exec('npm ' + cmdArgs.join(' '), { cwd: parameters.projectName });
     })
     .spread((stdOut, stdErr) => {
-      console.log(stdOut);
-      console.log(stdErr);
+      icli.print(stdOut);
+      icli.print(stdErr);
       let msg = icli.format.ok('  A new lager project has been created!\n\n');
       if (parameters.projectName) {
         msg += '  You should now enter in the ' + icli.format.info(parameters.projectName) + ' folder to start working\n';
       }
       msg += '  Execute ' + icli.format.cmd('lager -h') + ' in the root folder of the project to see available commands\n';
-      console.log(msg);
+      icli.print(msg);
       return true;
     });
   }

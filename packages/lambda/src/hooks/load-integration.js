@@ -4,7 +4,7 @@ const Promise = require('bluebird');
 const _ = require('lodash');
 
 const plugin = require('../index');
-const showReports = require('../tools/show-deployment-reports');
+const genReportsTable = require('../tools/generate-reports-table');
 
 let deployMode = 'none';
 
@@ -34,13 +34,13 @@ module.exports.hook = function loadIntegrationsHook(region, context, endpoints, 
       return Promise.resolve(lambdas);
     }
 
-    process.stdout.write(lambdas.length + ' Lambda(s) to deploy: ' + _.map(lambdas, l => l.getIdentifier()).join(', ') + '\n\n');
+    plugin.lager.call('cli:print', lambdas.length + ' Lambda(s) to deploy: ' + _.map(lambdas, l => l.getIdentifier()).join(', ') + '\n\n');
 
     // Deploy the lambdas
     return Promise.map(lambdas, lambda => lambda.deploy(region, context))
     .then(reports => {
-      // Show the result of the deployments on stdout
-      showReports(reports);
+      // Show the result of the deployments in the console
+      plugin.lager.call('cli:print', genReportsTable(reports));
     })
     .then(() => {
       return lambdas;

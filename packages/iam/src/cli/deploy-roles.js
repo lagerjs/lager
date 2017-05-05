@@ -102,17 +102,15 @@ module.exports = (icli) => {
         t.cell('Deploy time', formatHrTime(report.deployTime));
         t.newRow();
       });
-      console.log();
-      console.log('Roles deployed');
-      console.log();
-      console.log(t.toString());
+      icli.print('\nRoles deployed\n');
+      icli.print(t.toString());
     })
     .catch(e => {
       if (e.code === 'AccessDeniedException' && e.cause && e.cause.message) {
-        console.log('\n    ' + icli.format.error('Insufficient permissions to perform the action\n'));
-        console.log('The IAM user/role you are using to perform this action does not have sufficient permissions.\n');
-        console.log(e.cause.message + '\n');
-        console.log('Please update the policies of the user/role before trying again.\n');
+        icli.print('\n    ' + icli.format.error('Insufficient permissions to perform the action\n'));
+        icli.print('The IAM user/role you are using to perform this action does not have sufficient permissions.\n');
+        icli.print(e.cause.message + '\n');
+        icli.print('Please update the policies of the user/role before trying again.\n');
         process.exit(1);
       }
       throw e;

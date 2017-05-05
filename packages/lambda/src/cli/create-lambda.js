@@ -217,7 +217,7 @@ module.exports = (icli) => {
     .then(() => {
       const msg = '\n  The Lambda ' + icli.format.info(parameters.identifier) + ' has been created\n\n'
                 + '  Its configuration and its handler function are available in ' + icli.format.info(configFilePath) + '\n';
-      console.log(msg);
+      icli.print(msg);
     });
   }
 

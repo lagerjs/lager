@@ -41,7 +41,7 @@ module.exports = (icli) => {
         return plugin.loadLambdas()
         .then(lambdas => {
           if (!lambdas.length) {
-            console.log(icli.format.error('This project does not contain any Lambda.'));
+            icli.print(icli.format.error('This project does not contain any Lambda.'));
             process.exit(1);
           }
           return _.map(lambdas, lambda => {
@@ -61,10 +61,10 @@ module.exports = (icli) => {
    * @returns {Promise<null>} - The execution stops here
    */
   function executeCommand(parameters) {
-    console.log();
-    console.log('Installing ' + icli.format.info(parameters.lambdaIdentifiers.length) + ' Lambdas:');
-    console.log();
-    console.log('This operation may last a little');
+    icli.print();
+    icli.print('Installing ' + icli.format.info(parameters.lambdaIdentifiers.length) + ' Lambdas:');
+    icli.print();
+    icli.print('This operation may last a little');
 
     return plugin.loadLambdas()
     .then(lambdas => {
@@ -78,9 +78,9 @@ module.exports = (icli) => {
     })
     .then(() => {
       const lambdaList = parameters.lambdaIdentifiers.map(icli.format.info).join(', ');
-      console.log();
-      console.log('The following Lambdas have been installed: ' + lambdaList);
-      console.log();
+      icli.print();
+      icli.print('The following Lambdas have been installed: ' + lambdaList);
+      icli.print();
     });
   }
 

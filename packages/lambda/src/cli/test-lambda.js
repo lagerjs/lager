@@ -91,7 +91,7 @@ module.exports = (icli) => {
         return plugin.loadLambdas()
         .then(lambdas => {
           if (!lambdas.length) {
-            console.log(icli.format.error('This project does not contain any Lambda.'));
+            icli.print(icli.format.error('This project does not contain any Lambda.'));
             process.exit(1);
           }
           return _.map(lambdas, lambda => {
@@ -158,8 +158,8 @@ module.exports = (icli) => {
    * @returns {Promise<null>} - The execution stops here
    */
   function executeCommand(parameters) {
-    console.log();
-    console.log('Executing ' + icli.format.info(parameters.lambdaIdentifier) + ' in AWS');
+    icli.print();
+    icli.print('Executing ' + icli.format.info(parameters.lambdaIdentifier) + ' in AWS');
 
     return plugin.findLambda(parameters.lambdaIdentifier)
     .then(lambda => {
@@ -170,15 +170,15 @@ module.exports = (icli) => {
     })
     .then(result => {
       result.Payload = JSON.parse(result.Payload);
-      console.log('Success result:');
-      console.log(JSON.stringify(result, null, 2));
-      console.log();
+      icli.print('Success result:');
+      icli.print(JSON.stringify(result, null, 2));
+      icli.print();
     })
     .catch(e => {
-      console.log('Error result:');
-      console.log(e);
-      console.log(e.stack);
-      console.log();
+      icli.print('Error result:');
+      icli.print(e);
+      icli.print(e.stack);
+      icli.print();
     });
   }
 

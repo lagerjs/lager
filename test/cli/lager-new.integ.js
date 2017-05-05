@@ -6,7 +6,6 @@ const assert = require('assert');
 const Promise = require('bluebird');
 const fs = require('fs-extra');
 const remove = Promise.promisify(fs.remove);
-const catchStdout = require('../catch-stdout');
 const icli = require('../../packages/cli/src/bin/lager');
 const showStdout = !!process.env.LAGER_SHOW_STDOUT;
 
@@ -26,10 +25,10 @@ describe('Creation of a new project', () => {
 
   it('should be done via the sub-command "new"', function() {
     this.timeout(120000);
-    catchStdout.start(showStdout);
+    icli.catchPrintStart(showStdout);
     return icli.parse('node script.js new my-project @lager/iam'.split(' '))
     .then(res => {
-      const stdout = catchStdout.stop();
+      const stdout = icli.catchPrintStop();
       assert.ok(stdout.indexOf('Creating a node project') > -1);
       assert.ok(stdout.indexOf('Installing Lager and Lager plugins') > -1);
       assert.ok(stdout.indexOf('A new lager project has been created!') > -1);

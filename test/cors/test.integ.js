@@ -3,7 +3,6 @@
 
 const assert = require('assert');
 const rp = require('request-promise');
-const catchStdout = require('../catch-stdout');
 const icli = require('../../packages/cli/src/bin/lager');
 const showStdout = !!process.env.LAGER_SHOW_STDOUT;
 
@@ -20,11 +19,11 @@ describe('A project including the cors plugin', () => {
   });
 
   it('should be deployed via the sub-command "deploy-apis"', function() {
-    catchStdout.start(showStdout);
+    icli.catchPrintStart(showStdout);
     this.timeout(15000);
     return icli.parse('node script.js deploy-apis cors-test -r us-east-1 -s v0 -e DEV'.split(' '))
     .then(res => {
-      const stdout = catchStdout.stop();
+      const stdout = icli.catchPrintStop();
       assert.ok(stdout.indexOf('/mix        ANY      X') > -1);
       assert.ok(stdout.indexOf('/mix        GET      X') > -1);
       assert.ok(stdout.indexOf('/private    POST     X') > -1);

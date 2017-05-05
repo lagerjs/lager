@@ -131,7 +131,7 @@ module.exports = (icli) => {
     .then(() => {
       const msg = '\n  The IAM role ' + icli.format.info(parameters.identifier)
                 + ' has been created in ' + icli.format.info(configFilePath + path.sep + parameters.identifier + '.json') + '\n';
-      console.log(msg);
+      icli.print(msg);
     });
   }
 

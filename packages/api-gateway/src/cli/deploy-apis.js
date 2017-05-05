@@ -79,7 +79,7 @@ module.exports = (icli) => {
         return plugin.loadApis()
         .then(apis => {
           if (!apis.length) {
-            console.log(icli.format.error('This project does not contain any API.'));
+            icli.print(icli.format.error('This project does not contain any API.'));
             process.exit(1);
           }
           return _.map(apis, api => {
@@ -149,10 +149,10 @@ module.exports = (icli) => {
         });
         t.newRow();
       });
-      console.log();
-      console.log('Endpoints to deploy');
-      console.log();
-      console.log(t.toString());
+      icli.print();
+      icli.print('Endpoints to deploy');
+      icli.print();
+      icli.print(t.toString());
 
       // Load endpoints integrations
       return Promise.all([
@@ -169,7 +169,7 @@ module.exports = (icli) => {
         promises.push(new Promise((resolve, reject) => {
           // 35 seconds delay
           setTimeout(() => {
-            console.log('Deploying ' + api.getIdentifier() + ' ...');
+            icli.print('Deploying ' + api.getIdentifier() + ' ...');
             resolve(api.deploy(parameters.region, context));
           }, delay * 35000);
         }));
@@ -198,21 +198,21 @@ module.exports = (icli) => {
         }
         t.newRow();
       });
-      console.log();
-      console.log('Deployment done');
-      console.log();
-      console.log(t.toString());
+      icli.print();
+      icli.print('Deployment done');
+      icli.print();
+      icli.print(t.toString());
 
       // Publish the APIs
       if (success) {
         return Promise.map(apis, api => { return api.publish(parameters.region, context); })
         .then(() => {
-          console.log('APIs have been published');
-          console.log();
+          icli.print('APIs have been published');
+          icli.print();
         });
       } else {
-        console.log('The deployment of one or more APIs failed. The publication step will not be performed.');
-        console.log();
+        icli.print('The deployment of one or more APIs failed. The publication step will not be performed.');
+        icli.print();
         process.exit(1);
       }
     });

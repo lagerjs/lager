@@ -1,7 +1,7 @@
 'use strict';
 
 const _ = require('lodash');
-const showReports = require('../tools/show-deployment-reports');
+const genReportsTable = require('../tools/generate-reports-table');
 const plugin = require('../index');
 
 /**
@@ -75,7 +75,7 @@ module.exports = (icli) => {
         return plugin.loadLambdas()
         .then(lambdas => {
           if (!lambdas.length) {
-            console.log(icli.format.error('This project does not contain any Lambda.'));
+            icli.print(icli.format.error('This project does not contain any Lambda.'));
             process.exit(1);
           }
           return _.map(lambdas, lambda => {
@@ -125,13 +125,13 @@ module.exports = (icli) => {
     if (parameters.environment === undefined) { parameters.environment = plugin.lager.getConfig('environment'); }
     if (parameters.stage === undefined) { parameters.stage = plugin.lager.getConfig('stage'); }
 
-    console.log();
-    console.log('Deploying ' + icli.format.info(parameters.lambdaIdentifiers.length) + ' Lambda(s):');
-    console.log('  AWS region: ' + icli.format.info(parameters.region));
-    console.log('  Lager environement (prefix for Lambdas names): ' + icli.format.info(parameters.environment));
-    console.log('  Lager stage (used as Lambda alias): ' + icli.format.info(parameters.stage));
-    console.log();
-    console.log('This operation may last a little');
+    icli.print();
+    icli.print('Deploying ' + icli.format.info(parameters.lambdaIdentifiers.length) + ' Lambda(s):');
+    icli.print('  AWS region: ' + icli.format.info(parameters.region));
+    icli.print('  Lager environement (prefix for Lambdas names): ' + icli.format.info(parameters.environment));
+    icli.print('  Lager stage (used as Lambda alias): ' + icli.format.info(parameters.stage));
+    icli.print();
+    icli.print('This operation may last a little');
 
     return plugin.loadLambdas()
     .then(lambdas => {
@@ -148,14 +148,14 @@ module.exports = (icli) => {
       });
     })
     .then(reports => {
-      showReports(reports);
+      icli.print(genReportsTable(reports));
     })
     .catch(e => {
       if (e.code === 'AccessDeniedException' && e.cause && e.cause.message) {
-        console.log('\n    ' + icli.format.error('Insufficient permissions to perform the action\n'));
-        console.log('The IAM user/role you are using to perform this action does not have sufficient permissions.\n');
-        console.log(e.cause.message + '\n');
-        console.log('Please update the policies of the user/role before trying again.\n');
+        icli.print('\n    ' + icli.format.error('Insufficient permissions to perform the action\n'));
+        icli.print('The IAM user/role you are using to perform this action does not have sufficient permissions.\n');
+        icli.print(e.cause.message + '\n');
+        icli.print('Please update the policies of the user/role before trying again.\n');
         process.exit(1);
       }
       throw e;

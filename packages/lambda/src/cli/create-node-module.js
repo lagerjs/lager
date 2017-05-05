@@ -102,7 +102,7 @@ module.exports = (icli) => {
                 + icli.format.info(path.join(process.cwd(), plugin.config.lambdasPath, '<lambda-identifier>', 'package.json'))
                 + ' and add ' + icli.format.info('"' + parameters.name + '": "../modules/' + parameters.name + '"')
                 + ' in the section ' + icli.format.info('dependencies') + '\n';
-      console.log(msg);
+      icli.print(msg);
     });
   }
 

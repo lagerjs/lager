@@ -57,7 +57,7 @@ module.exports = (icli) => {
     .then(() => {
       const msg = '\n  The IAM policy ' + icli.format.info(parameters.identifier)
                 + ' has been created in ' + icli.format.info(configFilePath + path.sep + parameters.identifier + '.json') + '\n\n';
-      console.log(msg);
+      icli.print(msg);
     });
   }
 

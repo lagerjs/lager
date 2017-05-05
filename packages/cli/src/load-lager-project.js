@@ -10,6 +10,13 @@ const fs = require('fs');
 const _ = require('lodash');
 
 module.exports = function loadLagerProject(icli) {
+  const cliPlugin = {
+    name: 'cli',
+    extensions: {
+      print: () => { icli.print(); }
+    }
+  };
+
   const projectRoot = getProjectRootDirectory();
   if (projectRoot) {
     process.chdir(projectRoot);
@@ -20,6 +27,10 @@ module.exports = function loadLagerProject(icli) {
       return Promise.reject(e);
     }
     return lager.init(getConfig())
+    .then(() => {
+      // We add the cli plugin
+      return lager.registerPlugin(cliPlugin);
+    })
     .then(() => {
       // We fire the "registerCommands" event so plugins can add their own commands
       return lager.fire('registerCommands', icli);
