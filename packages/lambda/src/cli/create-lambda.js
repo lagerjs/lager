@@ -35,6 +35,7 @@ module.exports = (icli) => {
       description: 'select the runtime',
       type: 'list',
       choices: choicesLists.runtimes,
+      default: 'nodejs6.10',
       question: {
         message: 'Choose the runtime'
       }
@@ -203,23 +204,9 @@ module.exports = (icli) => {
       return fs.writeFileAsync(configFilePath + path.sep + 'config.json', JSON.stringify(config, null, 2));
     })
     .then(() => {
-      // We create the package.json file
-      const packageJson = {
-        'name': parameters.identifier,
-        'version': '0.0.0',
-        dependencies: {}
-      };
-      _.forEach(parameters.dependencies, moduleName => {
-        packageJson.dependencies[moduleName] = path.relative(configFilePath, path.join(process.cwd(), plugin.config.modulesPath, moduleName));
-      });
-      // We save the package.json file
-      return fs.writeFileAsync(configFilePath + path.sep + 'package.json', JSON.stringify(packageJson, null, 2));
-    })
-    .then(() => {
-      // We create the lambda handler
-      const src = path.join(__dirname, 'templates', 'index.js');
-      const dest = path.join(configFilePath, 'index.js');
-      return ncpAsync(src, dest);
+      return _.startsWith(parameters.runtime, 'nodejs')
+             ? initNodeJs(parameters, configFilePath)
+             : initPython(parameters, configFilePath);
     })
     .then(() => {
       // We create a test event file
@@ -235,3 +222,38 @@ module.exports = (icli) => {
   }
 
 };
+
+
+function initNodeJs(parameters, configFilePath) {
+  // We create the package.json file
+  const packageJson = {
+    'name': parameters.identifier,
+    'version': '0.0.0',
+    dependencies: {}
+  };
+  _.forEach(parameters.dependencies, moduleName => {
+    packageJson.dependencies[moduleName] = path.relative(configFilePath, path.join(process.cwd(), plugin.config.modulesPath, moduleName));
+  });
+  // We save the package.json file
+  return fs.writeFileAsync(configFilePath + path.sep + 'package.json', JSON.stringify(packageJson, null, 2))
+  .then(() => {
+    // We create the lambda handler
+    const src = path.join(__dirname, 'templates', 'index.js');
+    const dest = path.join(configFilePath, 'index.js');
+    return ncpAsync(src, dest);
+  });
+}
+
+
+function initPython(parameters, configFilePath) {
+  // We create the lambda handler
+  const src = path.join(__dirname, 'templates', 'setup.cfg');
+  const dest = path.join(configFilePath, 'setup.cfg');
+  return ncpAsync(src, dest)
+  .then(() => {
+    // We create the lambda handler
+    const src = path.join(__dirname, 'templates', 'lambda_function.py');
+    const dest = path.join(configFilePath, 'lambda_function.py');
+    return ncpAsync(src, dest);
+  });
+}
