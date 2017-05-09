@@ -5,6 +5,7 @@ const assert = require('assert');
 const rp = require('request-promise');
 const icli = require('../../packages/cli/src/bin/lager');
 const showStdout = !!process.env.LAGER_SHOW_STDOUT;
+const apiDeployDelay = require('../api-deploy-delay');
 
 describe('A project including the cors plugin', () => {
 
@@ -20,8 +21,11 @@ describe('A project including the cors plugin', () => {
 
   it('should be deployed via the sub-command "deploy-apis"', function() {
     icli.catchPrintStart(showStdout);
-    this.timeout(15000);
-    return icli.parse('node script.js deploy-apis cors-test -r us-east-1 -s v0 -e DEV'.split(' '))
+    this.timeout(60000);
+    return apiDeployDelay()
+    .then(res => {
+      return icli.parse('node script.js deploy-apis cors-test -r us-east-1 -s v0 -e DEV'.split(' '));
+    })
     .then(res => {
       const stdout = icli.catchPrintStop();
       assert.ok(stdout.indexOf('/mix        ANY      X') > -1);
@@ -52,7 +56,6 @@ describe('A project including the cors plugin', () => {
     .then(response => {
       assert.equal(response.statusCode, 200);
       assert.equal(response.headers['access-control-allow-origin'], '*');
-      //console.log(JSON.stringify(response, null, 2));
       return rp({ uri: address + '/public', method: 'OPTIONS', resolveWithFullResponse: true });
     })
     .then(response => {

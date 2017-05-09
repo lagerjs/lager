@@ -10,10 +10,11 @@ const fs = require('fs');
 const _ = require('lodash');
 
 module.exports = function loadLagerProject(icli) {
+
   const cliPlugin = {
     name: 'cli',
     extensions: {
-      print: () => { icli.print(); }
+      print: function() { icli.print.apply(icli, arguments); }
     }
   };
 

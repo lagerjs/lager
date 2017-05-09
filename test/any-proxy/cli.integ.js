@@ -9,6 +9,7 @@ const fs = require('fs-extra');
 const remove = Promise.promisify(fs.remove);
 const icli = require('../../packages/cli/src/bin/lager');
 const showStdout = !!process.env.LAGER_SHOW_STDOUT;
+const apiDeployDelay = require('../api-deploy-delay');
 
 describe('Creation and deployment of a proxy integration with ANY http method', () => {
 
@@ -87,9 +88,12 @@ describe('Creation and deployment of a proxy integration with ANY http method', 
 
   describe('Deployment of an API in AWS', () => {
     it('should be done via the sub-command "deploy-apis"', function() {
-      this.timeout(30000);
+      this.timeout(60000);
       icli.catchPrintStart(showStdout);
-      return icli.parse('node script.js deploy-apis any-proxy -r us-east-1 -s v0 -e DEV --deploy-lambdas all'.split(' '))
+      return apiDeployDelay()
+      .then(res => {
+        return icli.parse('node script.js deploy-apis any-proxy -r us-east-1 -s v0 -e DEV --deploy-lambdas all'.split(' '));
+      })
       .then(res => {
         const stdout = icli.catchPrintStop();
         assert.ok(stdout.indexOf('/          ANY     X') > -1);
