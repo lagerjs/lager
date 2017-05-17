@@ -49,7 +49,7 @@ Documentation available at [https://lagerjs.github.io](https://lagerjs.github.io
 |       @lager/lager | [![Known Vulnerabilities](https://snyk.io/test/npm/@lager/lager/badge.svg)](https://snyk.io/test/npm/@lager/lager)             |
 |         @lager/cli | [![Known Vulnerabilities](https://snyk.io/test/npm/@lager/cli/badge.svg)](https://snyk.io/test/npm/@lager/cli)                 |
 |         @lager/iam | [![Known Vulnerabilities](https://snyk.io/test/npm/@lager/iam/badge.svg)](https://snyk.io/test/npm/@lager/iam)                 |
-| @lager/node-lambda | [![Known Vulnerabilities](https://snyk.io/test/npm/@lager/node-lambda/badge.svg)](https://snyk.io/test/npm/@lager/node-lambda) |
+| @lager/lambda | [![Known Vulnerabilities](https://snyk.io/test/npm/@lager/lambda/badge.svg)](https://snyk.io/test/npm/@lager/lambda) |
 | @lager/api-gateway | [![Known Vulnerabilities](https://snyk.io/test/npm/@lager/api-gateway/badge.svg)](https://snyk.io/test/npm/@lager/api-gateway) |
 
 ---
