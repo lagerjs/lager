@@ -2,7 +2,7 @@
   "params": {
     "Timeout": "20",
     "MemorySize": "256",
-    "Role": "arn:aws:iam::086256341561:role/DEV_test_v0",
+    "Role": "arn:aws:iam::000000000000:role/DEV_test_v0",
     "Handler": "lambda.handler",
     "Runtime": "nodejs6.10",
     "Handler": "lambda.handler"

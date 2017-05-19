@@ -6,8 +6,6 @@
     "@lager/cors"
   ],
   "config": {
-    "stage": "v0",
-    "environment": "DEV",
     "colors": true
   }
 }

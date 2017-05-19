@@ -29,7 +29,7 @@ describe('The integration data injector', () => {
     lambda = new Lambda(config);
     awsLambdaData = {
       Configuration: {
-        FunctionArn: 'arn:aws:lambda:us-east-1:123456789012:function:DEV-my-lambda:v0'
+        FunctionArn: 'arn:aws:lambda:us-east-1:123456789012:function:DEV-callback-lambda:v0'
       }
     };
   });
@@ -55,7 +55,7 @@ describe('The integration data injector', () => {
       },
       'x-amazon-apigateway-integration': {
         type: 'aws',
-        uri: 'arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:123456789012:function:DEV-my-lambda:v0/invocations',
+        uri: 'arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:123456789012:function:DEV-callback-lambda:v0/invocations',
         httpMethod: 'POST',
         responses: {
           default: {

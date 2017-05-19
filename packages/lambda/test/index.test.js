@@ -10,9 +10,10 @@ describe('The lambda plugin', () => {
   it('should load the lambdas of a project', () => {
     return nodeLambdaPlugin.loadLambdas()
     .then(lambdas => {
-      assert.equal(lambdas.length, 2);
-      assert.equal(lambdas[0].getIdentifier(), 'empty-lambda');
-      assert.equal(lambdas[1].getIdentifier(), 'my-lambda');
+      assert.equal(lambdas.length, 3);
+      assert.equal(lambdas[0].getIdentifier(), 'callback-lambda');
+      assert.equal(lambdas[1].getIdentifier(), 'context-lambda');
+      assert.equal(lambdas[2].getIdentifier(), 'empty-lambda');
     });
   });
 

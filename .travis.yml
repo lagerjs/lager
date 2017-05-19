@@ -13,7 +13,6 @@ install:
 # Matrix begin
 node_js:
   - "6"
-  - "4"
 env:
   - TEST_SUITE=integration
   - TEST_SUITE=lager
