@@ -61,12 +61,15 @@ describe('A Lambda', () => {
 
   before(() => {
     AWS.mock('Lambda', 'invoke', (params, callback) => {
+      console.log('mock invoke');
       callback(null, invoke);
     });
     AWS.mock('Lambda', 'getFunction', (params, callback) => {
+      console.log('mock getFunction');
       callback(getFunctionError, getFunction);
     });
     AWS.mock('Lambda', 'createFunction', (params, callback) => {
+      console.log('mock createFunction');
       callback(null, createFunction);
     });
     AWS.mock('Lambda', 'publishVersion', (params, callback) => {
@@ -141,14 +144,6 @@ describe('A Lambda', () => {
     });
   });
 
-  it('should be executed in AWS', () => {
-    return lambda.execute('us-east-1', context, { a: 'b' })
-    .then(res => {
-      assert.equal(res.StatusCode, 200);
-      assert.equal(res.Payload, '{"msg":"This Lambda is not implemented!","input":{"a":"b"}}');
-    });
-  });
-
   describe('deployment', () => {
 
     it('should create the Lambda for the first deployment', function() {
@@ -177,4 +172,11 @@ describe('A Lambda', () => {
 
   });
 
+  it('should be executed in AWS', () => {
+    return lambda.execute('us-east-1', context, { a: 'b' })
+    .then(res => {
+      assert.equal(res.StatusCode, 200);
+      assert.equal(res.Payload, '{"msg":"This Lambda is not implemented!","input":{"a":"b"}}');
+    });
+  });
 });
