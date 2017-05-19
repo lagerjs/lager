@@ -60,6 +60,7 @@ describe('A Lambda', () => {
   const updateFunctionConfiguration = getFunction.Configuration;
 
   before(() => {
+    console.log('create mocks');
     AWS.mock('Lambda', 'invoke', (params, callback) => {
       console.log('mock invoke');
       callback(null, invoke);
@@ -93,6 +94,7 @@ describe('A Lambda', () => {
   });
 
   after(() => {
+    console.log('remove mocks');
     AWS.restore();
   });
 

@@ -89,6 +89,7 @@ describe('An API', () => {
       callback(null, importRestApi);
     });
     AWS.mock('APIGateway', 'putRestApi', (params, callback) => {
+      console.log('mock', 'putRestApi')
       callback(null, putRestApi);
     });
     AWS.mock('APIGateway', 'createDeployment', (params, callback) => {
