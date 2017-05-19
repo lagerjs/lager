@@ -22,8 +22,15 @@ module.exports = (icli) => {
       type: 'checkbox',
       choices: choicesLists.lambdaIdentifiers,
       question: {
-        message: 'Which Lambdas do you want to deploy?'
+        message: 'Which Lambdas do you want to deploy?',
+        when: (answers, cmdParameterValues) => {
+          return cmdParameterValues.lambdaIdentifiers.length === 0 && !cmdParameterValues.all;
+        }
       }
+    }, {
+      cmdSpec: '-a, --all',
+      description: 'Deploy all lambdas of the project',
+      type: 'boolean',
     }, {
       cmdSpec: '-r, --region [region]',
       description: 'select the AWS region',
@@ -125,20 +132,21 @@ module.exports = (icli) => {
     if (parameters.environment === undefined) { parameters.environment = plugin.lager.getConfig('environment'); }
     if (parameters.stage === undefined) { parameters.stage = plugin.lager.getConfig('stage'); }
 
-    icli.print();
-    icli.print('Deploying ' + icli.format.info(parameters.lambdaIdentifiers.length) + ' Lambda(s):');
-    icli.print('  AWS region: ' + icli.format.info(parameters.region));
-    icli.print('  Lager environement (prefix for Lambdas names): ' + icli.format.info(parameters.environment));
-    icli.print('  Lager stage (used as Lambda alias): ' + icli.format.info(parameters.stage));
-    icli.print();
-    icli.print('This operation may last a little');
-
     return plugin.loadLambdas()
     .then(lambdas => {
-      // If lambdaIdentifier is empty, we deploy all lambdas
-      if (parameters.lambdaIdentifiers) {
+      // If the parameter "all" is set, we deploy all lambdas
+      if (!parameters.all) {
         lambdas = _.filter(lambdas, lambda => { return parameters.lambdaIdentifiers.indexOf(lambda.getIdentifier()) !== -1; });
       }
+
+      icli.print();
+      icli.print('Deploying ' + icli.format.info(lambdas.length) + ' Lambda(s):');
+      icli.print('  AWS region: ' + icli.format.info(parameters.region));
+      icli.print('  Lager environement (prefix for Lambdas names): ' + icli.format.info(parameters.environment));
+      icli.print('  Lager stage (used as Lambda alias): ' + icli.format.info(parameters.stage));
+      icli.print();
+      icli.print('This operation may last a little');
+
       return Promise.map(lambdas, lambda => {
         const context = {
           stage: parameters.stage,

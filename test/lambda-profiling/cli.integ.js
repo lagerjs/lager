@@ -112,8 +112,21 @@ describe('Creation and deployment of a Lambda project', () => {
         assert.ok(true);
       });
     });
-  });
 
+    it('should be done without needing to list all lambdas', function() {
+      icli.catchPrintStart(showStdout);
+      this.timeout(30000);
+      return icli.parse('node script.js deploy-lambdas -a -r us-east-1 -e DEV -s v0'.split(' '))
+      .then(res => {
+        const stdout = icli.catchPrintStop();
+        assert.ok(stdout.indexOf('Deploying \x1b[36m3\x1b[0m Lambda(s):') > -1);
+        assert.ok(stdout.indexOf('DEV-config-128') > -1);
+        assert.ok(stdout.indexOf('DEV-config-512') > -1);
+        assert.ok(stdout.indexOf('DEV-config-1536') > -1);
+        assert.ok(true);
+      });
+    });
+  });
 
   describe('Execution of Lambdas in AWS', () => {
     it('should be done via the sub-command "test-lambda"', () => {

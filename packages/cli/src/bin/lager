@@ -52,8 +52,8 @@ icli.init = function init() {
  * The default print() simply wraps console.log()
  * @return {void}
  */
-const print = function print(v) {
-  console.log(v);
+const print = function print() {
+  console.log.apply(null, arguments);
 };
 icli.print = print;
 
