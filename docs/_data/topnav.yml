@@ -19,7 +19,7 @@ topnav_dropdowns:
         - title: IAM plugin
           url: /iam-overview.html
         - title: Node Lambda plugin
-          url: /node-lambda-overview.html
+          url: /lambda-overview.html
         - title: API Gateway plugin
           url: /api-gateway-overview.html
     - title: Tutorials

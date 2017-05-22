@@ -3,6 +3,6 @@
   "plugins": [
     "@lager/iam",
     "@lager/api-gateway",
-    "@lager/node-lambda"
+    "@lager/lambda"
   ]
 }

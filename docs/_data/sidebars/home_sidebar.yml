@@ -21,7 +21,7 @@ entries:
       url: /iam-overview.html
       output: web
     - title: Node Lambda plugin
-      url: /node-lambda-overview.html
+      url: /lambda-overview.html
       output: web
     - title: API Gateway plugin
       url: /api-gateway-overview.html

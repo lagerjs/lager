@@ -91,7 +91,7 @@ module.exports = {
 };
 ```
 
-Hooks fired by Lager node-lambda
+Hooks fired by Lager lambda
 ---
 
 ```javascript

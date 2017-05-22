@@ -1,23 +1,23 @@
 ---
-title: An overview of the @lager/node-lambda plugin
-keywords: lager, node-lambda
-tags: [node-lambda, getting_started]
-summary: "The @lager/node-lambda plugin allows to define Lambdas, manage their dependencies to portions of your application and perform deployments"
-sidebar: node-lambda_sidebar
-permalink: node-lambda-overview.html
-folder: node-lambda
+title: An overview of the @lager/lambda plugin
+keywords: lager, lambda
+tags: [lambda, getting_started]
+summary: "The @lager/lambda plugin allows to define Lambdas, manage their dependencies to portions of your application and perform deployments"
+sidebar: lambda_sidebar
+permalink: lambda-overview.html
+folder: lambda
 ---
 
 ## Prerequisites
 
-To use the `@lager/node-lambda` plugin, you should have a minimal knowledge about [AWS Lambda](https://aws.amazon.com/lambda/) and Node.js.
+To use the `@lager/lambda` plugin, you should have a minimal knowledge about [AWS Lambda](https://aws.amazon.com/lambda/) and Node.js.
 
 ## Installation
 
 In the root folder of a lager project:
 
 ```bash
-npm install @lager/node-lambda
+npm install @lager/lambda
 ```
 
 Then enable the plugin in the `lager.json` config file:
@@ -26,7 +26,7 @@ Then enable the plugin in the `lager.json` config file:
 {
   "name": "my-app",
   "plugins": [
-    "@lager/node-lambda"
+    "@lager/lambda"
   ]
 }
 ```
@@ -36,26 +36,26 @@ Once the plugin is installed and enabled in the project, the `lager` command lin
 
 ## Project anatomy
 
-The content managed by `@lager/node-lambda` is located in an `node-lambda` directory in the root directory of the project.
+The content managed by `@lager/lambda` is located in an `lambda` directory in the root directory of the project.
 
-Out of the box, `@lager/node-lambda` allows you to separate the definition of Lambdas from the logic of the application by providing a specific
-place to write node modules but you are not obliged to use it. `@lager/node-lambda` helps you to manage and deploy your Lambdas but lets you be
+Out of the box, `@lager/lambda` allows you to separate the definition of Lambdas from the logic of the application by providing a specific
+place to write node modules but you are not obliged to use it. `@lager/lambda` helps you to manage and deploy your Lambdas but lets you be
 responsible of the implementation of your application.
 
-The directory `node-lambda/lambdas` contains the Lambdas definitions. Each of its sub-directory has the name of a Lambda identifier and contains a
+The directory `lambda/lambdas` contains the Lambdas definitions. Each of its sub-directory has the name of a Lambda identifier and contains a
 `config.json` file and the code of the Lambda.
 
 The `config.json` file allows you to define the timeout, the memory and the role of the Lambda. It also allows to select some modules as dependencies
 of the Lambda.
 
-The directory `node-lambda/modules` contains the modules of the project. For example, some of these modules could be named `log`, or `data-access`
+The directory `lambda/modules` contains the modules of the project. For example, some of these modules could be named `log`, or `data-access`
 or `authorization` etc...
 Each module should have a clear responsibility so that each Lambda can embed only the code it needs.
 
 As an example is more easy to understand, that is what a project structure could looks like:
 
 ```text
-node-lambda
+lambda
 ├── lambdas                         The Lambdas defined by the application
 |   ├── my-lambda                   The name of this directory is the identifier of a Lambda
 |   |   ├── config.json             The configuration of the Lambda (memory, timeout, execution role...)

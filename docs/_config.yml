@@ -98,7 +98,7 @@ sidebars:
 - core_sidebar
 - cli_sidebar
 - iam_sidebar
-- node-lambda_sidebar
+- lambda_sidebar
 - api-gateway_sidebar
 - other
 

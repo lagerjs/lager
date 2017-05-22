@@ -21,7 +21,7 @@ A minimal `lager.json` file looks like this:
   "plugins": [
     "@lager/iam",
     "@lager/api-gateway",
-    "@lager/node-lambda",
+    "@lager/lambda",
     "./plugins/my-plugin"
   ]
 }

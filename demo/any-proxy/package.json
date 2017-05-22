@@ -12,6 +12,6 @@
   "devDependencies": {
     "@lager/api-gateway": "*",
     "@lager/lager": "*",
-    "@lager/node-lambda": "*"
+    "@lager/lambda": "*"
   }
 }

@@ -22,7 +22,7 @@ Each plugin installed in a project extends the capabilities of Lager and can add
 
 *   [`@lager/api-gateway`](https://www.npmjs.com/package/@lager/api-gateway) to define endpoints, associate them withs APIs and deploy them in
     `Amazon API Gateway`
-*   [`@lager/node-lambda`](https://www.npmjs.com/package/@lager/node-lambda) to deploy node functions in `AWS Lambda`
+*   [`@lager/lambda`](https://www.npmjs.com/package/@lager/lambda) to deploy node functions in `AWS Lambda`
 *   [`@lager/iam`](https://www.npmjs.com/package/@lager/iam) to manage `AWS IAM` (Identity and Access Management) policies and roles
 
 These plugins can interact with each other but can also be used independently.

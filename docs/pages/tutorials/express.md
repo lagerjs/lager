@@ -46,8 +46,8 @@ npm install -g @lager/cli
 
 ```bash
 # For the prompt "What is your project name?", leave it empty, so Lager will be installed in the same directory that Express
-# We will need the plugins @lager/iam @lager/api-gateway and @lager/node-lambda
-lager new @lager/iam @lager/api-gateway @lager/node-lambda
+# We will need the plugins @lager/iam @lager/api-gateway and @lager/lambda
+lager new @lager/iam @lager/api-gateway @lager/lambda
 ```
 
 Lager and its plugins will be installed in the section `devDependencies` of the file `package.json`.
@@ -66,7 +66,7 @@ lager create-role MyExpressAppLambdaInvocation -m APIGatewayLambdaInvocation
 We create a new Lambda managed by Lager.
 
 ```bash
-lager create-node-lambda serverless-express -t 30 -m 256 -r MyExpressAppLambdaExecution
+lager create-lambda serverless-express -t 30 -m 256 -r MyExpressAppLambdaExecution
 ```
 
 We have to do a small alteration to the `package.json` of the Express application to tell node that `app.js` is the file that has to be loaded when
@@ -85,7 +85,7 @@ We have to do a small alteration to the `package.json` of the Express applicatio
 In the `package.json` of the Lambda, we define the Express application as a dependency
 
 ```bash
-# in /node-lambda/lambdas/serverless-express
+# in /lambda/lambdas/serverless-express
 npm install ../../.. --save
 ```
 
@@ -93,14 +93,14 @@ npm install ../../.. --save
 API Gateway with Lambda integration. We add it as a dependency of our Lambda.
 
 ```bash
-# in /node-lambda/lambdas/serverless-express
+# in /lambda/lambdas/serverless-express
 npm install aws-serverless-express --save
 ```
 
 Then we can alter the code of `index.js` from the Lambda to correctly expose the handler.
 
 ```javascript
-// in /node-lambda/lambdas/serverless-express/index.js
+// in /lambda/lambdas/serverless-express/index.js
 'use strict';
 const awsServerlessExpress = require('aws-serverless-express');
 const app = require('express-app');

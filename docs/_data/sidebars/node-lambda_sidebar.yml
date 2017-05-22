@@ -10,47 +10,47 @@ entries:
     output: web
     folderitems:
     - title: Overview
-      url: /node-lambda-overview.html
+      url: /lambda-overview.html
       output: web
 
     - title: Required IAM permissions
-      url: /node-lambda-permissions.html
+      url: /lambda-permissions.html
       output: web
 
     - title: Command line
-      url: /node-lambda-commands.html
+      url: /lambda-commands.html
       output: web
 
     - title: Managing Lambdas
-      url: /node-lambda-lambdas.html
+      url: /lambda-lambdas.html
       output: web
 
     - title: Managing modules
-      url: /node-lambda-modules.html
+      url: /lambda-modules.html
       output: web
 
     - title: Deploying in AWS
-      url: /node-lambda-deploy.html
+      url: /lambda-deploy.html
       output: web
 
     - title: Custom configuration
-      url: /node-lambda-config.html
+      url: /lambda-config.html
       output: web
 
   - title: Extending the plugin
     output: web
     folderitems:
     - title: Events
-      url: /node-lambda-events.html
+      url: /lambda-events.html
       output: web
 
     - title: Lager extensions
-      url: /node-lambda-extensions.html
+      url: /lambda-extensions.html
       output: web
 
   - title: Integration with other plugins
     output: web
     folderitems:
     - title: With the api-gateway plugin
-      url: /node-lambda-api-gateway.html
+      url: /lambda-api-gateway.html
       output: web

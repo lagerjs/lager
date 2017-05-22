@@ -55,8 +55,8 @@ entries:
       url: /iam-integration-overview.html
       output: web
 
-    - title: With the node-lambda plugin
-      url: /iam-node-lambda.html
+    - title: With the lambda plugin
+      url: /iam-lambda.html
       output: web
 
     - title: With the api-gateway plugin

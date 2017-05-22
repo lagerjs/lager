@@ -19,7 +19,7 @@ Nevertheless, it *can* be useful to read for anybody that plans to use Lager.
 
 The `@lager/iam` plugin allows to define and deploy AWS policies and roles.
 
-It is also useful to allow other plugins to convert a role identifier into an ARN. For example, a project that use the `@lager/node-lambda` plugin could
+It is also useful to allow other plugins to convert a role identifier into an ARN. For example, a project that use the `@lager/lambda` plugin could
 reference a role as `MyProjectLambdaExecution`. When deploying the Lambda in AWS, the plugin will need a role ARN. The `@lager/iam` plugin should help to
 find the correct ARN to use. For example: `arn:aws:iam::012345678912:role/MyProjectLambdaExecution` or
 `arn:aws:iam::012345678912:role/DEV_MyProjectLambdaExecution`
@@ -31,11 +31,11 @@ it is not necessary to call AWS to retrieve the ARN.
 
 ## Node Lambda plugin
 
-The `@lager/node-lambda` plugin allows to define and deploy AWS Lambda function. It manages `Node.js` modules and Lambda configurations.
+The `@lager/lambda` plugin allows to define and deploy AWS Lambda function. It manages `Node.js` modules and Lambda configurations.
 
 ### Node.js modules
 
-A Lager project using `@lager/node-lambda` is composed of a collection of `Node.js` modules containing the application's logic. These modules are
+A Lager project using `@lager/lambda` is composed of a collection of `Node.js` modules containing the application's logic. These modules are
 independent of AWS Lambda and should be able to be used in any execution environment. It is the developer's responsibility to decide how to write, test
 and build them. Lager does not interfere with it.
 
@@ -60,7 +60,7 @@ The name of the folder containing these files will be used as the Lambda identif
 
 ### Lambda deployment
 
-When deploying a Lambda, the `@lager/node-lambda` plugin will create a zip file containing the Node.js module in a `node_module` folder and the handler.
+When deploying a Lambda, the `@lager/lambda` plugin will create a zip file containing the Node.js module in a `node_module` folder and the handler.
 
 In AWS, the name of the Lambda will be composed of the `context`'s' environment and the Lambda identifier. Examples: `DEVELOPER_JANE_my-test-lambda`,
 `DEV_api-generic` ...

@@ -1,9 +1,9 @@
 ---
-title: Configuration of the @lager/node-lambda plugin
-keywords: lager, node-lambda, configuration
-tags: [node-lambda, configuration]
-summary: "This page describes how to customize the @lager/node-lambda configuration"
-sidebar: node-lambda_sidebar
-permalink: node-lambda-config.html
-folder: node-lambda
+title: Configuration of the @lager/lambda plugin
+keywords: lager, lambda, configuration
+tags: [lambda, configuration]
+summary: "This page describes how to customize the @lager/lambda configuration"
+sidebar: lambda_sidebar
+permalink: lambda-config.html
+folder: lambda
 ---

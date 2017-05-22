@@ -64,7 +64,7 @@ We create a new `Lager` project named `planet-express`.
 
 ```bash
 npm install -g @lager/cli
-lager new planet-express @lager/iam @lager/api-gateway @lager/node-lambda
+lager new planet-express @lager/iam @lager/api-gateway @lager/lambda
 cd planet-express
 ```
 
@@ -109,7 +109,7 @@ The implementation of the modules will not be detailed here, but they are "commo
 We create a Lambda, specifying its configuration and its dependencies.
 
 ```bash
-lager create-node-lambda api-generic -t 20 -m 256 -r PlanetExpressLambdaExecution --dependencies data-access,log
+lager create-lambda api-generic -t 20 -m 256 -r PlanetExpressLambdaExecution --dependencies data-access,log
 ```
 
 ### Creation of the endpoints and APIs
@@ -159,7 +159,7 @@ Altogether
 
 ```bash
 npm install -g @lager/cli
-lager new planet-express @lager/iam @lager/api-gateway @lager/node-lambda
+lager new planet-express @lager/iam @lager/api-gateway @lager/lambda
 cd planet-express
 
 lager create-role PlanetExpressLambdaExecution -m LambdaBasicExecutionRole
@@ -167,7 +167,7 @@ lager create-role PlanetExpressLambdaExecution -m LambdaBasicExecutionRole
 lager create-node-module log
 lager create-node-module data-access -d log
 
-lager create-node-lambda api-generic -t 20 -m 256 -r PlanetExpressLambdaExecution --dependencies data-access,log
+lager create-lambda api-generic -t 20 -m 256 -r PlanetExpressLambdaExecution --dependencies data-access,log
 
 lager create-api back-office -t "Back Office" -d "Planet Express API for Back Office"
 lager create-api sender      -t "Sender"      -d "Planet Express API for sender application"

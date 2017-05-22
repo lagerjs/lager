@@ -2,7 +2,7 @@
   "name": "A Lager project",
   "plugins": [
     "@lager/iam",
-    "@lager/node-lambda"
+    "@lager/lambda"
   ],
   "config": {
     "test": "Config in lager.json"

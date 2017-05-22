@@ -12,6 +12,6 @@
   "dependencies": {
     "@lager/iam": "*",
     "@lager/lager": "*",
-    "@lager/node-lambda": "*"
+    "@lager/lambda": "*"
   }
 }
