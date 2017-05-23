@@ -57,8 +57,8 @@ Lager and its plugins will be installed in the section `devDependencies` of the 
 We create two IAM roles: one to allow Lambda to write in cloudwatch and the other to allow API Gateway to invoke Lambda.
 
 ```bash
-lager create-role MyExpressAppLambdaExecution -m LambdaBasicExecutionRole
-lager create-role MyExpressAppLambdaInvocation -m APIGatewayLambdaInvocation
+lager create-role MyExpressAppLambdaExecution --model LambdaBasicExecutionRole
+lager create-role MyExpressAppLambdaInvocation --model APIGatewayLambdaInvocation
 ```
 
 ### Creation of the Lambda
@@ -66,7 +66,7 @@ lager create-role MyExpressAppLambdaInvocation -m APIGatewayLambdaInvocation
 We create a new Lambda managed by Lager.
 
 ```bash
-lager create-lambda serverless-express -t 30 -m 256 -r MyExpressAppLambdaExecution
+lager create-lambda serverless-express --timeout 30 --memory 256 --role MyExpressAppLambdaExecution
 ```
 
 We have to do a small alteration to the `package.json` of the Express application to tell node that `app.js` is the file that has to be loaded when
@@ -114,15 +114,15 @@ exports.handler = (event, context) => awsServerlessExpress.proxy(server, event, 
 We create an API with two endpoints using `ANY` method and Lambda proxy integration: one to handle the root url, and another for the rest.
 
 ```bash
-lager create-api serverless-express -t "Serverless Express" -d "An Express application served by API Gateway and Lambda"
-lager create-endpoint / ANY -a serverless-express -s "Proxy to Lambda" --auth none -i lambda-proxy -l serverless-express -r MyExpressAppLambdaInvocation
-lager create-endpoint /{proxy+} ANY -a serverless-express -s "Proxy to Lambda" --auth none -i lambda-proxy -l serverless-express -r MyExpressAppLambdaInvocation
+lager create-api serverless-express --title "Serverless Express" --desc "An Express application served by API Gateway and Lambda"
+lager create-endpoint / ANY --apis serverless-express --summary "Proxy to Lambda" --auth none --integration lambda-proxy --lambda serverless-express --role MyExpressAppLambdaInvocation
+lager create-endpoint /{proxy+} ANY --apis serverless-express --summary "Proxy to Lambda" --auth none --integration lambda-proxy --lambda serverless-express --role MyExpressAppLambdaInvocation
 ```
 
 ### Deployment
 
 ```bash
-lager deploy-apis serverless-express -r us-east-1 -e DEV -s v0 --deploy-lambdas all
+lager deploy-apis serverless-express --region us-east-1 --environment DEV --stage v0 --deploy-lambdas all
 ```
 
 The deployment messages will give you the url of the application. It will have the form `https://{your-api-id}.execute-api.us-east-1.amazonaws.com/v0`.
