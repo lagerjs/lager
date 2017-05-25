@@ -43,6 +43,7 @@ module.exports = (icli) => {
       cmdSpec: '-t, --timeout <timeout>',
       description: 'select the timeout (in seconds)',
       type: 'integer',
+      default: 10,
       question: {
         message: 'Choose the timeout (in seconds)'
       }
@@ -51,6 +52,7 @@ module.exports = (icli) => {
       description: 'select the memory (in MB)',
       type: 'list',
       choices: choicesLists.memory,
+      default: '256',
       question: {
         message: 'Choose the memory'
       }

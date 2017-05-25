@@ -232,7 +232,7 @@ describe('Creation and deployment of the Planet Express project', () => {
       let address;
       return apiDeployDelay()
       .then(res => {
-        return icli.parse('node script.js deploy-apis back-office -r us-east-1 -s v0 -e DEV --deploy-lambdas all'.split(' '));
+        return icli.parse('node script.js deploy-apis back-office -r us-east-1 -s v0 -e DEV --deploy-lambdas all --alias v0'.split(' '));
       })
       .then(res => {
         const stdout = icli.catchPrintStop();

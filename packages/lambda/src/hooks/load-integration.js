@@ -7,9 +7,14 @@ const plugin = require('../index');
 const genReportsTable = require('../tools/generate-reports-table');
 
 let deployMode = 'none';
+let alias = '';
 
 module.exports.setDeployMode = function setDeployMode(mode) {
   deployMode = mode;
+};
+
+module.exports.setAlias = function setAlias(a) {
+  alias = a;
 };
 
 module.exports.hook = function loadIntegrationsHook(region, context, endpoints, integrationResults) {
@@ -37,6 +42,7 @@ module.exports.hook = function loadIntegrationsHook(region, context, endpoints, 
     plugin.lager.call('cli:print', lambdas.length + ' Lambda(s) to deploy: ' + _.map(lambdas, l => l.getIdentifier()).join(', ') + '\n\n');
 
     // Deploy the lambdas
+    context.alias = alias;
     return Promise.map(lambdas, lambda => lambda.deploy(region, context))
     .then(reports => {
       // Show the result of the deployments in the console

@@ -2,6 +2,7 @@
 
 const plugin = {
   name: 'cors',
+  version: require('../package.json').version,
 
   config: {
     'Access-Control-Allow-Methods': 'DELETE,GET,HEAD,OPTIONS,PATCH,POST,PUT,ANY',

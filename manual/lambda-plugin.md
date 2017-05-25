@@ -54,7 +54,7 @@ The content of the `params` property is used as the argument of the following me
 * [`updateFunctionCode()`](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/Lambda.html#updateFunctionCode-property)
 * [`updateFunctionConfiguration()`](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/Lambda.html#updateFunctionConfiguration-property)
 
-By default, for the NodeJS runtime, the directory `lambda/modules` contains the node modules of the project. For example,
+By default, for the Node.js runtime, the directory `lambda/modules` contains the node modules of the project. For example,
 some of these modules could be named `log`, or `data-access` or `authorization` etc...
 
 Each module should have a clear responsibility so that each Lambda can embed only the code it needs. This is a recommendation
@@ -66,13 +66,13 @@ This is what a project structure could look like:
 ```text
 lambda
 ├── lambdas                         The Lambdas defined by the application
-|   ├── my-lambda                   The name of this directory is the identifier of a Lambda
+|   ├── my-nodejs-lambda            The name of this directory is the identifier of a Lambda
 |   |   ├── config.json             The configuration of the Lambda (runtime, memory, timeout, execution role...)
 |   |   ├── index.js                A node module that exposes the handler
 |   |   └── package.json            It is possible to install the dependencies of the Lambda here
-|   └── my-other-lambda
+|   └── my-python-lambda            Several runtimes can coexist in a project
 |       ├── config.json
-|       └── index.js
+|       └── lambda_function.py
 └── modules                         The node modules of the application - they can be added as a dependency of a Lambda in its
     |                               package.json file
     ├── authorization               The name of this directory is the identifier of a module
@@ -116,20 +116,93 @@ property:
 
 In this case, `require('log')` will load the module `log` installed in `lambda/modules/data-access/node_modules/log`.
 
+It is recommended to use relative paths for portability.
+
 It is recommended to use a recent version of `npm` to minimize the size of the Lambda packages and facilitate the
 configuration of nested dependencies. Indeed, `npm@2` can behave in an unexpected manner with nested dependencies when using
-file paths.
+relative file paths.
 
 ## Commands
 
 ### create-lambda
 
+```
+create-lambda [options] [identifier]
+
+  Options:
+    -h, --help                                                       output usage information
+    -r, --runtime <nodejs|nodejs4.3|nodejs6.10|python2.7|python3.6>  select the runtime
+    -t, --timeout <timeout>                                          select the timeout (in seconds)
+    -m, --memory <memory>                                            select the memory (in MB)
+    -d --dependencies <modules-names>                                select the project modules that must be included in the Lambda (only for nodejs runtimes)
+    --role <role>                                                    select the execution role (enter the ARN)
+```
+
+Create a new Lambda. By default the location of Lambdas is `lambda/lambdas/<identifier>/`.
+
 ### create-node-module
+
+*For the Node.js runtime only.*
+
+```
+create-node-module [options] [name]
+
+  Options:
+    -h, --help                              output usage information
+    -d, --dependencies <dependent-modules>  select the node modules that are dependencies of this new one
+```
+
+Prepare a new Node.js module. By default the location of modules is `lambda/modules/<identifier>/`.
+
+The creation of nodes modules is just a suggestion to organize the code of a project. The idea is to maintain each component
+of the application in its own node module to select only relevant components when deploying Lambdas.
+
+Every Lambda can declare its modules dependencies using [local paths](https://docs.npmjs.com/files/package.json#local-paths)
+in its `package.json` file. Every module can also declare dependencies to other modules that way.
+
+When Lager deploys a Lambda, it executes `npm install` and the dependencies are installed in the `node_modules` folder.
 
 ### deploy-lambdas
 
+```
+deploy-lambdas [options] [lambda-identifiers...]
+
+  Options:
+    -h, --help                       output usage information
+     --all                           deploy all lambdas of the project
+    -r, --region [region]            select the AWS region
+    -e, --environment [environment]  select the environment
+    -a, --alias [alias]              select the alias to apply
+```
+
 ### install-lambdas-locally
+
+```
+install-lambdas-locally [options] [lambda-identifiers...]
+
+  Options:
+    -h, --help  output usage information
+```
 
 ### test-lambda-locally
 
+```
+test-lambda-locally [options] [lambda-identifier]
+
+  Options:
+    -h, --help                output usage information
+    -e, --event <event-name>  Event example to use
+```
+
 ### test-lambda
+
+```
+test-lambda [options] [lambda-identifier]
+
+  Options:
+    -h, --help                       output usage information
+    --event <event-name>             Event example to use
+    -r, --region [region]            select the AWS region
+    -e, --environment [environment]  select the environment
+    -s, --stage [stage]              select the stage (aka Lambda alias) to test
+```

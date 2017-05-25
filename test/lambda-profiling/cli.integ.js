@@ -106,7 +106,7 @@ describe('Creation and deployment of a Lambda project', () => {
     it('should be done via the sub-command "deploy-lambdas"', function() {
       icli.catchPrintStart(showStdout);
       this.timeout(30000);
-      return icli.parse('node script.js deploy-lambdas config-128 config-512 config-1536 -r us-east-1 -e DEV -s v0'.split(' '))
+      return icli.parse('node script.js deploy-lambdas config-128 config-512 config-1536 -r us-east-1 -e DEV -a v0'.split(' '))
       .then(res => {
         icli.catchPrintStop();
         assert.ok(true);
@@ -116,7 +116,7 @@ describe('Creation and deployment of a Lambda project', () => {
     it('should be done without needing to list all lambdas', function() {
       icli.catchPrintStart(showStdout);
       this.timeout(30000);
-      return icli.parse('node script.js deploy-lambdas -a -r us-east-1 -e DEV -s v0'.split(' '))
+      return icli.parse('node script.js deploy-lambdas --all -r us-east-1 -e DEV -a v0'.split(' '))
       .then(res => {
         const stdout = icli.catchPrintStop();
         assert.ok(stdout.indexOf('Deploying \x1b[36m3\x1b[0m Lambda(s):') > -1);

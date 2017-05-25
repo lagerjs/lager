@@ -1,7 +1,7 @@
 # IAM plugin
 
-The IAM plugin allows to define and deploy AWS policies and roles. It is not required in a Lager project, but it can be
-helpful to avoid referencing IAM roles ARNs and simplify the configuration of other plugins.
+The IAM plugin allows to define and deploy AWS policies and roles. It can be used to avoid referencing IAM roles ARNs and
+simplify the configuration of other plugins.
 
 ## Prerequisites
 
@@ -12,10 +12,10 @@ gives all necessary permissions.
 
 ## Installation
 
-Install the node module in a lager project:
+Install the npm module in a Lager project:
 
 ```bash
-npm install @lager/iam
+npm install @lager/iam --save-dev
 ```
 
 Then enable the plugin in the `lager.json` config file:
@@ -63,12 +63,12 @@ Two predefined role configuration are available:
  *   `LambdaBasicExecutionRole`: The `AWSLambdaBasicExecutionRole` is attached to it and it can be associated to Lambda
      functions.
 
-It is possible to can define custom policies and `trust-relationship` configuration. Is is also possible to reference
+It is possible to define custom policies and `trust-relationship` configuration. Is is also possible to reference
 policies from the Lager project.
 
 Roles can be referenced by other plugins to facilitate the deployment of Lager applications: by defining roles in the Lager
-project, deploying some resources like Lambda function or API definitions can be done on various environments without
-needing to define specific configuration to reference roles ARN.
+project, deploying some resources like Lambda functions or API definitions can be done on various environments without
+needing to define specific configuration to reference different roles ARN.
 
 ### deploy-policies
 
@@ -98,7 +98,7 @@ deploy-roles [options] [role-identifiers]
 
 Deploy one or more roles in AWS. The `environment` option is used as a prefix and the `stage` option as a suffix.
 
-## Definition of IAM polcies
+## Definition of IAM policies
 
 The policies managed by Lager are nothing more than IAM policy definitions stored as JSON file. This allows to manage the
 permissions needed by an application alongside the code.

@@ -131,7 +131,7 @@ Lambda.prototype.execute = function execute(region, context, event) {
     FunctionName: functionName,
     Payload: JSON.stringify(event)
   };
-  if (context.stage) { params.Qualifier = context.stage; }
+  if (context.alias) { params.Qualifier = context.alias; }
 
   return Promise.promisify(awsLambda.invoke.bind(awsLambda))(params);
 };
@@ -139,7 +139,7 @@ Lambda.prototype.execute = function execute(region, context, event) {
 /**
  * Returns an integration data injector for the API Gateway plugin
  * @param {string} region - the AWS region where the Lambda must be deployed
- * @param {Object} context - the context object containing the environment and the stage
+ * @param {Object} context - the context object containing the environment and the alias
  * @return {Promise<Object>} - an object conatining the IntegrationDataInjector of the lambda
  *                              and a report of the deployment
  */
@@ -152,8 +152,8 @@ Lambda.prototype.getIntegrationDataInjector = function getIntegrationDataInjecto
   const params = {
     FunctionName: this.config.params.FunctionName
   };
-  if (context.stage) {
-    params.Qualifier = context.stage;
+  if (context.alias) {
+    params.Qualifier = context.alias;
   }
   return Promise.promisify(awsLambda.getFunction.bind(awsLambda))(params)
   .then(data => {
@@ -164,7 +164,7 @@ Lambda.prototype.getIntegrationDataInjector = function getIntegrationDataInjecto
 /**
  * Deploys the lambda in AWS
  * @param {string} region - the AWS region where the Lambda must be deployed
- * @param {Object} context - the context object containing the environment and the stage
+ * @param {Object} context - the context object containing the environment and the alias
  * @return {Promise<Object>} - an object conatining the IntegrationDataInjector of the lambda
  *                              and a report of the deployment
  */
@@ -191,9 +191,9 @@ Lambda.prototype.deploy = function deploy(region, context) {
   .then(data => {
     // Publish a new version
     plugin.lager.log.debug('The Lambda ' + functionName + ' has been deployed');
-    if (context.stage) {
+    if (context.alias) {
       // Set the alias if needed
-      return this.setAlias(awsLambda, context.stage, report);
+      return this.setAlias(awsLambda, context.alias, report);
     }
     // If no alias is specified, we will use $LATEST
     report.arn = data.FunctionArn;

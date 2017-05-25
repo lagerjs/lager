@@ -36,7 +36,7 @@
   "devDependencies": {
     "aws-sdk-mock": "^1.7.0",
     "codecov": "^2.1.0",
-    "comquirer": "0.0.13",
+    "comquirer": "0.0.15",
     "istanbul": "^0.4.5",
     "mocha": "^3.3.0"
   },

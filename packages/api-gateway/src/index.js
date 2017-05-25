@@ -344,6 +344,7 @@ function getPolicies() {
 
 const plugin = {
   name: 'api-gateway',
+  version: require('../package.json').version,
 
   config: {
     apisPath: 'api-gateway' + path.sep + 'apis',

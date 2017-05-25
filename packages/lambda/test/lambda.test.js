@@ -10,7 +10,7 @@ const Lambda = testRequire('src/lambda');
 describe('A Lambda', () => {
 
   let callbackLambda, contextLambda;
-  const context = { environment: 'TEST', stage: 'v0' };
+  const context = { environment: 'TEST', alias: 'v0' };
 
   const invoke = {
     StatusCode: 200,

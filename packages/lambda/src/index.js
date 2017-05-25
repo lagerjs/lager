@@ -187,6 +187,7 @@ function getPolicies() {
 
 const plugin = {
   name: 'lambda',
+  version: require('../package.json').version,
 
   config: {
     lambdasPath: 'lambda' + path.sep + 'lambdas',
@@ -194,11 +195,6 @@ const plugin = {
   },
 
   hooks: {
-
-    afterInit: function afterInitHook() {
-      plugin.config.environment = plugin.config.environment || plugin.lager.getConfig('environment');
-      plugin.config.stage = plugin.config.stage || plugin.lager.getConfig('stage');
-    },
 
     /**
      * Register plugin commands

@@ -7,21 +7,19 @@ const Pebo = require('pebo');
 Pebo.setPromise(Promise);
 const log = require('./log');
 
-if (['dev', 'development', 'debug'].indexOf(process.env.NODE_ENV) > -1) {
-  Promise.config({
-    longStackTraces: true
-  });
+Promise.config({
+  longStackTraces: true
+});
 
-  process.on('uncaughtException', (e) => {
-    log.fatal(e, 'Uncaught Exception');
-    process.exit(1);
-  });
+process.on('uncaughtException', (e) => {
+  log.fatal(e, 'Uncaught Exception');
+  process.exit(1);
+});
 
-  process.on('unhandledRejection', (reason, promise) => {
-    log.fatal({promise: promise, reason: reason}, 'Unhandled Rejection');
-    process.exit(1);
-  });
-}
+process.on('unhandledRejection', (reason, promise) => {
+  log.fatal({ promise: promise, reason: reason }, 'Unhandled Rejection');
+  process.exit(1);
+});
 
 
 /**
@@ -121,6 +119,14 @@ class Lager extends Pebo {
       throw new Error('The plugin "' + name + '" is not registered in the Lager instance');
     }
     return plugin;
+  }
+
+  getVersions() {
+    const versions = this.plugins.map(p => {
+      return { name: p.name, version: p.version || 'unknown'};
+    });
+    versions.unshift({ name: 'core', version: require('../../package.json').version});
+    return versions;
   }
 
   /**

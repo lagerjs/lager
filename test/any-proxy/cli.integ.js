@@ -92,7 +92,7 @@ describe('Creation and deployment of a proxy integration with ANY http method', 
       icli.catchPrintStart(showStdout);
       return apiDeployDelay()
       .then(res => {
-        return icli.parse('node script.js deploy-apis any-proxy -r us-east-1 -s v0 -e DEV --deploy-lambdas all'.split(' '));
+        return icli.parse('node script.js deploy-apis any-proxy -r us-east-1 -s v0 -e DEV --deploy-lambdas all --alias v0'.split(' '));
       })
       .then(res => {
         const stdout = icli.catchPrintStop();

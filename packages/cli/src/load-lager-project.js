@@ -15,7 +15,8 @@ module.exports = function loadLagerProject(icli) {
     name: 'cli',
     extensions: {
       print: function() { icli.print.apply(icli, arguments); }
-    }
+    },
+    version: require('../package.json').version
   };
 
   const projectRoot = getProjectRootDirectory();

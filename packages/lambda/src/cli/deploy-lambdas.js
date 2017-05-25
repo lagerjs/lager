@@ -28,8 +28,8 @@ module.exports = (icli) => {
         }
       }
     }, {
-      cmdSpec: '-a, --all',
-      description: 'Deploy all lambdas of the project',
+      cmdSpec: '--all',
+      description: 'deploy all lambdas of the project',
       type: 'boolean',
     }, {
       cmdSpec: '-r, --region [region]',
@@ -52,14 +52,13 @@ module.exports = (icli) => {
         }
       }
     }, {
-      cmdSpec: '-s, --stage [stage]',
-      description: 'select the stage (aka Lambda alias) to apply',
+      cmdSpec: '-a, --alias [alias]',
+      description: 'select the alias to apply',
       type: 'input',
-      default: 'v0',
       question: {
-        message: 'Which stage (aka Lambda alias) do you want to apply?',
+        message: 'Which alias do you want to apply?',
         when: (answers, cmdParameterValues) => {
-          return cmdParameterValues['stage'] === undefined && plugin.lager.getConfig('stage') === undefined;
+          return cmdParameterValues['alias'] === undefined && plugin.lager.getConfig('lambda.alias') === undefined;
         }
       }
     }]
@@ -130,7 +129,6 @@ module.exports = (icli) => {
    */
   function executeCommand(parameters) {
     if (parameters.environment === undefined) { parameters.environment = plugin.lager.getConfig('environment'); }
-    if (parameters.stage === undefined) { parameters.stage = plugin.lager.getConfig('stage'); }
 
     return plugin.loadLambdas()
     .then(lambdas => {
@@ -142,14 +140,14 @@ module.exports = (icli) => {
       icli.print();
       icli.print('Deploying ' + icli.format.info(lambdas.length) + ' Lambda(s):');
       icli.print('  AWS region: ' + icli.format.info(parameters.region));
-      icli.print('  Lager environement (prefix for Lambdas names): ' + icli.format.info(parameters.environment));
-      icli.print('  Lager stage (used as Lambda alias): ' + icli.format.info(parameters.stage));
+      icli.print('  Environement (prefix for Lambdas names): ' + icli.format.info(parameters.environment));
+      icli.print('  Alias: ' + icli.format.info(parameters.alias || 'no alias'));
       icli.print();
       icli.print('This operation may last a little');
 
       return Promise.map(lambdas, lambda => {
         const context = {
-          stage: parameters.stage,
+          alias: parameters.alias,
           environment: parameters.environment
         };
         return lambda.deploy(parameters.region, context);

@@ -159,6 +159,7 @@ function findRoles(identifiers) {
 
 const plugin = {
   name: 'iam',
+  version: require('../package.json').version,
 
   config: {
     policiesPath: 'iam' + path.sep + 'policies',
