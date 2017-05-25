@@ -1,6 +1,6 @@
 {
   "name": "@lager/cors",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A Lager plugin to easily add CORS configuration to APIs in AWS API Gateway",
   "main": "src/index.js",
   "scripts": {
