@@ -33,7 +33,7 @@ module.exports = (icli) => {
       question: {
         message: 'Do you want to use syntax highlighting?',
         when: (answers, cmdParameterValues) => {
-          return cmdParameterValues.colors === undefined && plugin.lager.getConfig('colors') === undefined;
+          return cmdParameterValues.colors === undefined && plugin.myrmex.getConfig('colors') === undefined;
         }
       }
     }, {
@@ -89,7 +89,7 @@ module.exports = (icli) => {
    */
   function executeCommand(parameters) {
     if (parameters.colors === undefined) {
-      parameters.colors = plugin.lager.getConfig('colors');
+      parameters.colors = plugin.myrmex.getConfig('colors');
     }
     return plugin.findApi(parameters.apiIdentifier)
     .then(api => {

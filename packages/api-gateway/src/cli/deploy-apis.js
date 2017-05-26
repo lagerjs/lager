@@ -42,7 +42,7 @@ module.exports = (icli) => {
       question: {
         message: 'On which environment do you want to deploy?',
         when: (answers, cmdParameterValues) => {
-          return cmdParameterValues['environment'] === undefined && plugin.lager.getConfig('environment') === undefined;
+          return cmdParameterValues['environment'] === undefined && plugin.myrmex.getConfig('environment') === undefined;
         }
       }
     }, {
@@ -53,7 +53,7 @@ module.exports = (icli) => {
       question: {
         message: 'Which API stage do you want to deploy?',
         when: (answers, cmdParameterValues) => {
-          return cmdParameterValues['stage'] === undefined && plugin.lager.getConfig('stage') === undefined;
+          return cmdParameterValues['stage'] === undefined && plugin.myrmex.getConfig('stage') === undefined;
         }
       }
     }],
@@ -61,7 +61,7 @@ module.exports = (icli) => {
   };
 
   // Allow other plugin to complete the command
-  return plugin.lager.fire('createCommand', config)
+  return plugin.myrmex.fire('createCommand', config)
   .then(() => {
     /**
      * Create the command and the prompt
@@ -126,8 +126,8 @@ module.exports = (icli) => {
    * @returns {Promise<null>} - The execution stops here
    */
   function executeCommand(parameters) {
-    if (parameters.environment === undefined) { parameters.environment = plugin.lager.getConfig('environment'); }
-    if (parameters.stage === undefined) { parameters.stage = plugin.lager.getConfig('stage'); }
+    if (parameters.environment === undefined) { parameters.environment = plugin.myrmex.getConfig('environment'); }
+    if (parameters.stage === undefined) { parameters.stage = plugin.myrmex.getConfig('stage'); }
     const context = {
       environment: parameters.environment,
       stage: parameters.stage
@@ -142,7 +142,7 @@ module.exports = (icli) => {
       _.forEach(endpoints, endpoint => {
         t.cell('Path', endpoint.getResourcePath());
         t.cell('Method', endpoint.getMethod());
-        _.forEach(endpoint.getSpec()['x-lager'].apis, apiIdentifier => {
+        _.forEach(endpoint.getSpec()['x-myrmex'].apis, apiIdentifier => {
           if (parameters.apiIdentifiers.indexOf(apiIdentifier) > -1) {
             t.cell(apiIdentifier, 'X');
           }

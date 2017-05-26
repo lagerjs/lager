@@ -2,4 +2,4 @@ test
 test-assets
 coverage
 .istanbul.yml
-lager.log
+myrmex.log

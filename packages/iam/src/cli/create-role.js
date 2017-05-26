@@ -82,7 +82,7 @@ module.exports = (icli) => {
       managedPolicies: () => {
         return plugin.loadPolicies()
         .then(policies => {
-          // @TODO check if it would be interesting to try to load policies that exist in AWS but not in the lager project
+          // @TODO check if it would be interesting to try to load policies that exist in AWS but not in the myrmex project
           // and add them in choicesLists.managedPolicies
           return _.map(policies, p => {
             return {

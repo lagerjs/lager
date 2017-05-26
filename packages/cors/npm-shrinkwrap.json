@@ -1,5 +1,5 @@
 {
-  "name": "@lager/cors",
+  "name": "@myrmex/cors",
   "version": "0.1.1",
   "dependencies": {
     "abbrev": {

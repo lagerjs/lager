@@ -18,7 +18,7 @@ const assert = require('assert');
 const path = require('path');
 const Promise = require('bluebird');
 const _ = require('lodash');
-const lager = require('../../lager');
+const myrmex = require('../../core');
 const nodeApiGatewayPlugin = testRequire('src/index');
 
 Promise.config({
@@ -34,7 +34,7 @@ process.on('unhandledRejection', (reason, p) => {
 });
 
 /**
- * Before executiong the tests, register the plugin in a lager instance
+ * Before executiong the tests, register the plugin in a myrmex instance
  * @return Promise
  */
 before(function() {
@@ -43,9 +43,9 @@ before(function() {
     endpointsPath: 'test-assets' + path.sep + 'endpoints',
     modelsPath: 'test-assets' + path.sep + 'models'
   });
-  assert.equal(nodeApiGatewayPlugin.lager, undefined);
-  lager.registerPlugin(nodeApiGatewayPlugin);
-  assert.equal(nodeApiGatewayPlugin.lager, lager);
+  assert.equal(nodeApiGatewayPlugin.myrmex, undefined);
+  myrmex.registerPlugin(nodeApiGatewayPlugin);
+  assert.equal(nodeApiGatewayPlugin.myrmex, myrmex);
 });
 
 

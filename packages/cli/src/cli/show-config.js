@@ -4,7 +4,7 @@
  * This module exports a function that enrich the interactive command line and return a promise
  * @returns {Promise} - a promise that resolve when the operation is done
  */
-module.exports = (icli, lager) => {
+module.exports = (icli, myrmex) => {
 
   const config = {
     section: 'CLI core',
@@ -18,7 +18,7 @@ module.exports = (icli, lager) => {
       question: {
         message: 'Do you want to use syntax highlighting?',
         when: () => {
-          return lager.getConfig('colors') === undefined;
+          return myrmex.getConfig('colors') === undefined;
         }
       }
     }]
@@ -31,9 +31,9 @@ module.exports = (icli, lager) => {
    */
   function executeCommand(parameters) {
     if (parameters.colors === undefined) {
-      parameters.colors = lager.getConfig('colors');
+      parameters.colors = myrmex.getConfig('colors');
     }
-    let config = JSON.stringify(lager.getConfig(), null, 2);
+    let config = JSON.stringify(myrmex.getConfig(), null, 2);
     if (parameters.colors) {
       config = icli.highlight(config, { json: true });
     }

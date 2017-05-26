@@ -1,0 +1,46 @@
+{
+  "name": "@myrmex/core",
+  "version": "0.1.1",
+  "description": "Serverless applications builder",
+  "files": [
+    "src"
+  ],
+  "main": "./src/lib/myrmex.js",
+  "dependencies": {
+    "bluebird": "^3.5.0",
+    "bunyan": "^1.8.10",
+    "lodash": "^4.17.4",
+    "pebo": "0.0.2"
+  },
+  "devDependencies": {
+    "codecov": "^2.1.0",
+    "comquirer": "0.0.15",
+    "istanbul": "^0.4.5",
+    "mocha": "^3.3.0"
+  },
+  "keywords": [
+    "AWS",
+    "Amazon",
+    "Lambda",
+    "Api",
+    "Gateway",
+    "Swagger"
+  ],
+  "author": "Alexis Hénaut",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/myrmx/myrmex.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/myrmx/myrmex/issues"
+  },
+  "homepage": "https://github.com/myrmx/myrmex#readme",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "NODE_ENV=test istanbul cover --include-all-sources=true ./node_modules/mocha/bin/_mocha -- --recursive",
+    "test-ci": "NODE_ENV=test istanbul cover --include-all-sources=true ./node_modules/mocha/bin/_mocha --report lcovonly -- --recursive && codecov -F unit"
+  }
+}

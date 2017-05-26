@@ -1,0 +1,12 @@
+{
+  "name": "A Myrmex project",
+  "plugins": [
+    "@myrmex/api-gateway",
+    "@myrmex/cors"
+  ],
+  "config": {
+    "cors": {
+      "Access-Control-Allow-Methods": "DELETE,GET,PATCH,POST"
+    }
+  }
+}

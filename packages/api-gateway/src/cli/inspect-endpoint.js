@@ -41,7 +41,7 @@ module.exports = (icli) => {
       question: {
         message: 'Do you want to use syntax highlighting?',
         when: (answers, cmdParameterValues) => {
-          return cmdParameterValues.colors === undefined && plugin.lager.getConfig('colors') === undefined;
+          return cmdParameterValues.colors === undefined && plugin.myrmex.getConfig('colors') === undefined;
         }
       }
     }, {
@@ -130,7 +130,7 @@ module.exports = (icli) => {
    * @returns {Promise<null>} - The execution stops here
    */
   function executeCommand(parameters) {
-    if (parameters.colors === undefined) { parameters.colors = plugin.lager.getConfig('colors'); }
+    if (parameters.colors === undefined) { parameters.colors = plugin.myrmex.getConfig('colors'); }
 
     return plugin.findEndpoint(parameters.resourcePath, parameters.httpMethod)
     .then(endpoint => {

@@ -25,8 +25,8 @@ module.exports.hook = function loadIntegrationsHook(region, context, endpoints, 
       const lambdasIdentifiers = [];
       _.forEach(endpoints, endpoint => {
         const spec = endpoint.getSpec();
-        if (spec['x-lager'] && spec['x-lager'].lambda) {
-          lambdasIdentifiers.push(spec['x-lager'].lambda);
+        if (spec['x-myrmex'] && spec['x-myrmex'].lambda) {
+          lambdasIdentifiers.push(spec['x-myrmex'].lambda);
         }
       });
       lambdas = _.filter(lambdas, lambda => {
@@ -39,14 +39,14 @@ module.exports.hook = function loadIntegrationsHook(region, context, endpoints, 
       return Promise.resolve(lambdas);
     }
 
-    plugin.lager.call('cli:print', lambdas.length + ' Lambda(s) to deploy: ' + _.map(lambdas, l => l.getIdentifier()).join(', ') + '\n\n');
+    plugin.myrmex.call('cli:print', lambdas.length + ' Lambda(s) to deploy: ' + _.map(lambdas, l => l.getIdentifier()).join(', ') + '\n\n');
 
     // Deploy the lambdas
     context.alias = alias;
     return Promise.map(lambdas, lambda => lambda.deploy(region, context))
     .then(reports => {
       // Show the result of the deployments in the console
-      plugin.lager.call('cli:print', genReportsTable(reports));
+      plugin.myrmex.call('cli:print', genReportsTable(reports));
     })
     .then(() => {
       return lambdas;

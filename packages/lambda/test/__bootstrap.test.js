@@ -18,7 +18,7 @@ const assert = require('assert');
 const path = require('path');
 const Promise = require('bluebird');
 const _ = require('lodash');
-const lager = require('../../lager');
+const myrmex = require('../../core');
 const nodeLambdaPlugin = testRequire('src/index');
 
 Promise.config({
@@ -34,7 +34,7 @@ process.on('unhandledRejection', (reason, p) => {
 });
 
 /**
- * Before executiong the tests, register the plugin in a lager instance
+ * Before executiong the tests, register the plugin in a myrmex instance
  * @return Promise
  */
 before(function() {
@@ -42,9 +42,9 @@ before(function() {
     lambdasPath: 'test-assets' + path.sep + 'lambdas',
     modulesPath: 'test-assets' + path.sep + 'modules'
   });
-  assert.equal(nodeLambdaPlugin.lager, undefined);
-  lager.registerPlugin(nodeLambdaPlugin);
-  assert.equal(nodeLambdaPlugin.lager, lager);
+  assert.equal(nodeLambdaPlugin.myrmex, undefined);
+  myrmex.registerPlugin(nodeLambdaPlugin);
+  assert.equal(nodeLambdaPlugin.myrmex, myrmex);
 });
 
 

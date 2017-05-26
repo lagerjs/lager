@@ -1,5 +1,5 @@
 {
-  "name": "@lager/api-gateway",
+  "name": "@myrmex/api-gateway",
   "version": "0.1.1",
   "dependencies": {
     "abbrev": {

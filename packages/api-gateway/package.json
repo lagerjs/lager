@@ -1,14 +1,14 @@
 {
-  "name": "@lager/api-gateway",
+  "name": "@myrmex/api-gateway",
   "version": "0.1.1",
-  "description": "A Lager plugin to manage APIs in AWS API Gateway",
+  "description": "A Myrmex plugin to manage APIs in AWS API Gateway",
   "main": "src/index.js",
   "scripts": {
     "test": "NODE_ENV=test istanbul cover --include-all-sources=true ./node_modules/mocha/bin/_mocha -- --recursive",
     "test-ci": "NODE_ENV=test istanbul cover --include-all-sources=true ./node_modules/mocha/bin/_mocha --report lcovonly -- --recursive && codecov -F unit"
   },
   "keywords": [
-    "Lager",
+    "Myrmex",
     "plugin",
     "aws",
     "api",
@@ -17,13 +17,13 @@
   "author": "Alexis Hénaut",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lagerjs/lager.git"
+    "url": "git+https://github.com/myrmx/myrmex.git"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/lagerjs/lager/issues"
+    "url": "https://github.com/myrmx/myrmex/issues"
   },
-  "homepage": "https://github.com/lagerjs/lager#readme",
+  "homepage": "https://github.com/myrmx/myrmex#readme",
   "dependencies": {
     "aws-sdk": "^2.48.0",
     "bluebird": "^3.5.0",
@@ -41,6 +41,6 @@
     "mocha": "^3.3.0"
   },
   "peerDependencies": {
-    "@lager/lager": "*"
+    "@myrmex/core": "*"
   }
 }

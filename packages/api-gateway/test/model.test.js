@@ -43,7 +43,7 @@ describe('A model', () => {
     nestedModel = new Model('my-nested-model', nestedSpec);
     assert.ok(model instanceof Model);
     assert.ok(nestedModel instanceof Model);
-    plugin.lager.when('afterModelsLoad', models => {
+    plugin.myrmex.when('afterModelsLoad', models => {
       models.push(model);
       models.push(nestedModel);
       return Promise.resolve();

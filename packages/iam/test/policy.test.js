@@ -151,7 +151,7 @@ describe('An IAM policy', () => {
   });
 
 
-  it('should not add "_" to the policy name when the Lager "context" does not provide environment or stage', function() {
+  it('should not add "_" to the policy name when the Myrmex "context" does not provide environment or stage', function() {
     return policy.deploy({ environment: '', stage: '' })
     .then(report => {
       assert.equal(report.name, 'MyPolicy');

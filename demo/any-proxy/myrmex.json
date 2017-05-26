@@ -1,0 +1,7 @@
+{
+  "name": "any-proxy",
+  "plugins": [
+    "@myrmex/api-gateway",
+    "@myrmex/lambda"
+  ]
+}

@@ -55,22 +55,22 @@ module.exports = (icli) => {
       cmdSpec: '-e, --environment [environment]',
       description: 'select the environment',
       type: 'input',
-      default: plugin.lager.getConfig('environment') || 'DEV',
+      default: plugin.myrmex.getConfig('environment') || 'DEV',
       question: {
         message: 'On which environment do you want to test?',
         when: (answers, cmdParameterValues) => {
-          return cmdParameterValues['environment'] === undefined && plugin.lager.getConfig('environment') === undefined;
+          return cmdParameterValues['environment'] === undefined && plugin.myrmex.getConfig('environment') === undefined;
         }
       }
     }, {
-      cmdSpec: '-s, --stage [stage]',
-      description: 'select the stage (aka Lambda alias) to test',
+      cmdSpec: '-a, --alias [alias]',
+      description: 'select the alias to test',
       type: 'input',
-      default: plugin.lager.getConfig('stage') || 'v0',
+      default: plugin.myrmex.getConfig('stage') || 'v0',
       question: {
-        message: 'Which stage (aka Lambda alias) do you want to apply?',
+        message: 'Which alias of the Lambda do you want to invoke?',
         when: (answers, cmdParameterValues) => {
-          return cmdParameterValues['stage'] === undefined && plugin.lager.getConfig('stage') === undefined;
+          return cmdParameterValues['alias'] === undefined && plugin.myrmex.getConfig('lambda.alias') === undefined;
         }
       }
     }]
@@ -163,8 +163,8 @@ module.exports = (icli) => {
 
     return plugin.findLambda(parameters.lambdaIdentifier)
     .then(lambda => {
-      if (parameters.environment === undefined) { parameters.environment = plugin.lager.getConfig('environment'); }
-      if (parameters.stage === undefined) { parameters.stage = plugin.lager.getConfig('stage'); }
+      if (parameters.environment === undefined) { parameters.environment = plugin.myrmex.getConfig('environment'); }
+      if (parameters.stage === undefined) { parameters.stage = plugin.myrmex.getConfig('stage'); }
       const context = { stage: parameters.stage, environment: parameters.environment };
       return lambda.execute(parameters.region, context, parameters.event ? lambda.loadEventExample(parameters.event) : {});
     })

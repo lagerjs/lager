@@ -10,8 +10,8 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@lager/api-gateway": "../../packages/api-gateway",
-    "@lager/cors": "../../packages/cors",
-    "@lager/lager": "../../packages/lager"
+    "@myrmex/api-gateway": "../../packages/api-gateway",
+    "@myrmex/cors": "../../packages/cors",
+    "@myrmex/core": "../../packages/myrmex"
   }
 }

@@ -4,6 +4,6 @@ docker run \
        --env HOST_UID=`id -u` \
        --env HOST_GID=`id -g` \
        --env-file ./env.list \
-       -v `pwd`:/home/lager/app \
+       -v `pwd`:/home/myrmex/app \
        -it \
-       lager/dev
+       myrmex/dev

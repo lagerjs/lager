@@ -10,7 +10,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@lager/iam": "../../packages/iam",
-    "@lager/lager": "../../packages/lager"
+    "@myrmex/iam": "../../packages/iam",
+    "@myrmex/core": "../../packages/myrmex"
   }
 }

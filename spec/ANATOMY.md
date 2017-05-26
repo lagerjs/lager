@@ -1,7 +1,7 @@
 ```text
 ├── apis                              The APIs defined by the application
 |   ├── {an-api-identifier}           A custom identifier for the API
-|   |   └── spec.json                 The API's specification that will be completed by Lager
+|   |   └── spec.json                 The API's specification that will be completed by Myrmex
 |   └── {another-api-identifier}
 |       └── spec.json
 ├── endpoints                         Contains the definition of all endpoints

@@ -107,19 +107,19 @@ module.exports = Endpoint;
  * @returns {Object} - the cleaned Swagger/OpenAPI specification
  */
 function cleanSpecForApiGateway(spec) {
-  delete spec['x-lager'];
+  delete spec['x-myrmex'];
   return spec;
 }
 
 /**
- * Clean a specification to remove parts specific to lager and ApiGateway
+ * Clean a specification to remove parts specific to myrmex and ApiGateway
  * @param {Object} spec - an Swagger/OpenAPI specification
  * @returns {Object} - the cleaned Swagger/OpenAPI specification
  */
 function cleanSpecForDoc(spec) {
-  // For documentation, we can remove the OPTION methods, the lager extentions
+  // For documentation, we can remove the OPTION methods, the myrmex extentions
   // and the extentions from API Gateway Importer
-  delete spec['x-lager'];
+  delete spec['x-myrmex'];
   delete spec['x-amazon-apigateway-auth'];
   delete spec['x-amazon-apigateway-integration'];
   return spec;

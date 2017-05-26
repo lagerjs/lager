@@ -7,7 +7,7 @@ const Promise = require('bluebird');
 const fs = require('fs-extra');
 const copy = Promise.promisify(fs.copy);
 const remove = Promise.promisify(fs.remove);
-const icli = require('../../packages/cli/src/bin/lager');
+const icli = require('../../packages/cli/src/bin/myrmex');
 const showStdout = !!process.env.LAGER_SHOW_STDOUT;
 
 describe('Creation and deployment of a Lambda project', () => {
@@ -24,7 +24,7 @@ describe('Creation and deployment of a Lambda project', () => {
     return Promise.all([
       remove(path.join(__dirname, 'lambda')),
       remove(path.join(__dirname, 'iam')),
-      remove(path.join(__dirname, 'lager.log'))
+      remove(path.join(__dirname, 'myrmex.log'))
     ]);
   });
 
@@ -131,12 +131,15 @@ describe('Creation and deployment of a Lambda project', () => {
   describe('Execution of Lambdas in AWS', () => {
     it('should be done via the sub-command "test-lambda"', () => {
       icli.catchPrintStart(showStdout);
-      return icli.parse('node script.js test-lambda config-128 -r us-east-1 -e DEV -s v0'.split(' '))
+      return icli.parse('node script.js test-lambda config-128 -r us-east-1 -e DEV -a v0'.split(' '))
       .then(res => {
-        return icli.parse('node script.js test-lambda config-512 -r us-east-1 -e DEV -s v0'.split(' '));
+        return icli.parse('node script.js test-lambda config-128 -r us-east-1 -e DEV -a ""'.split(' '));
       })
       .then(res => {
-        return icli.parse('node script.js test-lambda config-1536 -r us-east-1 -e DEV -s v0'.split(' '));
+        return icli.parse('node script.js test-lambda config-512 -r us-east-1 -e DEV -a v0'.split(' '));
+      })
+      .then(res => {
+        return icli.parse('node script.js test-lambda config-1536 -r us-east-1 -e DEV -a v0'.split(' '));
       })
       .then(res => {
         icli.catchPrintStop();

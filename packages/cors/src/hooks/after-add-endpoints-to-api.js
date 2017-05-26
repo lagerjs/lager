@@ -16,8 +16,8 @@ module.exports = () => {
 
     // We retrieve the API level configuration and add it to the project configuration
     const apiSpec = api.getSpec();
-    if (apiSpec['x-lager'] && apiSpec['x-lager'].cors) {
-      Object.assign(apiCors, apiSpec['x-lager'].cors);
+    if (apiSpec['x-myrmex'] && apiSpec['x-myrmex'].cors) {
+      Object.assign(apiCors, apiSpec['x-myrmex'].cors);
     }
 
     // For each endpoint path, we check there is a specific configuration
@@ -39,7 +39,7 @@ module.exports = () => {
 
       // We check if there is specific configuration for this resource path
       try {
-        const resourcePathCors = require(path.join(process.cwd(), plugin.lager.getConfig('apiGateway.endpointsPath'), resourcePath, 'cors'));
+        const resourcePathCors = require(path.join(process.cwd(), plugin.myrmex.getConfig('apiGateway.endpointsPath'), resourcePath, 'cors'));
         // We retrieve the configuration for this resource path and add it to the configuration
         Object.assign(cors, resourcePathCors.default || {});
         // We retrieve the configuration for this resource path for the API if it exist and add it to the configuration
@@ -77,7 +77,7 @@ module.exports = () => {
 
 function createOptionsEndpoint(cors, resourcePath, definedMethods) {
   const plugin = require('..');
-  const Endpoint = plugin.lager.getPlugin('api-gateway').getEndpointConstructor();
+  const Endpoint = plugin.myrmex.getPlugin('api-gateway').getEndpointConstructor();
 
   const spec = JSON.parse(JSON.stringify(baseSpec));
   // We add the CORS headers to the OPTION endpoint
@@ -94,7 +94,7 @@ function createOptionsEndpoint(cors, resourcePath, definedMethods) {
       // For Access-Control-Allow-Methods, we remove "ANY" that is specific to API Gateway and add all methods covered by ANY
       if (configuredMethods.indexOf('ANY') !== -1) {
         // If ANY is part of the "allow methods" configuration, we init the list with all http methods managed by API Gateway
-        const allowedMethods = JSON.parse(JSON.stringify(plugin.lager.getPlugin('api-gateway').httpMethods));
+        const allowedMethods = JSON.parse(JSON.stringify(plugin.myrmex.getPlugin('api-gateway').httpMethods));
         // We exclude methods that have a endpoint explicitely defined (that means method definitions that override the ANY definition)
         // but are not present in the cors configuration
         definedMethods.forEach(method => {

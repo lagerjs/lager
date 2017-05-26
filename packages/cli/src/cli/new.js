@@ -42,18 +42,18 @@ module.exports = (icli) => {
   function getChoices() {
     return {
       plugins: [{
-        value: '@lager/iam',
-        name: icli.format.info('@lager/iam') + ' - manage IAM policies and roles',
+        value: '@myrmex/iam',
+        name: icli.format.info('@myrmex/iam') + ' - manage IAM policies and roles',
         short: 'iam',
         checked: true
       }, {
-        value: '@lager/api-gateway',
-        name: icli.format.info('@lager/api-gateway') + ' - deploy swagger definitions in API gateway',
+        value: '@myrmex/api-gateway',
+        name: icli.format.info('@myrmex/api-gateway') + ' - deploy swagger definitions in API gateway',
         short: 'api-gateway',
         checked: true
       }, {
-        value: '@lager/lambda',
-        name: icli.format.info('@lager/lambda') + ' - deploy Lambda in AWS and associate them to API endpoints',
+        value: '@myrmex/lambda',
+        name: icli.format.info('@myrmex/lambda') + ' - deploy Lambda in AWS and associate them to API endpoints',
         short: 'lambda',
         checked: true
       }]
@@ -78,12 +78,12 @@ module.exports = (icli) => {
       });
     }
     return p.then(() => {
-      icli.print('\n  Creating Lager config file (' + icli.format.info('lager.json') + ')');
+      icli.print('\n  Creating Myrmex config file (' + icli.format.info('myrmex.json') + ')');
       const projectConfig = {
-        name: parameters.projectName || 'A Lager project',
+        name: parameters.projectName || 'A Myrmex project',
         plugins: parameters.plugins
       };
-      return fs.writeFileAsync(configFilePath + path.sep + 'lager.json', JSON.stringify(projectConfig, null, 2));
+      return fs.writeFileAsync(configFilePath + path.sep + 'myrmex.json', JSON.stringify(projectConfig, null, 2));
     })
     .then(() => {
       try {
@@ -102,9 +102,9 @@ module.exports = (icli) => {
       }
     })
     .then(() => {
-      icli.print('\n  Installing Lager and Lager plugins');
+      icli.print('\n  Installing Myrmex and Myrmex plugins');
       const cmdArgs = parameters.plugins;
-      cmdArgs.unshift('@lager/lager');
+      cmdArgs.unshift('@myrmex/core');
       cmdArgs.unshift('--save-dev');
       cmdArgs.unshift('install');
       icli.print('  Running ' + icli.format.cmd('npm ' + cmdArgs.join(' ') + '\n'));
@@ -114,11 +114,11 @@ module.exports = (icli) => {
     .spread((stdOut, stdErr) => {
       icli.print(stdOut);
       icli.print(stdErr);
-      let msg = icli.format.ok('  A new lager project has been created!\n\n');
+      let msg = icli.format.ok('  A new myrmex project has been created!\n\n');
       if (parameters.projectName) {
         msg += '  You should now enter in the ' + icli.format.info(parameters.projectName) + ' folder to start working\n';
       }
-      msg += '  Execute ' + icli.format.cmd('lager -h') + ' in the root folder of the project to see available commands\n';
+      msg += '  Execute ' + icli.format.cmd('myrmex -h') + ' in the root folder of the project to see available commands\n';
       icli.print(msg);
       return true;
     });

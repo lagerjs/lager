@@ -1,11 +1,11 @@
-<img align="right" alt="lager logo" src="https://raw.githubusercontent.com/lagerjs/lager/master/img/lager-logo2.png" />
+<img align="right" alt="myrmex logo" src="https://raw.githubusercontent.com/myrmx/myrmex/master/img/myrmex-logo2.png" />
 
-# Lager (beta)
+# Myrmex (beta)
 
-[![Build Status](https://travis-ci.org/lagerjs/lager.svg)](https://travis-ci.org/lagerjs/lager)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/249a9410043a43dca599d29f53a7bf98)](https://www.codacy.com/app/alexisno/lager?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=lagerjs/lager&amp;utm_campaign=Badge_Grade)
-[![Codecov](https://codecov.io/gh/lagerjs/lager/branch/master/graph/badge.svg)](https://codecov.io/gh/lagerjs/lager)
-[![Known Vulnerabilities](https://snyk.io/test/github/lagerjs/lager/badge.svg?targetFile=packages%2Flager%2Fpackage.json)](https://snyk.io/test/github/lagerjs/lager?targetFile=packages%2Flager%2Fpackage.json)
+[![Build Status](https://travis-ci.org/myrmx/myrmex.svg)](https://travis-ci.org/myrmx/myrmex)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/249a9410043a43dca599d29f53a7bf98)](https://www.codacy.com/app/alexisno/myrmex?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=myrmx/myrmex&amp;utm_campaign=Badge_Grade)
+[![Codecov](https://codecov.io/gh/myrmx/myrmex/branch/master/graph/badge.svg)](https://codecov.io/gh/myrmx/myrmex)
+[![Known Vulnerabilities](https://snyk.io/test/github/myrmx/myrmex/badge.svg?targetFile=packages%2Fmyrmex%2Fpackage.json)](https://snyk.io/test/github/myrmx/myrmex?targetFile=packages%2Fmyrmex%2Fpackage.json)
 
 ---
 
@@ -13,9 +13,9 @@
 
 The **Lambda API Gateway Endpoints Router**
 
-> AWS Lambda + API Gateway + Swagger specification === *Lager*
+> AWS Lambda + API Gateway + Swagger specification === *Myrmex*
 
-Lager helps you to organize your code and deploy serverless applications in AWS. Its plugin system allows you to work with
+Myrmex helps you to organize your code and deploy serverless applications in AWS. Its plugin system allows you to work with
 AWS Lambda or API Gateway or both of them. The IAM plugin can help you to declare the IAM permissions your application needs
 in your versionning system.
 
@@ -26,19 +26,19 @@ Write your own plugins to enrich the command line, create higher level functiona
 Then share it as npm modules!
 
 ```
-$ npm install -g @lager/cli
-$ lager new my-serverless-project
+$ npm install -g myrmex
+$ myrmex new my-serverless-project
 $ cd my-serverless-project
-$ lager -h
+$ myrmex -h
 ```
 
-Documentation available at [https://lagerjs.github.io](https://lagerjs.github.io).
+Documentation available at [https://myrmx.github.io](https://myrmx.github.io).
 
 ---
 
 ## Code coverage
 
-![Codecov graph](https://codecov.io/gh/lagerjs/lager/branch/master/graphs/icicle.svg "Code coverage")
+![Codecov graph](https://codecov.io/gh/myrmx/myrmex/branch/master/graphs/icicle.svg "Code coverage")
 
 ---
 
@@ -46,11 +46,11 @@ Documentation available at [https://lagerjs.github.io](https://lagerjs.github.io
 
 | NPM package        | Analysis                                                                                                                       |
 | ------------------:| ------------------------------------------------------------------------------------------------------------------------------ |
-|       @lager/lager | [![Known Vulnerabilities](https://snyk.io/test/npm/@lager/lager/badge.svg)](https://snyk.io/test/npm/@lager/lager)             |
-|         @lager/cli | [![Known Vulnerabilities](https://snyk.io/test/npm/@lager/cli/badge.svg)](https://snyk.io/test/npm/@lager/cli)                 |
-|         @lager/iam | [![Known Vulnerabilities](https://snyk.io/test/npm/@lager/iam/badge.svg)](https://snyk.io/test/npm/@lager/iam)                 |
-| @lager/lambda | [![Known Vulnerabilities](https://snyk.io/test/npm/@lager/lambda/badge.svg)](https://snyk.io/test/npm/@lager/lambda) |
-| @lager/api-gateway | [![Known Vulnerabilities](https://snyk.io/test/npm/@lager/api-gateway/badge.svg)](https://snyk.io/test/npm/@lager/api-gateway) |
+|       @myrmex/core | [![Known Vulnerabilities](https://snyk.io/test/npm/@myrmex/core/badge.svg)](https://snyk.io/test/npm/@myrmex/core)             |
+|         myrmex | [![Known Vulnerabilities](https://snyk.io/test/npm/myrmex/badge.svg)](https://snyk.io/test/npm/myrmex)                 |
+|         @myrmex/iam | [![Known Vulnerabilities](https://snyk.io/test/npm/@myrmex/iam/badge.svg)](https://snyk.io/test/npm/@myrmex/iam)                 |
+| @myrmex/lambda | [![Known Vulnerabilities](https://snyk.io/test/npm/@myrmex/lambda/badge.svg)](https://snyk.io/test/npm/@myrmex/lambda) |
+| @myrmex/api-gateway | [![Known Vulnerabilities](https://snyk.io/test/npm/@myrmex/api-gateway/badge.svg)](https://snyk.io/test/npm/@myrmex/api-gateway) |
 
 ---
 

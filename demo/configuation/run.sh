@@ -4,7 +4,7 @@ docker run \
        --env HOST_UID=`id -u` \
        --env HOST_GID=`id -g` \
        --env-file ./env.list \
-       -v `pwd`:/home/lager/app \
-       -v `pwd`/../../packages/cli:/home/lager/.node/lib/node_modules/@lager/cli \
+       -v `pwd`:/home/myrmex/app \
+       -v `pwd`/../../packages/cli:/home/myrmex/.node/lib/node_modules/myrmex \
        -it \
-       lager/dev
+       myrmex/dev

@@ -23,7 +23,7 @@ function loadApis() {
   const apiSpecsPath = path.join(process.cwd(), plugin.config.apisPath);
 
   // This event allows to inject code before loading all APIs
-  return plugin.lager.fire('beforeApisLoad')
+  return plugin.myrmex.fire('beforeApisLoad')
   .then(() => {
     // Retrieve configuration path of all API specifications
     return Promise.promisify(fs.readdir)(apiSpecsPath);
@@ -40,7 +40,7 @@ function loadApis() {
   })
   .then(apis => {
     // This event allows to inject code to add or delete or alter API specifications
-    return plugin.lager.fire('afterApisLoad', apis);
+    return plugin.myrmex.fire('afterApisLoad', apis);
   })
   .spread(loadedApis => {
     apis = loadedApis;
@@ -62,21 +62,21 @@ function loadApis() {
  * @returns {Promise<Api>} - the promise of an API instance
  */
 function loadApi(apiSpecPath, identifier) {
-  return plugin.lager.fire('beforeApiLoad', apiSpecPath, identifier)
+  return plugin.myrmex.fire('beforeApiLoad', apiSpecPath, identifier)
   .spread((apiSpecPath, identifier) => {
     // Because we use require() to get the spec, it could either be a JSON file
     // or the content exported by a node module
     // But because require() caches the content it loads, we clone the result to avoid bugs
     // if the function is called twice
     const apiSpec = _.cloneDeep(require(apiSpecPath));
-    apiSpec['x-lager'] = apiSpec['x-lager'] || {};
+    apiSpec['x-myrmex'] = apiSpec['x-myrmex'] || {};
 
-    // Lasy loading because the plugin has to be registered in a Lager instance before requiring ./endpoint
+    // Lasy loading because the plugin has to be registered in a Myrmex instance before requiring ./endpoint
     const Api = require('./api');
     const api = new Api(apiSpec, identifier);
 
     // This event allows to inject code to alter the API specification
-    return plugin.lager.fire('afterApiLoad', api);
+    return plugin.myrmex.fire('afterApiLoad', api);
   })
   .spread(api => {
     return api.init();
@@ -95,7 +95,7 @@ function loadEndpoints() {
 
   const endpointSpecsPath = path.join(process.cwd(), plugin.config.endpointsPath);
 
-  return plugin.lager.fire('beforeEndpointsLoad')
+  return plugin.myrmex.fire('beforeEndpointsLoad')
   .spread(() => {
     const endpointPromises = [];
     file.walkSync(endpointSpecsPath, (dirPath, dirs, files) => {
@@ -113,7 +113,7 @@ function loadEndpoints() {
     return Promise.all(endpointPromises);
   })
   .then(endpoints => {
-    return plugin.lager.fire('afterEndpointsLoad', endpoints);
+    return plugin.myrmex.fire('afterEndpointsLoad', endpoints);
   })
   .spread(loadedEndpoints => {
     endpoints = loadedEndpoints;
@@ -129,7 +129,7 @@ function loadEndpoints() {
 
 /**
  * Load an Endpoint specification
- * From the `endpointSpecRootPath` directory, lager will look for a specification in
+ * From the `endpointSpecRootPath` directory, myrmex will look for a specification in
  * each subdirectory following the structure `path/to/the/resource/HTTP_METHOD/`
  * @param {string} endpointSpecRootPath - the root directory of the endpoint configuration
  * @param {string} resourcePath - the URL path to the endpoint resource
@@ -138,7 +138,7 @@ function loadEndpoints() {
  */
 function loadEndpoint(endpointSpecRootPath, resourcePath, method) {
   method = method.toUpperCase();
-  return plugin.lager.fire('beforeEndpointLoad', endpointSpecRootPath, resourcePath, method)
+  return plugin.myrmex.fire('beforeEndpointLoad', endpointSpecRootPath, resourcePath, method)
   .spread(() => {
     const parts = resourcePath.split('/');
     const subPath = parts.join(path.sep) + path.sep + method;
@@ -155,14 +155,14 @@ function loadEndpoint(endpointSpecRootPath, resourcePath, method) {
       });
     })
     .then(() => {
-      // Lasy loading because the plugin has to be registered in a Lager instance before requiring ./endpoint
+      // Lasy loading because the plugin has to be registered in a Myrmex instance before requiring ./endpoint
       const Endpoint = require('./endpoint');
       return Promise.resolve(new Endpoint(spec, resourcePath, method));
     });
   })
   .then(endpoint => {
     // This event allows to inject code to alter the endpoint specification
-    return plugin.lager.fire('afterEndpointLoad', endpoint);
+    return plugin.myrmex.fire('afterEndpointLoad', endpoint);
   })
   .spread((endpoint) => {
     return Promise.resolve(endpoint);
@@ -177,7 +177,7 @@ function loadEndpoint(endpointSpecRootPath, resourcePath, method) {
 function loadModels() {
   const modelSpecsPath = path.join(process.cwd(), plugin.config.modelsPath);
 
-  return plugin.lager.fire('beforeModelsLoad')
+  return plugin.myrmex.fire('beforeModelsLoad')
   .spread(() => {
     return Promise.promisify(fs.readdir)(modelSpecsPath);
   })
@@ -190,7 +190,7 @@ function loadModels() {
     });
   })
   .then(models => {
-    return plugin.lager.fire('afterModelsLoad', models);
+    return plugin.myrmex.fire('afterModelsLoad', models);
   })
   .spread(models => {
     return Promise.resolve(models);
@@ -209,7 +209,7 @@ function loadModels() {
  * @returns {Promise<Model>} - the promise of an model instance
  */
 function loadModel(modelSpecPath, name) {
-  return plugin.lager.fire('beforeModelLoad', modelSpecPath, name)
+  return plugin.myrmex.fire('beforeModelLoad', modelSpecPath, name)
   .spread(() => {
     // Because we use require() to get the spec, it could either be a JSON file
     // or the content exported by a node module
@@ -217,13 +217,13 @@ function loadModel(modelSpecPath, name) {
     // if the function is called twice
     const modelSpec = _.cloneDeep(require(modelSpecPath));
 
-    // Lasy loading because the plugin has to be registered in a Lager instance before requiring ./model
+    // Lasy loading because the plugin has to be registered in a Myrmex instance before requiring ./model
     const Model = require('./model');
     return Promise.resolve(new Model(name, modelSpec));
   })
   .then(model => {
     // This event allows to inject code to alter the model specification
-    return plugin.lager.fire('afterModelLoad', model);
+    return plugin.myrmex.fire('afterModelLoad', model);
   })
   .spread((model) => {
     return Promise.resolve(model);
@@ -246,10 +246,10 @@ function loadIntegrations(region, context, endpoints) {
   // The list of endpoints that must be deployed
   // An array that will receive integration results
   const integrationDataInjectors = [];
-  return plugin.lager.fire('loadIntegrations', region, context, endpoints, integrationDataInjectors)
+  return plugin.myrmex.fire('loadIntegrations', region, context, endpoints, integrationDataInjectors)
   .spread((region, context, endpoints, integrationDataInjectors) => {
     // At this point, integration plugins returned their integrationDataInjectors
-    return plugin.lager.fire('beforeAddIntegrationDataToEndpoints', endpoints, integrationDataInjectors);
+    return plugin.myrmex.fire('beforeAddIntegrationDataToEndpoints', endpoints, integrationDataInjectors);
   })
   .spread((endpoints, integrationDataInjectors) => {
     return Promise.map(integrationDataInjectors, (integrationDataInjector) => {
@@ -258,7 +258,7 @@ function loadIntegrations(region, context, endpoints) {
       });
     })
     .then(() => {
-      return plugin.lager.fire('afterAddIntegrationDataToEndpoints', endpoints, integrationDataInjectors);
+      return plugin.myrmex.fire('afterAddIntegrationDataToEndpoints', endpoints, integrationDataInjectors);
     });
   })
   .spread((endpoints, integrationDataInjectors) => {
@@ -316,7 +316,7 @@ function findModel(name) {
 }
 
 /**
- * Enrich the lager command line
+ * Enrich the myrmex command line
  * @returns {Promise<[program, inquirer]>} - promise of an array containing the parameters
  */
 function registerCommands(icli) {

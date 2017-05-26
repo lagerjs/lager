@@ -1,0 +1,7 @@
+{
+  "name": "A Myrmex project",
+  "plugins": [
+    "@myrmex/iam",
+    "@myrmex/lambda"
+  ]
+}

@@ -39,7 +39,7 @@ describe('The integration data injector', () => {
 
     const fakeEndpoint = {
       spec: {
-        'x-lager': {
+        'x-myrmex': {
           lambda: 'MyLambda'
         }
       },
@@ -50,7 +50,7 @@ describe('The integration data injector', () => {
 
     injector.applyToEndpoint(fakeEndpoint);
     const expected = {
-      'x-lager': {
+      'x-myrmex': {
         lambda: 'MyLambda'
       },
       'x-amazon-apigateway-integration': {
@@ -72,7 +72,7 @@ describe('The integration data injector', () => {
 
     const fakeEndpoint = {
       spec: {
-        'x-lager': {
+        'x-myrmex': {
           lambda: 'AnotherLambda'
         }
       },
@@ -83,7 +83,7 @@ describe('The integration data injector', () => {
 
     injector.applyToEndpoint(fakeEndpoint);
     const expected = {
-      'x-lager': {
+      'x-myrmex': {
         lambda: 'AnotherLambda'
       }
     };

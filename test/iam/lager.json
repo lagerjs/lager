@@ -1,6 +1,0 @@
-{
-  "name": "iam",
-  "plugins": [
-    "@lager/iam"
-  ]
-}

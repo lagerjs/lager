@@ -1,12 +1,12 @@
-Lager plugins and hooks
+Myrmex plugins and hooks
 ===
 
-Hooks allow to inject code during the execution of Lager.
+Hooks allow to inject code during the execution of Myrmex.
 
 Definition of plugins
 ---
 
-A lager plugin is a node.js module that expose an object that has properties implementing hook functions.
+A myrmex plugin is a node.js module that expose an object that has properties implementing hook functions.
 A function that implements a hook MUST return the `Promise` of a array containing its own parameters,
 eventually transformed.
 
@@ -29,7 +29,7 @@ module.exports = {
 };
 ```
 
-Hooks fired by Lager api-gateway
+Hooks fired by Myrmex api-gateway
 ---
 
 ```javascript
@@ -64,7 +64,7 @@ module.exports = {
 };
 ```
 
-Hooks fired by Lager iam
+Hooks fired by Myrmex iam
 
 ```javascript
 // TODO
@@ -91,7 +91,7 @@ module.exports = {
 };
 ```
 
-Hooks fired by Lager lambda
+Hooks fired by Myrmex lambda
 ---
 
 ```javascript
@@ -123,10 +123,10 @@ module.exports = {
 Create new hooks
 ---
 
-A lager plugin can fire it's own hooks by calling `lager.fire()`
+A myrmex plugin can fire it's own hooks by calling `myrmex.fire()`
 
 ```javascript
-lager.fire('myNewHookToInjectCode', argument1, argument2)
+myrmex.fire('myNewHookToInjectCode', argument1, argument2)
 .spread((argument1, argument2) => {
   // Here I can continue to execute my plugin with arguments eventually transformed by other plugins
   // ...

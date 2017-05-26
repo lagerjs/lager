@@ -1,5 +1,5 @@
 {
-  "x-lager": {
+  "x-myrmex": {
     "apis": [
       "serverless-express"
     ],

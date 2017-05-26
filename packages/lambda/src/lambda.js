@@ -53,7 +53,7 @@ const Lambda = function Lambda(config, fsPath) {
 };
 
 /**
- * Returns the lambda identifier in the Lager project
+ * Returns the lambda identifier in the Myrmex project
  * @returns {string}
  */
 Lambda.prototype.getIdentifier = function getIdentifier() {
@@ -96,7 +96,7 @@ Lambda.prototype.getEventExamples = function getEventExamples() {
   })
   .catch(e => {
     if (e.code === 'ENOENT') {
-      plugin.lager.log.info('No events folder for Lamdba ' + this.getIdentifier());
+      plugin.myrmex.log.info('No events folder for Lamdba ' + this.getIdentifier());
       return Promise.resolve([]);
     }
     return Promise.reject(e);
@@ -179,18 +179,18 @@ Lambda.prototype.deploy = function deploy(region, context) {
   .then(isDeployed => {
     if (isDeployed) {
       // If the function already exists
-      plugin.lager.log.debug('The lambda ' + functionName + ' already exists');
+      plugin.myrmex.log.debug('The lambda ' + functionName + ' already exists');
       report.operation = 'Update';
       return this.update(awsLambda, context, report);
     }
     // If an error occured because the function does not exists, we create it
-    plugin.lager.log.debug('The lambda ' + functionName + ' does not exists');
+    plugin.myrmex.log.debug('The lambda ' + functionName + ' does not exists');
     report.operation = 'Creation';
     return this.create(awsLambda, context, report);
   })
   .then(data => {
     // Publish a new version
-    plugin.lager.log.debug('The Lambda ' + functionName + ' has been deployed');
+    plugin.myrmex.log.debug('The Lambda ' + functionName + ' has been deployed');
     if (context.alias) {
       // Set the alias if needed
       return this.setAlias(awsLambda, context.alias, report);
@@ -282,7 +282,7 @@ Lambda.prototype.create = function create(awsLambda, context, report) {
   const params = _.cloneDeep(this.config.params);
   return Promise.all([
     this.buildPackage(report),
-    plugin.lager.call('iam:retrieveRoleArn', params.Role, context, params.Role)
+    plugin.myrmex.call('iam:retrieveRoleArn', params.Role, context, params.Role)
   ])
   .spread((buffer, roleArn) => {
     initTime = process.hrtime();
@@ -315,7 +315,7 @@ Lambda.prototype.update = function update(awsLambda, context, report) {
     };
     return Promise.all([
       Promise.promisify(awsLambda.updateFunctionCode.bind(awsLambda))(codeParams),
-      plugin.lager.call('iam:retrieveRoleArn', this.config.params.Role, context, this.config.params.Role)
+      plugin.myrmex.call('iam:retrieveRoleArn', this.config.params.Role, context, this.config.params.Role)
     ]);
   })
   .spread((codeUpdateResponse, roleArn) => {
@@ -351,24 +351,24 @@ Lambda.prototype.publishVersion = function publishVersion(awsLambda) {
 Lambda.prototype.setAlias = function setAlias(awsLambda, alias, report) {
   return this.publishVersion(awsLambda)
   .then(data => {
-    plugin.lager.log.debug('The Lambda ' + this.config.params.functionName + ' has been published: version ' + data.Version);
+    plugin.myrmex.log.debug('The Lambda ' + this.config.params.functionName + ' has been published: version ' + data.Version);
     report.publishedVersion = data.Version;
     return Promise.all([data.Version, this.aliasExists(awsLambda, alias)]);
   })
   .spread((version, aliasExists) => {
     if (aliasExists) {
       // If the alias already exists
-      plugin.lager.log.debug('The lambda ' + this.config.params.FunctionName + ' already has an alias ' + version);
+      plugin.myrmex.log.debug('The lambda ' + this.config.params.FunctionName + ' already has an alias ' + version);
       report.aliasExisted = true;
       return this.updateAlias(awsLambda, version, alias);
     }
     // If an error occured because the alias does not exists, we create it
-    plugin.lager.log.debug('The lambda ' + this.config.params.FunctionName + ' does not have an alias ' + version);
+    plugin.myrmex.log.debug('The lambda ' + this.config.params.FunctionName + ' does not have an alias ' + version);
     report.aliasExisted = false;
     return this.createAlias(awsLambda, version, alias);
   })
   .then(data => {
-    plugin.lager.log.debug('The Lambda ' + this.config.params.FunctionName + ' version ' + data.FunctionVersion + ' has been aliased ' + data.AliasArn);
+    plugin.myrmex.log.debug('The Lambda ' + this.config.params.FunctionName + ' version ' + data.FunctionVersion + ' has been aliased ' + data.AliasArn);
     report.arn = data.AliasArn;
     return Promise.resolve(report);
   });

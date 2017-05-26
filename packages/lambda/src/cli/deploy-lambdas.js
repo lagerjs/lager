@@ -48,7 +48,7 @@ module.exports = (icli) => {
       question: {
         message: 'On which environment do you want to deploy?',
         when: (answers, cmdParameterValues) => {
-          return cmdParameterValues['environment'] === undefined && plugin.lager.getConfig('environment') === undefined;
+          return cmdParameterValues['environment'] === undefined && plugin.myrmex.getConfig('environment') === undefined;
         }
       }
     }, {
@@ -58,7 +58,7 @@ module.exports = (icli) => {
       question: {
         message: 'Which alias do you want to apply?',
         when: (answers, cmdParameterValues) => {
-          return cmdParameterValues['alias'] === undefined && plugin.lager.getConfig('lambda.alias') === undefined;
+          return cmdParameterValues['alias'] === undefined && plugin.myrmex.getConfig('lambda.alias') === undefined;
         }
       }
     }]
@@ -128,7 +128,7 @@ module.exports = (icli) => {
    * @returns {Promise<null>} - The execution stops here
    */
   function executeCommand(parameters) {
-    if (parameters.environment === undefined) { parameters.environment = plugin.lager.getConfig('environment'); }
+    if (parameters.environment === undefined) { parameters.environment = plugin.myrmex.getConfig('environment'); }
 
     return plugin.loadLambdas()
     .then(lambdas => {

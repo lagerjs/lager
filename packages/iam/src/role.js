@@ -49,7 +49,7 @@ Role.prototype.deploy = function deploy(context) {
   const report = { name: name };
   const initTime = process.hrtime();
 
-  return plugin.lager.fire('beforeDeployRole', this)
+  return plugin.myrmex.fire('beforeDeployRole', this)
   .spread(() => {
     return Promise.promisify(awsIAM.getRole.bind(awsIAM))({ RoleName: name })
     .catch(e => {
@@ -77,7 +77,7 @@ Role.prototype.deploy = function deploy(context) {
   })
   .then(data => {
     report.deployTime = process.hrtime(initTime);
-    return plugin.lager.fire('afterDeployPolicy', this);
+    return plugin.myrmex.fire('afterDeployPolicy', this);
   })
   .spread(() => {
     return Promise.resolve(report);

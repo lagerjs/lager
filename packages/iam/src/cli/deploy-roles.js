@@ -29,22 +29,22 @@ module.exports = (icli) => {
       cmdSpec: '-e, --environment [environment]',
       description: 'An environment identifier that will be used as a prefix',
       type: 'input',
-      default: plugin.lager.getConfig('environment') || 'DEV',
+      default: plugin.myrmex.getConfig('environment') || 'DEV',
       question: {
         message: 'Enter an environment identifier that will be used as a prefix',
         when: (answers, cmdParameterValues) => {
-          return cmdParameterValues['environment'] === undefined && plugin.lager.getConfig('environment') === undefined;
+          return cmdParameterValues['environment'] === undefined && plugin.myrmex.getConfig('environment') === undefined;
         }
       }
     }, {
       cmdSpec: '-s, --stage [stage]',
       description: 'A stage identifier that will be used as a suffix',
       type: 'input',
-      default: plugin.lager.getConfig('stage') || 'v0',
+      default: plugin.myrmex.getConfig('stage') || 'v0',
       question: {
         message: 'Enter a stage identifier that will be used as a suffix',
         when: (answers, cmdParameterValues) => {
-          return cmdParameterValues['stage'] === undefined && plugin.lager.getConfig('stage') === undefined;
+          return cmdParameterValues['stage'] === undefined && plugin.myrmex.getConfig('stage') === undefined;
         }
       }
     }]
@@ -83,8 +83,8 @@ module.exports = (icli) => {
    * @returns {Promise<null>} - The execution stops here
    */
   function executeCommand(parameters) {
-    if (parameters.environment === undefined) { parameters.environment = plugin.lager.getConfig('environment'); }
-    if (parameters.stage === undefined) { parameters.stage = plugin.lager.getConfig('stage'); }
+    if (parameters.environment === undefined) { parameters.environment = plugin.myrmex.getConfig('environment'); }
+    if (parameters.stage === undefined) { parameters.stage = plugin.myrmex.getConfig('stage'); }
     const context = {
       stage: parameters.stage,
       environment: parameters.environment

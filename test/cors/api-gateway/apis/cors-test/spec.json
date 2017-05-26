@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "title": "cors-test",
-    "description": "cors-test - an API built with Lager"
+    "description": "cors-test - an API built with Myrmex"
   },
   "schemes": [
     "https"

@@ -1,0 +1,7 @@
+{
+  "name": "lambda-profiling",
+  "plugins": [
+    "@myrmex/iam",
+    "@myrmex/lambda"
+  ]
+}

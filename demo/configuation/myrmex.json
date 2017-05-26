@@ -1,0 +1,10 @@
+{
+  "name": "A Myrmex project",
+  "plugins": [
+    "@myrmex/iam",
+    "@myrmex/lambda"
+  ],
+  "config": {
+    "test": "Config in myrmex.json"
+  }
+}

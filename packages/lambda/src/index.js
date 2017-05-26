@@ -14,7 +14,7 @@ function loadLambdas() {
   const lambdasPath = path.join(process.cwd(), plugin.config.lambdasPath);
 
   // This event allows to inject code before loading all APIs
-  return plugin.lager.fire('beforeLambdasLoad')
+  return plugin.myrmex.fire('beforeLambdasLoad')
   .then(() => {
     // Retrieve configuration path of all Lambdas
     return Promise.promisify(fs.readdir)(lambdasPath);
@@ -31,7 +31,7 @@ function loadLambdas() {
   })
   .then((lambdas) => {
     // This event allows to inject code to add or delete or alter lambda configurations
-    return plugin.lager.fire('afterLambdasLoad', lambdas);
+    return plugin.myrmex.fire('afterLambdasLoad', lambdas);
   })
   .spread((lambdas) => {
     return Promise.resolve(lambdas);
@@ -53,7 +53,7 @@ function loadLambdas() {
  * @returns {Promise<Lambda>} - the promise of a lambda
  */
 function loadLambda(lambdaPath, identifier) {
-  return plugin.lager.fire('beforeLambdaLoad', lambdaPath, identifier)
+  return plugin.myrmex.fire('beforeLambdaLoad', lambdaPath, identifier)
   .spread((lambdaPath, identifier) => {
     // Because we use require() to get the config, it could either be a JSON file
     // or the content exported by a node module
@@ -64,12 +64,12 @@ function loadLambda(lambdaPath, identifier) {
     // If the identifier is not specified, it will be the name of the directory that contains the config
     lambdaConfig.identifier = lambdaConfig.identifier || identifier;
 
-    // Lasy loading because the plugin has to be registered in a Lager instance before requiring ./lambda
+    // Lasy loading because the plugin has to be registered in a Myrmex instance before requiring ./lambda
     const Lambda = require('./lambda');
     const lambda = new Lambda(lambdaConfig, lambdaPath);
 
     // This event allows to inject code to alter the Lambda configuration
-    return plugin.lager.fire('afterLambdaLoad', lambda);
+    return plugin.myrmex.fire('afterLambdaLoad', lambda);
   })
   .spread((lambda) => {
     return Promise.resolve(lambda);
@@ -83,7 +83,7 @@ function loadLambda(lambdaPath, identifier) {
 function loadModules() {
   const nodeModulesPath = path.join(process.cwd(), plugin.config.modulesPath);
 
-  return plugin.lager.fire('beforeNodeModulesLoad')
+  return plugin.myrmex.fire('beforeNodeModulesLoad')
   .then(() => {
     // Retrieve paths of all node packages
     return Promise.promisify(fs.readdir)(nodeModulesPath);
@@ -100,7 +100,7 @@ function loadModules() {
   })
   .then(nodeModules => {
     // This event allows to inject code to add or delete or alter node modules configurations
-    return plugin.lager.fire('afterNodeModulesLoad', nodeModules);
+    return plugin.myrmex.fire('afterNodeModulesLoad', nodeModules);
   })
   .spread(nodeModules => {
     return Promise.resolve(nodeModules);
@@ -122,7 +122,7 @@ function loadModules() {
  * @return {Promise<NodeModule>} - promise of a node packages
  */
 function loadNodeModule(nodeModulePath, name) {
-  return plugin.lager.fire('beforeNodeModuleLoad', nodeModulePath, name)
+  return plugin.myrmex.fire('beforeNodeModuleLoad', nodeModulePath, name)
   .spread((nodeModulePath, name) => {
     let packageJson = {};
     try {
@@ -133,12 +133,12 @@ function loadNodeModule(nodeModulePath, name) {
       }
     }
 
-    // Lasy loading because the plugin has to be registered in a Lager instance before requiring ./node-module
+    // Lasy loading because the plugin has to be registered in a Myrmex instance before requiring ./node-module
     const NodeModule = require('./node-module');
     const nodePackage = new NodeModule(packageJson, name, nodeModulePath);
 
     // This event allows to inject code to alter the Lambda configuration
-    return plugin.lager.fire('afterNodeModuleLoad', nodePackage);
+    return plugin.myrmex.fire('afterNodeModuleLoad', nodePackage);
   })
   .spread(nodePackage => {
     return Promise.resolve(nodePackage);
@@ -155,7 +155,7 @@ function findLambda(identifier) {
   .then(lambdas => {
     const lambda = _.find(lambdas, (lambda) => { return lambda.getIdentifier() === identifier; });
     if (!lambda) {
-      throw new Error('The Lambda "' + identifier + '" does not exists in this Lager project');
+      throw new Error('The Lambda "' + identifier + '" does not exists in this Myrmex project');
     }
     return lambda;
   });
@@ -171,7 +171,7 @@ function findNodeModule(name) {
   .then(nodeModules => {
     const nodeModule = _.find(nodeModules, (nodeModule) => { return nodeModule.getName() === name; });
     if (!nodeModule) {
-      throw new Error('The node module "' + name + '" does not exists in this Lager project');
+      throw new Error('The node module "' + name + '" does not exists in this Myrmex project');
     }
     return nodeModule;
   });
@@ -213,7 +213,7 @@ const plugin = {
 
     /**
      * This hook allows to complete commands
-     * @param {Object} commandConfig - a command being added to the Lager CLI
+     * @param {Object} commandConfig - a command being added to the Myrmex CLI
      * @returns {Promise}
      */
     createCommand: function createCommandHook(commandConfig) {

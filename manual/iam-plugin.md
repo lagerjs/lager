@@ -5,26 +5,26 @@ simplify the configuration of other plugins.
 
 ## Prerequisites
 
-To use the `@lager/iam` plugin, it is necessary to have a minimal knowledge about [AWS Identity and Access Management](https://aws.amazon.com/iam/).
+To use the `@myrmex/iam` plugin, it is necessary to have a minimal knowledge about [AWS Identity and Access Management](https://aws.amazon.com/iam/).
 
-An AWS user or role that uses the plugin `@lager/iam` must have access to IAM administration. The AWS policy `IAMFullAccess`
+An AWS user or role that uses the plugin `@myrmex/iam` must have access to IAM administration. The AWS policy `IAMFullAccess`
 gives all necessary permissions.
 
 ## Installation
 
-Install the npm module in a Lager project:
+Install the npm module in a Myrmex project:
 
 ```bash
-npm install @lager/iam --save-dev
+npm install @myrmex/iam --save-dev
 ```
 
-Then enable the plugin in the `lager.json` config file:
+Then enable the plugin in the `myrmex.json` config file:
 
 ```json
 {
   "name": "my-app",
   "plugins": [
-    "@lager/iam"
+    "@myrmex/iam"
   ]
 }
 ```
@@ -64,9 +64,9 @@ Two predefined role configuration are available:
      functions.
 
 It is possible to define custom policies and `trust-relationship` configuration. Is is also possible to reference
-policies from the Lager project.
+policies from the Myrmex project.
 
-Roles can be referenced by other plugins to facilitate the deployment of Lager applications: by defining roles in the Lager
+Roles can be referenced by other plugins to facilitate the deployment of Myrmex applications: by defining roles in the Myrmex
 project, deploying some resources like Lambda functions or API definitions can be done on various environments without
 needing to define specific configuration to reference different roles ARN.
 
@@ -82,7 +82,7 @@ deploy-policies [options] [policy-identifiers]
     -s, --stage [stage]              A stage identifier that will be used as a suffix
 ```
 
-Deploy one or more policies in AWS. The `environment` option is used as a prefix and the `stage` option as a suffix.
+Deploy one or more policies in AWS. The `--environment` option is used as a prefix and the `--stage` option as a suffix.
 
 ### deploy-roles
 
@@ -100,16 +100,16 @@ Deploy one or more roles in AWS. The `environment` option is used as a prefix an
 
 ## Definition of IAM policies
 
-The policies managed by Lager are nothing more than IAM policy definitions stored as JSON file. This allows to manage the
+The policies managed by Myrmex are nothing more than IAM policy definitions stored as JSON file. This allows to manage the
 permissions needed by an application alongside the code.
 
-Every time Lager has to deploy a policy, it checks if it needs to be created or updated and perform the appropriate action
+Every time Myrmex has to deploy a policy, it checks if it needs to be created or updated and perform the appropriate action
 if needed. If a policy already has 5 version (the maximum allowed by AWS), the oldest one will be deleted (unless it as been
 defined as the default one).
 
 ## Definition of IAM roles
 
-AWS roles can be configured with JSON files with `@lager/iam`. The structure looks like this:
+AWS roles can be configured with JSON files with `@myrmex/iam`. The structure looks like this:
 
 ```
 {
@@ -134,7 +134,7 @@ AWS roles can be configured with JSON files with `@lager/iam`. The structure loo
 ```
 
 The *managed-policies* section contains a list of identifiers of IAM policies already deployed in AWS associated to the role.
-During the deployment of a role, Lager will look for policies matching the identifiers in *managed-policies*, trying
+During the deployment of a role, Myrmex will look for policies matching the identifiers in *managed-policies*, trying
 combinations with the *environment* and the *stage* options:
 
 *   `<environment>_<identifier>_<stage>`
@@ -171,11 +171,11 @@ The *trust-relationship* section contains the policy that describe the trusted e
 
 ### Extensions
 
-`lager.call('iam:getRoles')` returns the roles managed in the current Lager project.
+`myrmex.call('iam:getRoles')` returns the roles managed in the current Myrmex project.
 
-`lager.call('iam:getAWSRole')` returns the roles available in AWS.
+`myrmex.call('iam:getAWSRole')` returns the roles available in AWS.
 
-`lager.call('iam:retrieveRoleArn', identifier, context)` retrieve the ARN of an IAM role using its identifier. Tries
+`myrmex.call('iam:retrieveRoleArn', identifier, context)` retrieve the ARN of an IAM role using its identifier. Tries
 combinations with the `environment` and the `stage` properties of the `context` parameter in this order:
 
 *   `<environment>_<identifier>_<stage>`

@@ -1,0 +1,11 @@
+{
+  "name": "A Myrmex project",
+  "plugins": [
+    "@myrmex/lambda",
+    "@myrmex/api-gateway",
+    "@myrmex/cors"
+  ],
+  "config": {
+    "colors": true
+  }
+}

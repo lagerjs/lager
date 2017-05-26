@@ -7,7 +7,7 @@ const Promise = require('bluebird');
 const rp = require('request-promise');
 const fs = require('fs-extra');
 const remove = Promise.promisify(fs.remove);
-const icli = require('../../packages/cli/src/bin/lager');
+const icli = require('../../packages/cli/src/bin/myrmex');
 const showStdout = !!process.env.LAGER_SHOW_STDOUT;
 const apiDeployDelay = require('../api-deploy-delay');
 
@@ -26,7 +26,7 @@ describe('Creation and deployment of the Planet Express project', () => {
       remove(path.join(__dirname, 'api-gateway')),
       remove(path.join(__dirname, 'lambda')),
       remove(path.join(__dirname, 'iam')),
-      remove(path.join(__dirname, 'lager.log'))
+      remove(path.join(__dirname, 'myrmex.log'))
     ]);
   });
 
@@ -106,9 +106,9 @@ describe('Creation and deployment of the Planet Express project', () => {
         assert.ok(stdout.indexOf('The API "\x1b[36mback-office\x1b[0m" has been created') > -1);
         assert.ok(stdout.indexOf('The API "\x1b[36msender\x1b[0m" has been created') > -1);
         assert.ok(stdout.indexOf('The API "\x1b[36mrecipient\x1b[0m" has been created') > -1);
-        assert.ok(stdout.indexOf('You can inspect it using the command \x1b[33mlager inspect-api back-office\x1b[0m') > -1);
-        assert.ok(stdout.indexOf('You can inspect it using the command \x1b[33mlager inspect-api sender\x1b[0m') > -1);
-        assert.ok(stdout.indexOf('You can inspect it using the command \x1b[33mlager inspect-api recipient\x1b[0m') > -1);
+        assert.ok(stdout.indexOf('You can inspect it using the command \x1b[33mmyrmex inspect-api back-office\x1b[0m') > -1);
+        assert.ok(stdout.indexOf('You can inspect it using the command \x1b[33mmyrmex inspect-api sender\x1b[0m') > -1);
+        assert.ok(stdout.indexOf('You can inspect it using the command \x1b[33mmyrmex inspect-api recipient\x1b[0m') > -1);
       });
     });
   });
@@ -133,13 +133,13 @@ describe('Creation and deployment of the Planet Express project', () => {
       .then(res => {
         const stdout = icli.catchPrintStop();
         assert.ok(stdout.indexOf('The endpoint \x1b[36mGET /delivery/{id}\x1b[0m has been created') > -1);
-        assert.ok(stdout.indexOf('You can inspect it using the command \x1b[33mlager inspect-endpoint /delivery/{id} GET\x1b[0m') > -1);
+        assert.ok(stdout.indexOf('You can inspect it using the command \x1b[33mmyrmex inspect-endpoint /delivery/{id} GET\x1b[0m') > -1);
         assert.ok(stdout.indexOf('The endpoint \x1b[36mPATCH /delivery/{id}\x1b[0m has been created') > -1);
-        assert.ok(stdout.indexOf('You can inspect it using the command \x1b[33mlager inspect-endpoint /delivery/{id} PATCH\x1b[0m') > -1);
+        assert.ok(stdout.indexOf('You can inspect it using the command \x1b[33mmyrmex inspect-endpoint /delivery/{id} PATCH\x1b[0m') > -1);
         assert.ok(stdout.indexOf('The endpoint \x1b[36mPOST /delivery\x1b[0m has been created') > -1);
-        assert.ok(stdout.indexOf('You can inspect it using the command \x1b[33mlager inspect-endpoint /delivery POST\x1b[0m') > -1);
+        assert.ok(stdout.indexOf('You can inspect it using the command \x1b[33mmyrmex inspect-endpoint /delivery POST\x1b[0m') > -1);
         assert.ok(stdout.indexOf('The endpoint \x1b[36mDELETE /delivery/{id}\x1b[0m has been created') > -1);
-        assert.ok(stdout.indexOf('You can inspect it using the command \x1b[33mlager inspect-endpoint /delivery/{id} DELETE\x1b[0m') > -1);
+        assert.ok(stdout.indexOf('You can inspect it using the command \x1b[33mmyrmex inspect-endpoint /delivery/{id} DELETE\x1b[0m') > -1);
       });
     });
   });
@@ -155,7 +155,7 @@ describe('Creation and deployment of the Planet Express project', () => {
         assert.equal(res.paths['/delivery'].post.summary, 'Create+a+delivery');
         assert.equal(res.paths['/delivery/{id}'].delete, undefined);
         assert.equal(res.paths['/delivery/{id}'].get['x-amazon-apigateway-integration'].type, 'aws_proxy');
-        assert.equal(res.paths['/delivery/{id}'].get['x-lager'].lambda, 'api-generic');
+        assert.equal(res.paths['/delivery/{id}'].get['x-myrmex'].lambda, 'api-generic');
       });
     });
   });
@@ -168,7 +168,7 @@ describe('Creation and deployment of the Planet Express project', () => {
         icli.catchPrintStop();
         assert.equal(res.paths['/delivery/{id}'].get.summary, 'View+a+delivery');
         assert.equal(res.paths['/delivery/{id}'].get['x-amazon-apigateway-integration'].type, 'aws_proxy');
-        assert.equal(res.paths['/delivery/{id}'].get['x-lager'], undefined);
+        assert.equal(res.paths['/delivery/{id}'].get['x-myrmex'], undefined);
       });
     });
   });
@@ -181,7 +181,7 @@ describe('Creation and deployment of the Planet Express project', () => {
         icli.catchPrintStop();
         assert.equal(res.paths['/delivery/{id}'].get.summary, 'View+a+delivery');
         assert.equal(res.paths['/delivery/{id}'].get['x-amazon-apigateway-integration'], undefined);
-        assert.equal(res.paths['/delivery/{id}'].get['x-lager'], undefined);
+        assert.equal(res.paths['/delivery/{id}'].get['x-myrmex'], undefined);
       });
     });
   });
@@ -194,7 +194,7 @@ describe('Creation and deployment of the Planet Express project', () => {
         icli.catchPrintStop();
         assert.equal(res.summary, 'View+a+delivery');
         assert.equal(res['x-amazon-apigateway-integration'].type, 'aws_proxy');
-        assert.equal(res['x-lager'].lambda, 'api-generic');
+        assert.equal(res['x-myrmex'].lambda, 'api-generic');
       });
     });
   });
@@ -207,7 +207,7 @@ describe('Creation and deployment of the Planet Express project', () => {
         icli.catchPrintStop();
         assert.equal(res.summary, 'View+a+delivery');
         assert.equal(res['x-amazon-apigateway-integration'].type, 'aws_proxy');
-        assert.equal(res['x-lager'], undefined);
+        assert.equal(res['x-myrmex'], undefined);
       });
     });
   });
@@ -220,7 +220,7 @@ describe('Creation and deployment of the Planet Express project', () => {
         icli.catchPrintStop();
         assert.equal(res.summary, 'View+a+delivery');
         assert.equal(res['x-amazon-apigateway-integration'], undefined);
-        assert.equal(res['x-lager'], undefined);
+        assert.equal(res['x-myrmex'], undefined);
       });
     });
   });

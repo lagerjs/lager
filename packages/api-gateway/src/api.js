@@ -30,7 +30,7 @@ Api.prototype.init = function init() {
 };
 
 /**
- * Returns the API identifier in the Lager project
+ * Returns the API identifier in the Myrmex project
  * @returns {string}
  */
 Api.prototype.getIdentifier = function getIdentifier() {
@@ -60,8 +60,8 @@ Api.prototype.getSpec = function getSpec() {
  */
 Api.prototype.doesExposeEndpoint = function doesExposeEndpoint(endpoint) {
   const spec = endpoint.getSpec();
-  if (spec['x-lager'] && spec['x-lager'].apis && spec['x-lager'].apis.length) {
-    return endpoint.getSpec()['x-lager'].apis.indexOf(this.identifier) !== -1;
+  if (spec['x-myrmex'] && spec['x-myrmex'].apis && spec['x-myrmex'].apis.length) {
+    return endpoint.getSpec()['x-myrmex'].apis.indexOf(this.identifier) !== -1;
   }
   return false;
 };
@@ -73,14 +73,14 @@ Api.prototype.doesExposeEndpoint = function doesExposeEndpoint(endpoint) {
  * @returns {Promise<Api>}
  */
 Api.prototype.addEndpoints = function addEndpoints(endpoints, force) {
-  return plugin.lager.fire('beforeAddEndpointsToApi', this, endpoints)
+  return plugin.myrmex.fire('beforeAddEndpointsToApi', this, endpoints)
   .spread((api, endpoints) => {
     return Promise.map(endpoints, (endpoint) => {
       return this.addEndpoint(endpoint, force);
     });
   })
   .then(() => {
-    return plugin.lager.fire('afterAddEndpointsToApi', this, endpoints);
+    return plugin.myrmex.fire('afterAddEndpointsToApi', this, endpoints);
   })
   .spread((api, endpoints) => {
     return Promise.resolve(this);
@@ -99,15 +99,15 @@ Api.prototype.addEndpoint = function addEndpoint(endpoint, force) {
     return Promise.resolve(this);
   }
 
-  return plugin.lager.fire('beforeAddEndpointToApi', this, endpoint)
+  return plugin.myrmex.fire('beforeAddEndpointToApi', this, endpoint)
   .spread((api, endpoint) => {
     // We add the API indentifier to the configuration of the endpoint
     // in case "force" has been used
     if (force) {
-      endpoint.getSpec()['x-lager'] = endpoint.getSpec()['x-lager'] || {};
-      endpoint.getSpec()['x-lager'].apis = endpoint.getSpec()['x-lager'].apis || [];
-      if (endpoint.getSpec()['x-lager'].apis.indexOf(this.getIdentifier()) === -1) {
-        endpoint.getSpec()['x-lager'].apis.push(this.getIdentifier());
+      endpoint.getSpec()['x-myrmex'] = endpoint.getSpec()['x-myrmex'] || {};
+      endpoint.getSpec()['x-myrmex'].apis = endpoint.getSpec()['x-myrmex'].apis || [];
+      if (endpoint.getSpec()['x-myrmex'].apis.indexOf(this.getIdentifier()) === -1) {
+        endpoint.getSpec()['x-myrmex'].apis.push(this.getIdentifier());
       }
     }
     this.endpoints.push(endpoint);
@@ -123,7 +123,7 @@ Api.prototype.addEndpoint = function addEndpoint(endpoint, force) {
         this.models.push(model);
       }
     });
-    return plugin.lager.fire('afterAddEndpointToApi', this, endpoint);
+    return plugin.myrmex.fire('afterAddEndpointToApi', this, endpoint);
   })
   .spread(() => {
     return Promise.resolve(this);
@@ -188,7 +188,7 @@ Api.prototype.generateSpec = function generateSpec(type, context) {
 
     // Depending on the type of specification we want, we may do some cleanup
     if (type === 'api-gateway') {
-      // Inject lager identification data in the API name
+      // Inject myrmex identification data in the API name
       if (context) {
         spec.info.title = context.environment + ' ' + this.identifier + ' - ' + spec.info.title;
       }
@@ -206,7 +206,7 @@ Api.prototype.generateSpec = function generateSpec(type, context) {
  */
 Api.prototype.publish = function publish(region, context) {
   const awsApiGateway = new AWS.APIGateway({ region });
-  return plugin.lager.fire('beforePublishApi', this)
+  return plugin.myrmex.fire('beforePublishApi', this)
   .spread(() => {
     // Retrieve the API in AWS API Gateway
     return this.findInApiGateway(awsApiGateway, context);
@@ -219,7 +219,7 @@ Api.prototype.publish = function publish(region, context) {
     return Promise.promisify(awsApiGateway.createDeployment.bind(awsApiGateway))(params);
   })
   .then((res) => {
-    return plugin.lager.fire('afterDeployApi', this);
+    return plugin.myrmex.fire('afterDeployApi', this);
   })
   .spread(() => {
     return this;
@@ -234,7 +234,7 @@ Api.prototype.deploy = function deploy(region, context) {
   const awsApiGateway = new AWS.APIGateway({ region });
   const report = {};
 
-  return plugin.lager.fire('beforeDeployApi', this)
+  return plugin.myrmex.fire('beforeDeployApi', this)
   .spread(() => {
     // Generate the specification to deploy
     return this.generateSpec('api-gateway', context);
@@ -260,7 +260,7 @@ Api.prototype.deploy = function deploy(region, context) {
     report.name = awsApi.name;
     report.description = awsApi.description;
     report.stage = context.stage;
-    return plugin.lager.fire('afterDeployApi', this);
+    return plugin.myrmex.fire('afterDeployApi', this);
   })
   .spread(() => {
     return Promise.resolve({
@@ -269,7 +269,7 @@ Api.prototype.deploy = function deploy(region, context) {
     });
   })
   .catch(e => {
-    plugin.lager.log.fatal(e, 'The deployment of ' + this.getIdentifier() + ' failed');
+    plugin.myrmex.log.fatal(e, 'The deployment of ' + this.getIdentifier() + ' failed');
     report.failed = 'DEPLOYMENT FAILED - ' + e.code;
     return Promise.resolve({
       report: report,
@@ -281,7 +281,7 @@ Api.prototype.deploy = function deploy(region, context) {
 
 /**
  * We cannot find an API by name with the AWS SDK (only by ID)
- * We do not know the API ID but Lager inject identification content in the name
+ * We do not know the API ID but Myrmex inject identification content in the name
  * We have to list all APIs and return the first one having a name that matches
  * @param {APIGateway} awsApiGateway - an API Gateway client from the AWS SDK
  * @param {Object} context - an object containing information about the environment of the API we are searching
@@ -355,7 +355,7 @@ function cleanSpecForApiGateway(spec) {
   // @TODO: see if it is still useful when importing with the SDK
   // JSON schema doesn't allow to have example as property, but swagger model does
   // https://github.com/awslabs/aws-apigateway-importer/issues/177
-  delete spec['x-lager'];
+  delete spec['x-myrmex'];
   _.forEach(spec.definitions, definition => {
     delete definition.example;
     _.forEach(definition.properties, property => {
@@ -366,14 +366,14 @@ function cleanSpecForApiGateway(spec) {
 }
 
 /**
- * Clean an Swagger/OpenAPI specification to remove parts specific to lager and ApiGateway
+ * Clean an Swagger/OpenAPI specification to remove parts specific to myrmex and ApiGateway
  * @param {Object} spec - an Swagger/OpenAPI specification
  * @returns {Object} - the cleaned Swagger/OpenAPI specification
  */
 function cleanSpecForDoc(spec) {
-  // For documentation, we can remove the OPTION methods, the lager extentions
+  // For documentation, we can remove the OPTION methods, the myrmex extentions
   // and the extentions from API Gateway Importer
-  delete spec['x-lager'];
+  delete spec['x-myrmex'];
   // _.forEach(spec.paths, path => {
   //   delete path.options;
   // });
@@ -399,9 +399,9 @@ function applyCredentialsARNs(spec, context) {
 
   // Retrieve ARN for each credential
   return Promise.map(credentials, credential => {
-    // The @lager/iam plugin can help to convert an indentifier into an ARN
-    // If @lager/iam is not installed, the correct ARN has to be provided
-    return plugin.lager.call('iam:retrieveRoleArn', credential, context, credential)
+    // The @myrmex/iam plugin can help to convert an indentifier into an ARN
+    // If @myrmex/iam is not installed, the correct ARN has to be provided
+    return plugin.myrmex.call('iam:retrieveRoleArn', credential, context, credential)
     .then(arn => {
       return { identifier: credential, arn };
     });

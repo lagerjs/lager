@@ -3,7 +3,7 @@
 
 const assert = require('assert');
 const rp = require('request-promise');
-const icli = require('../../packages/cli/src/bin/lager');
+const icli = require('../../packages/cli/src/bin/myrmex');
 const showStdout = !!process.env.LAGER_SHOW_STDOUT;
 const apiDeployDelay = require('../api-deploy-delay');
 
@@ -148,7 +148,7 @@ describe('A project including the cors plugin', () => {
 
 
   it('should allow to define a specific configuration for an API', function() {
-    return icli.lager.getPlugin('api-gateway').findApi('cors-test-2')
+    return icli.myrmex.getPlugin('api-gateway').findApi('cors-test-2')
     .then(api => {
       return api.generateSpec('api-gateway');
     })

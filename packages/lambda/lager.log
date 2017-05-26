@@ -1,0 +1,320 @@
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":11475,"level":20,"msg":"The lambda TEST-callback-lambda does not exists","time":"2017-05-19T17:54:16.502Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":11475,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T17:54:17.068Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":11475,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T17:54:17.070Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":11475,"level":20,"msg":"The lambda TEST-callback-lambda does not have an alias $LATEST","time":"2017-05-19T17:54:17.073Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":11475,"level":20,"msg":"The Lambda TEST-callback-lambda version 1 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T17:54:17.073Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":11475,"level":20,"msg":"The lambda TEST-callback-lambda already exists","time":"2017-05-19T17:54:17.077Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":11475,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T17:54:17.613Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":11475,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T17:54:17.614Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":11475,"level":20,"msg":"The lambda TEST-callback-lambda already has an alias $LATEST","time":"2017-05-19T17:54:17.615Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":11475,"level":20,"msg":"The Lambda TEST-callback-lambda version 2 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T17:54:17.616Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":11712,"level":20,"msg":"The lambda TEST-callback-lambda does not exists","time":"2017-05-19T17:56:07.389Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":11712,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T17:56:07.967Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":11712,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T17:56:07.969Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":11712,"level":20,"msg":"The lambda TEST-callback-lambda does not have an alias $LATEST","time":"2017-05-19T17:56:07.971Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":11712,"level":20,"msg":"The Lambda TEST-callback-lambda version 1 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T17:56:07.972Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":11712,"level":20,"msg":"The lambda TEST-callback-lambda already exists","time":"2017-05-19T17:56:07.976Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":11712,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T17:56:08.518Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":11712,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T17:56:08.519Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":11712,"level":20,"msg":"The lambda TEST-callback-lambda already has an alias $LATEST","time":"2017-05-19T17:56:08.520Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":11712,"level":20,"msg":"The Lambda TEST-callback-lambda version 2 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T17:56:08.521Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":12477,"level":20,"msg":"The lambda TEST-callback-lambda does not exists","time":"2017-05-19T18:01:56.964Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":12477,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T18:01:57.541Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":12477,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T18:01:57.542Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":12477,"level":20,"msg":"The lambda TEST-callback-lambda does not have an alias $LATEST","time":"2017-05-19T18:01:57.545Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":12477,"level":20,"msg":"The Lambda TEST-callback-lambda version 1 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T18:01:57.546Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":12477,"level":20,"msg":"The lambda TEST-callback-lambda already exists","time":"2017-05-19T18:01:57.549Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":12477,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T18:01:58.084Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":12477,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T18:01:58.085Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":12477,"level":20,"msg":"The lambda TEST-callback-lambda already has an alias $LATEST","time":"2017-05-19T18:01:58.086Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":12477,"level":20,"msg":"The Lambda TEST-callback-lambda version 2 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T18:01:58.087Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":12618,"level":20,"msg":"The lambda TEST-callback-lambda does not exists","time":"2017-05-19T18:02:55.806Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":12618,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T18:02:56.397Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":12618,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T18:02:56.399Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":12618,"level":20,"msg":"The lambda TEST-callback-lambda does not have an alias $LATEST","time":"2017-05-19T18:02:56.401Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":12618,"level":20,"msg":"The Lambda TEST-callback-lambda version 1 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T18:02:56.402Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":12618,"level":20,"msg":"The lambda TEST-callback-lambda already exists","time":"2017-05-19T18:02:56.406Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":12618,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T18:02:56.955Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":12618,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T18:02:56.956Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":12618,"level":20,"msg":"The lambda TEST-callback-lambda already has an alias $LATEST","time":"2017-05-19T18:02:56.957Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":12618,"level":20,"msg":"The Lambda TEST-callback-lambda version 2 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T18:02:56.958Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":12746,"level":20,"msg":"The lambda TEST-callback-lambda does not exists","time":"2017-05-19T18:03:55.473Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":12746,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T18:03:56.067Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":12746,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T18:03:56.068Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":12746,"level":20,"msg":"The lambda TEST-callback-lambda does not have an alias $LATEST","time":"2017-05-19T18:03:56.071Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":12746,"level":20,"msg":"The Lambda TEST-callback-lambda version 1 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T18:03:56.072Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":12746,"level":20,"msg":"The lambda TEST-callback-lambda already exists","time":"2017-05-19T18:03:56.075Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":12746,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T18:03:56.624Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":12746,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T18:03:56.625Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":12746,"level":20,"msg":"The lambda TEST-callback-lambda already has an alias $LATEST","time":"2017-05-19T18:03:56.626Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":12746,"level":20,"msg":"The Lambda TEST-callback-lambda version 2 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T18:03:56.627Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":13156,"level":20,"msg":"The lambda TEST-callback-lambda does not exists","time":"2017-05-19T18:08:20.772Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":13156,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T18:08:21.373Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":13156,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T18:08:21.374Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":13156,"level":20,"msg":"The lambda TEST-callback-lambda does not have an alias $LATEST","time":"2017-05-19T18:08:21.377Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":13156,"level":20,"msg":"The Lambda TEST-callback-lambda version 1 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T18:08:21.378Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":13156,"level":20,"msg":"The lambda TEST-callback-lambda already exists","time":"2017-05-19T18:08:21.381Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":13156,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T18:08:21.955Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":13156,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T18:08:21.956Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":13156,"level":20,"msg":"The lambda TEST-callback-lambda already has an alias $LATEST","time":"2017-05-19T18:08:21.956Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":13156,"level":20,"msg":"The Lambda TEST-callback-lambda version 2 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T18:08:21.957Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":13278,"level":20,"msg":"The lambda TEST-callback-lambda does not exists","time":"2017-05-19T18:09:09.831Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":13278,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T18:09:10.416Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":13278,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T18:09:10.418Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":13278,"level":20,"msg":"The lambda TEST-callback-lambda does not have an alias $LATEST","time":"2017-05-19T18:09:10.420Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":13278,"level":20,"msg":"The Lambda TEST-callback-lambda version 1 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T18:09:10.421Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":13278,"level":20,"msg":"The lambda TEST-callback-lambda already exists","time":"2017-05-19T18:09:10.424Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":13278,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T18:09:10.990Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":13278,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T18:09:10.991Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":13278,"level":20,"msg":"The lambda TEST-callback-lambda already has an alias $LATEST","time":"2017-05-19T18:09:10.991Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":13278,"level":20,"msg":"The Lambda TEST-callback-lambda version 2 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T18:09:10.992Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":13466,"level":20,"msg":"The lambda TEST-callback-lambda does not exists","time":"2017-05-19T18:10:20.186Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":13466,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T18:10:20.778Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":13466,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T18:10:20.779Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":13466,"level":20,"msg":"The lambda TEST-callback-lambda does not have an alias $LATEST","time":"2017-05-19T18:10:20.782Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":13466,"level":20,"msg":"The Lambda TEST-callback-lambda version 1 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T18:10:20.783Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":13466,"level":20,"msg":"The lambda TEST-callback-lambda already exists","time":"2017-05-19T18:10:20.786Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":13466,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T18:10:21.356Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":13466,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T18:10:21.357Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":13466,"level":20,"msg":"The lambda TEST-callback-lambda already has an alias $LATEST","time":"2017-05-19T18:10:21.358Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":13466,"level":20,"msg":"The Lambda TEST-callback-lambda version 2 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T18:10:21.359Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":24486,"level":20,"msg":"The lambda TEST-callback-lambda does not exists","time":"2017-05-19T20:40:05.737Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":24486,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T20:40:06.324Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":24486,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T20:40:06.325Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":24486,"level":20,"msg":"The lambda TEST-callback-lambda does not have an alias $LATEST","time":"2017-05-19T20:40:06.328Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":24486,"level":20,"msg":"The Lambda TEST-callback-lambda version 1 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T20:40:06.329Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":24486,"level":20,"msg":"The lambda TEST-callback-lambda already exists","time":"2017-05-19T20:40:06.332Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":24486,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T20:40:06.889Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":24486,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T20:40:06.890Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":24486,"level":20,"msg":"The lambda TEST-callback-lambda already has an alias $LATEST","time":"2017-05-19T20:40:06.891Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":24486,"level":20,"msg":"The Lambda TEST-callback-lambda version 2 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T20:40:06.892Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":24776,"level":20,"msg":"The lambda TEST-callback-lambda does not exists","time":"2017-05-19T20:42:26.262Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":24776,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T20:42:26.857Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":24776,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T20:42:26.859Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":24776,"level":20,"msg":"The lambda TEST-callback-lambda does not have an alias $LATEST","time":"2017-05-19T20:42:26.862Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":24776,"level":20,"msg":"The Lambda TEST-callback-lambda version 1 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T20:42:26.863Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":24776,"level":20,"msg":"The lambda TEST-callback-lambda already exists","time":"2017-05-19T20:42:26.866Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":24776,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T20:42:27.428Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":24776,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T20:42:27.429Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":24776,"level":20,"msg":"The lambda TEST-callback-lambda already has an alias $LATEST","time":"2017-05-19T20:42:27.430Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":24776,"level":20,"msg":"The Lambda TEST-callback-lambda version 2 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T20:42:27.431Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25071,"level":20,"msg":"The lambda TEST-callback-lambda does not exists","time":"2017-05-19T20:44:14.505Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25071,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T20:44:15.104Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25071,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T20:44:15.106Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25071,"level":20,"msg":"The lambda TEST-callback-lambda does not have an alias $LATEST","time":"2017-05-19T20:44:15.108Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25071,"level":20,"msg":"The Lambda TEST-callback-lambda version 1 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T20:44:15.109Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25071,"level":20,"msg":"The lambda TEST-callback-lambda already exists","time":"2017-05-19T20:44:15.113Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25071,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T20:44:15.669Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25071,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T20:44:15.670Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25071,"level":20,"msg":"The lambda TEST-callback-lambda already has an alias $LATEST","time":"2017-05-19T20:44:15.670Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25071,"level":20,"msg":"The Lambda TEST-callback-lambda version 2 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T20:44:15.671Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25265,"level":20,"msg":"The lambda TEST-callback-lambda does not exists","time":"2017-05-19T20:45:49.458Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25265,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T20:45:50.065Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25265,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T20:45:50.067Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25265,"level":20,"msg":"The lambda TEST-callback-lambda does not have an alias $LATEST","time":"2017-05-19T20:45:50.070Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25265,"level":20,"msg":"The Lambda TEST-callback-lambda version 1 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T20:45:50.070Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25265,"level":20,"msg":"The lambda TEST-callback-lambda already exists","time":"2017-05-19T20:45:50.074Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25265,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T20:45:50.636Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25265,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T20:45:50.637Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25265,"level":20,"msg":"The lambda TEST-callback-lambda already has an alias $LATEST","time":"2017-05-19T20:45:50.638Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25265,"level":20,"msg":"The Lambda TEST-callback-lambda version 2 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T20:45:50.638Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25378,"level":20,"msg":"The lambda TEST-callback-lambda does not exists","time":"2017-05-19T20:46:26.733Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25378,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T20:46:27.394Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25378,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T20:46:27.396Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25378,"level":20,"msg":"The lambda TEST-callback-lambda does not have an alias $LATEST","time":"2017-05-19T20:46:27.398Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25378,"level":20,"msg":"The Lambda TEST-callback-lambda version 1 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T20:46:27.399Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25378,"level":20,"msg":"The lambda TEST-callback-lambda already exists","time":"2017-05-19T20:46:27.403Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25378,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T20:46:28.172Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25378,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T20:46:28.174Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25378,"level":20,"msg":"The lambda TEST-callback-lambda already has an alias $LATEST","time":"2017-05-19T20:46:28.174Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25378,"level":20,"msg":"The Lambda TEST-callback-lambda version 2 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T20:46:28.175Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25513,"level":20,"msg":"The lambda TEST-callback-lambda does not exists","time":"2017-05-19T20:47:03.660Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25513,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T20:47:04.258Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25513,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T20:47:04.259Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25513,"level":20,"msg":"The lambda TEST-callback-lambda does not have an alias $LATEST","time":"2017-05-19T20:47:04.262Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25513,"level":20,"msg":"The Lambda TEST-callback-lambda version 1 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T20:47:04.262Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25513,"level":20,"msg":"The lambda TEST-callback-lambda already exists","time":"2017-05-19T20:47:04.266Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25513,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T20:47:04.823Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25513,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T20:47:04.824Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25513,"level":20,"msg":"The lambda TEST-callback-lambda already has an alias $LATEST","time":"2017-05-19T20:47:04.825Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25513,"level":20,"msg":"The Lambda TEST-callback-lambda version 2 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T20:47:04.826Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25633,"level":20,"msg":"The lambda TEST-callback-lambda does not exists","time":"2017-05-19T20:47:30.846Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25633,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T20:47:31.449Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25633,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T20:47:31.451Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25633,"level":20,"msg":"The lambda TEST-callback-lambda does not have an alias $LATEST","time":"2017-05-19T20:47:31.453Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25633,"level":20,"msg":"The Lambda TEST-callback-lambda version 1 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T20:47:31.454Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25633,"level":20,"msg":"The lambda TEST-callback-lambda already exists","time":"2017-05-19T20:47:31.457Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25633,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T20:47:32.016Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25633,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T20:47:32.017Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25633,"level":20,"msg":"The lambda TEST-callback-lambda already has an alias $LATEST","time":"2017-05-19T20:47:32.018Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25633,"level":20,"msg":"The Lambda TEST-callback-lambda version 2 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T20:47:32.019Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25720,"level":20,"msg":"The lambda TEST-callback-lambda does not exists","time":"2017-05-19T20:47:46.432Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25720,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T20:47:47.056Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25720,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T20:47:47.058Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25720,"level":20,"msg":"The lambda TEST-callback-lambda does not have an alias $LATEST","time":"2017-05-19T20:47:47.061Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25720,"level":20,"msg":"The Lambda TEST-callback-lambda version 1 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T20:47:47.062Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25720,"level":20,"msg":"The lambda TEST-callback-lambda already exists","time":"2017-05-19T20:47:47.068Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25720,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T20:47:47.630Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25720,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T20:47:47.631Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25720,"level":20,"msg":"The lambda TEST-callback-lambda already has an alias $LATEST","time":"2017-05-19T20:47:47.631Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25720,"level":20,"msg":"The Lambda TEST-callback-lambda version 2 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T20:47:47.632Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25956,"level":20,"msg":"The lambda TEST-callback-lambda does not exists","time":"2017-05-19T20:49:24.059Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25956,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T20:49:24.655Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25956,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T20:49:24.658Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25956,"level":20,"msg":"The lambda TEST-callback-lambda does not have an alias $LATEST","time":"2017-05-19T20:49:24.660Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25956,"level":20,"msg":"The Lambda TEST-callback-lambda version 1 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T20:49:24.661Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25956,"level":20,"msg":"The lambda TEST-callback-lambda already exists","time":"2017-05-19T20:49:24.665Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25956,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T20:49:25.215Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25956,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T20:49:25.216Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25956,"level":20,"msg":"The lambda TEST-callback-lambda already has an alias $LATEST","time":"2017-05-19T20:49:25.217Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":25956,"level":20,"msg":"The Lambda TEST-callback-lambda version 2 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T20:49:25.218Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":26178,"level":20,"msg":"The lambda TEST-callback-lambda does not exists","time":"2017-05-19T20:50:40.961Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":26178,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T20:50:41.587Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":26178,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T20:50:41.589Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":26178,"level":20,"msg":"The lambda TEST-callback-lambda does not have an alias $LATEST","time":"2017-05-19T20:50:41.592Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":26178,"level":20,"msg":"The Lambda TEST-callback-lambda version 1 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T20:50:41.593Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":26178,"level":20,"msg":"The lambda TEST-callback-lambda already exists","time":"2017-05-19T20:50:41.598Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":26178,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T20:50:42.157Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":26178,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T20:50:42.158Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":26178,"level":20,"msg":"The lambda TEST-callback-lambda already has an alias $LATEST","time":"2017-05-19T20:50:42.159Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":26178,"level":20,"msg":"The Lambda TEST-callback-lambda version 2 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T20:50:42.160Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":26319,"level":20,"msg":"The lambda TEST-callback-lambda does not exists","time":"2017-05-19T20:51:22.563Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":26319,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T20:51:23.174Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":26319,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T20:51:23.175Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":26319,"level":20,"msg":"The lambda TEST-callback-lambda does not have an alias $LATEST","time":"2017-05-19T20:51:23.178Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":26319,"level":20,"msg":"The Lambda TEST-callback-lambda version 1 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T20:51:23.179Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":26319,"level":20,"msg":"The lambda TEST-callback-lambda already exists","time":"2017-05-19T20:51:23.182Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":26319,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T20:51:23.743Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":26319,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T20:51:23.744Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":26319,"level":20,"msg":"The lambda TEST-callback-lambda already has an alias $LATEST","time":"2017-05-19T20:51:23.745Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":26319,"level":20,"msg":"The Lambda TEST-callback-lambda version 2 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T20:51:23.745Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":26429,"level":20,"msg":"The lambda TEST-callback-lambda does not exists","time":"2017-05-19T20:51:44.990Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":26429,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T20:51:45.602Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":26429,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T20:51:45.604Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":26429,"level":20,"msg":"The lambda TEST-callback-lambda does not have an alias $LATEST","time":"2017-05-19T20:51:45.607Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":26429,"level":20,"msg":"The Lambda TEST-callback-lambda version 1 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T20:51:45.608Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":26429,"level":20,"msg":"The lambda TEST-callback-lambda already exists","time":"2017-05-19T20:51:45.612Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":26429,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T20:51:46.221Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":26429,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T20:51:46.222Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":26429,"level":20,"msg":"The lambda TEST-callback-lambda already has an alias $LATEST","time":"2017-05-19T20:51:46.222Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":26429,"level":20,"msg":"The Lambda TEST-callback-lambda version 2 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T20:51:46.223Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":26574,"level":20,"msg":"The lambda TEST-callback-lambda does not exists","time":"2017-05-19T20:52:49.360Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":26574,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T20:52:49.979Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":26574,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T20:52:49.981Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":26574,"level":20,"msg":"The lambda TEST-callback-lambda does not have an alias $LATEST","time":"2017-05-19T20:52:49.984Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":26574,"level":20,"msg":"The Lambda TEST-callback-lambda version 1 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T20:52:49.984Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":26574,"level":20,"msg":"The lambda TEST-callback-lambda already exists","time":"2017-05-19T20:52:49.988Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":26574,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T20:52:50.540Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":26574,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T20:52:50.541Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":26574,"level":20,"msg":"The lambda TEST-callback-lambda already has an alias $LATEST","time":"2017-05-19T20:52:50.542Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":26574,"level":20,"msg":"The Lambda TEST-callback-lambda version 2 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T20:52:50.543Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":26952,"level":20,"msg":"The lambda TEST-callback-lambda does not exists","time":"2017-05-19T20:56:09.961Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":26952,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T20:56:10.563Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":26952,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T20:56:10.565Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":26952,"level":20,"msg":"The lambda TEST-callback-lambda does not have an alias $LATEST","time":"2017-05-19T20:56:10.568Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":26952,"level":20,"msg":"The Lambda TEST-callback-lambda version 1 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T20:56:10.569Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":26952,"level":20,"msg":"The lambda TEST-callback-lambda already exists","time":"2017-05-19T20:56:10.572Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":26952,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T20:56:11.133Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":26952,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T20:56:11.135Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":26952,"level":20,"msg":"The lambda TEST-callback-lambda already has an alias $LATEST","time":"2017-05-19T20:56:11.135Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":26952,"level":20,"msg":"The Lambda TEST-callback-lambda version 2 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T20:56:11.136Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27173,"level":20,"msg":"The lambda TEST-callback-lambda does not exists","time":"2017-05-19T20:57:45.341Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27173,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T20:57:45.938Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27173,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T20:57:45.940Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27173,"level":20,"msg":"The lambda TEST-callback-lambda does not have an alias $LATEST","time":"2017-05-19T20:57:45.943Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27173,"level":20,"msg":"The Lambda TEST-callback-lambda version 1 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T20:57:45.943Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27173,"level":20,"msg":"The lambda TEST-callback-lambda already exists","time":"2017-05-19T20:57:45.947Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27173,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T20:57:46.506Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27173,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T20:57:46.507Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27173,"level":20,"msg":"The lambda TEST-callback-lambda already has an alias $LATEST","time":"2017-05-19T20:57:46.508Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27173,"level":20,"msg":"The Lambda TEST-callback-lambda version 2 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T20:57:46.509Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27333,"level":20,"msg":"The lambda TEST-callback-lambda does not exists","time":"2017-05-19T20:58:59.576Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27333,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T20:59:00.187Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27333,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T20:59:00.189Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27333,"level":20,"msg":"The lambda TEST-callback-lambda does not have an alias $LATEST","time":"2017-05-19T20:59:00.192Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27333,"level":20,"msg":"The Lambda TEST-callback-lambda version 1 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T20:59:00.193Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27333,"level":20,"msg":"The lambda TEST-callback-lambda already exists","time":"2017-05-19T20:59:00.197Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27333,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T20:59:00.748Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27333,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T20:59:00.749Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27333,"level":20,"msg":"The lambda TEST-callback-lambda already has an alias $LATEST","time":"2017-05-19T20:59:00.750Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27333,"level":20,"msg":"The Lambda TEST-callback-lambda version 2 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T20:59:00.750Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27456,"level":20,"msg":"The lambda TEST-callback-lambda does not exists","time":"2017-05-19T20:59:40.625Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27456,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T20:59:41.259Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27456,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T20:59:41.261Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27456,"level":20,"msg":"The lambda TEST-callback-lambda does not have an alias $LATEST","time":"2017-05-19T20:59:41.264Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27456,"level":20,"msg":"The Lambda TEST-callback-lambda version 1 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T20:59:41.265Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27456,"level":20,"msg":"The lambda TEST-callback-lambda already exists","time":"2017-05-19T20:59:41.268Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27456,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T20:59:41.833Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27456,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T20:59:41.834Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27456,"level":20,"msg":"The lambda TEST-callback-lambda already has an alias $LATEST","time":"2017-05-19T20:59:41.835Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27456,"level":20,"msg":"The Lambda TEST-callback-lambda version 2 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T20:59:41.836Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27574,"level":20,"msg":"The lambda TEST-callback-lambda does not exists","time":"2017-05-19T21:00:10.616Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27574,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T21:00:11.212Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27574,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T21:00:11.215Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27574,"level":20,"msg":"The lambda TEST-callback-lambda does not have an alias $LATEST","time":"2017-05-19T21:00:11.217Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27574,"level":20,"msg":"The Lambda TEST-callback-lambda version 1 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T21:00:11.218Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27574,"level":20,"msg":"The lambda TEST-callback-lambda already exists","time":"2017-05-19T21:00:11.222Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27574,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T21:00:11.889Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27574,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T21:00:11.891Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27574,"level":20,"msg":"The lambda TEST-callback-lambda already has an alias $LATEST","time":"2017-05-19T21:00:11.894Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27574,"level":20,"msg":"The Lambda TEST-callback-lambda version 2 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T21:00:11.895Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27702,"level":20,"msg":"The lambda TEST-callback-lambda does not exists","time":"2017-05-19T21:00:36.873Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27702,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T21:00:37.523Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27702,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T21:00:37.525Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27702,"level":20,"msg":"The lambda TEST-callback-lambda does not have an alias $LATEST","time":"2017-05-19T21:00:37.528Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27702,"level":20,"msg":"The Lambda TEST-callback-lambda version 1 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T21:00:37.529Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27702,"level":20,"msg":"The lambda TEST-callback-lambda already exists","time":"2017-05-19T21:00:37.532Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27702,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T21:00:38.094Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27702,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T21:00:38.096Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27702,"level":20,"msg":"The lambda TEST-callback-lambda already has an alias $LATEST","time":"2017-05-19T21:00:38.096Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27702,"level":20,"msg":"The Lambda TEST-callback-lambda version 2 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T21:00:38.098Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27799,"level":20,"msg":"The lambda TEST-callback-lambda does not exists","time":"2017-05-19T21:00:59.914Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27799,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T21:01:00.520Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27799,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T21:01:00.522Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27799,"level":20,"msg":"The lambda TEST-callback-lambda does not have an alias $LATEST","time":"2017-05-19T21:01:00.525Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27799,"level":20,"msg":"The Lambda TEST-callback-lambda version 1 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T21:01:00.526Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27799,"level":20,"msg":"The lambda TEST-callback-lambda already exists","time":"2017-05-19T21:01:00.529Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27799,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T21:01:01.100Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27799,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T21:01:01.102Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27799,"level":20,"msg":"The lambda TEST-callback-lambda already has an alias $LATEST","time":"2017-05-19T21:01:01.102Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":27799,"level":20,"msg":"The Lambda TEST-callback-lambda version 2 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T21:01:01.103Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":28085,"level":20,"msg":"The lambda TEST-callback-lambda does not exists","time":"2017-05-19T21:03:57.251Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":28085,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T21:03:57.852Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":28085,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T21:03:57.854Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":28085,"level":20,"msg":"The lambda TEST-callback-lambda does not have an alias $LATEST","time":"2017-05-19T21:03:57.856Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":28085,"level":20,"msg":"The Lambda TEST-callback-lambda version 1 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T21:03:57.857Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":28085,"level":20,"msg":"The lambda TEST-callback-lambda already exists","time":"2017-05-19T21:03:57.861Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":28085,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-19T21:03:58.414Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":28085,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-19T21:03:58.415Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":28085,"level":20,"msg":"The lambda TEST-callback-lambda already has an alias $LATEST","time":"2017-05-19T21:03:58.416Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":28085,"level":20,"msg":"The Lambda TEST-callback-lambda version 2 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-19T21:03:58.417Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":1961,"level":20,"msg":"The lambda TEST-callback-lambda does not exists","time":"2017-05-22T19:40:46.355Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":1961,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-22T19:40:46.943Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":1961,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-22T19:40:46.945Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":1961,"level":20,"msg":"The lambda TEST-callback-lambda does not have an alias $LATEST","time":"2017-05-22T19:40:46.947Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":1961,"level":20,"msg":"The Lambda TEST-callback-lambda version 1 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-22T19:40:46.948Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":1961,"level":20,"msg":"The lambda TEST-callback-lambda already exists","time":"2017-05-22T19:40:46.952Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":1961,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-22T19:40:47.507Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":1961,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-22T19:40:47.508Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":1961,"level":20,"msg":"The lambda TEST-callback-lambda already has an alias $LATEST","time":"2017-05-22T19:40:47.509Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":1961,"level":20,"msg":"The Lambda TEST-callback-lambda version 2 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-22T19:40:47.510Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":20173,"level":20,"msg":"The lambda TEST-callback-lambda does not exists","time":"2017-05-25T17:09:33.102Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":20173,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-25T17:09:33.677Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":20173,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-25T17:09:33.678Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":20173,"level":20,"msg":"The lambda TEST-callback-lambda does not have an alias $LATEST","time":"2017-05-25T17:09:33.681Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":20173,"level":20,"msg":"The Lambda TEST-callback-lambda version 1 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-25T17:09:33.682Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":20173,"level":20,"msg":"The lambda TEST-callback-lambda already exists","time":"2017-05-25T17:09:33.685Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":20173,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-25T17:09:34.224Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":20173,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-25T17:09:34.225Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":20173,"level":20,"msg":"The lambda TEST-callback-lambda already has an alias $LATEST","time":"2017-05-25T17:09:34.226Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":20173,"level":20,"msg":"The Lambda TEST-callback-lambda version 2 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-25T17:09:34.227Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":10893,"level":20,"msg":"The lambda TEST-callback-lambda does not exists","time":"2017-05-25T21:29:06.679Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":10893,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-25T21:29:07.250Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":10893,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-25T21:29:07.252Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":10893,"level":20,"msg":"The lambda TEST-callback-lambda does not have an alias $LATEST","time":"2017-05-25T21:29:07.254Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":10893,"level":20,"msg":"The Lambda TEST-callback-lambda version 1 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-25T21:29:07.255Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":10893,"level":20,"msg":"The lambda TEST-callback-lambda already exists","time":"2017-05-25T21:29:07.260Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":10893,"level":20,"msg":"The Lambda TEST-callback-lambda has been deployed","time":"2017-05-25T21:29:07.800Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":10893,"level":20,"msg":"The Lambda undefined has been published: version $LATEST","time":"2017-05-25T21:29:07.801Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":10893,"level":20,"msg":"The lambda TEST-callback-lambda already has an alias $LATEST","time":"2017-05-25T21:29:07.802Z","v":0}
+{"name":"myrmex","hostname":"cs278.concrete.com","pid":10893,"level":20,"msg":"The Lambda TEST-callback-lambda version 2 has been aliased arn:aws:lambda:us-east-1:000000000000:function:TEST-callback-lambda:v0","time":"2017-05-25T21:29:07.803Z","v":0}

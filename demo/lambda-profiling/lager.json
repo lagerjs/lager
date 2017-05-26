@@ -1,7 +1,0 @@
-{
-  "name": "A Lager project",
-  "plugins": [
-    "@lager/iam",
-    "@lager/lambda"
-  ]
-}

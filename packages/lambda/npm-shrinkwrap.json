@@ -1,5 +1,5 @@
 {
-  "name": "@lager/lambda",
+  "name": "@myrmex/lambda",
   "version": "0.1.1",
   "dependencies": {
     "abbrev": {

@@ -10,9 +10,9 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@lager/api-gateway": "*",
-    "@lager/iam": "*",
-    "@lager/lager": "*",
-    "@lager/lambda": "*"
+    "@myrmex/api-gateway": "*",
+    "@myrmex/iam": "*",
+    "@myrmex/core": "*",
+    "@myrmex/lambda": "*"
   }
 }

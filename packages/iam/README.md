@@ -1,7 +1,7 @@
-<img align="right" alt="lager logo" src="https://raw.githubusercontent.com/lagerjs/lager/master/img/lager-logo2.png" />
+<img align="right" alt="myrmex logo" src="https://raw.githubusercontent.com/myrmx/myrmex/master/img/myrmex-logo2.png" />
 
-[![Known Vulnerabilities](https://snyk.io/test/npm/@lager/iam/badge.svg)](https://snyk.io/test/npm/@lager/iam)
+[![Known Vulnerabilities](https://snyk.io/test/npm/@myrmex/iam/badge.svg)](https://snyk.io/test/npm/@myrmex/iam)
 
-# Lager IAM plugin
+# Myrmex IAM plugin
 
-Documentation available at [https://lagerjs.github.io](https://lagerjs.github.io).
+Documentation available at [https://myrmx.github.io](https://myrmx.github.io).

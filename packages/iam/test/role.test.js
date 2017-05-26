@@ -121,7 +121,7 @@ describe('An IAM role', () => {
   });
 
 
-  it('should not add "_" to the role name when the Lager "context" does not provide environment or stage', function() {
+  it('should not add "_" to the role name when the Myrmex "context" does not provide environment or stage', function() {
     return role.deploy({ environment: '', stage: '' })
     .then(report => {
       assert.equal(report.name, 'MyRole');

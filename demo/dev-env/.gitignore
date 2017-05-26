@@ -1,7 +1,7 @@
 *
 !gitignore
-!node_modules/@lager
-!lager.json
+!node_modules/@myrmex
+!myrmex.json
 !package.json
 !run.sh
 !env.list.example

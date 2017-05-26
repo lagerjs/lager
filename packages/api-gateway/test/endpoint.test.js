@@ -9,7 +9,7 @@ describe('An endpoint', () => {
 
   let endpoint;
   const spec = {
-    'x-lager': {
+    'x-myrmex': {
       apis: [
         'my-api'
       ],
@@ -62,21 +62,21 @@ describe('An endpoint', () => {
     const spec = endpoint.generateSpec('doc');
     assert.equal(spec.produces[0], 'application/json');
     assert.equal(spec['x-amazon-apigateway-integration'], undefined);
-    assert.equal(spec['x-lager'], undefined);
+    assert.equal(spec['x-myrmex'], undefined);
   });
 
   it('should generate its AWS specification', () => {
     const spec = endpoint.generateSpec('api-gateway');
     assert.equal(spec.produces[0], 'application/json');
     assert.equal(spec['x-amazon-apigateway-integration'].credentials, 'api-invoke-lambda');
-    assert.equal(spec['x-lager'], undefined);
+    assert.equal(spec['x-myrmex'], undefined);
   });
 
   it('should generate its complete specification', () => {
     const spec = endpoint.generateSpec('complete');
     assert.equal(spec.produces[0], 'application/json');
     assert.equal(spec['x-amazon-apigateway-integration'].credentials, 'api-invoke-lambda');
-    assert.equal(spec['x-lager'].apis[0], 'my-api');
+    assert.equal(spec['x-myrmex'].apis[0], 'my-api');
   });
 
 });

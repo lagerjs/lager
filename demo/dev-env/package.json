@@ -1,7 +1,7 @@
 {
   "name": "app",
   "version": "1.0.0",
-  "description": "This folder contains a basic Lager project that should be used for contributions to Lager and its core plugins.",
+  "description": "This folder contains a basic Myrmex project that should be used for contributions to Myrmex and its core plugins.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,8 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@lager/iam": "*",
-    "@lager/lager": "*",
-    "@lager/lambda": "*"
+    "@myrmex/iam": "*",
+    "@myrmex/core": "*",
+    "@myrmex/lambda": "*"
   }
 }

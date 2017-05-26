@@ -1,0 +1,6 @@
+{
+  "name": "iam",
+  "plugins": [
+    "@myrmex/iam"
+  ]
+}

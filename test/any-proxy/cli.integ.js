@@ -7,7 +7,7 @@ const Promise = require('bluebird');
 const rp = require('request-promise');
 const fs = require('fs-extra');
 const remove = Promise.promisify(fs.remove);
-const icli = require('../../packages/cli/src/bin/lager');
+const icli = require('../../packages/cli/src/bin/myrmex');
 const showStdout = !!process.env.LAGER_SHOW_STDOUT;
 const apiDeployDelay = require('../api-deploy-delay');
 
@@ -25,7 +25,7 @@ describe('Creation and deployment of a proxy integration with ANY http method', 
     return Promise.all([
       remove(path.join(__dirname, 'api-gateway')),
       remove(path.join(__dirname, 'lambda')),
-      remove(path.join(__dirname, 'lager.log'))
+      remove(path.join(__dirname, 'myrmex.log'))
     ]);
   });
 
@@ -33,7 +33,7 @@ describe('Creation and deployment of a proxy integration with ANY http method', 
     it('should be done via the sub-command "create-lambda"', () => {
       icli.catchPrintStart(showStdout);
       // eslint-disable-next-line max-len
-      return icli.parse('node script.js create-lambda any-proxy -r nodejs6.10 -t 20 -m 128 --role arn:aws:iam::856019870963:role/LambdaExecutionLagerIntegrationTest'.split(' '))
+      return icli.parse('node script.js create-lambda any-proxy -r nodejs6.10 -t 20 -m 128 --role arn:aws:iam::856019870963:role/LambdaExecutionMyrmexIntegrationTest'.split(' '))
       .then(res => {
         const stdout = icli.catchPrintStop();
         assert.ok(stdout.indexOf('The Lambda \x1b[36many-proxy\x1b[0m has been created') > -1);
@@ -56,10 +56,10 @@ describe('Creation and deployment of a proxy integration with ANY http method', 
     it('should be done via the sub-command "create-endpoint"', () => {
       icli.catchPrintStart(showStdout);
       // eslint-disable-next-line max-len
-      return icli.parse('node script.js create-endpoint /{proxy+} any -a any-proxy -s Catch+all+non+root+request -i lambda-proxy --auth none --role arn:aws:iam::856019870963:role/APIGatewayInvokeLambdaLagerIntegrationTest -l any-proxy'.split(' '))
+      return icli.parse('node script.js create-endpoint /{proxy+} any -a any-proxy -s Catch+all+non+root+request -i lambda-proxy --auth none --role arn:aws:iam::856019870963:role/APIGatewayInvokeLambdaMyrmexIntegrationTest -l any-proxy'.split(' '))
       .then(res => {
         // eslint-disable-next-line max-len
-        return icli.parse('node script.js create-endpoint / any -a any-proxy -s Catch+all+root+request -i lambda-proxy --auth none --role arn:aws:iam::856019870963:role/APIGatewayInvokeLambdaLagerIntegrationTest -l any-proxy'.split(' '));
+        return icli.parse('node script.js create-endpoint / any -a any-proxy -s Catch+all+root+request -i lambda-proxy --auth none --role arn:aws:iam::856019870963:role/APIGatewayInvokeLambdaMyrmexIntegrationTest -l any-proxy'.split(' '));
       })
       .then(res => {
         const stdout = icli.catchPrintStop();

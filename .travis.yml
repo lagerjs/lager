@@ -3,7 +3,7 @@ sudo: false
 cache:
   directories:
     - node_modules
-    - packages/lager/node_modules
+    - packages/myrmex/node_modules
     - packages/cli/node_modules
     - packages/iam/node_modules
     - packages/lambda/node_modules
@@ -15,7 +15,7 @@ node_js:
   - "6"
 env:
   - TEST_SUITE=integration
-  - TEST_SUITE=lager
+  - TEST_SUITE=myrmex
   - TEST_SUITE=cli
   - TEST_SUITE=iam
   - TEST_SUITE=lambda

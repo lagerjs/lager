@@ -1,7 +1,0 @@
-{
-  "name": "lambda-profiling",
-  "plugins": [
-    "@lager/iam",
-    "@lager/lambda"
-  ]
-}

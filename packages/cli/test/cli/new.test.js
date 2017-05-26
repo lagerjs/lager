@@ -10,7 +10,7 @@ const cmd = testRequire('src/cli/new');
 describe('The new sub-command', function() {
 
   it('is a function', () => {
-    assert.equal(typeof cmd, 'function', 'the module "src/cli/please" exposes a function');
+    assert.equal(typeof cmd, 'function', 'the module "src/cli/new" exposes a function');
   });
 
   it('creates a comquirer sub-command', () => {

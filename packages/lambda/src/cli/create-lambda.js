@@ -84,7 +84,7 @@ module.exports = (icli) => {
       }
     }, {
       cmdSpec: '--role <role>',
-      description: 'select the execution role' + (plugin.lager.isPluginRegistered('iam') ? '' : ' (enter the ARN)'),
+      description: 'select the execution role' + (plugin.myrmex.isPluginRegistered('iam') ? '' : ' (enter the ARN)'),
       type: 'list',
       choices: choicesLists.roles,
       // We desactivate validation because the value can be set manually
@@ -93,14 +93,14 @@ module.exports = (icli) => {
         message: 'Choose the execution role',
         when(answers, cmdParameterValues) {
           if (cmdParameterValues.role) { return false; }
-          return answers.roleOrigin === 'lager' || answers.roleOrigin === 'aws';
+          return answers.roleOrigin === 'myrmex' || answers.roleOrigin === 'aws';
         }
       }
     }, {
       type: 'input',
       question: {
         name: 'roleManually',
-        message: 'Enter the IAM role that will be used to execute the Lambda function' + (plugin.lager.isPluginRegistered('iam') ? '' : ' (enter the ARN)'),
+        message: 'Enter the IAM role that will be used to execute the Lambda function' + (plugin.myrmex.isPluginRegistered('iam') ? '' : ' (enter the ARN)'),
         when(answers, cmdParameterValues) {
           return !answers.role && !cmdParameterValues.role;
         }
@@ -138,11 +138,11 @@ module.exports = (icli) => {
         });
       },
       roleOrigins: () => {
-        if (plugin.lager.isPluginRegistered('iam')) {
+        if (plugin.myrmex.isPluginRegistered('iam')) {
           const choices = [];
           choices.push({
-            value: 'lager',
-            name: 'Select a role managed by the plugin @lager/iam'
+            value: 'myrmex',
+            name: 'Select a role managed by the plugin @myrmex/iam'
           });
           choices.push({
             value: 'aws',
@@ -158,12 +158,12 @@ module.exports = (icli) => {
       },
       roles: (answers) => {
         if (answers && answers.roleOrigin === 'aws') {
-          return plugin.lager.call('iam:getAWSRoles', [])
+          return plugin.myrmex.call('iam:getAWSRoles', [])
           .then(roles => {
             return _.map(roles, 'RoleName');
           });
         } else {
-          return plugin.lager.call('iam:getRoles', [])
+          return plugin.myrmex.call('iam:getRoles', [])
           .then(roles => {
             const eligibleRoles = [];
             _.forEach(roles, role => {

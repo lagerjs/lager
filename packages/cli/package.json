@@ -1,29 +1,29 @@
 {
-  "name": "@lager/cli",
-  "version": "0.1.3",
-  "description": "The lager CLI",
+  "name": "myrmex",
+  "version": "0.0.1",
+  "description": "The Myrmex CLI",
   "main": "index.js",
   "scripts": {
     "test": "NODE_ENV=test istanbul cover --include-all-sources=true ./node_modules/mocha/bin/_mocha -- --recursive && rm -rf ./coverage",
     "test-ci": "NODE_ENV=test istanbul cover --include-all-sources=true ./node_modules/mocha/bin/_mocha --report lcovonly -- --recursive && codecov -F unit"
   },
   "bin": {
-    "lager": "src/bin/lager"
+    "myrmex": "src/bin/myrmex"
   },
   "keywords": [
-    "lager",
+    "myrmex",
     "cli"
   ],
   "author": "Alexis Hénaut",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lagerjs/lager.git"
+    "url": "git+https://github.com/myrmx/myrmex.git"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/lagerjs/lager/issues"
+    "url": "https://github.com/myrmx/myrmex/issues"
   },
-  "homepage": "https://github.com/lagerjs/cli#readme",
+  "homepage": "https://github.com/myrmx/cli#readme",
   "dependencies": {
     "bluebird": "^3.5.0",
     "comquirer": "^0.0.15",

@@ -95,7 +95,7 @@ module.exports = (icli) => {
       }
     }, {
       cmdSpec: '-r, --role <role>',
-      description: 'select the role to invoke integration' + (plugin.lager.isPluginRegistered('iam') ? '' : ' (enter the ARN)'),
+      description: 'select the role to invoke integration' + (plugin.myrmex.isPluginRegistered('iam') ? '' : ' (enter the ARN)'),
       type: 'list',
       choices: choicesLists.roles,
       // We desactivate validation because the value can be set manually
@@ -104,14 +104,14 @@ module.exports = (icli) => {
         message: 'Choose the invocation role',
         when(answers, cmdParameterValues) {
           if (cmdParameterValues.role) { return false; }
-          return answers.roleOrigin === 'lager' || answers.roleOrigin === 'aws';
+          return answers.roleOrigin === 'myrmex' || answers.roleOrigin === 'aws';
         }
       }
     }, {
       type: 'input',
       question: {
         name: 'roleManually',
-        message: 'Enter the IAM role that will be used to invoke the integration' + (plugin.lager.isPluginRegistered('iam') ? '' : ' (enter the ARN)'),
+        message: 'Enter the IAM role that will be used to invoke the integration' + (plugin.myrmex.isPluginRegistered('iam') ? '' : ' (enter the ARN)'),
         when(answers, cmdParameterValues) {
           return (!answers.role && !cmdParameterValues.role) && (answers.integration !== 'mock' && cmdParameterValues.integration !== 'mock');
         }
@@ -160,11 +160,11 @@ module.exports = (icli) => {
         });
       },
       roleOrigins: () => {
-        if (plugin.lager.isPluginRegistered('iam')) {
+        if (plugin.myrmex.isPluginRegistered('iam')) {
           const choices = [];
           choices.push({
-            value: 'lager',
-            name: 'Select a role managed by the plugin @lager/iam'
+            value: 'myrmex',
+            name: 'Select a role managed by the plugin @myrmex/iam'
           });
           choices.push({
             value: 'aws',
@@ -180,12 +180,12 @@ module.exports = (icli) => {
       },
       roles: (answers) => {
         if (answers && answers.roleOrigin === 'aws') {
-          return plugin.lager.call('iam:getAWSRoles', [])
+          return plugin.myrmex.call('iam:getAWSRoles', [])
           .then(roles => {
             return _.map(roles, 'RoleName');
           });
         } else {
-          return plugin.lager.call('iam:getRoles', [])
+          return plugin.myrmex.call('iam:getRoles', [])
           .then(roles => {
             const eligibleRoles = [];
             _.forEach(roles, role => {
@@ -201,7 +201,7 @@ module.exports = (icli) => {
         }
       },
       lambdas: () => {
-        return plugin.lager.call('lambda:getLambdas', [])
+        return plugin.myrmex.call('lambda:getLambdas', [])
         .then(lambdas => {
           return _.map(lambdas, lambda => {
             return {
@@ -235,7 +235,7 @@ module.exports = (icli) => {
     .then(() => {
       // We create the endpoint Swagger/OpenAPI specification
       const spec = {
-        'x-lager': {
+        'x-myrmex': {
           'apis': parameters.apis
         },
         summary: parameters.summary,
@@ -272,7 +272,7 @@ module.exports = (icli) => {
           break;
       }
       if (parameters.lambda) {
-        spec['x-lager'].lambda = parameters.lambda;
+        spec['x-myrmex'].lambda = parameters.lambda;
       }
 
       // We save the specification in a json file
@@ -282,7 +282,7 @@ module.exports = (icli) => {
       const msg = '\n  The endpoint ' + icli.format.info(parameters.httpMethod + ' ' + parameters.resourcePath) + ' has been created\n\n'
                 + '  Its OpenAPI specification is available in ' + icli.format.info(specFilePath + path.sep + 'spec.json') + '\n'
                 + '  You can inspect it using the command '
-                + icli.format.cmd('lager inspect-endpoint ' + parameters.resourcePath + ' ' + parameters.httpMethod) + '\n';
+                + icli.format.cmd('myrmex inspect-endpoint ' + parameters.resourcePath + ' ' + parameters.httpMethod) + '\n';
       icli.print(msg);
     });
   }

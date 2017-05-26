@@ -10,8 +10,8 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@lager/api-gateway": "../../packages/api-gateway",
-    "@lager/lager": "../../packages/lager",
-    "@lager/lambda": "../../packages/lambda"
+    "@myrmex/api-gateway": "../../packages/api-gateway",
+    "@myrmex/core": "../../packages/myrmex",
+    "@myrmex/lambda": "../../packages/lambda"
   }
 }

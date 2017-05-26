@@ -4,7 +4,7 @@ const plugin = {
   name: 'world',
   hooks: {
     registerCommands: (icli) => {
-      plugin.lager.log.info('"world" registerCommands hook called');
+      plugin.myrmex.log.info('"world" registerCommands hook called');
     }
   }
 };

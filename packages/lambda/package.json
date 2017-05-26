@@ -1,14 +1,14 @@
 {
-  "name": "@lager/lambda",
+  "name": "@myrmex/lambda",
   "version": "0.1.1",
-  "description": "A Lager plugin to manage AWS lambda functions and deploy them.",
+  "description": "A Myrmex plugin to manage AWS lambda functions and deploy them.",
   "main": "src/index.js",
   "scripts": {
     "test": "NODE_ENV=test istanbul cover --include-all-sources=true ./node_modules/mocha/bin/_mocha -- --recursive",
     "test-ci": "NODE_ENV=test istanbul cover --include-all-sources=true ./node_modules/mocha/bin/_mocha --report lcovonly -- --recursive && codecov -F unit"
   },
   "keywords": [
-    "Lager",
+    "Myrmex",
     "plugin",
     "aws",
     "lambda"
@@ -16,13 +16,13 @@
   "author": "Alexis Hénaut",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lagerjs/lager.git"
+    "url": "git+https://github.com/myrmx/myrmex.git"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/lagerjs/lager/issues"
+    "url": "https://github.com/myrmx/myrmex/issues"
   },
-  "homepage": "https://github.com/lagerjs/lager#readme",
+  "homepage": "https://github.com/myrmx/myrmex#readme",
   "dependencies": {
     "archiver": "^1.3.0",
     "aws-sdk": "^2.48.0",
@@ -41,6 +41,6 @@
     "mocha": "^3.3.0"
   },
   "peerDependencies": {
-    "@lager/lager": "*"
+    "@myrmex/core": "*"
   }
 }

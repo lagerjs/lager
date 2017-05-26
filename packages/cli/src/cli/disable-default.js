@@ -19,8 +19,8 @@ module.exports = (icli) => {
    */
   function executeCommand(parameters) {
     let msg = '\n  ' + icli.format.ko('Unknown command \n\n');
-    msg += '  Enter ' + icli.format.cmd('lager -h') + ' to see available commands\n';
-    msg += '  You have to be in the root folder of your Lager project to see commands implemented by Lager plugins\n';
+    msg += '  Enter ' + icli.format.cmd('myrmex -h') + ' to see available commands\n';
+    msg += '  You have to be in the root folder of your Myrmex project to see commands implemented by Myrmex plugins\n';
     console.log(msg);
     process.exit(1);
   }

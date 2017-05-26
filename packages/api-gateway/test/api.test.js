@@ -15,7 +15,7 @@ describe('An API', () => {
     swagger: '2.0',
     info: {
       title: 'my-api',
-      description: 'my-api - an API built with Lager'
+      description: 'my-api - an API built with Myrmex'
     },
     schemes: [
       'https'
@@ -55,16 +55,16 @@ describe('An API', () => {
     items: [{
       id: 'aaaaaaaaaa',
       name: 'an-api - an-api',
-      description: 'an-api - an API built with Lager',
+      description: 'an-api - an API built with Myrmex',
       createdDate: new Date()
     }, {
       id: 'bbbbbbbbbb',
       name: 'another-api - another-api',
-      description: 'another-api - an API built with Lager',
+      description: 'another-api - an API built with Myrmex',
       createdDate: new Date()
     }, {
       id: 'cccccccccc',
-      name: 'an-api-not-created-by-lager',
+      name: 'an-api-not-created-by-myrmex',
       createdDate: new Date()
     }]
   };
@@ -72,7 +72,7 @@ describe('An API', () => {
   const importRestApi = {
     id: 'dddddddddd',
     name: 'TEST my-api - my-api',
-    description: 'my-api - an API built with Lager',
+    description: 'my-api - an API built with Myrmex',
     createdDate: new Date()
   };
   const putRestApi = importRestApi;
@@ -111,15 +111,15 @@ describe('An API', () => {
 
   it('should indicate if it exposes an endpoint or not', () => {
     assert.equal(api.doesExposeEndpoint(endpoint), false);
-    endpointSpec['x-lager'] = { apis: [ 'my-api' ] };
+    endpointSpec['x-myrmex'] = { apis: [ 'my-api' ] };
     assert.equal(api.doesExposeEndpoint(endpoint), true);
   });
 
   it('should register an endpoint and its models', () => {
-    delete endpointSpec['x-lager'];
+    delete endpointSpec['x-myrmex'];
     assert.equal(api.endpoints.length, 0);
     assert.equal(api.models.length, 0);
-    endpointSpec['x-lager'] = { apis: [ 'my-api' ] };
+    endpointSpec['x-myrmex'] = { apis: [ 'my-api' ] };
     return api.addEndpoint(endpoint)
     .then(api => {
       assert.equal(api.endpoints.length, 1);

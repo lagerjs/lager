@@ -10,8 +10,8 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@lager/iam": "*",
-    "@lager/lager": "*",
-    "@lager/lambda": "*"
+    "@myrmex/iam": "*",
+    "@myrmex/core": "*",
+    "@myrmex/lambda": "*"
   }
 }

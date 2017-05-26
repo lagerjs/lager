@@ -5,32 +5,32 @@ Node.js and secondly with Python.
 
 ## Prerequisites
 
-To use the `@lager/lambda` plugin, it is necessary to have a minimal knowledge about
+To use the `@myrmex/lambda` plugin, it is necessary to have a minimal knowledge about
 [AWS Lambda](https://aws.amazon.com/lambda/).
 
-An AWS user or role that uses the plugin `@lager/lambda` must have access to Lambda administration. The AWS policy
+An AWS user or role that uses the plugin `@myrmex/lambda` must have access to Lambda administration. The AWS policy
 `AWSLambdaFullAccess` gives all necessary permissions.
 
 ## Installation
 
-Install the node module in a lager project:
+Install the node module in a myrmex project:
 
 ```bash
-npm install @lager/lambda
+npm install @myrmex/lambda
 ```
 
-Then enable the plugin in the `lager.json` config file:
+Then enable the plugin in the `myrmex.json` config file:
 
 ```json
 {
   "name": "my-app",
   "plugins": [
-    "@lager/lambda"
+    "@myrmex/lambda"
   ]
 }
 ```
 
-Once the plugin is installed and enabled in the project, the `lager` command line will provide new sub-commands to manage and
+Once the plugin is installed and enabled in the project, the `myrmex` command line will provide new sub-commands to manage and
 deploy Lambdas.
 
 ## Project anatomy
@@ -39,7 +39,7 @@ By default, the content managed by the Lambda plugin is located in an `lambda` d
 project.
 
 Out of the box, for the Node.js runtime, the Lambda plugin allows to separate the definition of Lambdas from the logic of the
-application by providing a specific place to write node modules but it is not mandatory to use it. `@lager/lambda` helps to
+application by providing a specific place to write node modules but it is not mandatory to use it. `@myrmex/lambda` helps to
 define and deploy Lambdas but the developer is responsible of the implementation of the application. Other plugins built on
 top of the Lambda plugin may be more opinionated.
 
@@ -152,7 +152,7 @@ create-node-module [options] [name]
     -d, --dependencies <dependent-modules>  select the node modules that are dependencies of this new one
 ```
 
-Prepare a new Node.js module. By default the location of modules is `lambda/modules/<identifier>/`.
+Prepare a new Node.js module. By default the location of modules is `lambda/modules/<name>/`.
 
 The creation of nodes modules is just a suggestion to organize the code of a project. The idea is to maintain each component
 of the application in its own node module to select only relevant components when deploying Lambdas.
@@ -160,7 +160,7 @@ of the application in its own node module to select only relevant components whe
 Every Lambda can declare its modules dependencies using [local paths](https://docs.npmjs.com/files/package.json#local-paths)
 in its `package.json` file. Every module can also declare dependencies to other modules that way.
 
-When Lager deploys a Lambda, it executes `npm install` and the dependencies are installed in the `node_modules` folder.
+When Myrmex deploys a Lambda, it executes `npm install` and the dependencies are installed in the `node_modules` folder.
 
 ### deploy-lambdas
 
@@ -169,11 +169,14 @@ deploy-lambdas [options] [lambda-identifiers...]
 
   Options:
     -h, --help                       output usage information
-     --all                           deploy all lambdas of the project
+    --all                            deploy all lambdas of the project
     -r, --region [region]            select the AWS region
     -e, --environment [environment]  select the environment
     -a, --alias [alias]              select the alias to apply
 ```
+
+Deploy one or more Lambdas in AWS. The `--environment` option is used as a prefix. The `--alias` option will publish a version
+in Amazon Lambda and apply an alias. Setting the option to an empty string (`--alias ""`) will skip this.
 
 ### install-lambdas-locally
 
@@ -183,6 +186,8 @@ install-lambdas-locally [options] [lambda-identifiers...]
   Options:
     -h, --help  output usage information
 ```
+
+Deletes the `node_modules` folder of one or several lambda and runs `npm install` to re-install it.
 
 ### test-lambda-locally
 
@@ -194,6 +199,10 @@ test-lambda-locally [options] [lambda-identifier]
     -e, --event <event-name>  Event example to use
 ```
 
+Executes a Lambda locally. The event option allows to select the example object that will be passed as the first argument.
+Example objects are defined in json files in `lambda/lambdas/<identifier>/events/<event-name>.json`. A mock of the context
+object is passed as the second argument.
+
 ### test-lambda
 
 ```
@@ -204,5 +213,11 @@ test-lambda [options] [lambda-identifier]
     --event <event-name>             Event example to use
     -r, --region [region]            select the AWS region
     -e, --environment [environment]  select the environment
-    -s, --stage [stage]              select the stage (aka Lambda alias) to test
+    -a, --alias [alias]              select the alias to test
 ```
+
+Executes a Lambda deployed in AWS. The event option allows to select the example object that will be passed as the first
+argument. Example objects are defined in json files in `lambda/lambdas/<identifier>/events/<event-name>.json`. A mock of the
+context object is passed as the second argument.
+
+Setting the option `--alias` to an empty string (`--alias ""`) will invoke the `LATEST` version of the Lambda.

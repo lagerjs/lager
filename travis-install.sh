@@ -11,8 +11,8 @@ elif [ ! -d "packages/$TEST_SUITE" ]; then
     echo "The directory \"packages/$TEST_SUITE\" does not exists"
     exit 1;
 else
-    # All tests depend on the @lager/lager package
-    npm --prefix ./packages/lager install ./packages/lager --production
+    # All tests depend on the @myrmex/core package
+    npm --prefix ./packages/myrmex install ./packages/myrmex --production
     # Install dependencies of the tested package itself
     cd packages/$TEST_SUITE
     npm update

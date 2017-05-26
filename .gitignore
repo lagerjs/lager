@@ -1,9 +1,9 @@
 node_modules
 !test/**/node_modules
-!demo/dev-env/node_modules/@lager
+!demo/dev-env/node_modules/@myrmex
 npm-debug.log
 lerna-debug.log
-lager.log
+myrmex.log
 coverage
 reports
 doc

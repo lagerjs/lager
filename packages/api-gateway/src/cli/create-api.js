@@ -40,7 +40,7 @@ module.exports = (icli) => {
       type: 'input',
       question: {
         default: (answers, cmdParameterValues) => {
-          return (cmdParameterValues.apiIdentifier || answers.apiIdentifier) + ' - an API built with Lager';
+          return (cmdParameterValues.apiIdentifier || answers.apiIdentifier) + ' - an API built with Myrmex';
         },
         message: 'You can write a more complete description of the API here'
       }
@@ -80,7 +80,7 @@ module.exports = (icli) => {
     .then(() => {
       const msg = '\n  The API "' + icli.format.info(parameters.apiIdentifier) + '" has been created\n\n'
               + '  Its Swagger specification is available in ' + icli.format.info(specFilePath + path.sep + 'spec.json') + '\n'
-              + '  You can inspect it using the command ' + icli.format.cmd('lager inspect-api ' + parameters.apiIdentifier) + '\n';
+              + '  You can inspect it using the command ' + icli.format.cmd('myrmex inspect-api ' + parameters.apiIdentifier) + '\n';
       icli.print(msg);
     });
   }

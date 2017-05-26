@@ -21,7 +21,7 @@ LambdaIntegrationDataInjector.prototype.applyToEndpoint = function applyToEndpoi
   const spec = endpoint.getSpec();
 
   // The integrationDataInjector applies if the endpoint spec refers to its lambda
-  if (spec['x-lager'] && spec['x-lager'].lambda && spec['x-lager'].lambda === this.lambda.getIdentifier()) {
+  if (spec['x-myrmex'] && spec['x-myrmex'].lambda && spec['x-myrmex'].lambda === this.lambda.getIdentifier()) {
     spec['x-amazon-apigateway-integration'] = spec['x-amazon-apigateway-integration'] || {};
     spec['x-amazon-apigateway-integration'].type = spec['x-amazon-apigateway-integration'].type || 'aws';
     spec['x-amazon-apigateway-integration'].uri = 'arn:aws:apigateway:'

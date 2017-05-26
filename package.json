@@ -1,5 +1,5 @@
 {
-  "name": "lager",
+  "name": "myrmex",
   "version": "0.0.0",
   "dependencies": {},
   "devDependencies": {
@@ -34,12 +34,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lagerjs/lager.git"
+    "url": "git+https://github.com/myrmx/myrmex.git"
   },
   "author": "Alexis Henaut",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/lagerjs/lager/issues"
+    "url": "https://github.com/myrmx/myrmex/issues"
   },
-  "homepage": "https://github.com/lagerjs/lager#readme"
+  "homepage": "https://github.com/myrmx/myrmex#readme"
 }

@@ -6,7 +6,7 @@ const assert = require('assert');
 const Promise = require('bluebird');
 const fs = require('fs-extra');
 const remove = Promise.promisify(fs.remove);
-const icli = require('../../packages/cli/src/bin/lager');
+const icli = require('../../packages/cli/src/bin/myrmex');
 const showStdout = !!process.env.LAGER_SHOW_STDOUT;
 
 describe('Definition of IAM permissions', () => {
@@ -22,7 +22,7 @@ describe('Definition of IAM permissions', () => {
   after(() => {
     return Promise.all([
       remove(path.join(__dirname, 'iam')),
-      remove(path.join(__dirname, 'lager.log'))
+      remove(path.join(__dirname, 'myrmex.log'))
     ]);
   });
 
@@ -32,7 +32,7 @@ describe('Definition of IAM permissions', () => {
     .then(res => {
       const stdout = icli.catchPrintStop();
       assert.ok(stdout.indexOf('The IAM policy \x1b[36mintegration-test-policy\x1b[0m has been created') > -1);
-      const path = icli.lager.getConfig('iam.policiesPath');
+      const path = icli.myrmex.getConfig('iam.policiesPath');
       const policy = require('./' + path + '/integration-test-policy');
       assert.equal(policy.Statement[0].Effect, 'Deny');
     });
@@ -54,7 +54,7 @@ describe('Definition of IAM permissions', () => {
     .then(res => {
       const stdout = icli.catchPrintStop();
       assert.ok(stdout.indexOf('The IAM role \x1b[36mintegration-test-role\x1b[0m has been created') > -1);
-      const path = icli.lager.getConfig('iam.rolesPath');
+      const path = icli.myrmex.getConfig('iam.rolesPath');
       const role = require('./' + path + '/integration-test-role');
       assert.equal(role['managed-policies'][0], 'integration-test-policy');
     });

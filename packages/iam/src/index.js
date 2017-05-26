@@ -15,7 +15,7 @@ function loadPolicies() {
   const policyConfigsPath = path.join(process.cwd(), plugin.config.policiesPath);
 
   // This event allows to inject code before loading all APIs
-  return plugin.lager.fire('beforePoliciesLoad')
+  return plugin.myrmex.fire('beforePoliciesLoad')
   .then(() => {
     // Retrieve configuration path of all API specifications
     return fs.readdirAsync(policyConfigsPath);
@@ -32,7 +32,7 @@ function loadPolicies() {
   })
   .then(policies => {
     // This event allows to inject code to add or delete or alter policy configurations
-    return plugin.lager.fire('afterPoliciesLoad', policies);
+    return plugin.myrmex.fire('afterPoliciesLoad', policies);
   })
   .spread(policies => {
     return Promise.resolve(policies);
@@ -52,7 +52,7 @@ function loadPolicies() {
  * @returns {Promise<Policy>} - the promise of a policy
  */
 function loadPolicy(documentPath, name) {
-  return plugin.lager.fire('beforePolicyLoad', documentPath, name)
+  return plugin.myrmex.fire('beforePolicyLoad', documentPath, name)
   .spread((documentPath, name) => {
     // Because we use require() to get the document, it could either be a JSON file
     // or the content exported by a node module
@@ -63,7 +63,7 @@ function loadPolicy(documentPath, name) {
     const policy = new Policy(document, name);
 
     // This event allows to inject code to alter the Lambda configuration
-    return plugin.lager.fire('afterPolicyLoad', policy);
+    return plugin.myrmex.fire('afterPolicyLoad', policy);
   })
   .spread((policy) => {
     return Promise.resolve(policy);
@@ -90,7 +90,7 @@ function loadRoles() {
   const roleConfigsPath = path.join(process.cwd(), plugin.config.rolesPath);
 
   // This event allows to inject code before loading all APIs
-  return plugin.lager.fire('beforeRolesLoad')
+  return plugin.myrmex.fire('beforeRolesLoad')
   .then(() => {
     // Retrieve configuration path of all API specifications
     return fs.readdirAsync(roleConfigsPath);
@@ -107,7 +107,7 @@ function loadRoles() {
   })
   .then((roles) => {
     // This event allows to inject code to add or delete or alter role configurations
-    return plugin.lager.fire('afterRolesLoad', roles);
+    return plugin.myrmex.fire('afterRolesLoad', roles);
   })
   .spread((roles) => {
     return Promise.resolve(roles);
@@ -127,7 +127,7 @@ function loadRoles() {
  * @returns {[type]}            [description]
  */
 function loadRole(configPath, name) {
-  return plugin.lager.fire('beforeRoleLoad', configPath, name)
+  return plugin.myrmex.fire('beforeRoleLoad', configPath, name)
   .spread((documentPath, name) => {
     // Because we use require() to get the config, it could either be a JSON file
     // or the content exported by a node module
@@ -138,7 +138,7 @@ function loadRole(configPath, name) {
     const role = new Role(config, name);
 
     // This event allows to inject code to alter the Lambda configuration
-    return plugin.lager.fire('afterRoleLoad', role);
+    return plugin.myrmex.fire('afterRoleLoad', role);
   })
   .spread((role) => {
     return Promise.resolve(role);
@@ -168,7 +168,7 @@ const plugin = {
 
   hooks: {
     /**
-     * Hooks that add new commands to the Lager CLI
+     * Hooks that add new commands to the Myrmex CLI
      * @returns {Promise}
      */
     registerCommands: function registerCommands(icli) {
