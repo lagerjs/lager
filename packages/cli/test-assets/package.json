@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "description": "A Myrmex application to test the CLI",
   "dependencies": {
-    "@myrmex/core": "*"
+    "@myrmex/core": "../../core"
   },
   "devDependencies": {},
   "license": "MIT"
