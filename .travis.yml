@@ -3,11 +3,12 @@ sudo: false
 cache:
   directories:
     - node_modules
-    - packages/myrmex/node_modules
+    - packages/core/node_modules
     - packages/cli/node_modules
     - packages/iam/node_modules
     - packages/lambda/node_modules
     - packages/api-gateway/node_modules
+    - packages/cors/node_modules
 install:
   - bash travis-install.sh
 # Matrix begin
