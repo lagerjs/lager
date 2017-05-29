@@ -7,19 +7,21 @@ const Pebo = require('pebo');
 Pebo.setPromise(Promise);
 const log = require('./log');
 
-Promise.config({
-  longStackTraces: true
-});
+if (process.env.NODE_ENV !== 'test') {
+  Promise.config({
+    longStackTraces: true
+  });
 
-process.on('uncaughtException', (e) => {
-  log.fatal(e, 'Uncaught Exception');
-  process.exit(1);
-});
+  process.on('uncaughtException', (e) => {
+    log.fatal(e, 'Uncaught Exception');
+    process.exit(1);
+  });
 
-process.on('unhandledRejection', (reason, promise) => {
-  log.fatal({ promise: promise, reason: reason }, 'Unhandled Rejection');
-  process.exit(1);
-});
+  process.on('unhandledRejection', (reason, promise) => {
+    log.fatal({ promise: promise, reason: reason }, 'Unhandled Rejection');
+    process.exit(1);
+  });
+}
 
 
 /**

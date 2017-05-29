@@ -1,6 +1,6 @@
 {
   "name": "@myrmex/api-gateway",
-  "version": "0.1.1",
+  "version": "0.0.1",
   "description": "A Myrmex plugin to manage APIs in AWS API Gateway",
   "main": "src/index.js",
   "scripts": {

@@ -23,7 +23,7 @@ describe('Creation of a new project', () => {
     return remove(path.join(__dirname, 'my-project'));
   });
 
-  it('should be done via the sub-command "new"', function() {
+  it.skip('should be done via the sub-command "new"', function() {
     this.timeout(120000);
     icli.catchPrintStart(showStdout);
     return icli.parse('node script.js new my-project @myrmex/iam'.split(' '))

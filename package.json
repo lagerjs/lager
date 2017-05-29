@@ -25,7 +25,7 @@
   "scripts": {
     "lerna": "lerna",
     "snyk": "snyk",
-    "test": "snyk test && lerna run test",
+    "test": "lerna run test",
     "test-integration": "NODE_ENV=test istanbul cover --include-all-sources=true ./node_modules/mocha/bin/_mocha -- $(find test -name '*.integ.js' ! -ipath '*node_modules*')",
     "test-integration-ci": "NODE_ENV=test istanbul cover --include-all-sources=true ./node_modules/mocha/bin/_mocha --report lcovonly -- $(find test -name '*.integ.js' ! -ipath '*node_modules*') && codecov -F integration",
     "eslint": "eslint . && echo \"  JS lint passed\n\"; exit 0",

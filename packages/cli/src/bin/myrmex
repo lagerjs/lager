@@ -4,19 +4,6 @@
 const icli = require('comquirer');
 const _ = require('lodash');
 
-process.on('uncaughtException', (e) => {
-  process.stderr.write('\n  Uncaught Exception\n\n');
-  process.stderr.write(e.stack + '\n');
-  process.exit(1);
-});
-
-process.on('unhandledRejection', (reason, promise) => {
-  process.stderr.write('\n  Unhandled Rejection\n\n');
-  process.stderr.write('Promise: ' + JSON.stringify(promise, null, 2) + '\n\n');
-  process.stderr.write('Reason: ' + (reason instanceof Error ? reason.stack : JSON.stringify(reason, null, 2)) + '\n');
-  process.exit(1);
-});
-
 /**
  * Initialisation fush the require cache and try to load a myrmex project
  * @return {Promise}
