@@ -15,7 +15,7 @@ node_js:
   - "6"
 env:
   - TEST_SUITE=integration
-  - TEST_SUITE=myrmex
+  - TEST_SUITE=core
   - TEST_SUITE=cli
   - TEST_SUITE=iam
   - TEST_SUITE=lambda
