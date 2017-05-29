@@ -11,7 +11,7 @@
   "license": "MIT",
   "dependencies": {
     "@myrmex/iam": "../../packages/iam",
-    "@myrmex/core": "../../packages/myrmex",
+    "@myrmex/core": "../../packages/core",
     "@myrmex/lambda": "../../packages/lambda"
   }
 }

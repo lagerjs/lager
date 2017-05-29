@@ -1,6 +1,6 @@
 {
   "name": "@myrmex/lambda",
-  "version": "0.1.1",
+  "version": "0.0.1",
   "description": "A Myrmex plugin to manage AWS lambda functions and deploy them.",
   "main": "src/index.js",
   "scripts": {

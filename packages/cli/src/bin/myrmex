@@ -29,7 +29,7 @@ icli.init = function init() {
 
   // Add base commands
   require('../cli/disable-default')(icli);
-  require('../cli/chears')(icli);
+  require('../cli/cheers')(icli);
 
   // Check if the user calls the command from a myrmex project
   return require('../load-project')(icli)

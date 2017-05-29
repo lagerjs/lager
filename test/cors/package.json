@@ -12,6 +12,6 @@
   "devDependencies": {
     "@myrmex/api-gateway": "../../packages/api-gateway",
     "@myrmex/cors": "../../packages/cors",
-    "@myrmex/core": "../../packages/myrmex"
+    "@myrmex/core": "../../packages/core"
   }
 }

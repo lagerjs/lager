@@ -5,7 +5,7 @@ const assert = require('assert');
 const icli = require('../../packages/cli/src/bin/myrmex');
 const showStdout = !!process.env.LAGER_SHOW_STDOUT;
 
-describe('The "please" sub-command', () => {
+describe('The "cheers" sub-command', () => {
 
   before(() => {
     process.chdir(__dirname);
@@ -17,7 +17,7 @@ describe('The "please" sub-command', () => {
 
   it('should display a beer', () => {
     icli.catchPrintStart(showStdout);
-    return icli.parse('node script.js please'.split(' '))
+    return icli.parse('node script.js cheers'.split(' '))
     .then(res => {
       const stdout = icli.catchPrintStop();
       assert.ok(stdout.indexOf('language: ') > -1);
@@ -27,7 +27,7 @@ describe('The "please" sub-command', () => {
 
   it('should allow to select a language and a font', () => {
     icli.catchPrintStart(showStdout);
-    return icli.parse('node script.js please -l french -f Binary'.split(' '))
+    return icli.parse('node script.js cheers -l french -f Binary'.split(' '))
     .then(res => {
       const stdout = icli.catchPrintStop();
       assert.ok(stdout.indexOf('language: french') > -1);

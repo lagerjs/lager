@@ -12,7 +12,7 @@
   "dependencies": {
     "@myrmex/api-gateway": "../../packages/api-gateway",
     "@myrmex/iam": "../../packages/iam",
-    "@myrmex/core": "../../packages/myrmex",
+    "@myrmex/core": "../../packages/core",
     "@myrmex/lambda": "../../packages/lambda"
   }
 }
