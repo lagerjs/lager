@@ -12,7 +12,7 @@ elif [ ! -d "packages/$TEST_SUITE" ]; then
     exit 1;
 else
     # All tests depend on the @myrmex/core package
-    npm --prefix ./packages/myrmex install ./packages/myrmex --production
+    npm --prefix ./packages/core install ./packages/core --production
     # Install dependencies of the tested package itself
     cd packages/$TEST_SUITE
     npm update

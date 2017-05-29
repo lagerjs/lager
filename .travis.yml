@@ -21,6 +21,7 @@ env:
   - TEST_SUITE=iam
   - TEST_SUITE=lambda
   - TEST_SUITE=api-gateway
+  - TEST_SUITE=cors
 # Matrix end
 script:
   - bash travis-run.sh

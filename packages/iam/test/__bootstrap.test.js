@@ -16,22 +16,9 @@ global.testRequire = function(name) {
 
 const assert = require('assert');
 const path = require('path');
-const Promise = require('bluebird');
 const _ = require('lodash');
 const myrmex = require('../../core');
 const iamPlugin = testRequire('src/index');
-
-Promise.config({
-  longStackTraces: true
-});
-
-process.on('uncaughtException', (e) => {
-  console.log('Unhandled Exception at: ', e);
-});
-
-process.on('unhandledRejection', (reason, p) => {
-  console.log('Unhandled Rejection at: Promise ', p, ' reason: ', reason);
-});
 
 /**
  * Before executiong the tests, register the plugin in a myrmex instance
@@ -46,7 +33,6 @@ before(function() {
   myrmex.registerPlugin(iamPlugin);
   assert.equal(iamPlugin.myrmex, myrmex);
 });
-
 
 /**
  * Once the tests are finished
