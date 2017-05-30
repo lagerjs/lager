@@ -8,4 +8,4 @@ docker run \
        -v `pwd`/../../packages/cli:/home/myrmex/.node/lib/node_modules/myrmex \
        -v `pwd`/../../packages:/home/myrmex/.node/lib/node_modules/@myrmex \
        -it \
-       myrmex
+       myrmex/dev
