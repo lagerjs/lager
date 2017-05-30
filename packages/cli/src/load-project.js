@@ -34,6 +34,14 @@ module.exports = function loadProject(icli) {
       return myrmex.registerPlugin(cliPlugin);
     })
     .then(() => {
+      // Fire events that allow other plugin to complete commands
+      const originCreateSubCommand = icli.createSubCommand;
+      icli.createSubCommand = (config, executionFn) => {
+        return myrmex.fire('createCommand', config, icli)
+        .then(() => {
+          return originCreateSubCommand(config, executionFn);
+        });
+      };
       // We fire the "registerCommands" event so plugins can add their own commands
       return myrmex.fire('registerCommands', icli);
     })

@@ -12,6 +12,8 @@
   "dependencies": {
     "@myrmex/iam": "*",
     "@myrmex/core": "*",
+    "@myrmex/api-gateway": "*",
+    "@myrmex/cors": "*",
     "@myrmex/lambda": "*"
   }
 }

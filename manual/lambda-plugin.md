@@ -13,13 +13,13 @@ An AWS user or role that uses the plugin `@myrmex/lambda` must have access to La
 
 ## Installation
 
-Install the node module in a myrmex project:
+Install the npm module in a Myrmex project:
 
 ```bash
 npm install @myrmex/lambda
 ```
 
-Then enable the plugin in the `myrmex.json` config file:
+Then enable the plugin in the `myrmex.json` file:
 
 ```json
 {
@@ -130,7 +130,6 @@ relative file paths.
 create-lambda [options] [identifier]
 
   Options:
-    -h, --help                                                       output usage information
     -r, --runtime <nodejs|nodejs4.3|nodejs6.10|python2.7|python3.6>  select the runtime
     -t, --timeout <timeout>                                          select the timeout (in seconds)
     -m, --memory <memory>                                            select the memory (in MB)
@@ -148,7 +147,6 @@ Create a new Lambda. By default the location of Lambdas is `lambda/lambdas/<iden
 create-node-module [options] [name]
 
   Options:
-    -h, --help                              output usage information
     -d, --dependencies <dependent-modules>  select the node modules that are dependencies of this new one
 ```
 
@@ -168,7 +166,6 @@ When Myrmex deploys a Lambda, it executes `npm install` and the dependencies are
 deploy-lambdas [options] [lambda-identifiers...]
 
   Options:
-    -h, --help                       output usage information
     --all                            deploy all lambdas of the project
     -r, --region [region]            select the AWS region
     -e, --environment [environment]  select the environment
@@ -181,10 +178,7 @@ in Amazon Lambda and apply an alias. Setting the option to an empty string (`--a
 ### install-lambdas-locally
 
 ```
-install-lambdas-locally [options] [lambda-identifiers...]
-
-  Options:
-    -h, --help  output usage information
+install-lambdas-locally [lambda-identifiers...]
 ```
 
 Deletes the `node_modules` folder of one or several lambda and runs `npm install` to re-install it.
@@ -195,7 +189,6 @@ Deletes the `node_modules` folder of one or several lambda and runs `npm install
 test-lambda-locally [options] [lambda-identifier]
 
   Options:
-    -h, --help                output usage information
     -e, --event <event-name>  Event example to use
 ```
 
@@ -209,7 +202,6 @@ object is passed as the second argument.
 test-lambda [options] [lambda-identifier]
 
   Options:
-    -h, --help                       output usage information
     --event <event-name>             Event example to use
     -r, --region [region]            select the AWS region
     -e, --environment [environment]  select the environment

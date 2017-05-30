@@ -29,7 +29,7 @@ module.exports = (icli) => {
   };
 
   /**
-   * Create the command and the promp
+   * Create the command and the prompt
    */
   return icli.createSubCommand(config, executeCommand);
 

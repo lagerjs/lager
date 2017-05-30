@@ -2,7 +2,6 @@
   "name": "planet-express",
   "plugins": [
     "@myrmex/iam",
-    "@myrmex/api-gateway",
-    "@myrmex/lambda"
+    "@myrmex/api-gateway"
   ]
 }

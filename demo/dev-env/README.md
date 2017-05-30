@@ -5,7 +5,7 @@ This folder contains a basic Myrmex project that should be used for contribution
 If you did not arrived here by mistake, thanks for contributing to Myrmex! :tada:
 
 Executing the `run.sh` script in this folder will open a shell inside a Docker :whale: container. There, you have access to a
-empty Myrmex :beers: project that can be used to test modifications applied to Myrmex modules hosted in this repository.
+empty Myrmex :ant: project that can be used to test modifications applied to Myrmex modules hosted in this repository.
 
 The content of the `packages` folder of this repository in mounted in the `/home/myrmex/.node/lib/node_modules/` folder of the
 container like if the packages had been installed globally. Inside the Myrmex project, the packages are available via a
@@ -20,5 +20,3 @@ If you want to perform deployments on AWS, copy the `env.list.example` file into
 credentials.
 
 Every file created in this folder will be ignored by git.
-
-Cheers :beers: :sparkles:

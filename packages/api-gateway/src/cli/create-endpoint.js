@@ -67,22 +67,6 @@ module.exports = (icli) => {
         message: 'What is the type of integration of this endpoint?'
       }
     }, {
-      cmdSpec: '-l --lambda <lambda-name|lambda-arn>',
-      description: 'The Lambda to integrate with the endpoint',
-      type: 'list',
-      choices: choicesLists.lambdas,
-      question: {
-        message: 'What is the Lambda to integrate with the endpoint?',
-        when(answers, cmdParameterValues) {
-          if (cmdParameterValues.lambda) {
-            return false;
-          }
-          return choicesLists.lambdas().then(lambdas => {
-            return lambdas.length > 0;
-          });
-        }
-      }
-    }, {
       type: 'list',
       choices: choicesLists.roleOrigins,
       question: {
@@ -199,17 +183,6 @@ module.exports = (icli) => {
             return eligibleRoles;
           });
         }
-      },
-      lambdas: () => {
-        return plugin.myrmex.call('lambda:getLambdas', [])
-        .then(lambdas => {
-          return _.map(lambdas, lambda => {
-            return {
-              value: lambda.getIdentifier(),
-              name: icli.format.info(lambda.getIdentifier())
-            };
-          });
-        });
       }
     };
   }
@@ -272,6 +245,7 @@ module.exports = (icli) => {
           break;
       }
       if (parameters.lambda) {
+        // @TODO this should be the responsability of the Lambda plugin
         spec['x-myrmex'].lambda = parameters.lambda;
       }
 

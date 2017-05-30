@@ -216,8 +216,8 @@ const plugin = {
      * @param {Object} commandConfig - a command being added to the Myrmex CLI
      * @returns {Promise}
      */
-    createCommand: function createCommandHook(commandConfig) {
-      return require('./hooks/create-command').hook(commandConfig);
+    createCommand: function createCommandHook(commandConfig, icli) {
+      return require('./hooks/create-command').hook(commandConfig, icli);
     },
 
     /**

@@ -14,13 +14,11 @@ describe('The deploy-apis sub-command', function() {
   });
 
   it('creates a comquirer sub-command', () => {
-    cmd(icli)
-    .then(() => {
-      assert.ok(
-        _.find(icli.getProgram().commands, command => { return command._name === 'deploy-apis'; }),
-        'a "deploy-apis sub command has been created"'
-      );
-    });
+    cmd(icli);
+    assert.ok(
+      _.find(icli.getProgram().commands, command => { return command._name === 'deploy-apis'; }),
+      'a "deploy-apis sub command has been created"'
+    );
   });
 
 });

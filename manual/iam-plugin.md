@@ -18,7 +18,7 @@ Install the npm module in a Myrmex project:
 npm install @myrmex/iam --save-dev
 ```
 
-Then enable the plugin in the `myrmex.json` config file:
+Then enable the plugin in the `myrmex.json` file:
 
 ```json
 {
