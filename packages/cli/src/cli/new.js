@@ -31,8 +31,14 @@ module.exports = (icli) => {
       question: {
         message: 'Which core plugins do you want to use in your project?'
       }
-    }]
+    }],
+    execute: executeCommand
   };
+
+  /**
+   * Create the command and the prompt
+   */
+  return icli.createSubCommand(config);
 
   /**
    * Build the choices for "list" and "checkbox" parameters
@@ -124,8 +130,4 @@ module.exports = (icli) => {
     });
   }
 
-  /**
-   * Create the command and the prompt
-   */
-  return icli.createSubCommand(config, executeCommand);
 };

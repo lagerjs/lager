@@ -61,13 +61,14 @@ module.exports = (icli) => {
           return cmdParameterValues['alias'] === undefined && plugin.myrmex.getConfig('lambda.alias') === undefined;
         }
       }
-    }]
+    }],
+    execute: executeCommand
   };
 
   /**
-   * Create the command and the promp
+   * Create the command and the prompt
    */
-  return icli.createSubCommand(config, executeCommand);
+  return icli.createSubCommand(config);
 
 
   /**

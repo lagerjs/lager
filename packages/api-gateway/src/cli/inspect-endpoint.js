@@ -58,13 +58,14 @@ module.exports = (icli) => {
       // Uppercase the HTTP method
       if (arguments[1]) { arguments[1] = arguments[1].toUpperCase(); }
       return arguments;
-    }
+    },
+    execute: executeCommand
   };
 
   /**
-   * Create the command and the promp
+   * Create the command and the prompt
    */
-  return icli.createSubCommand(config, executeCommand);
+  return icli.createSubCommand(config);
 
   /**
    * Build the choices for "list" and "checkbox" parameters

@@ -8,7 +8,7 @@ const rp = require('request-promise');
 const fs = require('fs-extra');
 const remove = Promise.promisify(fs.remove);
 const icli = require('../../packages/cli/src/bin/myrmex');
-const showStdout = !!process.env.LAGER_SHOW_STDOUT;
+const showStdout = !!process.env.MYRMEX_SHOW_STDOUT;
 const apiDeployDelay = require('../api-deploy-delay');
 
 describe('Creation and deployment of a proxy integration with ANY http method', () => {
@@ -56,10 +56,10 @@ describe('Creation and deployment of a proxy integration with ANY http method', 
     it('should be done via the sub-command "create-endpoint"', () => {
       icli.catchPrintStart(showStdout);
       // eslint-disable-next-line max-len
-      return icli.parse(('node script.js create-endpoint /{proxy+} any -a any-proxy -s Catch+all+non+root+request -i lambda-proxy --auth none --role arn:aws:iam::' + process.env.AWS_ACCOUNT_ID + ':role/APIGatewayInvokeLambda -l any-proxy').split(' '))
+      return icli.parse(('node script.js create-endpoint /{proxy+} any -a any-proxy -s Catch+all+non+root+request -i lambda-proxy --auth none --role arn:aws:iam::' + process.env.AWS_ACCOUNT_ID + ':role/APIGatewayInvokeLambda --lambda any-proxy').split(' '))
       .then(res => {
         // eslint-disable-next-line max-len
-        return icli.parse(('node script.js create-endpoint / any -a any-proxy -s Catch+all+root+request -i lambda-proxy --auth none --role arn:aws:iam::' + process.env.AWS_ACCOUNT_ID + ':role/APIGatewayInvokeLambdaMyrmexIntegrationTest -l any-proxy').split(' '));
+        return icli.parse(('node script.js create-endpoint / any -a any-proxy -s Catch+all+root+request -i lambda-proxy --auth none --role arn:aws:iam::' + process.env.AWS_ACCOUNT_ID + ':role/APIGatewayInvokeLambda --lambda any-proxy').split(' '));
       })
       .then(res => {
         const stdout = icli.catchPrintStop();

@@ -3,7 +3,7 @@
 
 const assert = require('assert');
 const icli = require('../../packages/cli/src/bin/myrmex');
-const showStdout = !!process.env.LAGER_SHOW_STDOUT;
+const showStdout = !!process.env.MYRMEX_SHOW_STDOUT;
 
 describe('The "cheers" sub-command', () => {
 

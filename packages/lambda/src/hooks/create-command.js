@@ -51,6 +51,7 @@ module.exports.hook = function createCommandHook(commandConfig, icli) {
     };
   }
 
+
   if (commandConfig.cmd === 'create-endpoint') {
     const choices = () => {
       return plugin.loadLambdas().then(lambdas => {
@@ -63,7 +64,7 @@ module.exports.hook = function createCommandHook(commandConfig, icli) {
       });
     };
     commandConfig.parameters.push({
-      cmdSpec: '-l --lambda <lambda-name|lambda-arn>',
+      cmdSpec: '--lambda <lambda-name|lambda-arn>',
       description: 'The Lambda to integrate with the endpoint',
       type: 'list',
       choices: choices,

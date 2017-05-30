@@ -232,16 +232,16 @@ The command `myrmex show-config` will give the same response:
 
 ### Using environment variables to override the configuration
 
-It is also possible to define configuration via environment variables. Any environment variable that starts with `LAGER_`
+It is also possible to define configuration via environment variables. Any environment variable that starts with `MYRMEX_`
 is injected as a configuration key/value. An underscore is used to resolve nested keys.
 
 > Because `_` is used to resolve nested key, this technique cannot work with configuration keys containing a `_`.
 
 For example, the configuration of `myNestedConfig.level1` can be overrided using the environment variable
-`LAGER_myNestedConfig_level1`:
+`MYRMEX_myNestedConfig_level1`:
 
 ```
-export LAGER_myNestedConfig_level1=43
+export MYRMEX_myNestedConfig_level1=43
 myrmex show-config
 ```
 

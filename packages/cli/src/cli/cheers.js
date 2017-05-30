@@ -91,8 +91,14 @@ module.exports = (icli) => {
       cmdSpec: '-f, --font <font name>',
       type: 'list',
       choices: choicesLists.font
-    }]
+    }],
+    execute: executeCommand
   };
+
+  /**
+   * Create the command and the prompt
+   */
+  return icli.createSubCommand(config);
 
   /**
    * Build the choices for "list" and "checkbox" parameters
@@ -179,8 +185,4 @@ module.exports = (icli) => {
     });
   }
 
-  /**
-   * Create the command and the prompt
-   */
-  return icli.createSubCommand(config, executeCommand);
 };

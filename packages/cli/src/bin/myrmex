@@ -22,19 +22,22 @@ icli.init = function init() {
   return require('../load-project')(icli)
   .then(myrmex => {
     if (myrmex) {
-      // If a Myrmex instance is found, we add the "show-config" command
-      require('../cli/show-config')(icli, myrmex);
-      // Inject myrmex in the cli, it will be used by integration tests to retrieve the configuration
-      icli.myrmex = myrmex;
       // Retrieve version of all plugins
       icli.getProgram().version(formatVersions(myrmex.getVersions()));
-    } else {
-      // If no Myrmex instance is found, we add the "new" command
-      icli.getProgram().version(require('../../package.json').version);
-      // The "--version" option shows the version of the CLI
-      require('../cli/new')(icli);
+      // Inject myrmex in the cli, it will be used by integration tests to retrieve the configuration
+      icli.myrmex = myrmex;
+      // Fire the event that register commands from other plugins
+      return fireRegisterCommandsEvent(myrmex)
+      .then(() => {
+        // We add the "show-config" command
+        require('../cli/show-config')(icli, myrmex);
+        return Promise.resolve(icli);
+      });
     }
-    //icli.getProgram().option('-v, --version', 'output the version number');
+    // If no Myrmex instance is found, we add the "new" command
+    icli.getProgram().version(require('../../package.json').version);
+    // The "--version" option shows the version of the CLI
+    require('../cli/new')(icli);
     return Promise.resolve(icli);
   });
 };
@@ -59,7 +62,8 @@ icli.catchPrintStart = function printBufferStart(execOriginal) {
   catched = '';
   icli.print = function(v) {
     if (execOriginal) { print.apply(null, arguments); }
-    catched += v;
+    if (v === undefined) { v = ''; }
+    catched += v + '\n';
   };
 };
 
@@ -74,6 +78,27 @@ icli.catchPrintStop = () => {
 
 module.exports = icli;
 
+
+const originCreateSubCommand = icli.createSubCommand;
+function fireRegisterCommandsEvent(myrmex) {
+  // Fire events that allow other plugin to complete commands
+  icli.createSubCommand = (config, executionFn) => {
+    return myrmex.fire('createCommand', config, icli)
+    .then(() => {
+      return originCreateSubCommand(config, executionFn);
+    });
+  };
+  // We fire the "registerCommands" event so plugins can add their own commands
+  return myrmex.fire('registerCommands', icli);
+}
+
+
+function formatVersions(versions) {
+  const maxLengthName = Math.max.apply(null, versions.map(v => v.name.length));
+  return versions.map(v => _.padEnd(v.name, maxLengthName) + ' ' + v.version).join('\n');
+}
+
+
 /**
  * If the current file is the main one, we call icli.init() and parse the command line
  */
@@ -87,9 +112,4 @@ if (require.main === module) {
       icli.parse(process.argv);
     }
   });
-}
-
-function formatVersions(versions) {
-  const maxLengthName = Math.max.apply(null, versions.map(v => v.name.length));
-  return versions.map(v => _.padEnd(v.name, maxLengthName) + ' ' + v.version).join('\n');
 }

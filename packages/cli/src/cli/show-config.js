@@ -21,8 +21,14 @@ module.exports = (icli, myrmex) => {
           return myrmex.getConfig('colors') === undefined;
         }
       }
-    }]
+    }],
+    execute: executeCommand
   };
+
+  /**
+   * Create the command and the prompt
+   */
+  return icli.createSubCommand(config);
 
   /**
    * Create the new project
@@ -40,8 +46,4 @@ module.exports = (icli, myrmex) => {
     icli.print(config);
   }
 
-  /**
-   * Create the command and the prompt
-   */
-  return icli.createSubCommand(config, executeCommand);
 };

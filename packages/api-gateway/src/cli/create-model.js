@@ -25,13 +25,14 @@ module.exports = (icli) => {
       question: {
         message: 'Choose a unique name for the new model'
       }
-    }]
+    }],
+    execute: executeCommand
   };
 
   /**
    * Create the command and the prompt
    */
-  return icli.createSubCommand(config, executeCommand);
+  return icli.createSubCommand(config);
 
   /**
    * Create the new model

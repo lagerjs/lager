@@ -9,8 +9,14 @@ module.exports = (icli) => {
     cmd: '*',
     description: 'nothing here',
     options: { noHelp: true },
-    parameters: []
+    parameters: [],
+    execute: executeCommand
   };
+
+  /**
+   * Create the command and the prompt
+   */
+  return icli.createSubCommand(config);
 
   /**
    * Show an error if a unknown command was called
@@ -25,8 +31,4 @@ module.exports = (icli) => {
     process.exit(1);
   }
 
-  /**
-   * Create the command and the promp
-   */
-  return icli.createSubCommand(config, executeCommand);
 };

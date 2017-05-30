@@ -8,7 +8,7 @@ const rp = require('request-promise');
 const fs = require('fs-extra');
 const remove = Promise.promisify(fs.remove);
 const icli = require('../../packages/cli/src/bin/myrmex');
-const showStdout = !!process.env.LAGER_SHOW_STDOUT;
+const showStdout = !!process.env.MYRMEX_SHOW_STDOUT;
 const apiDeployDelay = require('../api-deploy-delay');
 
 describe('Creation and deployment of the Planet Express project', () => {
@@ -117,18 +117,18 @@ describe('Creation and deployment of the Planet Express project', () => {
     it('should be done via the sub-command "create-endpoint"', () => {
       icli.catchPrintStart(showStdout);
       // eslint-disable-next-line max-len
-      return icli.parse('node script.js create-endpoint /delivery/{id} get -a back-office,recipient,sender -s View+a+delivery -i lambda-proxy --auth none --role PlanetExpressLambdaInvocation -l api-generic'.split(' '))
+      return icli.parse('node script.js create-endpoint /delivery/{id} get -a back-office,recipient,sender -s View+a+delivery -i lambda-proxy --auth none --role PlanetExpressLambdaInvocation --lambda api-generic'.split(' '))
       .then(res => {
         // eslint-disable-next-line max-len
-        return icli.parse('node script.js create-endpoint /delivery/{id} patch -a back-office -s Update+a+delivery -i lambda-proxy --auth none --role PlanetExpressLambdaInvocation -l api-generic'.split(' '));
+        return icli.parse('node script.js create-endpoint /delivery/{id} patch -a back-office -s Update+a+delivery -i lambda-proxy --auth none --role PlanetExpressLambdaInvocation --lambda api-generic'.split(' '));
       })
       .then(res => {
         // eslint-disable-next-line max-len
-        return icli.parse('node script.js create-endpoint /delivery post -a back-office,sender -s Create+a+delivery -i lambda-proxy --auth none --role PlanetExpressLambdaInvocation -l api-generic'.split(' '));
+        return icli.parse('node script.js create-endpoint /delivery post -a back-office,sender -s Create+a+delivery -i lambda-proxy --auth none --role PlanetExpressLambdaInvocation --lambda api-generic'.split(' '));
       })
       .then(res => {
         // eslint-disable-next-line max-len
-        return icli.parse('node script.js create-endpoint /delivery/{id} delete -a back-office,recipient -s Delete+a+delivery -i lambda-proxy --auth none --role PlanetExpressLambdaInvocation -l api-generic'.split(' '));
+        return icli.parse('node script.js create-endpoint /delivery/{id} delete -a back-office,recipient -s Delete+a+delivery -i lambda-proxy --auth none --role PlanetExpressLambdaInvocation --lambda api-generic'.split(' '));
       })
       .then(res => {
         const stdout = icli.catchPrintStop();

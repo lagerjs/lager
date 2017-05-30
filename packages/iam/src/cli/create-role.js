@@ -55,13 +55,14 @@ module.exports = (icli) => {
           return false;
         }
       }
-    }]
+    }],
+    execute: executeCommand
   };
 
   /**
-   * Create the command and the promp
+   * Create the command and the prompt
    */
-  return icli.createSubCommand(config, executeCommand);
+  return icli.createSubCommand(config);
 
   /**
    * Build the choices for "list" and "checkbox" parameters
@@ -105,7 +106,7 @@ module.exports = (icli) => {
     const configFilePath = path.join(process.cwd(), plugin.config.rolesPath);
     return mkdirpAsync(configFilePath)
     .then(() => {
-      if (parameters.model != 'none') {
+      if (parameters.model !== 'none') {
         // Case a preset config has been choosen
         const src = path.join(__dirname, 'templates', 'roles', parameters.model + '.json');
         const dest = path.join(configFilePath, parameters.identifier + '.json');

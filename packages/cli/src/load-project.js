@@ -34,18 +34,6 @@ module.exports = function loadProject(icli) {
       return myrmex.registerPlugin(cliPlugin);
     })
     .then(() => {
-      // Fire events that allow other plugin to complete commands
-      const originCreateSubCommand = icli.createSubCommand;
-      icli.createSubCommand = (config, executionFn) => {
-        return myrmex.fire('createCommand', config, icli)
-        .then(() => {
-          return originCreateSubCommand(config, executionFn);
-        });
-      };
-      // We fire the "registerCommands" event so plugins can add their own commands
-      return myrmex.fire('registerCommands', icli);
-    })
-    .then(() => {
       return myrmex;
     });
   }
@@ -138,9 +126,9 @@ function getConfig() {
 
   // Add configuration passed by environment variables
   Object.keys(process.env).forEach(key => {
-    if (key.substring(0, 6) === 'LAGER_') {
+    if (key.substring(0, 6) === 'MYRMEX_') {
       // We transform
-      //     LAGER_myConfig_levels = value
+      //     MYRMEX_myConfig_levels = value
       // into
       //     { config: { myConfig: { levels: value } } }
       function addParts(config, parts, value) {

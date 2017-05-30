@@ -4,7 +4,7 @@
 const assert = require('assert');
 const rp = require('request-promise');
 const icli = require('../../packages/cli/src/bin/myrmex');
-const showStdout = !!process.env.LAGER_SHOW_STDOUT;
+const showStdout = !!process.env.MYRMEX_SHOW_STDOUT;
 const apiDeployDelay = require('../api-deploy-delay');
 
 describe('A project including the cors plugin', () => {

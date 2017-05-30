@@ -44,13 +44,14 @@ module.exports = (icli) => {
         },
         message: 'You can write a more complete description of the API here'
       }
-    }]
+    }],
+    execute: executeCommand
   };
 
   /**
-   * Create the command and the promp
+   * Create the command and the prompt
    */
-  return icli.createSubCommand(config, executeCommand);
+  return icli.createSubCommand(config);
 
   /**
    * Create the new api

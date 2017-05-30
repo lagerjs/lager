@@ -56,13 +56,14 @@ module.exports = (icli) => {
           return cmdParameterValues['stage'] === undefined && plugin.myrmex.getConfig('stage') === undefined;
         }
       }
-    }]
+    }],
+    execute: executeCommand
   };
 
   /**
    * Create the command and the prompt
    */
-  return icli.createSubCommand(config, executeCommand);
+  return icli.createSubCommand(config);
 
   /**
    * Build the choices for "list" and "checkbox" parameters

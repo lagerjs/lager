@@ -8,7 +8,7 @@ const fs = require('fs-extra');
 const copy = Promise.promisify(fs.copy);
 const remove = Promise.promisify(fs.remove);
 const icli = require('../../packages/cli/src/bin/myrmex');
-const showStdout = !!process.env.LAGER_SHOW_STDOUT;
+const showStdout = !!process.env.MYRMEX_SHOW_STDOUT;
 
 describe('Creation and deployment of a Lambda project', () => {
 

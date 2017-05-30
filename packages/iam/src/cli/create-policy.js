@@ -24,13 +24,14 @@ module.exports = (icli) => {
       question: {
         message: 'Choose a unique identifier for the policy (alphanumeric caracters, "_" and "-" accepted)'
       }
-    }]
+    }],
+    execute: executeCommand
   };
 
   /**
-   * Create the command and the promp
+   * Create the command and the prompt
    */
-  return icli.createSubCommand(config, executeCommand);
+  return icli.createSubCommand(config);
 
   /**
    * Create the new policy

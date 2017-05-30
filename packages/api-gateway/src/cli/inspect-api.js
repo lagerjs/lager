@@ -45,13 +45,14 @@ module.exports = (icli) => {
       question: {
         message: 'Which version of the specification do ou want to see?'
       }
-    }]
+    }],
+    execute: executeCommand
   };
 
   /**
-   * Create the command and the promp
+   * Create the command and the prompt
    */
-  return icli.createSubCommand(config, executeCommand);
+  return icli.createSubCommand(config);
 
   /**
    * Build the choices for "list" and "checkbox" parameters

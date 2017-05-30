@@ -23,13 +23,14 @@ module.exports = (icli) => {
       question: {
         message: 'Which Lambdas do you want to install locally?'
       }
-    }]
+    }],
+    execute: executeCommand
   };
 
   /**
-   * Create the command and the promp
+   * Create the command and the prompt
    */
-  return icli.createSubCommand(config, executeCommand);
+  return icli.createSubCommand(config);
 
   /**
    * Build the choices for "list" and "checkbox" parameters

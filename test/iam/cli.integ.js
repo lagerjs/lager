@@ -7,7 +7,7 @@ const Promise = require('bluebird');
 const fs = require('fs-extra');
 const remove = Promise.promisify(fs.remove);
 const icli = require('../../packages/cli/src/bin/myrmex');
-const showStdout = !!process.env.LAGER_SHOW_STDOUT;
+const showStdout = !!process.env.MYRMEX_SHOW_STDOUT;
 
 describe('Definition of IAM permissions', () => {
 
