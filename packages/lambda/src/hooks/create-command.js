@@ -80,6 +80,11 @@ module.exports.hook = function createCommandHook(commandConfig, icli) {
         }
       }
     });
+    commandConfig.specModifiers.push((spec, parameters) => {
+      if (parameters.lambda) {
+        spec['x-myrmex'].lambda = parameters.lambda;
+      }
+    });
   }
 
 };

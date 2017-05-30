@@ -106,6 +106,7 @@ module.exports = (icli) => {
       if (arguments[1]) { arguments[1] = arguments[1].toUpperCase(); }
       return arguments;
     },
+    specModifiers: [],
     execute: executeCommand
   };
 
@@ -245,10 +246,7 @@ module.exports = (icli) => {
           spec['x-amazon-apigateway-integration'].passthroughBehavior = 'when_no_match';
           break;
       }
-      if (parameters.lambda) {
-        // @TODO this should be the responsability of the Lambda plugin
-        spec['x-myrmex'].lambda = parameters.lambda;
-      }
+      config.specModifiers.forEach(fn => { fn(spec, parameters); });
 
       // We save the specification in a json file
       return fs.writeFileAsync(path.join(specFilePath, 'spec.json'), JSON.stringify(spec, null, 2));
