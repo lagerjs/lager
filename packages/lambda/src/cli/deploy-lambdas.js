@@ -32,7 +32,7 @@ module.exports = (icli) => {
       description: 'deploy all lambdas of the project',
       type: 'boolean',
     }, {
-      cmdSpec: '-r, --region [region]',
+      cmdSpec: '-r, --region <region>',
       description: 'select the AWS region',
       type: 'list',
       choices: choicesLists.region,
@@ -41,7 +41,7 @@ module.exports = (icli) => {
         message: 'On which AWS region do you want to deploy?'
       }
     }, {
-      cmdSpec: '-e, --environment [environment]',
+      cmdSpec: '-e, --environment <environment>',
       description: 'select the environment',
       type: 'input',
       default: 'DEV',
@@ -52,7 +52,7 @@ module.exports = (icli) => {
         }
       }
     }, {
-      cmdSpec: '-a, --alias [alias]',
+      cmdSpec: '-a, --alias <alias>',
       description: 'select the alias to apply',
       type: 'input',
       question: {

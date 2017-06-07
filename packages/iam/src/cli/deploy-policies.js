@@ -26,7 +26,7 @@ module.exports = (icli) => {
         message: 'Which policies do you want to deploy?'
       }
     }, {
-      cmdSpec: '-e, --environment [environment]',
+      cmdSpec: '-e, --environment <environment>',
       description: 'An environment identifier that will be used as a prefix',
       type: 'input',
       default: 'DEV',
@@ -37,7 +37,7 @@ module.exports = (icli) => {
         }
       }
     }, {
-      cmdSpec: '-s, --stage [stage]',
+      cmdSpec: '-s, --stage <stage>',
       description: 'A stage identifier that will be used as a suffix',
       type: 'input',
       default: 'v0',

@@ -200,9 +200,9 @@ Generate the Swagger definition of an endpoint and print it. There are three dif
 deploy-apis [options] [api-identifiers...]
 
   Options:
-    -r, --region [region]            select the AWS region
-    -e, --environment [environment]  select the environment
-    -s, --stage [stage]              select the API stage
+    -r, --region <region>            select the AWS region
+    -e, --environment <environment>  select the environment
+    -s, --stage <stage>              select the API stage
 ```
 
 Deploy one or more APIs in API Gateway. The `--environment` option is used as a prefix to the API name in API Gateway. It can

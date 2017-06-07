@@ -39,12 +39,13 @@ module.exports.hook = function createCommandHook(commandConfig, icli) {
       question: {
         message: 'What is the alias to use for Lambda integrations?',
         when: (answers, cmdParameterValues) => {
-          return cmdParameterValues['alias'] === undefined;
+          return cmdParameterValues['alias'] === undefined && plugin.myrmex.getConfig('lambda.alias') === undefined;
         }
       }
     });
     const origExecute = commandConfig.execute;
     commandConfig.execute = parameters => {
+      if (parameters.alias === undefined) { parameters.alias = plugin.myrmex.getConfig('lambda.alias'); }
       loadIntegrationHook.setDeployMode(parameters.deployLambdas);
       loadIntegrationHook.setAlias(parameters.alias);
       return origExecute(parameters);
@@ -64,7 +65,7 @@ module.exports.hook = function createCommandHook(commandConfig, icli) {
       });
     };
     commandConfig.parameters.push({
-      cmdSpec: '--lambda <lambda-name|lambda-arn>',
+      cmdSpec: '--lambda <lambda-identifier>',
       description: 'The Lambda to integrate with the endpoint',
       type: 'list',
       choices: choices,

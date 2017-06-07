@@ -153,7 +153,7 @@ Path to the folder that contains modules for Node.js Lambdas. Default value: `la
 Set the alias applied when deploying Lambdas.
 
 By setting this configuration, the `--alias` option of the [`myrmex deploy-lambdas`](#deploy-lambdas) command does not prompt
-when not provided via the command line and the configuration value is used as the default value.
+when not provided via the command line and the configured value is used as the default value.
 
 Setting `lambda.alias` to an empty string disables the creation/update of an alias and the new version of the Lambda will
 only be available as `LATEST`.
@@ -224,9 +224,9 @@ deploy-lambdas [options] [lambda-identifiers...]
 
   Options:
     --all                            deploy all lambdas of the project
-    -r, --region [region]            select the AWS region
-    -e, --environment [environment]  select the environment
-    -a, --alias [alias]              select the alias to apply
+    -r, --region <region>            select the AWS region
+    -e, --environment <environment>  select the environment
+    -a, --alias <alias>              select the alias to apply
 ```
 
 Deploy one or more Lambdas in AWS. The `--environment` option is used as a prefix. The `--alias` option will publish a version
@@ -262,9 +262,9 @@ test-lambda [options] [lambda-identifier]
 
   Options:
     --event <event-name>             Event example to use
-    -r, --region [region]            select the AWS region
-    -e, --environment [environment]  select the environment
-    -a, --alias [alias]              select the alias to test
+    -r, --region <region>            select the AWS region
+    -e, --environment <environment>  select the environment
+    -a, --alias <alias>              select the alias to test
 ```
 
 Executes a Lambda deployed in AWS. The event option allows to select the example object that will be passed as the first
@@ -272,3 +272,52 @@ argument. Example objects are defined in json files in `lambda/lambdas/<identifi
 context object is passed as the second argument.
 
 Setting the option `--alias` to an empty string (`--alias ""`) will invoke the `LATEST` version of the Lambda.
+
+## Integration with `@myrmex/api-gateway`
+
+`@myrmex/lambda` add some functionalities to  `@myrmex/api-gateway` when both are installed in the same project.
+
+### Associate a Lambda with an API endpoint
+
+In the [`spec.json`](/manual/usage/api-gateway-plugin.html#project-anatomy) file that describes an endpoint, a new extension
+to Swagger is available to select a Lambda that must be used for the endpoint integration.
+
+```json
+{
+  "x-myrmex": {
+    "apis": [],
+    "lambda": "lambda-identifier"
+  }
+  ... rest of the endpoint specification
+}
+```
+
+### New option for `myrmex create-endpoint`
+
+When calling [`myrmex create-endpoint`](/manual/usage/api-gateway-plugin.html#create-endpoint), a new option
+`--lambda <lambda-identifier>` is available. This option accepts the identifier of a Lambda managed by `@myrmex/lambda`.
+
+If the option is not provided in the command line and the option `--integration` is set to `lambda` or `lambda-proxy`, a
+prompt will propose to select the appropriate Lambda in a list.
+
+The value of `--lambda <lambda-identifier>` will be set in extension to Swagger described above.
+
+### New options for `myrmex deploy-apis`
+
+When calling [`myrmex create-endpoint`](/manual/usage/api-gateway-plugin.html#deploy-apis), two new options are available:
+
+#### `--deploy-lambdas <all|partial|none>`
+
+The option `--deploy-lambdas <all|partial|none>` accepts three possible values:
+
+* `all` will perform the deployment of all Lambdas defined in the Myrmex project before deploying the APIs.
+* `partial` will perform the deployment of all Lambdas that are associated to deployed endpoints before deploying the APIs.
+* `none` will not deploy any Lambda, but it will retrieve the ARNs of all Lambdas that are associated to deployed endpoints.
+  So these Lambda have to be already deployed with the appropriate alias.
+
+#### `--alias <alias>`
+
+The option `--alias <alias>` allows to select the Lambda alias that will be integrated with endpoints.
+
+If the [`lambda.alias`](#-lambda-alias-) configuration is set and the option is not provided via the command line, no prompt
+will appear to set the value the configured value is used as the default value.

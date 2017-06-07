@@ -43,7 +43,7 @@ module.exports = (icli) => {
         }
       }
     }, {
-      cmdSpec: '-r, --region [region]',
+      cmdSpec: '-r, --region <region>',
       description: 'select the AWS region',
       type: 'list',
       choices: choicesLists.region,
@@ -52,7 +52,7 @@ module.exports = (icli) => {
         message: 'On which AWS region do you want to test?'
       }
     }, {
-      cmdSpec: '-e, --environment [environment]',
+      cmdSpec: '-e, --environment <environment>',
       description: 'select the environment',
       type: 'input',
       default: plugin.myrmex.getConfig('environment') || 'DEV',
@@ -63,7 +63,7 @@ module.exports = (icli) => {
         }
       }
     }, {
-      cmdSpec: '-a, --alias [alias]',
+      cmdSpec: '-a, --alias <alias>',
       description: 'select the alias to test',
       type: 'input',
       default: plugin.myrmex.getConfig('stage') || 'v0',

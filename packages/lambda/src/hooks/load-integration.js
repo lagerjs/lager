@@ -20,6 +20,9 @@ module.exports.setAlias = function setAlias(a) {
 module.exports.hook = function loadIntegrationsHook(region, context, endpoints, integrationResults) {
   return plugin.loadLambdas()
   .then(lambdas => {
+    // Add the Lambda alias to apply to the context
+    context.alias = alias;
+
     // If the user does not want to deploy all lambdas, we filter the ones that are related to the endpoints
     if (deployMode !== 'all') {
       const lambdasIdentifiers = [];
@@ -42,7 +45,6 @@ module.exports.hook = function loadIntegrationsHook(region, context, endpoints, 
     plugin.myrmex.call('cli:print', lambdas.length + ' Lambda(s) to deploy: ' + _.map(lambdas, l => l.getIdentifier()).join(', ') + '\n\n');
 
     // Deploy the lambdas
-    context.alias = alias;
     return Promise.map(lambdas, lambda => lambda.deploy(region, context))
     .then(reports => {
       // Show the result of the deployments in the console

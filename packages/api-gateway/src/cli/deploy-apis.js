@@ -26,7 +26,7 @@ module.exports = (icli) => {
         message: 'Which APIs do you want to deploy?'
       }
     }, {
-      cmdSpec: '-r, --region [region]',
+      cmdSpec: '-r, --region <region>',
       description: 'select the AWS region',
       type: 'list',
       choices: choicesLists.region,
@@ -35,7 +35,7 @@ module.exports = (icli) => {
         message: 'On which AWS region do you want to deploy?'
       }
     }, {
-      cmdSpec: '-e, --environment [environment]',
+      cmdSpec: '-e, --environment <environment>',
       description: 'select the environment',
       type: 'input',
       default: 'DEV',
@@ -46,7 +46,7 @@ module.exports = (icli) => {
         }
       }
     }, {
-      cmdSpec: '-s, --stage [stage]',
+      cmdSpec: '-s, --stage <stage>',
       description: 'select the API stage',
       type: 'input',
       default: 'v0',

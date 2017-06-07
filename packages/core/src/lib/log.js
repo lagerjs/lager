@@ -10,7 +10,7 @@ const stderrStream = {
   stream: {
     write: (obj) => {
       if (obj.err && obj.err.code && obj.err.message) {
-        process.stderr.write(eol + obj.err.code + eol + obj.err.message + eol + obj.reason.stack + eol);
+        process.stderr.write(eol + obj.err.code + eol + obj.err.message + eol + obj.err.stack + eol);
       } else if (obj.promise && obj.reason && obj.reason.code) {
         process.stderr.write(eol + obj.reason.code + eol + obj.reason.stack + eol);
       } else {
