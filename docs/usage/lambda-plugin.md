@@ -122,6 +122,63 @@ It is recommended to use a recent version of `npm` to minimize the size of the L
 configuration of nested dependencies. Indeed, `npm@2` can behave in an unexpected manner with nested dependencies when using
 relative file paths.
 
+## Configuration
+
+These are [Myrmex configuration keys](/manual/installation/getting-started.html#project-configuration) specific to to the
+`@myrmex/lambda` plugin.
+
+### Default values
+
+Using `myrmex show-config` after installing the plugin, we can see the default configuration:
+
+```json
+{
+  "lambda": {
+    "lambdasPath": "lambda/lambdas",
+    "modulesPath": "lambda/modules"
+  }
+}
+```
+
+### `lambda.lambdasPath`
+
+Path to the folder that contains Lambdas. Default value: `lambda/lambdas`.
+
+### `lambda.modulesPath`
+
+Path to the folder that contains modules for Node.js Lambdas. Default value: `lambda/modules`.
+
+### `lambda.alias`
+
+Set the alias applied when deploying Lambdas.
+
+By setting this configuration, the `--alias` option of the [`myrmex deploy-lambdas`](#deploy-lambdas) command does not prompt
+when not provided via the command line and the configuration value is used as the default value.
+
+Setting `lambda.alias` to an empty string disables the creation/update of an alias and the new version of the Lambda will
+only be available as `LATEST`.
+
+### Example
+
+Using the `myrmex.json` file, the plugin configuration can be defined like this:
+
+```json
+{
+  "name": "A Myrmex project",
+  "plugins": [
+    "@myrmex/lambda"
+  ],
+  "config": {
+    "lambda": {
+      "lambdasPath": "lambdas",
+      "modulesPath": "modules",
+      "alias": ""
+    }
+  }
+}
+
+```
+
 ## Commands
 
 ### create-lambda
