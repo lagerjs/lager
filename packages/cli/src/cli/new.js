@@ -48,20 +48,30 @@ module.exports = (icli) => {
   function getChoices() {
     return {
       plugins: [{
-        value: '@myrmex/iam',
-        name: icli.format.info('@myrmex/iam') + ' - manage IAM policies and roles',
-        short: 'iam',
-        checked: true
-      }, {
         value: '@myrmex/api-gateway',
         name: icli.format.info('@myrmex/api-gateway') + ' - deploy swagger definitions in API gateway',
         short: 'api-gateway',
         checked: true
       }, {
+        value: '@myrmex/cors',
+        name: icli.format.info('@myrmex/cors') + ' - set CORS configuration for @myrmex/api-gateway',
+        short: 'cors',
+        checked: false
+      }, {
+        value: '@myrmex/iam',
+        name: icli.format.info('@myrmex/iam') + ' - manage IAM policies and roles',
+        short: 'iam',
+        checked: true
+      }, {
         value: '@myrmex/lambda',
-        name: icli.format.info('@myrmex/lambda') + ' - deploy Lambda in AWS and associate them to API endpoints',
+        name: icli.format.info('@myrmex/lambda') + ' - deploy Lambdas in AWS and associate them to API endpoints',
         short: 'lambda',
         checked: true
+      }, {
+        value: '@myrmex/packager',
+        name: icli.format.info('@myrmex/packager') + ' - use docker to package Lambdas defined with @myrmex/lambda',
+        short: 'packager',
+        checked: false
       }]
     };
   }
@@ -89,7 +99,8 @@ module.exports = (icli) => {
         name: parameters.projectName || 'A Myrmex project',
         plugins: parameters.plugins,
         config: {
-          colors: true
+          colors: true,
+          environment: ''
         }
       };
       return fs.writeFileAsync(configFilePath + path.sep + 'myrmex.json', JSON.stringify(projectConfig, null, 2));
