@@ -87,7 +87,10 @@ module.exports = (icli) => {
       icli.print('\n  Creating Myrmex config file (' + icli.format.info('myrmex.json') + ')');
       const projectConfig = {
         name: parameters.projectName || 'A Myrmex project',
-        plugins: parameters.plugins
+        plugins: parameters.plugins,
+        config: {
+          colors: true
+        }
       };
       return fs.writeFileAsync(configFilePath + path.sep + 'myrmex.json', JSON.stringify(projectConfig, null, 2));
     })
