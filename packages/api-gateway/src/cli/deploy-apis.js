@@ -232,7 +232,7 @@ module.exports = (icli) => {
         } else {
           t.cell(
             'Url',
-            icli.format.info('https://' + result.report.awsId + '.execute-api.us-east-1.amazonaws.com/' + result.report.stage)
+            icli.format.info('https://' + result.report.awsId + '.execute-api.' + result.report.region + '.amazonaws.com/' + result.report.stage)
           );
         }
         t.newRow();
