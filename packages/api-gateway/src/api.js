@@ -260,6 +260,7 @@ Api.prototype.deploy = function deploy(region, context) {
     report.name = awsApi.name;
     report.description = awsApi.description;
     report.stage = context.stage;
+    report.region = region;
     return plugin.myrmex.fire('afterDeployApi', this);
   })
   .spread(() => {

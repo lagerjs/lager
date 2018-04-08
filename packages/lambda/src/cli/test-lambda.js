@@ -2,6 +2,7 @@
 
 const _ = require('lodash');
 const plugin = require('../index');
+const regions = require('./regions');
 
 /**
  * This module exports a function that enrich the interactive command line and return a promise
@@ -119,33 +120,7 @@ module.exports = (icli) => {
           return _.uniq(_.concat.apply(null, eventsLists));
         });
       },
-      region: [
-        {
-          value: 'us-east-1',
-          name: icli.format.info('us-east-1') + '      US East (N. Virginia)',
-          short: 'us-east-1 - US East (N. Virginia)'
-        }, {
-          value: 'us-west-2',
-          name: icli.format.info('us-west-2') + '      US West (Oregon)',
-          short: 'us-west-2 - US West (Oregon)'
-        }, {
-          value: 'eu-west-1',
-          name: icli.format.info('eu-west-1') + '      EU (Ireland)',
-          short: 'eu-west-1 - EU (Ireland)'
-        }, {
-          value: 'eu-central-1',
-          name: icli.format.info('eu-central-1') + '   EU (Frankfurt)',
-          short: 'eu-central-1 - EU (Frankfurt)'
-        }, {
-          value: 'ap-northeast-1',
-          name: icli.format.info('ap-northeast-1') + ' Asia Pacific (Tokyo)',
-          short: 'ap-northeast-1 - Asia Pacific (Tokyo)'
-        }, {
-          value: 'ap-southeast-1',
-          name: icli.format.info('ap-southeast-2') + ' Asia Pacific (Sydney)',
-          short: 'ap-southeast-2 - Asia Pacific (Sydney)'
-        }
-      ]
+      region: regions(icli)
     };
   }
 
@@ -167,7 +142,7 @@ module.exports = (icli) => {
       if (parameters.environment === undefined) { parameters.environment = plugin.myrmex.getConfig('environment'); }
       if (parameters.stage === undefined) { parameters.stage = plugin.myrmex.getConfig('stage'); }
       const context = { stage: parameters.stage, environment: parameters.environment };
-      return lambda.execute(parameters.region, context, parameters.event ? lambda.loadEventExample(parameters.event) : {});
+      return lambda.execute(parameters.region, context, parameters.event ? lambda.loadEventExample(parameters.event) : {}, parameters.alias);
     })
     .then(result => {
       result.Payload = JSON.parse(result.Payload);
