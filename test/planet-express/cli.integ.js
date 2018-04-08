@@ -71,7 +71,7 @@ describe('Creation and deployment of the Planet Express project', () => {
   describe('Creation of a node Lambda', () => {
     it('should be done via the sub-command "create-lambda"', () => {
       icli.catchPrintStart(showStdout);
-      return icli.parse('node script.js create-lambda api-generic -r nodejs6.10 -t 20 -m 256 --role PlanetExpressLambdaExecution --dependencies log'.split(' '))
+      return icli.parse('node script.js create-lambda api-generic -r nodejs8.10 -t 20 -m 256 --role PlanetExpressLambdaExecution --dependencies log'.split(' '))
       .then(res => {
         const stdout = icli.catchPrintStop();
         assert.ok(stdout.indexOf('The Lambda \x1b[36mapi-generic\x1b[0m has been created') > -1);

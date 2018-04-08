@@ -27,11 +27,11 @@ module.exports = (icli) => {
         message: 'Choose a unique identifier for the Lambda (alphanumeric caracters, "_" and "-" accepted)'
       }
     }, {
-      cmdSpec: '-r, --runtime <nodejs4.3|nodejs6.10|python2.7|python3.6>',
+      cmdSpec: '-r, --runtime <nodejs4.3|nodejs6.10|nodejs8.10|python2.7|python3.6>',
       description: 'select the runtime',
       type: 'list',
       choices: choicesLists.runtimes,
-      default: 'nodejs6.10',
+      default: 'nodejs8.10',
       question: {
         message: 'Choose the runtime'
       }
@@ -122,7 +122,7 @@ module.exports = (icli) => {
     }
     return {
       memory: memoryValues,
-      runtimes: ['nodejs4.3', 'nodejs6.10', 'python2.7', 'python3.6'],
+      runtimes: ['nodejs4.3', 'nodejs6.10', 'nodejs8.10', 'python2.7', 'python3.6'],
       dependencies: () => {
         return plugin.loadModules()
         .then(modules => {
@@ -157,7 +157,17 @@ module.exports = (icli) => {
         if (answers && answers.roleOrigin === 'aws') {
           return plugin.myrmex.call('iam:getAWSRoles', [])
           .then(roles => {
-            return _.map(roles, 'RoleName');
+            const eligibleRoles = [];
+            _.forEach(roles, role => {
+              const trustRelationship = JSON.parse(decodeURIComponent(role.AssumeRolePolicyDocument))
+              if (_.find(trustRelationship.Statement, (o) => { return o.Principal.Service === 'lambda.amazonaws.com'; })) {
+                eligibleRoles.push({
+                  value: role.RoleName,
+                  name: icli.format.info(role.RoleName)
+                });
+              }
+            });
+            return eligibleRoles;
           });
         } else {
           return plugin.myrmex.call('iam:getRoles', [])
@@ -254,5 +264,9 @@ function initPython(parameters, configFilePath) {
     const src = path.join(__dirname, 'templates', 'lambda_function.py');
     const dest = path.join(configFilePath, 'lambda_function.py');
     return fs.copy(src, dest);
+  })
+  .then(() => {
+    // We create a requirements.txt file
+    return fs.writeFile(path.join(configFilePath, 'requirements.txt'), '')
   });
 }

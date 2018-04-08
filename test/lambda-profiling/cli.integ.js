@@ -56,12 +56,12 @@ describe('Creation and deployment of a Lambda project', () => {
   describe('Creation of Lambdas', () => {
     it('should be done via the sub-command "create-lambda"', () => {
       icli.catchPrintStart(showStdout);
-      return icli.parse('node script.js create-lambda config-128 -r nodejs6.10 -t 30 -m 128 --dependencies inspection --role LambdaInspection'.split(' '))
+      return icli.parse('node script.js create-lambda config-128 -r nodejs8.10 -t 30 -m 128 --dependencies inspection --role LambdaInspection'.split(' '))
       .then(res => {
-        return icli.parse('node script.js create-lambda config-512 -r nodejs6.10 -t 30 -m 512 --dependencies inspection --role LambdaInspection'.split(' '));
+        return icli.parse('node script.js create-lambda config-512 -r nodejs8.10 -t 30 -m 512 --dependencies inspection --role LambdaInspection'.split(' '));
       })
       .then(res => {
-        return icli.parse('node script.js create-lambda config-1536 -r nodejs6.10 -t 30 -m 1536 --dependencies inspection --role LambdaInspection'.split(' '));
+        return icli.parse('node script.js create-lambda config-1536 -r nodejs8.10 -t 30 -m 1536 --dependencies inspection --role LambdaInspection'.split(' '));
       })
       .then(res => {
         icli.catchPrintStop();

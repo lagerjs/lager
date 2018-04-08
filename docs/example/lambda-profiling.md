@@ -71,9 +71,9 @@ module.exports = () => {
 Now we create three Lambdas that will use the `inspection` module as a dependency. Their are configured with different memory values: 128MB, 512MB and 1536MB.
 
 ```shell
-myrmex create-lambda config-128 --runtime nodejs6.10 --timeout 30 --memory 128 --dependencies inspection --role LambdaInspection
-myrmex create-lambda config-512 --runtime nodejs6.10 --timeout 30 --memory 512 --dependencies inspection --role LambdaInspection
-myrmex create-lambda config-1536 --runtime nodejs6.10 --timeout 30 --memory 1536 --dependencies inspection --role LambdaInspection
+myrmex create-lambda config-128 --runtime nodejs8.10 --timeout 30 --memory 128 --dependencies inspection --role LambdaInspection
+myrmex create-lambda config-512 --runtime nodejs8.10 --timeout 30 --memory 512 --dependencies inspection --role LambdaInspection
+myrmex create-lambda config-1536 --runtime nodejs8.10 --timeout 30 --memory 1536 --dependencies inspection --role LambdaInspection
 ```
 
 We alter the handler of the three Lambdas to call the `inspection` module, log its output (it will be visible in cloudwatch) and return it.

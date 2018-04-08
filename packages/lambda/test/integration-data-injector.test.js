@@ -18,7 +18,7 @@ describe('The integration data injector', () => {
         Timeout: 20,
         MemorySize: 256,
         Role: 'PlanetExpressLambdaExecution',
-        Runtime: 'nodejs6.10',
+        Runtime: 'nodejs8.10',
         Handler: 'index.handler'
       },
       modules: [

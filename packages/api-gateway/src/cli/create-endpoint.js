@@ -168,7 +168,17 @@ module.exports = (icli) => {
         if (answers && answers.roleOrigin === 'aws') {
           return plugin.myrmex.call('iam:getAWSRoles', [])
           .then(roles => {
-            return _.map(roles, 'RoleName');
+            const eligibleRoles = [];
+            _.forEach(roles, role => {
+              const trustRelationship = JSON.parse(decodeURIComponent(role.AssumeRolePolicyDocument))
+              if (_.find(trustRelationship.Statement, (o) => { return o.Principal.Service === 'apigateway.amazonaws.com'; })) {
+                eligibleRoles.push({
+                  value: role.RoleName,
+                  name: icli.format.info(role.RoleName)
+                });
+              }
+            });
+            return eligibleRoles;
           });
         } else {
           return plugin.myrmex.call('iam:getRoles', [])

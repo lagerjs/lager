@@ -103,7 +103,7 @@ The implementation of the modules will not be detailed here, but they are "commo
 We create a Lambda, specifying its configuration and its dependencies.
 
 ```shell
-myrmex create-lambda api-generic --runtime nodejs6.10 --timeout 20 --memory 256 --role PlanetExpressLambdaExecution --dependencies data-access,log
+myrmex create-lambda api-generic --runtime nodejs8.10 --timeout 20 --memory 256 --role PlanetExpressLambdaExecution --dependencies data-access,log
 ```
 
 ### Creation of the endpoints and APIs
@@ -161,7 +161,7 @@ myrmex create-role PlanetExpressLambdaExecution --model LambdaBasicExecutionRole
 myrmex create-node-module log
 myrmex create-node-module data-access --dependencies log
 
-myrmex create-lambda api-generic --runtime nodejs6.10 --timeout 20 --memory 256 --role PlanetExpressLambdaExecution --dependencies data-access,log
+myrmex create-lambda api-generic --runtime nodejs8.10 --timeout 20 --memory 256 --role PlanetExpressLambdaExecution --dependencies data-access,log
 
 myrmex create-api back-office --title "Back Office" --desc "Planet Express API for Back Office"
 myrmex create-api sender      --title "Sender"      --desc "Planet Express API for sender application"

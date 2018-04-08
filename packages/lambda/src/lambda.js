@@ -18,7 +18,7 @@ const runtimeMethods = {
 };
 
 const runtimes = {
-  nodejs: ['nodejs4.3', 'nodejs6.10'],
+  nodejs: ['nodejs4.3', 'nodejs6.10', 'nodejs8.10'],
   python: ['python2.7', 'python3.6']
 };
 

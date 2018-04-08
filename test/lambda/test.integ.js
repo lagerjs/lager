@@ -95,7 +95,7 @@ describe('use of the plugin @myrmex/lambda', () => {
       icli.catchPrintStart(showStdout);
       return icli.parse([
         'node', 'script.js', 'create-lambda', 'node-a',
-        '-r', 'nodejs6.10',
+        '-r', 'nodejs8.10',
         '-t', '12',
         '-m', '128',
         '--dependencies',

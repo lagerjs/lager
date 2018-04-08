@@ -11,7 +11,7 @@ const plugin = require('../index');
 const s3 = new AWS.S3();
 
 const DEPENDENCIES_DIR_NAME = 'myrmex-tmp-dependencies-dir';
-const managedRuntimes = ['nodejs4.3', 'nodejs6.10', 'python2.7', 'python3.6'];
+const managedRuntimes = ['nodejs4.3', 'nodejs6.10', 'nodejs8.10', 'python2.7', 'python3.6'];
 
 module.exports = function buildLambdaPackageHook(lambda, context, codeParams) {
   // Shorcut: if the runtime is not managed by the plugin, we skip this hook
@@ -96,7 +96,7 @@ function prepareSources(modulePath, sourcesPath, runtime) {
   })
   .then(() => {
     // Shortcut: the next part is relevant only for node
-    if (['nodejs4.3', 'nodejs6.10'].indexOf(runtime) === -1) {
+    if (['nodejs4.3', 'nodejs6.10', 'nodejs8.10'].indexOf(runtime) === -1) {
       return Promise.resolve();
     }
 

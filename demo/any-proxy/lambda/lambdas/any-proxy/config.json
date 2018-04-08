@@ -3,7 +3,7 @@
     "Timeout": 20,
     "MemorySize": "128",
     "Role": "xxxxxx",
-    "Runtime": "nodejs6.10",
+    "Runtime": "nodejs8.10",
     "Handler": "index.handler"
   }
 }

@@ -3,7 +3,7 @@
     "Timeout": "20",
     "MemorySize": "256",
     "Role": "arn:aws:iam::000000000000:role/DEV_test_v0",
-    "Runtime": "nodejs6.10",
+    "Runtime": "nodejs8.10",
     "Handler": "lambda.handler"
   }
 }

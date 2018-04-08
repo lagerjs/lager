@@ -56,7 +56,7 @@ myrmex create-role MyExpressAppLambdaInvocation --model APIGatewayLambdaInvocati
 We create a new Lambda managed by Myrmex.
 
 ```shell
-myrmex create-lambda serverless-express --runtime nodejs6.10 --timeout 30 --memory 256 --role MyExpressAppLambdaExecution
+myrmex create-lambda serverless-express --runtime nodejs8.10 --timeout 30 --memory 256 --role MyExpressAppLambdaExecution
 ```
 
 We have to do a small alteration to the `package.json` of the Express application to tell node that `app.js` is the file that

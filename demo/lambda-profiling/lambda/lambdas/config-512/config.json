@@ -3,7 +3,7 @@
     "Timeout": 30,
     "MemorySize": "512",
     "Role": "LambdaInspection",
-    "Runtime": "nodejs6.10",
+    "Runtime": "nodejs8.10",
     "Handler": "index.handler"
   }
 }

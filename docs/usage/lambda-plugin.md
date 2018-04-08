@@ -61,7 +61,7 @@ Example of `config.json` file:
   "params": {
     "Timeout": 10,
     "MemorySize": "256",
-    "Runtime": "nodejs6.10",
+    "Runtime": "nodejs8.10",
     "Handler": "index.handler",
     "Role": "arn:aws:iam::012345678901:role/LambdaBasicExecution"
   }
@@ -109,7 +109,7 @@ Example of `config.json` file:
     "Timeout": 30,
     "MemorySize": 256,
     "Role": "arn:aws:iam::123456789012:role/MyRole",
-    "Runtime": "nodejs6.10",
+    "Runtime": "nodejs8.10",
     "Handler": "index.handler"
   }
 }
@@ -201,11 +201,11 @@ Using the `myrmex.json` file, the plugin configuration can be defined like this:
 create-lambda [options] [identifier]
 
   Options:
-    -r, --runtime <nodejs|nodejs4.3|nodejs6.10|python2.7|python3.6>  select the runtime
-    -t, --timeout <timeout>                                          select the timeout (in seconds)
-    -m, --memory <memory>                                            select the memory (in MB)
-    -d --dependencies <modules-names>                                select the project modules that must be included in the Lambda (only for nodejs runtimes)
-    --role <role>                                                    select the execution role (enter the ARN)
+    -r, --runtime <nodejs|nodejs4.3|nodejs6.10|nodejs8.10|python2.7|python3.6>  select the runtime
+    -t, --timeout <timeout>                                                     select the timeout (in seconds)
+    -m, --memory <memory>                                                       select the memory (in MB)
+    -d --dependencies <modules-names>                                           select the project modules that must be included in the Lambda (only for nodejs runtimes)
+    --role <role>                                                               select the execution role (enter the ARN)
 ```
 
 Create a new Lambda. By default the location of Lambdas is `lambda/lambdas/<identifier>/`.
