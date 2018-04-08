@@ -143,7 +143,7 @@ Lambda.prototype.executeLocally = function executeLocally(event) {
  * Returns the result of am execution in AWS
  * @returns {Object}
  */
-Lambda.prototype.execute = function execute(region, context, event) {
+Lambda.prototype.execute = function execute(region, context, event, alias) {
   const awsLambda = new AWS.Lambda({ region });
 
   const functionName = (context.environment ? context.environment + '-' : '') + this.identifier;
@@ -151,7 +151,7 @@ Lambda.prototype.execute = function execute(region, context, event) {
     FunctionName: functionName,
     Payload: JSON.stringify(event)
   };
-  if (context.alias) { params.Qualifier = context.alias; }
+  if (alias) { params.Qualifier = alias; }
 
   return awsLambda.invoke(params).promise();
 };
