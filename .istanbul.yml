@@ -1,2 +1,2 @@
 instrumentation:
-  excludes: ["demo/**", "docs/**", "**/coverage/**", "**/test-assets/**", "**/src/cli/templates/**", "packages/cli/src/cli/figlet/**"]
+  excludes: ["demo/**", "docs/**", "**/coverage/**", "**/test-assets/**", "**/src/cli/templates/**", "packages/cli/src/cli/figlet/**", "packages/cloud-formation"]
