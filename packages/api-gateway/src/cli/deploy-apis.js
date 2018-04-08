@@ -173,12 +173,26 @@ module.exports = (icli) => {
     .then(apis => {
       // Give an overview of what will be deployed
       apis = _.filter(apis, api => { return parameters.apiIdentifiers.indexOf(api.getIdentifier()) !== -1; });
-      const endpoints = _.union.apply(null, _.map(apis, api => { return api.getEndpoints(); }));
+      const endpoints = _.concat.apply(null, _.map(apis, api => { return api.getEndpoints(); }));
+      const filteredEndpoints = _.reduce(endpoints, (result, endpoint) => {
+        let r = _.find(result, (o) => { return o.path === endpoint.getResourcePath() && o.method === endpoint.getMethod() });
+        if (!r) {
+          r = {
+            path: endpoint.getResourcePath(),
+            method: endpoint.getMethod(),
+            apis: []
+          }
+          result.push(r);
+        }
+        r.apis = _.union(r.apis, endpoint.getSpec()['x-myrmex'].apis);
+        return result;
+      }, []);
+      const sortedEndpoints = _.sortBy(filteredEndpoints, ['path', 'method']);
       const t = new Table();
-      _.forEach(endpoints, endpoint => {
-        t.cell('Path', endpoint.getResourcePath());
-        t.cell('Method', endpoint.getMethod());
-        _.forEach(endpoint.getSpec()['x-myrmex'].apis, apiIdentifier => {
+      _.forEach(sortedEndpoints, endpoint => {
+        t.cell('Path', endpoint.path);
+        t.cell('Method', endpoint.method);
+        _.forEach(endpoint.apis, apiIdentifier => {
           if (parameters.apiIdentifiers.indexOf(apiIdentifier) > -1) {
             t.cell(apiIdentifier, 'X');
           }
