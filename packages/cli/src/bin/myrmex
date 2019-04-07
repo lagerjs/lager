@@ -37,6 +37,10 @@ icli.init = function init() {
     // The "--version" option shows the version of the CLI
     require('../cli/new')(icli);
     return Promise.resolve(icli);
+  })
+  .catch(err => {
+    icli.print(icli.format.error(err.message));
+    return Promise.resolve(icli);
   });
 };
 
@@ -67,6 +71,7 @@ icli.catchPrintStart = function printBufferStart(execOriginal) {
 
 /**
  * Stop to catch the content that is sent to icli.print() and returns it
+ * Used to avoid flooding during test execution 
  * @return {String}
  */
 icli.catchPrintStop = () => {

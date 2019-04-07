@@ -9,7 +9,7 @@ const Lambda = testRequire('src/lambda');
 
 describe('A Lambda', () => {
 
-  let callbackLambda, contextLambda;
+  let callbackLambda, contextLambda, asyncLambda;
   const context = { environment: 'TEST', alias: 'v0' };
 
   const invoke = {
@@ -102,8 +102,13 @@ describe('A Lambda', () => {
     configB.identifier = 'context-lambda';
     contextLambda = new Lambda(configB, path.join(__dirname, '..', 'test-assets', 'lambdas', 'context-lambda'));
 
+    const configC = require(path.join(__dirname, '..', 'test-assets', 'lambdas', 'async-lambda', 'config'));
+    configC.identifier = 'async-lambda';
+    asyncLambda = new Lambda(configC, path.join(__dirname, '..', 'test-assets', 'lambdas', 'async-lambda'));
+
     assert.ok(callbackLambda instanceof Lambda);
     assert.ok(contextLambda instanceof Lambda);
+    assert.ok(asyncLambda instanceof Lambda);
   });
 
   it('should provide its identifier', () => {
@@ -143,7 +148,6 @@ describe('A Lambda', () => {
     it('should work using a callback parameter', () => {
       return callbackLambda.executeLocally({ id: 42, success: true })
       .then(res => {
-        assert.equal(res.logs, '\'Callback Lambda\'\n\'Call getData(42)\'');
         assert.equal(res.response.success.id, 42);
         assert.equal(res.response.success.content, 'fake');
       });
@@ -152,8 +156,14 @@ describe('A Lambda', () => {
     it('should work using context.succeed()', () => {
       return contextLambda.executeLocally({ success: true })
       .then(res => {
-        assert.equal(res.logs, '\'Success\'');
         assert.equal(res.response.success, 'A successful Lambda execution');
+      });
+    });
+
+    it('should work using a Promise', () => {
+      return asyncLambda.executeLocally({ success: true })
+      .then(res => {
+        assert.equal(res.response, 'Async Lambda Success');
       });
     });
 

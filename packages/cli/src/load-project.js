@@ -88,13 +88,15 @@ function getProjectRootDirectory() {
  */
 function getMyrmexInstance() {
   try {
+    require.cache = {};
     return require(path.join(process.cwd(), 'node_modules', '@myrmex', 'core'));
   } catch (e) {
     if (e.code !== 'MODULE_NOT_FOUND' || e.message.slice(e.message.length - 13, -1) !== '@myrmex' + path.sep + 'core') {
       throw e;
     }
+    console.log(e);
+    console.log(require.cache);
     const msg = 'Myrmex seems to be present in a package.json file but not installed. Maybe you have to use `npm install`.';
-    process.stderr.write('\n' + msg + '\n\n');
     throw new Error(msg);
   }
 }

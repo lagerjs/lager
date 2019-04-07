@@ -47,7 +47,7 @@ const Lambda = function Lambda(config, fsPath) {
     }
   });
   if (!runtimeLanguage) { throw new Error(this.config.params.Runtime + ' is not a valid runtime'); }
-  this.runtimeMethods = runtimeMethods[runtimeLanguage];
+  this.runtimeMethod = runtimeMethods[runtimeLanguage];
 
   this.config.modules = this.config.modules || [];
 };
@@ -136,7 +136,7 @@ Lambda.prototype.loadEventExample = function loadEventExample(name) {
  * @returns {Object}
  */
 Lambda.prototype.executeLocally = function executeLocally(event) {
-  return this.runtimeMethods.executeLocally(this, event);
+  return this.runtimeMethod.executeLocally(this, event);
 };
 
 /**
@@ -234,7 +234,7 @@ Lambda.prototype.deploy = function deploy(region, context) {
  * @returns {Promise<Lambda>}
  */
 Lambda.prototype.installLocally = function install() {
-  return Promise.resolve(this.runtimeMethods.installLocally(this))
+  return Promise.resolve(this.runtimeMethod.installLocally(this))
   .then(() => {
     return this;
   });

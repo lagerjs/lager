@@ -1,6 +1,5 @@
 'use strict';
 
-const util = require('util');
 const path = require('path');
 const fs = require('fs-extra');
 const Promise = require('bluebird');
@@ -12,21 +11,14 @@ const nodejsContextMock = require('./nodejs-context-mock');
  * @returns {Object}
  */
 module.exports.executeLocally = function executeLocally(lambda, event, contextMock) {
-  const result = { logs: [] };
   const handlerParts = lambda.config.params.Handler.split('.');
-  const m = require(path.join(lambda.getFsPath(), handlerParts[0]));
+  const lambdaModule = require(path.join(lambda.getFsPath(), handlerParts[0]));
   contextMock = contextMock || nodejsContextMock;
 
-  // Catch console.log output
-  const consoleLogFn = console.log;
-  console.log = function() {
-    const log = Array.prototype.slice.call(arguments).map(e => {
-      return util.inspect(e, { depth: 2 });
-    }).join(' ');
-    result.logs.push(log);
-  };
+  // Used to save the value returned by the handler
+  let handlerReturn;
 
-  // Transform  context.succeed() / context.fail() as a Promise
+  // Transform context.succeed() / context.fail() as a Promise
   const contextPromise = new Promise((resolve, reject) => {
     const succeed = contextMock.succeed;
     const fail = contextMock.fail;
@@ -42,7 +34,7 @@ module.exports.executeLocally = function executeLocally(lambda, event, contextMo
 
   // Transform callback as a Promise
   const callbackPromise = new Promise((resolve, reject) => {
-    m[handlerParts[1]](event, contextMock || nodejsContextMock, (err, res) => {
+    handlerReturn = lambdaModule[handlerParts[1]](event, contextMock, (err, res) => {
       if (err) {
         resolve({ failure: err });
       } else {
@@ -51,16 +43,22 @@ module.exports.executeLocally = function executeLocally(lambda, event, contextMo
     });
   });
 
-  // The first method (context or callback) that resolves or rejects will be considered
+  // If the handler returns a Promise, its resolution is considered as the result of the lambda execution
+  if (handlerReturn && typeof handlerReturn.then === 'function') {
+    return handlerReturn.then(res => {
+      return Promise.resolve({
+        response: res
+      });
+    });
+  }
+  // If the handler does not return a Promise
+  // The first method (context or callback or return) that resolves or rejects
+  // will be considered as the result of the lambda execution
   return Promise.race([callbackPromise, contextPromise])
   .then(res => {
-    console.log = consoleLogFn;
-    result.logs = result.logs.join('\n');
-    result.response = res;
-    return Promise.resolve(result, null, 2);
+    return Promise.resolve({ response: res });
   })
   .catch(e => {
-    console.log = consoleLogFn;
     return Promise.reject(e);
   });
 };

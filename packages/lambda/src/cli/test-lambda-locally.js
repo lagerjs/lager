@@ -102,44 +102,44 @@ module.exports = (icli) => {
    * @returns {Promise<null>} - The execution stops here
    */
   function executeCommand(parameters) {
-    icli.print();
-    icli.print('Executing ' + icli.format.info(parameters.lambdaIdentifier) + '\n');
+    icli.print('Executing ' + icli.format.info(parameters.lambdaIdentifier));
 
     return plugin.findLambda(parameters.lambdaIdentifier)
     .then(lambda => {
+      icli.print();
+      icli.print(icli.format.info('Logs:'));
       return lambda.executeLocally(parameters.event ? lambda.loadEventExample(parameters.event) : {});
     })
     .then(result => {
       if (result.logs) {
-        icli.print(icli.format.info('Logs:'));
         icli.print(result.logs);
-        icli.print();
       }
       if (result.stdError) {
+        icli.print();
         icli.print(icli.format.error('StdErr:'));
         icli.print(result.stdErr);
-        icli.print();
       }
       if (result.response) {
+        icli.print();
         if (result.response.success) {
           icli.print(icli.format.success('Success:'));
           icli.print(result.response.success);
-          icli.print();
         } else if (result.response.failure) {
           icli.print(icli.format.error('Handled error:'));
           icli.print(result.response.failure);
-          icli.print();
         } else {
           icli.print(icli.format.success('Response:'));
           icli.print(result.response);
-          icli.print();
         }
+      }
+      if (result.noResponseError) { 
+        icli.print(icli.format.error(noResponseError));
       }
     })
     .catch(e => {
-      icli.print(icli.format.error('An error occurred during the execution:') + '\n');
-      icli.print(e.stack || e);
       icli.print();
+      icli.print(icli.format.error('An error occurred during the execution:'));
+      icli.print(e.stack || e);
     });
   }
 

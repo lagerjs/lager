@@ -4,8 +4,8 @@
   "description": "A Myrmex plugin to manage Cloud Formation templates",
   "main": "src/index.js",
   "scripts": {
-    "test": "NODE_ENV=test istanbul cover --include-all-sources=true ./node_modules/mocha/bin/_mocha -- --recursive",
-    "test-ci": "NODE_ENV=test istanbul cover --include-all-sources=true ./node_modules/mocha/bin/_mocha --report lcovonly -- --recursive && codecov -F unit"
+    "test": "echo TODO",
+    "test-ci": "echo TODO"
   },
   "keywords": [
     "Myrmex",
